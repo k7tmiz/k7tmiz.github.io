@@ -1,61 +1,43 @@
-# Nativefier 使用教程
+# MSI-PERKEYRGB
 
-#### 基于electron的打包软件
+> 适用于我MSI-GP68HX的键盘RGB调光的git项目
 
-##### nativefier -n <打包后的应用名称> -p <程序兼容的平台> —-arch <架构> —- weight <窗口宽度> —-height <窗口高度> <网页URL>
+下面是Github的项目地址： [msi-perkeyrgb](https://github.com/Askannz/msi-perkeyrgb)
 
-#### 实例（Eshelper）
+- - -
+### 安装教程这里就掠过
 
-nativefier -n Eshelper -p linux --arch x64 --width 1024 --height 768 --tray
-\--disable-dev-tools <https://www.esdict.cn/>
+### 简单用法
 
-\#如果想让程序可以后台运行，可以增加参数——tray
+#### Steady Color：稳定颜色
 
-\#如果不想在使用时可以调出chrome的开发者工具，可以增加参数——disable-dev-tools
+```
+msi-perkeyrgb --model <MSI model> -s <COLOR>
+```
+#### Preset：内置预设(--list-presets)
 
-\#如果想控制程序在同一时间只能运行一个实例，则增加参数——single-instance
+```
+msi-perkeyrgb --model <MSI model> -p <preset>
+```
+### 高级用法不多赘述 个人用不到
 
-#### .desktop文件（Linux下启动文件）
+- - -
+### 个人电脑键盘预设配色如下：
 
-\[Desktop Entry]
+- aqua
+- chakra
+- default
+- disco
+- drain
+- freeway
+- rainbow-split
+- roulette
 
-\# type关键字如上所述
+### 如果你的电脑也没有被录入的话 可以通过id的方式进行使用。
 
-Type=Application
+注意：这里是十六进制的数字 --id VENDOR_ID:PRODUCT_ID
 
-\# 本文件所遵循的桌面项规范版本
-
-Version=1.0
-
-\# 应用程序的名称
-
-Name=jMemorize
-
-\# 显示为工具提示的注释
-
-Comment=Flash card based learning tool
-
-\# 可执行文件所在的目录
-
-Path=/opt/jmemorise
-
-\# 可执行文件，可以带参
-
-Exec=jmemorize
-
-\# 图标名称
-
-Icon=jmemorize
-
-\# 应用程序是否需要运行在终端中
-
-Terminal=false
-
-\# 本桌面项将显示在哪些分类中
-
-Categories=Education;Languages;Java;
-
-#### .desktop文件存放位置
-
-/usr/share/applications/
+```
+例 sudo msi-perkeyrgb --id 1038:113a -p rainbow-split
+```
 
