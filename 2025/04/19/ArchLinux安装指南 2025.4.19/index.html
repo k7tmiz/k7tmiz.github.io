@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html lang=en>
+<head>
+    <!-- so meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5" />
+    <meta name="description" content="ArchLinux安装指南 2025.4.19初步配置联网 dhcpcd&#x2F;iwctl  iwctl:device liststation ‘device’ scanstation ‘device’ get-networksstation ‘device’ connect ‘wlan’   #更新ntp服务器 timdatectl set-ntp true 分区及挂载 此处演示p1:EFI p2:&amp;">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Hexo">
+<meta property="og:url" content="http://example.com/2025/04/19/ArchLinux%E5%AE%89%E8%A3%85%E6%8C%87%E5%8D%97%202025.4.19/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="ArchLinux安装指南 2025.4.19初步配置联网 dhcpcd&#x2F;iwctl  iwctl:device liststation ‘device’ scanstation ‘device’ get-networksstation ‘device’ connect ‘wlan’   #更新ntp服务器 timdatectl set-ntp true 分区及挂载 此处演示p1:EFI p2:&amp;">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2025-04-19T12:34:14.734Z">
+<meta property="article:modified_time" content="2025-04-19T12:34:14.736Z">
+<meta property="article:author" content="John Doe">
+<meta name="twitter:card" content="summary">
+    
+    
+      
+        
+          <link rel="shortcut icon" href="/images/favicon.ico">
+        
+      
+      
+        
+          <link rel="icon" type="image/png" href="/images/favicon-192x192.png" sizes="192x192">
+        
+      
+      
+        
+          <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+        
+      
+    
+    <!-- title -->
+    <title>Hexo</title>
+    <!-- async scripts -->
+    <!-- Google Analytics -->
+
+
+    <!-- Umami Analytics -->
+
+
+    <!-- styles -->
+    
+<link rel="stylesheet" href="/css/style.css">
+
+    <!-- persian styles -->
+    
+    <!-- rss -->
+    
+    
+	<!-- mathjax -->
+	
+<meta name="generator" content="Hexo 7.3.0"></head>
+
+<body class="max-width mx-auto px3 ltr">
+    
+      <div id="header-post">
+  <a id="menu-icon" href="#" aria-label="Menu"><i class="fa-solid fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#" aria-label="Menu"><i class="fa-solid fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" aria-label="Top" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fa-solid fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+        <!--
+       --><li><a href="/">Home</a></li><!--
+     --><!--
+       --><li><a href="/about/">About</a></li><!--
+     --><!--
+       --><li><a href="/archives/">Writing</a></li><!--
+     --><!--
+       --><li><a target="_blank" rel="noopener" href="http://github.com/probberechts">Projects</a></li><!--
+     -->
+      </ul>
+    </span>
+    <br/>
+    <span id="actions">
+      <ul>
+        
+        
+        <li><a class="icon" aria-label="Next post" href="/2025/04/19/hello-world/"><i class="fa-solid fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
+        
+        <li><a class="icon" aria-label="Back to top" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fa-solid fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
+        <li><a class="icon" aria-label="Share post" href="#"><i class="fa-solid fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">Previous post</span>
+      <span id="i-next" class="info" style="display:none;">Next post</span>
+      <span id="i-top" class="info" style="display:none;">Back to top</span>
+      <span id="i-share" class="info" style="display:none;">Share post</span>
+    </span>
+    <br/>
+    <div id="share" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=http://example.com/2025/04/19/ArchLinux%E5%AE%89%E8%A3%85%E6%8C%87%E5%8D%97%202025.4.19/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=http://example.com/2025/04/19/ArchLinux%E5%AE%89%E8%A3%85%E6%8C%87%E5%8D%97%202025.4.19/&text="><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=http://example.com/2025/04/19/ArchLinux%E5%AE%89%E8%A3%85%E6%8C%87%E5%8D%97%202025.4.19/&title="><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=http://example.com/2025/04/19/ArchLinux%E5%AE%89%E8%A3%85%E6%8C%87%E5%8D%97%202025.4.19/&is_video=false&description="><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=&body=Check out this article: http://example.com/2025/04/19/ArchLinux%E5%AE%89%E8%A3%85%E6%8C%87%E5%8D%97%202025.4.19/"><i class="fa-solid fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=http://example.com/2025/04/19/ArchLinux%E5%AE%89%E8%A3%85%E6%8C%87%E5%8D%97%202025.4.19/&title="><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=http://example.com/2025/04/19/ArchLinux%E5%AE%89%E8%A3%85%E6%8C%87%E5%8D%97%202025.4.19/&title="><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=http://example.com/2025/04/19/ArchLinux%E5%AE%89%E8%A3%85%E6%8C%87%E5%8D%97%202025.4.19/&title="><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=http://example.com/2025/04/19/ArchLinux%E5%AE%89%E8%A3%85%E6%8C%87%E5%8D%97%202025.4.19/&title="><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=http://example.com/2025/04/19/ArchLinux%E5%AE%89%E8%A3%85%E6%8C%87%E5%8D%97%202025.4.19/&name=&description="><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=http://example.com/2025/04/19/ArchLinux%E5%AE%89%E8%A3%85%E6%8C%87%E5%8D%97%202025.4.19/&t="><i class="fab fa-hacker-news " aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+    
+    
+      <div id="toc">
+        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#ArchLinux%E5%AE%89%E8%A3%85%E6%8C%87%E5%8D%97-2025-4-19"><span class="toc-number">1.</span> <span class="toc-text">ArchLinux安装指南 2025.4.19</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%88%9D%E6%AD%A5%E9%85%8D%E7%BD%AE"><span class="toc-number">1.1.</span> <span class="toc-text">初步配置</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%81%94%E7%BD%91"><span class="toc-number">1.1.1.</span> <span class="toc-text">联网</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%88%86%E5%8C%BA%E5%8F%8A%E6%8C%82%E8%BD%BD"><span class="toc-number">1.1.2.</span> <span class="toc-text">分区及挂载</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%BC%80%E5%A7%8B%E5%AE%89%E8%A3%85"><span class="toc-number">1.2.</span> <span class="toc-text">开始安装</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%BC%96%E8%BE%91%E9%95%9C%E5%83%8F%E6%BA%90"><span class="toc-number">1.2.1.</span> <span class="toc-text">编辑镜像源</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%8B%89%E5%8F%96%E9%95%9C%E5%83%8F"><span class="toc-number">1.2.2.</span> <span class="toc-text">拉取镜像</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%9B%B4%E6%96%B0%E5%88%86%E5%8C%BA%E8%A1%A8"><span class="toc-number">1.2.3.</span> <span class="toc-text">更新分区表</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%A3%80%E6%9F%A5%E5%88%86%E5%8C%BA%E8%A1%A8"><span class="toc-number">1.2.4.</span> <span class="toc-text">检查分区表</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%B8%8B%E8%BD%BD%E5%9F%BA%E6%9C%AC%E8%BD%AF%E4%BB%B6"><span class="toc-number">1.2.5.</span> <span class="toc-text">下载基本软件</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%88%87%E6%8D%A2%E5%88%B0%E6%9C%AC%E5%9C%B0"><span class="toc-number">1.3.</span> <span class="toc-text">切换到本地</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%9B%B4%E6%96%B0%E6%9C%AC%E5%9C%B0%E6%97%B6%E9%97%B4"><span class="toc-number">1.3.1.</span> <span class="toc-text">更新本地时间</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%AE%BE%E7%BD%AEroot%E5%AF%86%E7%A0%81"><span class="toc-number">1.3.2.</span> <span class="toc-text">设置root密码</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%B8%8B%E8%BD%BD%E5%9F%BA%E6%9C%AC%E8%BD%AF%E4%BB%B6-1"><span class="toc-number">1.3.3.</span> <span class="toc-text">下载基本软件</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AE%89%E8%A3%85CPU%E9%A9%B1%E5%8A%A8"><span class="toc-number">1.3.4.</span> <span class="toc-text">安装CPU驱动</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%AE%89%E8%A3%85%E5%BC%95%E5%AF%BC"><span class="toc-number">1.4.</span> <span class="toc-text">安装引导</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%87%B3%E6%AD%A4-%E5%AE%89%E8%A3%85%E7%BB%93%E6%9D%9F"><span class="toc-number">1.4.1.</span> <span class="toc-text">至此 安装结束</span></a></li></ol></li></ol></li></ol>
+      </div>
+    
+  </span>
+</div>
+
+    
+    <div class="content index py4 ">
+        
+        <article class="post h-entry" itemscope itemtype="http://schema.org/BlogPosting">
+  <header>
+    
+    <h1 class="posttitle p-name" itemprop="name headline">
+        
+    </h1>
+
+
+
+    <div class="meta">
+      <span class="author p-author h-card" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span class="p-name" itemprop="name">John Doe</span>
+      </span>
+      
+    <div class="postdate">
+      
+        <time datetime="2025-04-19T12:34:14.734Z" class="dt-published" itemprop="datePublished">2025-04-19</time>
+        
+      
+    </div>
+
+
+      
+
+      
+
+    </div>
+  </header>
+  
+
+  <div class="content e-content" itemprop="articleBody">
+    <h1 id="ArchLinux安装指南-2025-4-19"><a href="#ArchLinux安装指南-2025-4-19" class="headerlink" title="ArchLinux安装指南 2025.4.19"></a>ArchLinux安装指南 2025.4.19</h1><h2 id="初步配置"><a href="#初步配置" class="headerlink" title="初步配置"></a>初步配置</h2><h3 id="联网"><a href="#联网" class="headerlink" title="联网"></a>联网</h3><p> <code>dhcpcd/iwctl</code></p>
+<blockquote>
+<p>iwctl:<br>device list<br>station ‘device’ scan<br>station ‘device’ get-networks<br>station ‘device’ connect ‘wlan’</p>
+</blockquote>
+<p> #更新ntp服务器 <code>timdatectl set-ntp true</code></p>
+<h3 id="分区及挂载"><a href="#分区及挂载" class="headerlink" title="分区及挂载"></a>分区及挂载</h3><blockquote>
+<p>此处演示p1:EFI p2:&#x2F;mnt p3:swap</p>
+</blockquote>
+<p> #查看目前磁盘，分区状况 <code>lsblk</code></p>
+<p> #分区 <code>fdisk /dev/sdX / fdisk /dev/nvme0n1</code></p>
+<blockquote>
+<p>m 查看命令<br>n 新建一个分区<br>g 转换GPT<br>t 更改分区类型：EFI:1  SWAP:19  Linux:20</p>
+</blockquote>
+<p> #格式化分区为FAT32格式 <code>mkfs.fat -F32 /dev/nvme0n1p1</code></p>
+<p> #格式化分区为EXT4格式 <code>mkfs.ext4 /dev/nvme0n1p2</code></p>
+<p> #格式化分区为SWAP格式 <code>mkswap /dev/nvme0n1p3</code></p>
+<p> #开启SWAP <code>swapon /dev/nvme0n1p3</code></p>
+<p> #挂载根分区 <code>mount /dev/nvme0n1p2 /mnt</code></p>
+<p> #新建Boot文件夹 <code>mkdir /mnt/boot</code></p>
+<p> #新建Home文件夹 <code>mkdir /mnt/home</code></p>
+<p> #挂载Boot分区 <code>mount /dev/nvme0n1p1 /mnt/boot</code></p>
+<blockquote>
+<p>如果有的话一个分区为了Home分区 <code>mount /dev/nvme0n1px /mnt/home</code></p>
+</blockquote>
+<h2 id="开始安装"><a href="#开始安装" class="headerlink" title="开始安装"></a>开始安装</h2><h3 id="编辑镜像源"><a href="#编辑镜像源" class="headerlink" title="编辑镜像源"></a>编辑镜像源</h3><p> <code>nano /etc/pacman.d/mirrorlist</code></p>
+<h3 id="拉取镜像"><a href="#拉取镜像" class="headerlink" title="拉取镜像"></a>拉取镜像</h3><p> <code>pacstrap /mnt base base-devel linux linux-firmware vi nano</code></p>
+<h3 id="更新分区表"><a href="#更新分区表" class="headerlink" title="更新分区表"></a>更新分区表</h3><p> <code>genfstab -U /mnt &gt;&gt; /mnt/etc/fstab</code></p>
+<h3 id="检查分区表"><a href="#检查分区表" class="headerlink" title="检查分区表"></a>检查分区表</h3><p> <code>cat /mnt/etc/fstab</code></p>
+<h3 id="下载基本软件"><a href="#下载基本软件" class="headerlink" title="下载基本软件"></a>下载基本软件</h3><p> <code>pacman -S vim networkmanager dhcpcd</code></p>
+<h2 id="切换到本地"><a href="#切换到本地" class="headerlink" title="切换到本地"></a>切换到本地</h2><p> <code>arch-chroot /mnt</code></p>
+<h3 id="更新本地时间"><a href="#更新本地时间" class="headerlink" title="更新本地时间"></a>更新本地时间</h3><p> <code>ln -sf /usr/share/zoneinfo/Asia/Shanghai /etc/localtime</code></p>
+<p> <code>hwclock --systohc</code></p>
+<p> #编辑 <code> nano /etc/locale.gen</code></p>
+<p> #找到 <code>en_US.UTF-8</code> 和 <code>zh_CN.UTF-8</code> 去掉前面的#</p>
+<p> #更新 <code>locale-gen</code></p>
+<p> #编辑locale.conf文件 &#96;&#96;&#96;nano &#x2F;etc&#x2F;locale.conf&#96;&#96;&#96;&#96;LANG&#x3D;en_US.UTF-8&#96;</p>
+<h3 id="设置root密码"><a href="#设置root密码" class="headerlink" title="设置root密码"></a>设置root密码</h3><p> <code>passwd</code></p>
+<blockquote>
+<p>不显示密码是正常情况</p>
+</blockquote>
+<h3 id="下载基本软件-1"><a href="#下载基本软件-1" class="headerlink" title="下载基本软件"></a>下载基本软件</h3><p> <code>pacman -S dialog wpa_supplicant ntfs-3g</code></p>
+<h3 id="安装CPU驱动"><a href="#安装CPU驱动" class="headerlink" title="安装CPU驱动"></a>安装CPU驱动</h3><p> #intel <code>pacman -S intel-ucode</code></p>
+<p> #amd <code>pacman -S amd-ucode</code></p>
+<h2 id="安装引导"><a href="#安装引导" class="headerlink" title="安装引导"></a>安装引导</h2><p> <code>pacman -S grub efibootmgr</code></p>
+<p> #多系统引导 <code>pacman -S os-prober</code></p>
+<p> #UEFI引导 <code>grub-install --target=x86_64-efi --efi-directory=/boot --bootloader=ArchLinux</code></p>
+<p> #更新grub <code>grub-mkconfig -o /boot/grub/grub.cfg</code></p>
+<h3 id="至此-安装结束"><a href="#至此-安装结束" class="headerlink" title="至此 安装结束"></a><strong>至此 安装结束</strong></h3><p> #退出 <code>exit</code></p>
+<p> #重启 <code>reboot</code></p>
+
+  </div>
+</article>
+
+
+
+        
+          <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+        
+          <li><a href="/">Home</a></li>
+        
+          <li><a href="/about/">About</a></li>
+        
+          <li><a href="/archives/">Writing</a></li>
+        
+          <li><a target="_blank" rel="noopener" href="http://github.com/probberechts">Projects</a></li>
+        
+      </ul>
+    </div>
+
+    
+    
+      <div id="toc-footer" style="display: none">
+        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#ArchLinux%E5%AE%89%E8%A3%85%E6%8C%87%E5%8D%97-2025-4-19"><span class="toc-number">1.</span> <span class="toc-text">ArchLinux安装指南 2025.4.19</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%88%9D%E6%AD%A5%E9%85%8D%E7%BD%AE"><span class="toc-number">1.1.</span> <span class="toc-text">初步配置</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%81%94%E7%BD%91"><span class="toc-number">1.1.1.</span> <span class="toc-text">联网</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%88%86%E5%8C%BA%E5%8F%8A%E6%8C%82%E8%BD%BD"><span class="toc-number">1.1.2.</span> <span class="toc-text">分区及挂载</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%BC%80%E5%A7%8B%E5%AE%89%E8%A3%85"><span class="toc-number">1.2.</span> <span class="toc-text">开始安装</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%BC%96%E8%BE%91%E9%95%9C%E5%83%8F%E6%BA%90"><span class="toc-number">1.2.1.</span> <span class="toc-text">编辑镜像源</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%8B%89%E5%8F%96%E9%95%9C%E5%83%8F"><span class="toc-number">1.2.2.</span> <span class="toc-text">拉取镜像</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%9B%B4%E6%96%B0%E5%88%86%E5%8C%BA%E8%A1%A8"><span class="toc-number">1.2.3.</span> <span class="toc-text">更新分区表</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%A3%80%E6%9F%A5%E5%88%86%E5%8C%BA%E8%A1%A8"><span class="toc-number">1.2.4.</span> <span class="toc-text">检查分区表</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%B8%8B%E8%BD%BD%E5%9F%BA%E6%9C%AC%E8%BD%AF%E4%BB%B6"><span class="toc-number">1.2.5.</span> <span class="toc-text">下载基本软件</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%88%87%E6%8D%A2%E5%88%B0%E6%9C%AC%E5%9C%B0"><span class="toc-number">1.3.</span> <span class="toc-text">切换到本地</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%9B%B4%E6%96%B0%E6%9C%AC%E5%9C%B0%E6%97%B6%E9%97%B4"><span class="toc-number">1.3.1.</span> <span class="toc-text">更新本地时间</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%AE%BE%E7%BD%AEroot%E5%AF%86%E7%A0%81"><span class="toc-number">1.3.2.</span> <span class="toc-text">设置root密码</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%B8%8B%E8%BD%BD%E5%9F%BA%E6%9C%AC%E8%BD%AF%E4%BB%B6-1"><span class="toc-number">1.3.3.</span> <span class="toc-text">下载基本软件</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AE%89%E8%A3%85CPU%E9%A9%B1%E5%8A%A8"><span class="toc-number">1.3.4.</span> <span class="toc-text">安装CPU驱动</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%AE%89%E8%A3%85%E5%BC%95%E5%AF%BC"><span class="toc-number">1.4.</span> <span class="toc-text">安装引导</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%87%B3%E6%AD%A4-%E5%AE%89%E8%A3%85%E7%BB%93%E6%9D%9F"><span class="toc-number">1.4.1.</span> <span class="toc-text">至此 安装结束</span></a></li></ol></li></ol></li></ol>
+      </div>
+    
+
+    <div id="share-footer" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=http://example.com/2025/04/19/ArchLinux%E5%AE%89%E8%A3%85%E6%8C%87%E5%8D%97%202025.4.19/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=http://example.com/2025/04/19/ArchLinux%E5%AE%89%E8%A3%85%E6%8C%87%E5%8D%97%202025.4.19/&text="><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=http://example.com/2025/04/19/ArchLinux%E5%AE%89%E8%A3%85%E6%8C%87%E5%8D%97%202025.4.19/&title="><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=http://example.com/2025/04/19/ArchLinux%E5%AE%89%E8%A3%85%E6%8C%87%E5%8D%97%202025.4.19/&is_video=false&description="><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=&body=Check out this article: http://example.com/2025/04/19/ArchLinux%E5%AE%89%E8%A3%85%E6%8C%87%E5%8D%97%202025.4.19/"><i class="fa-solid fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=http://example.com/2025/04/19/ArchLinux%E5%AE%89%E8%A3%85%E6%8C%87%E5%8D%97%202025.4.19/&title="><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=http://example.com/2025/04/19/ArchLinux%E5%AE%89%E8%A3%85%E6%8C%87%E5%8D%97%202025.4.19/&title="><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=http://example.com/2025/04/19/ArchLinux%E5%AE%89%E8%A3%85%E6%8C%87%E5%8D%97%202025.4.19/&title="><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=http://example.com/2025/04/19/ArchLinux%E5%AE%89%E8%A3%85%E6%8C%87%E5%8D%97%202025.4.19/&title="><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=http://example.com/2025/04/19/ArchLinux%E5%AE%89%E8%A3%85%E6%8C%87%E5%8D%97%202025.4.19/&name=&description="><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=http://example.com/2025/04/19/ArchLinux%E5%AE%89%E8%A3%85%E6%8C%87%E5%8D%97%202025.4.19/&t="><i class="fab fa-hacker-news fa-lg" aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+
+    <div id="actions-footer">
+        <a id="menu" class="icon" href="#" onclick="$('#nav-footer').toggle();return false;"><i class="fa-solid fa-bars fa-lg" aria-hidden="true"></i> Menu</a>
+        
+          <a id="toc" class="icon" href="#" onclick="$('#toc-footer').toggle();return false;"><i class="fa-solid fa-list fa-lg" aria-hidden="true"></i> TOC</a>
+        
+        <a id="share" class="icon" href="#" onclick="$('#share-footer').toggle();return false;"><i class="fa-solid fa-share-alt fa-lg" aria-hidden="true"></i> Share</a>
+        <a id="top" style="display:none" class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fa-solid fa-chevron-up fa-lg" aria-hidden="true"></i> Top</a>
+    </div>
+
+  </div>
+</div>
+
+        
+        <footer id="footer">
+  <div class="footer-left">
+    Copyright &copy;
+    
+    
+    2016-2025
+    John Doe
+  </div>
+  <div class="footer-right">
+    <nav>
+      <ul>
+        <!--
+       --><li><a href="/">Home</a></li><!--
+     --><!--
+       --><li><a href="/about/">About</a></li><!--
+     --><!--
+       --><li><a href="/archives/">Writing</a></li><!--
+     --><!--
+       --><li><a target="_blank" rel="noopener" href="http://github.com/probberechts">Projects</a></li><!--
+     -->
+      </ul>
+    </nav>
+  </div>
+</footer>
+
+    </div>
+    <!-- styles -->
+
+
+
+  <link rel="preload" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" crossorigin="anonymous" onload="this.onload=null;this.rel='stylesheet'"/>
+
+
+    <!-- jquery -->
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js" crossorigin="anonymous"></script>
+
+
+
+
+<!-- clipboard -->
+
+  
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.7/clipboard.min.js" crossorigin="anonymous"></script>
+  
+  <script type="text/javascript">
+  $(function() {
+    // copy-btn HTML
+    var btn = "<span class=\"btn-copy tooltipped tooltipped-sw\" aria-label=\"Copy to clipboard!\">";
+    btn += '<i class="fa-regular fa-clone"></i>';
+    btn += '</span>';
+    // mount it!
+    $(".highlight table").before(btn);
+    var clip = new ClipboardJS('.btn-copy', {
+      text: function(trigger) {
+        return Array.from(trigger.nextElementSibling.querySelectorAll('.code')).reduce((str,it)=>str+it.innerText+'\n','')
+      }
+    });
+    clip.on('success', function(e) {
+      e.trigger.setAttribute('aria-label', "Copied!");
+      e.clearSelection();
+    })
+  })
+  </script>
+
+
+<script src="/js/main.js"></script>
+
+<!-- search -->
+
+<!-- Baidu Analytics -->
+
+<!-- Cloudflare Analytics -->
+
+<!-- Disqus Comments -->
+
+<!-- utterances Comments -->
+
+</body>
+</html>
