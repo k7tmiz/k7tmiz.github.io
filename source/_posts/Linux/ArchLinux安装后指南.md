@@ -11,45 +11,79 @@ date: 2025-04-23 19:06:38
 
 ## root登录
 
- #联网,基于之前装的NetworkManager 
+ #联网,基于之前装的NetworkManager
 
- ```systemctl start NetworkManager #这里必须大写```
+ ```
+ systemctl start NetworkManager #这里必须大写
+ ```
 
- #开机自启动 ```systemctl enable NetworkManager```
+ #开机自启动
+ ```
+ systemctl enable NetworkManager
+ ```
 
- ```nmtui```
+ ```
+ nmtui
+ ```
 
- #触摸板驱动 ```pacman -S xf86-input-synaptics```
+ #触摸板驱动
+ ```
+ pacman -S xf86-input-synaptics
+ ```
 
- #X11 ```pacman -S xorg```
+ #X11
+ ```
+ pacman -S xorg
+ ```
 
- #Wayland ```pacman -S wayland xorg-xwayland```
+ #Wayland
+ ```
+ pacman -S wayland xorg-xwayland
+ ```
 
-> NVIDIA 多装一个```xorg-xrandr```
+> NVIDIA 多装一个 `xorg-xrandr`
 
- #开源中文字体安装 ```pacman -S ttf-dejavu wqy-microhei```
+ #开源中文字体安装
+ ```
+ pacman -S ttf-dejavu wqy-microhei
+ ```
 
- #安装sudo ```pacman -S sudo```
+ #安装sudo
+ ```
+ pacman -S sudo
+ ```
 
 
 
 ## 添加用户并且提权
 
- #添加用户 ```useradd -m -G wheel Bruno```
+ #添加用户
+ ```
+ useradd -m -G wheel Bruno
+ ```
 
- #密码 ```passwd Bruno```
+ #密码
+ ```
+ passwd Bruno
+ ```
 
  ```visudo``` 或者 ```nano /etc/sudoers```
 
 > 找到#%wheel ALL=(ALL)ALL 按X去掉# :wq 保存退出
 
- #重启 ```reboot```
+ #重启
+ ```
+ reboot
+ ```
 
 
 
 ## 重启进来用user登录
 
- #intel核显驱动 ```sudo pacman -S xf86-video-intel```
+ #intel核显驱动
+ ```
+ sudo pacman -S xf86-video-intel
+ ```
 
 
 
@@ -57,11 +91,17 @@ date: 2025-04-23 19:06:38
 
 > 本人是KDE的忠实教徒，如需其他桌面，请自行搜索
 
- #Plasma ```sudo pacman -S plasma kde-applications```
+ #Plasma
+ ```
+ sudo pacman -S plasma kde-applications
+ ```
 
 > 最小Plasma桌面 plasma-meta
 
- #锁屏 ```sudo pacman -S sddm```
+ #锁屏
+ ```
+ sudo pacman -S sddm
+ ```
 
  #向 /etc/sddm.conf 中追加下面的内容。其中，QT_FONT_DPI 的值为你的 DPI 缩放数值 (计算方式是 96 乘以你的缩放比例，比如 150% 缩放则为 `144`)。QT_SCREEN_SCALE_FACTORS 的值为你需要的 DPI 缩放比例（比如，若为 150% 就直接填 `1.5`）,同时 sddm 登录界面不会自动将数字小键盘打开, sddm 的鼠标指针也可以更改一下
 ```
@@ -77,21 +117,40 @@ CursorTheme=breeze_cursors
 ```
 > 修改完 HiDPI 设置之后可能需要重新启动系统。
 
- #开机自启动设置 ```systemctl enable sddm```
+ #开机自启动设置
+ ```
+ systemctl enable sddm
+ ```
 
- #笔记本电源管理 ```sudo pacman -S power-profiles-daemon``` (需要启用 ```power-profiles-daemon``` 服务)
+ #笔记本电源管理
+ ```
+ sudo pacman -S power-profiles-daemon
+ ``` 
+ (需要启用 `power-profiles-daemon` 服务)
 
 ## 一些驱动
 
- #音频 ```sudo pacman -S alsa-utils pipewire pipewire-alsa pipewire-pulse```
+ #音频
+ ```
+ sudo pacman -S alsa-utils pipewire pipewire-alsa pipewire-pulse
+ ```
 
 > 有可能装完还是用不了，我这里为了方便，直接一站式，有可能需要装`sof-firmware`--开源音频驱动
 
- #中文输入法 ```sudo pacman -S fcitx fcitx-rime fcitx-im kcm-fcitx```
+ #中文输入法
+ ```
+ sudo pacman -S fcitx fcitx-rime fcitx-im kcm-fcitx
+ ```
 
- #Sunpinyin ```sudo pacman -S fcitx-sunpinyin```
+ #Sunpinyin
+ ```
+ sudo pacman -S fcitx-sunpinyin
+ ```
 
- #Sogoupinyin ```sudo pacman -S fcitx-sogoupinyin```
+ #Sogoupinyin
+ ```
+ sudo pacman -S fcitx-sogoupinyin
+ ```
 
  #编辑 ~/.xprofile文件
 
