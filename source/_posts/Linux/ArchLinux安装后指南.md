@@ -68,9 +68,10 @@ date: 2025-04-23 19:06:38
 [General]
 GreeterEnvironment=QT_SCREEN_SCALE_FACTORS=1.5,QT_FONT_DPI=144
 
+# 打开数字小键盘
 Numlock=on
 
-# 如果你想修改sddm登录界面的鼠标指针，加入下面的设置
+# 修改鼠标指针，加入下面的设置
 [Theme]
 CursorTheme=breeze_cursors
 ```
