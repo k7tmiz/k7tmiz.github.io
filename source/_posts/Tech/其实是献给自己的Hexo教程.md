@@ -231,7 +231,7 @@ Github仓库: [hexo-renderer-marked](https://github.com/hexojs/hexo-renderer-mar
 
 ### 一键回顶部
 
-修改Next配置文件（theme/next/_config.yml），修改以下代码
+修改Next配置文件（themes/next/_config.yml），修改以下代码
 ```
 back2top:
   enable: true
@@ -243,7 +243,7 @@ back2top:
 
 ### 阅读进度条
 
-修改Next配置文件（theme/next/_config.yml），修改以下代码
+修改Next配置文件（themes/next/_config.yml），修改以下代码
 ```
 reading_progress:
   enable: true
@@ -252,6 +252,22 @@ reading_progress:
   color: "#37c6c0"
   height: 3px
 ```
+
+### 作者头像设置
+将我们的头像图片放置在 `themes/next/source/images` 目录下，然后修改 `themes/next/_config.yml`
+```
+# Sidebar Avatar
+avatar:
+  # Replace the default image and set the url here.
+  url: /images/author.jpeg
+  # If true, the avatar will be dispalyed in circle.
+  rounded: false #头像是否设为圆形，否则为矩形
+  # If true, the avatar will be rotated with the cursor.
+  rotated: true #鼠标放在头像上时是否旋转
+```
+
+
+
 
 ### 定制Next主题的Sidebar_state
 因为只有true和false 而我想定制在Hexo的NexT主题中仅显示侧边栏的archive部分并隐藏tags
