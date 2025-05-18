@@ -63,6 +63,19 @@ date: 2025-04-23 19:06:38
 
  #锁屏 ```sudo pacman -S sddm```
 
+ #向 /etc/sddm.conf 中追加下面的内容。其中，QT_FONT_DPI 的值为你的 DPI 缩放数值 (计算方式是 96 乘以你的缩放比例，比如 150% 缩放则为 `144`)。QT_SCREEN_SCALE_FACTORS 的值为你需要的 DPI 缩放比例（比如，若为 150% 就直接填 `1.5`）,同时 sddm 登录界面不会自动将数字小键盘打开, sddm 的鼠标指针也可以更改一下
+```
+[General]
+GreeterEnvironment=QT_SCREEN_SCALE_FACTORS=1.5,QT_FONT_DPI=144
+
+Numlock=on
+
+# 如果你想修改sddm登录界面的鼠标指针，加入下面的设置
+[Theme]
+CursorTheme=breeze_cursors
+```
+> 修改完 HiDPI 设置之后可能需要重新启动系统。
+
  #开机自启动设置 ```systemctl enable sddm```
 
  #笔记本电源管理 ```sudo pacman -S power-profiles-daemon``` (需要启用 ```power-profiles-daemon``` 服务)
