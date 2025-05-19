@@ -5,6 +5,7 @@ categories:
   - Linux
 abbrlink: d773eb13
 date: 2025-05-11 22:24:04
+top: true
 ---
 
 # 我与Linux的故事
