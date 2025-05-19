@@ -135,17 +135,17 @@ CursorTheme=breeze_cursors
 
 #### 中文输入法
  ```
- sudo pacman -S fcitx fcitx-rime fcitx-im kcm-fcitx
+ sudo pacman -S fcitx5 fcitx5-chinese-addons fcitx5-configtool fcitx5-gtk fcitx5-qt
  ```
 
-##### Sunpinyin
+##### Wikipedia中文词库
  ```
- sudo pacman -S fcitx-sunpinyin
+ sudo pacman -S fcitx5-pinyin-zhwiki
  ```
 
 ##### Sogoupinyin
  ```
- sudo pacman -S fcitx-sogoupinyin
+ yay -S fcitx5-pinyin-sougou
  ```
 
 编辑 `~/.xprofile` 文件
@@ -159,6 +159,11 @@ export QT*IM*MODULE=fcitx
 export XMODIFIERS=@im=fcitx
 
 ````
+
+##### fcitx5类似微软拼音的皮肤
+```
+sudo pacman -S fcitx5-material-color
+```
 
 #### zsh
 通过pacman安装zsh，然后将[此文件](../../files/zshrc)的内容覆盖到~/.zshrc中，完成配置。
