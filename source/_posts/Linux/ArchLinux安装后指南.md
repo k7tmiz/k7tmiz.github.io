@@ -143,7 +143,7 @@ CursorTheme=breeze_cursors
  sudo pacman -S fcitx5-pinyin-zhwiki
  ```
 
-##### Sogoupinyin
+##### 搜狗拼音输入法的词库
  ```
  yay -S fcitx5-pinyin-sougou
  ```
@@ -183,7 +183,7 @@ sudo pacman -S refind
 ```
 refind-install
 ```
-然后进入 `boot/EFI/refind` 将[此文件](../../files/refind.conf)覆盖 `refind.conf`
+然后进入 `boot/EFI/refind` 将[此文件](../../files/refind)中的内容覆盖 `refind.conf`
 >需要安装darkmini的refind主题才能正常使用，如果不想安装主题或者不想用darkmini，就把最后一行 `include themes/darkmini/theme-mini.conf` 注释掉或者修改成你想使用的主题
 
 ref: [rEFInd](https://wiki.archlinuxcn.org/wiki/REFInd)
