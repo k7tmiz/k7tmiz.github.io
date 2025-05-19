@@ -5,10 +5,10 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
 <meta name="theme-color" content="#222">
 <meta name="generator" content="Hexo 7.3.0">
-  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
-  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
-  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
-  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/favicon-128.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16.png">
+  <link rel="mask-icon" href="/images/favicon-512.png" color="#222">
 
 <link rel="stylesheet" href="/css/main.css">
 
@@ -28,7 +28,7 @@
 <meta property="og:description" content="ArchLinux安装指南 2025.4.19初步配置联网">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2025-04-19T14:28:32.000Z">
-<meta property="article:modified_time" content="2025-05-11T11:34:46.000Z">
+<meta property="article:modified_time" content="2025-05-19T01:20:50.458Z">
 <meta property="article:author" content="k7tmiz">
 <meta property="article:tag" content="Linux">
 <meta name="twitter:card" content="summary">
@@ -171,6 +171,7 @@
     <i class="fa fa-arrow-up"></i>
     <span>0%</span>
   </div>
+  <div class="reading-progress-bar"></div>
 
 
     <main class="main">
@@ -188,7 +189,7 @@
     <link itemprop="mainEntityOfPage" href="https://k7tmiz.github.io/posts/a907d758.html">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="image" content="/images/author.jpeg">
       <meta itemprop="name" content="k7tmiz">
       <meta itemprop="description" content="一些碎碎念">
     </span>
@@ -215,7 +216,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2025-05-11 19:34:46" itemprop="dateModified" datetime="2025-05-11T19:34:46+08:00">2025-05-11</time>
+                <time title="修改时间：2025-05-19 09:20:50" itemprop="dateModified" datetime="2025-05-19T09:20:50+08:00">2025-05-19</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -238,55 +239,72 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        <h1 id="ArchLinux安装指南-2025-4-19"><a href="#ArchLinux安装指南-2025-4-19" class="headerlink" title="ArchLinux安装指南 2025.4.19"></a>ArchLinux安装指南 2025.4.19</h1><h2 id="初步配置"><a href="#初步配置" class="headerlink" title="初步配置"></a>初步配置</h2><h3 id="联网"><a href="#联网" class="headerlink" title="联网"></a>联网</h3><p> <code>dhcpcd/iwctl</code></p>
+        <h1 id="ArchLinux安装指南-2025-4-19"><a href="#ArchLinux安装指南-2025-4-19" class="headerlink" title="ArchLinux安装指南 2025.4.19"></a>ArchLinux安装指南 2025.4.19</h1><h2 id="初步配置"><a href="#初步配置" class="headerlink" title="初步配置"></a>初步配置</h2><h3 id="联网"><a href="#联网" class="headerlink" title="联网"></a>联网</h3> <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">dhcpcd/iwctl</span><br></pre></td></tr></table></figure>
+
 <blockquote>
 <p>iwctl:<br>device list<br>station ‘device’ scan<br>station ‘device’ get-networks<br>station ‘device’ connect ‘wlan’</p>
 </blockquote>
-<p> #更新ntp服务器 <code>timdatectl set-ntp true</code></p>
+<p> #更新ntp服务器<br> <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">timdatectl set-ntp true</span><br></pre></td></tr></table></figure></p>
 <h3 id="分区及挂载"><a href="#分区及挂载" class="headerlink" title="分区及挂载"></a>分区及挂载</h3><blockquote>
 <p>此处演示p1:EFI p2:&#x2F;mnt p3:swap</p>
 </blockquote>
 <p> #查看目前磁盘，分区状况 <code>lsblk</code></p>
-<p> #分区 <code>fdisk /dev/sdX / fdisk /dev/nvme0n1</code></p>
+<p> #分区<br> <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">fdisk /dev/sdX / fdisk /dev/nvme0n1</span><br></pre></td></tr></table></figure></p>
 <blockquote>
 <p>m 查看命令<br>n 新建一个分区<br>g 转换GPT<br>t 更改分区类型：EFI:1  SWAP:19  Linux:20</p>
 </blockquote>
-<p> #格式化分区为FAT32格式 <code>mkfs.fat -F32 /dev/nvme0n1p1</code></p>
-<p> #格式化分区为EXT4格式 <code>mkfs.ext4 /dev/nvme0n1p2</code></p>
-<p> #格式化分区为SWAP格式 <code>mkswap /dev/nvme0n1p3</code></p>
-<p> #开启SWAP <code>swapon /dev/nvme0n1p3</code></p>
-<p> #挂载根分区 <code>mount /dev/nvme0n1p2 /mnt</code></p>
-<p> #新建Boot文件夹 <code>mkdir /mnt/boot</code></p>
-<p> #新建Home文件夹 <code>mkdir /mnt/home</code></p>
-<p> #挂载Boot分区 <code>mount /dev/nvme0n1p1 /mnt/boot</code></p>
+<p> #格式化分区为FAT32格式<br> <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mkfs.fat -F32 /dev/nvme0n1p1</span><br></pre></td></tr></table></figure></p>
+<p> #格式化分区为EXT4格式<br> <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mkfs.ext4 /dev/nvme0n1p2</span><br></pre></td></tr></table></figure></p>
+<p> #格式化分区为SWAP格式<br> <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mkswap /dev/nvme0n1p3</span><br></pre></td></tr></table></figure></p>
+<p> #开启SWAP<br> <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">swapon /dev/nvme0n1p3</span><br></pre></td></tr></table></figure></p>
+<p> #挂载根分区<br> <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mount /dev/nvme0n1p2 /mnt</span><br></pre></td></tr></table></figure></p>
+<p> #新建Boot文件夹<br> <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mkdir /mnt/boot</span><br></pre></td></tr></table></figure></p>
+<p> #新建Home文件夹<br> <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mkdir /mnt/home</span><br></pre></td></tr></table></figure></p>
+<p> #挂载Boot分区<br> <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mount /dev/nvme0n1p1 /mnt/boot</span><br></pre></td></tr></table></figure></p>
 <blockquote>
 <p>如果有的话一个分区为了Home分区 <code>mount /dev/nvme0n1px /mnt/home</code></p>
 </blockquote>
-<h2 id="开始安装"><a href="#开始安装" class="headerlink" title="开始安装"></a>开始安装</h2><h3 id="编辑镜像源"><a href="#编辑镜像源" class="headerlink" title="编辑镜像源"></a>编辑镜像源</h3><p> <code>nano /etc/pacman.d/mirrorlist</code></p>
-<h3 id="拉取镜像"><a href="#拉取镜像" class="headerlink" title="拉取镜像"></a>拉取镜像</h3><p> <code>pacstrap /mnt base base-devel linux linux-firmware vi nano</code></p>
-<h3 id="更新分区表"><a href="#更新分区表" class="headerlink" title="更新分区表"></a>更新分区表</h3><p> <code>genfstab -U /mnt &gt;&gt; /mnt/etc/fstab</code></p>
-<h3 id="检查分区表"><a href="#检查分区表" class="headerlink" title="检查分区表"></a>检查分区表</h3><p> <code>cat /mnt/etc/fstab</code></p>
-<h3 id="下载基本软件"><a href="#下载基本软件" class="headerlink" title="下载基本软件"></a>下载基本软件</h3><p> <code>pacman -S vim networkmanager dhcpcd</code></p>
-<h2 id="切换到本地"><a href="#切换到本地" class="headerlink" title="切换到本地"></a>切换到本地</h2><p> <code>arch-chroot /mnt</code></p>
-<h3 id="更新本地时间"><a href="#更新本地时间" class="headerlink" title="更新本地时间"></a>更新本地时间</h3><p> <code>ln -sf /usr/share/zoneinfo/Asia/Shanghai /etc/localtime</code></p>
-<p> <code>hwclock --systohc</code></p>
-<p> #编辑 <code> nano /etc/locale.gen</code></p>
+<h2 id="开始安装"><a href="#开始安装" class="headerlink" title="开始安装"></a>开始安装</h2><h3 id="编辑镜像源"><a href="#编辑镜像源" class="headerlink" title="编辑镜像源"></a>编辑镜像源</h3> <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">nano /etc/pacman.d/mirrorlist</span><br></pre></td></tr></table></figure>
+
+<h3 id="拉取镜像"><a href="#拉取镜像" class="headerlink" title="拉取镜像"></a>拉取镜像</h3> <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pacstrap /mnt base base-devel linux linux-firmware vi nano</span><br></pre></td></tr></table></figure>
+
+<h3 id="更新分区表"><a href="#更新分区表" class="headerlink" title="更新分区表"></a>更新分区表</h3> <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">genfstab -U /mnt &gt;&gt; /mnt/etc/fstab</span><br></pre></td></tr></table></figure>
+
+<h3 id="检查分区表"><a href="#检查分区表" class="headerlink" title="检查分区表"></a>检查分区表</h3> <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cat /mnt/etc/fstab</span><br></pre></td></tr></table></figure>
+
+<h3 id="下载基本软件"><a href="#下载基本软件" class="headerlink" title="下载基本软件"></a>下载基本软件</h3> <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pacman -S vim networkmanager dhcpcd</span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="切换到本地"><a href="#切换到本地" class="headerlink" title="切换到本地"></a>切换到本地</h2> <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">arch-chroot /mnt</span><br></pre></td></tr></table></figure>
+
+<h3 id="更新本地时间"><a href="#更新本地时间" class="headerlink" title="更新本地时间"></a>更新本地时间</h3> <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ln -sf /usr/share/zoneinfo/Asia/Shanghai /etc/localtime</span><br></pre></td></tr></table></figure>
+
+ <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">hwclock --systohc</span><br></pre></td></tr></table></figure>
+
+<p> #编辑locale.gen<br> <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">nano /etc/locale.gen</span><br></pre></td></tr></table></figure></p>
 <p> #找到 <code>en_US.UTF-8</code> 和 <code>zh_CN.UTF-8</code> 去掉前面的#</p>
-<p> #更新 <code>locale-gen</code></p>
-<p> #编辑locale.conf文件 <code>nano /etc/locale.conf</code> &gt;<code>LANG=en_US.UTF-8</code></p>
-<h3 id="设置root密码"><a href="#设置root密码" class="headerlink" title="设置root密码"></a>设置root密码</h3><p> <code>passwd</code></p>
+<p> #更新<br> <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">locale-gen</span><br></pre></td></tr></table></figure></p>
+<p> #编辑locale.conf文件<br> <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">nano /etc/locale.conf</span><br></pre></td></tr></table></figure></p>
+<blockquote>
+<p>写入 <code>LANG=en_US.UTF-8</code></p>
+</blockquote>
+<h3 id="设置root密码"><a href="#设置root密码" class="headerlink" title="设置root密码"></a>设置root密码</h3> <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">passwd</span><br></pre></td></tr></table></figure>
+
 <blockquote>
 <p>不显示密码是正常情况</p>
 </blockquote>
-<h3 id="下载基本软件-1"><a href="#下载基本软件-1" class="headerlink" title="下载基本软件"></a>下载基本软件</h3><p> <code>pacman -S dialog wpa_supplicant ntfs-3g</code></p>
-<h3 id="安装CPU驱动"><a href="#安装CPU驱动" class="headerlink" title="安装CPU驱动"></a>安装CPU驱动</h3><p> #intel <code>pacman -S intel-ucode</code></p>
-<p> #amd <code>pacman -S amd-ucode</code></p>
-<h2 id="安装引导"><a href="#安装引导" class="headerlink" title="安装引导"></a>安装引导</h2><p> <code>pacman -S grub efibootmgr</code></p>
-<p> #多系统引导 <code>pacman -S os-prober</code></p>
-<p> #UEFI引导 <code>grub-install --target=x86_64-efi --efi-directory=/boot --bootloader=ArchLinux</code></p>
-<p> #更新grub <code>grub-mkconfig -o /boot/grub/grub.cfg</code></p>
-<h3 id="至此-安装结束"><a href="#至此-安装结束" class="headerlink" title="至此 安装结束"></a><strong>至此 安装结束</strong></h3><p> #退出 <code>exit</code></p>
-<p> #重启 <code>reboot</code></p>
+<h3 id="下载基本软件-1"><a href="#下载基本软件-1" class="headerlink" title="下载基本软件"></a>下载基本软件</h3> <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pacman -S dialog wpa_supplicant ntfs-3g</span><br></pre></td></tr></table></figure>
+
+<h3 id="安装CPU驱动"><a href="#安装CPU驱动" class="headerlink" title="安装CPU驱动"></a>安装CPU驱动</h3><p> #intel<br> <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pacman -S intel-ucode</span><br></pre></td></tr></table></figure></p>
+<p> #amd<br> <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pacman -S amd-ucode</span><br></pre></td></tr></table></figure></p>
+<h2 id="安装引导"><a href="#安装引导" class="headerlink" title="安装引导"></a>安装引导</h2> <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pacman -S grub efibootmgr</span><br></pre></td></tr></table></figure>
+
+<p> #多系统引导<br> <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pacman -S os-prober</span><br></pre></td></tr></table></figure></p>
+<p> #UEFI引导<br> <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">grub-install --target=x86_64-efi --efi-directory=/boot --bootloader=ArchLinux</span><br></pre></td></tr></table></figure></p>
+<p> #更新grub<br> <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">grub-mkconfig -o /boot/grub/grub.cfg</span><br></pre></td></tr></table></figure></p>
+<h3 id="至此-安装结束"><a href="#至此-安装结束" class="headerlink" title="至此 安装结束"></a><strong>至此 安装结束</strong></h3><p> #退出<br> <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">exit</span><br></pre></td></tr></table></figure></p>
+<p> #重启<br> <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">reboot</span><br></pre></td></tr></table></figure></p>
 
     </div>
 
@@ -376,6 +394,8 @@
 
       <div class="site-overview-wrap sidebar-panel">
         <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="k7tmiz"
+      src="/images/author.jpeg">
   <p class="site-author-name" itemprop="name">k7tmiz</p>
   <div class="site-description" itemprop="description">一些碎碎念</div>
 </div>
@@ -383,7 +403,7 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
           <a href="/archives">
-          <span class="site-state-item-count">9</span>
+          <span class="site-state-item-count">11</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>

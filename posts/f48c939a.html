@@ -5,10 +5,10 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
 <meta name="theme-color" content="#222">
 <meta name="generator" content="Hexo 7.3.0">
-  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
-  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
-  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
-  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/favicon-128.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16.png">
+  <link rel="mask-icon" href="/images/favicon-512.png" color="#222">
 
 <link rel="stylesheet" href="/css/main.css">
 
@@ -28,7 +28,7 @@
 <meta property="og:description" content="ArchLinux安装后指南root登录 #联网,基于之前装的NetworkManager">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2025-04-23T11:06:38.000Z">
-<meta property="article:modified_time" content="2025-05-18T14:23:34.271Z">
+<meta property="article:modified_time" content="2025-05-19T01:56:21.348Z">
 <meta property="article:author" content="k7tmiz">
 <meta property="article:tag" content="Linux">
 <meta name="twitter:card" content="summary">
@@ -171,6 +171,7 @@
     <i class="fa fa-arrow-up"></i>
     <span>0%</span>
   </div>
+  <div class="reading-progress-bar"></div>
 
 
     <main class="main">
@@ -188,7 +189,7 @@
     <link itemprop="mainEntityOfPage" href="https://k7tmiz.github.io/posts/f48c939a.html">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="image" content="/images/author.jpeg">
       <meta itemprop="name" content="k7tmiz">
       <meta itemprop="description" content="一些碎碎念">
     </span>
@@ -215,7 +216,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2025-05-18 22:23:34" itemprop="dateModified" datetime="2025-05-18T22:23:34+08:00">2025-05-18</time>
+                <time title="修改时间：2025-05-19 09:56:21" itemprop="dateModified" datetime="2025-05-19T09:56:21+08:00">2025-05-19</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -238,53 +239,61 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        <h1 id="ArchLinux安装后指南"><a href="#ArchLinux安装后指南" class="headerlink" title="ArchLinux安装后指南"></a>ArchLinux安装后指南</h1><h2 id="root登录"><a href="#root登录" class="headerlink" title="root登录"></a>root登录</h2><p> #联网,基于之前装的NetworkManager </p>
-<p> <code>systemctl start NetworkManager #这里必须大写</code></p>
-<p> #开机自启动 <code>systemctl enable NetworkManager</code></p>
-<p> <code>nmtui</code></p>
-<p> #触摸板驱动 <code>pacman -S xf86-input-synaptics</code></p>
-<p> #X11 <code>pacman -S xorg</code></p>
-<p> #Wayland <code>pacman -S wayland xorg-xwayland</code></p>
+        <h1 id="ArchLinux安装后指南"><a href="#ArchLinux安装后指南" class="headerlink" title="ArchLinux安装后指南"></a>ArchLinux安装后指南</h1><h2 id="root登录"><a href="#root登录" class="headerlink" title="root登录"></a>root登录</h2><p> #联网,基于之前装的NetworkManager</p>
+ <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">systemctl start NetworkManager #这里必须大写</span><br></pre></td></tr></table></figure>
+
+<p> #开机自启动<br> <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">systemctl enable NetworkManager</span><br></pre></td></tr></table></figure></p>
+ <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">nmtui</span><br></pre></td></tr></table></figure>
+
+<p> #触摸板驱动<br> <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pacman -S xf86-input-synaptics</span><br></pre></td></tr></table></figure></p>
+<p> #X11<br> <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pacman -S xorg</span><br></pre></td></tr></table></figure></p>
+<p> #Wayland<br> <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pacman -S wayland xorg-xwayland</span><br></pre></td></tr></table></figure></p>
 <blockquote>
-<p>NVIDIA 多装一个<code>xorg-xrandr</code></p>
+<p>NVIDIA 多装一个 <code>xorg-xrandr</code></p>
 </blockquote>
-<p> #开源中文字体安装 <code>pacman -S ttf-dejavu wqy-microhei</code></p>
-<p> #安装sudo <code>pacman -S sudo</code></p>
-<h2 id="添加用户并且提权"><a href="#添加用户并且提权" class="headerlink" title="添加用户并且提权"></a>添加用户并且提权</h2><p> #添加用户 <code>useradd -m -G wheel Bruno</code></p>
-<p> #密码 <code>passwd Bruno</code></p>
+<p> #开源中文字体安装<br> <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pacman -S ttf-dejavu wqy-microhei</span><br></pre></td></tr></table></figure></p>
+<p> #安装sudo<br> <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pacman -S sudo</span><br></pre></td></tr></table></figure></p>
+<h2 id="添加用户并且提权"><a href="#添加用户并且提权" class="headerlink" title="添加用户并且提权"></a>添加用户并且提权</h2><p> #添加用户<br> <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">useradd -m -G wheel Bruno</span><br></pre></td></tr></table></figure></p>
+<p> #密码<br> <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">passwd Bruno</span><br></pre></td></tr></table></figure></p>
 <p> <code>visudo</code> 或者 <code>nano /etc/sudoers</code></p>
 <blockquote>
 <p>找到#%wheel ALL&#x3D;(ALL)ALL 按X去掉# :wq 保存退出</p>
 </blockquote>
-<p> #重启 <code>reboot</code></p>
-<h2 id="重启进来用user登录"><a href="#重启进来用user登录" class="headerlink" title="重启进来用user登录"></a>重启进来用user登录</h2><p> #intel核显驱动 <code>sudo pacman -S xf86-video-intel</code></p>
+<p> #重启<br> <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">reboot</span><br></pre></td></tr></table></figure></p>
+<h2 id="重启进来用user登录"><a href="#重启进来用user登录" class="headerlink" title="重启进来用user登录"></a>重启进来用user登录</h2><p> #intel核显驱动<br> <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo pacman -S xf86-video-intel</span><br></pre></td></tr></table></figure></p>
 <h2 id="安装桌面环境"><a href="#安装桌面环境" class="headerlink" title="安装桌面环境"></a>安装桌面环境</h2><blockquote>
 <p>本人是KDE的忠实教徒，如需其他桌面，请自行搜索</p>
 </blockquote>
-<p> #Plasma <code>sudo pacman -S plasma kde-applications</code></p>
+<p> #Plasma<br> <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo pacman -S plasma kde-applications</span><br></pre></td></tr></table></figure></p>
 <blockquote>
 <p>最小Plasma桌面 plasma-meta</p>
 </blockquote>
-<p> #锁屏 <code>sudo pacman -S sddm</code></p>
+<p> #锁屏<br> <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo pacman -S sddm</span><br></pre></td></tr></table></figure></p>
 <p> #向 &#x2F;etc&#x2F;sddm.conf 中追加下面的内容。其中，QT_FONT_DPI 的值为你的 DPI 缩放数值 (计算方式是 96 乘以你的缩放比例，比如 150% 缩放则为 <code>144</code>)。QT_SCREEN_SCALE_FACTORS 的值为你需要的 DPI 缩放比例（比如，若为 150% 就直接填 <code>1.5</code>）,同时 sddm 登录界面不会自动将数字小键盘打开, sddm 的鼠标指针也可以更改一下</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">[General]</span><br><span class="line">GreeterEnvironment=QT_SCREEN_SCALE_FACTORS=1.5,QT_FONT_DPI=144</span><br><span class="line"></span><br><span class="line"># 打开数字小键盘</span><br><span class="line">Numlock=on</span><br><span class="line"></span><br><span class="line"># 修改鼠标指针，加入下面的设置</span><br><span class="line">[Theme]</span><br><span class="line">CursorTheme=breeze_cursors</span><br></pre></td></tr></table></figure>
 <blockquote>
 <p>修改完 HiDPI 设置之后可能需要重新启动系统。</p>
 </blockquote>
-<p> #开机自启动设置 <code>systemctl enable sddm</code></p>
-<p> #笔记本电源管理 <code>sudo pacman -S power-profiles-daemon</code> (需要启用 <code>power-profiles-daemon</code> 服务)</p>
-<h2 id="一些驱动"><a href="#一些驱动" class="headerlink" title="一些驱动"></a>一些驱动</h2><p> #音频 <code>sudo pacman -S alsa-utils pipewire pipewire-alsa pipewire-pulse</code></p>
+<p> #开机自启动设置<br> <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">systemctl enable sddm</span><br></pre></td></tr></table></figure></p>
+<p> #笔记本电源管理<br> <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo pacman -S power-profiles-daemon</span><br></pre></td></tr></table></figure><br> (需要启用 <code>power-profiles-daemon</code> 服务)</p>
+<h2 id="一些驱动"><a href="#一些驱动" class="headerlink" title="一些驱动"></a>一些驱动</h2><p> #音频<br> <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo pacman -S alsa-utils pipewire pipewire-alsa pipewire-pulse</span><br></pre></td></tr></table></figure></p>
 <blockquote>
 <p>有可能装完还是用不了，我这里为了方便，直接一站式，有可能需要装<code>sof-firmware</code>–开源音频驱动</p>
 </blockquote>
-<p> #中文输入法 <code>sudo pacman -S fcitx fcitx-rime fcitx-im kcm-fcitx</code></p>
-<p> #Sunpinyin <code>sudo pacman -S fcitx-sunpinyin</code></p>
-<p> #Sogoupinyin <code>sudo pacman -S fcitx-sogoupinyin</code></p>
+<p> #中文输入法<br> <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo pacman -S fcitx fcitx-rime fcitx-im kcm-fcitx</span><br></pre></td></tr></table></figure></p>
+<p> #Sunpinyin<br> <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo pacman -S fcitx-sunpinyin</span><br></pre></td></tr></table></figure></p>
+<p> #Sogoupinyin<br> <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo pacman -S fcitx-sogoupinyin</span><br></pre></td></tr></table></figure></p>
 <p> #编辑 ~&#x2F;.xprofile文件</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">export GTK*IM*MODULE=fcitx</span><br><span class="line"></span><br><span class="line">export QT*IM*MODULE=fcitx</span><br><span class="line"></span><br><span class="line">export XMODIFIERS=@im=fcitx</span><br><span class="line"></span><br></pre></td></tr></table></figure>
 
-
-
+<p> #zsh<br>通过pacman安装zsh，然后将<a href="../../files/zshrc">此文件</a>的内容覆盖到~&#x2F;.zshrc中，完成配置。</p>
+<blockquote>
+<ul>
+<li>需要事先安装git命令</li>
+<li>使用<code>chsh -s /bin/zsh</code>来更改当前用户的默认终端</li>
+</ul>
+</blockquote>
+<p>ref:<a target="_blank" rel="noopener" href="https://www.bwsl.wang/linux/34.html">Archlinux 安装笔记</a></p>
 <h2 id="ArchLinuxCN镜像源以及AUR"><a href="#ArchLinuxCN镜像源以及AUR" class="headerlink" title="ArchLinuxCN镜像源以及AUR"></a>ArchLinuxCN镜像源以及AUR</h2><p><strong>编辑&#x2F;etc&#x2F;pacman.conf</strong></p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">[archlinuxcn]</span><br><span class="line">Server = https://mirrors.cernet.edu.cn/archlinuxcn/$arch</span><br></pre></td></tr></table></figure>
 
@@ -381,6 +390,8 @@
 
       <div class="site-overview-wrap sidebar-panel">
         <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="k7tmiz"
+      src="/images/author.jpeg">
   <p class="site-author-name" itemprop="name">k7tmiz</p>
   <div class="site-description" itemprop="description">一些碎碎念</div>
 </div>
@@ -388,7 +399,7 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
           <a href="/archives">
-          <span class="site-state-item-count">9</span>
+          <span class="site-state-item-count">11</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
