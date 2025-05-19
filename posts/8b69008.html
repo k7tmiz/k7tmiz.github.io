@@ -30,7 +30,7 @@
 <meta property="og:image" content="https://k7tmiz.github.io/images/Hexo/e.png">
 <meta property="og:image" content="https://k7tmiz.github.io/images/Hexo/a.png">
 <meta property="article:published_time" content="2025-05-18T14:58:56.000Z">
-<meta property="article:modified_time" content="2025-05-19T03:04:49.754Z">
+<meta property="article:modified_time" content="2025-05-19T05:14:54.846Z">
 <meta property="article:author" content="k7tmiz">
 <meta property="article:tag" content="“k7tmiz,Katmai”">
 <meta name="twitter:card" content="summary">
@@ -220,7 +220,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2025-05-19 11:04:49" itemprop="dateModified" datetime="2025-05-19T11:04:49+08:00">2025-05-19</time>
+                <time title="修改时间：2025-05-19 13:14:54" itemprop="dateModified" datetime="2025-05-19T13:14:54+08:00">2025-05-19</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -391,7 +391,7 @@
 <p>到目前为止，置顶功能已经可以实现了。</p>
 <p>不过置顶的文章显示在最上面之后，如果没有明确的置顶标志，是不是感觉有点怪怪的</p>
 <p><strong>设置置顶标志</strong><br>打开： <code>themes/next/layout/_macro</code> 目录下的<code>post.swig</code>文件，定位到 <code>&lt;div class=&quot;post-meta&quot;&gt;</code>标签下，插入如下代码：</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">&#123;% if post.top %&#125;</span><br><span class="line">     &lt;font color=7D26CD&gt;置顶&lt;/font&gt;</span><br><span class="line">     &lt;span class=&quot;post-meta-divider&quot;&gt;|&lt;/span&gt;</span><br><span class="line">   &#123;% endif %&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">&#123;% if post.top %&#125;</span><br><span class="line">	&lt;font color=7D26CD&gt;置顶&lt;/font&gt;</span><br><span class="line">	&lt;span class=&quot;post-meta-divider&quot;&gt;|&lt;/span&gt;</span><br><span class="line">&#123;% endif %&#125;</span><br></pre></td></tr></table></figure>
 <p><img src="/../../images/Hexo/e.png" alt="效果如图" title="效果如图"><br>ref: <a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/33617563">Hexo博客优化之彻底解决博文置顶问题</a><br>ref: <a target="_blank" rel="noopener" href="https://www.itfanr.cc/2019/09/05/hexo-top-optimize/">Hexo博客置顶功能优化</a></p>
 <h3 id="定制Next主题的Sidebar-state"><a href="#定制Next主题的Sidebar-state" class="headerlink" title="定制Next主题的Sidebar_state"></a>定制Next主题的Sidebar_state</h3><p>因为只有true和false 而我想定制在Hexo的NexT主题中仅显示侧边栏的archive部分并隐藏tags</p>
 <p>修改Next配置文件 <code>theme/next/layout/_partials/sidebar/site-overview.swig</code> ，注释你想注释掉的，比如我注释掉了 <code>categories</code> 和 <code>tags</code> </p>
