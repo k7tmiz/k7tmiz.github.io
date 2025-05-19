@@ -10,7 +10,7 @@ date: 2025-04-19 22:28:32
 
 ## 初步配置
 
-### 联网
+#### 联网
 
  ```
  dhcpcd/iwctl
@@ -22,18 +22,21 @@ date: 2025-04-19 22:28:32
 > station 'device' get-networks
 > station 'device' connect 'wlan'
 
- #更新ntp服务器
+#### 更新ntp服务器
  ```
  timdatectl set-ntp true
  ```
 
-### 分区及挂载
+## 分区及挂载
 
 > 此处演示p1:EFI p2:/mnt p3:swap
 
- #查看目前磁盘，分区状况 ```lsblk```
+#### 查看目前磁盘，分区状况
+```
+lsblk
+```
 
- #分区
+#### 分区
  ```
  fdisk /dev/sdX / fdisk /dev/nvme0n1
  ```
@@ -43,42 +46,42 @@ date: 2025-04-19 22:28:32
 > g 转换GPT
 > t 更改分区类型：EFI:1  SWAP:19  Linux:20
 
- #格式化分区为FAT32格式
+#### 格式化分区为FAT32格式
  ```
  mkfs.fat -F32 /dev/nvme0n1p1
  ```
 
- #格式化分区为EXT4格式
+#### 格式化分区为EXT4格式
  ```
  mkfs.ext4 /dev/nvme0n1p2
  ```
 
- #格式化分区为SWAP格式
+#### 格式化分区为SWAP格式
  ```
  mkswap /dev/nvme0n1p3
  ```
 
- #开启SWAP
+#### 开启SWAP
  ```
  swapon /dev/nvme0n1p3
  ```
 
- #挂载根分区
+#### 挂载根分区
  ```
  mount /dev/nvme0n1p2 /mnt
  ```
 
- #新建Boot文件夹
+#### 新建Boot文件夹
  ```
  mkdir /mnt/boot
  ```
 
- #新建Home文件夹
+#### 新建Home文件夹
  ```
  mkdir /mnt/home
  ```
 
- #挂载Boot分区
+#### 挂载Boot分区
  ```
  mount /dev/nvme0n1p1 /mnt/boot
  ```
@@ -89,31 +92,31 @@ date: 2025-04-19 22:28:32
 
 ## 开始安装
 
-### 编辑镜像源
+#### 编辑镜像源
 
  ```
  nano /etc/pacman.d/mirrorlist
  ```
 
-### 拉取镜像
+#### 拉取镜像
 
  ```
  pacstrap /mnt base base-devel linux linux-firmware vi nano
  ```
 
-### 更新分区表
+#### 更新分区表
 
  ```
  genfstab -U /mnt >> /mnt/etc/fstab
  ```
 
-### 检查分区表
+#### 检查分区表
 
  ```
  cat /mnt/etc/fstab
  ```
 
-### 下载基本软件
+#### 下载基本软件
 
  ```
  pacman -S vim networkmanager dhcpcd
@@ -127,7 +130,7 @@ date: 2025-04-19 22:28:32
  arch-chroot /mnt
  ```
 
-### 更新本地时间
+#### 更新本地时间
 
  ```
  ln -sf /usr/share/zoneinfo/Asia/Shanghai /etc/localtime
@@ -137,25 +140,25 @@ date: 2025-04-19 22:28:32
  hwclock --systohc
  ```
 
- #编辑locale.gen
+#### 编辑locale.gen
  ``` 
  nano /etc/locale.gen
  ```
 
- #找到 `en_US.UTF-8` 和 `zh_CN.UTF-8` 去掉前面的#
+**找到 `en_US.UTF-8` 和 `zh_CN.UTF-8` 去掉前面的#**
 
- #更新
+#### 更新
  ```
  locale-gen
  ```
 
- #编辑locale.conf文件
+#### 编辑locale.conf文件
  ```
  nano /etc/locale.conf
  ``` 
  >写入 `LANG=en_US.UTF-8`
 
-### 设置root密码
+#### 设置root密码
 
  ```
  passwd
@@ -163,20 +166,20 @@ date: 2025-04-19 22:28:32
 
 > 不显示密码是正常情况
 
-### 下载基本软件
+#### 下载基本软件
 
  ```
  pacman -S dialog wpa_supplicant ntfs-3g
  ```
 
-### 安装CPU驱动
+#### 安装CPU驱动
 
- #intel
+##### intel
  ```
  pacman -S intel-ucode
  ```
 
- #amd
+##### amd
  ```
  pacman -S amd-ucode
  ```
@@ -189,31 +192,31 @@ date: 2025-04-19 22:28:32
  pacman -S grub efibootmgr
  ```
 
- #多系统引导
+#### 多系统引导
  ```
  pacman -S os-prober
  ```
 
- #UEFI引导
+#### UEFI引导
  ```
  grub-install --target=x86_64-efi --efi-directory=/boot --bootloader=ArchLinux
  ```
 
- #更新grub
+#### 更新grub
  ```
  grub-mkconfig -o /boot/grub/grub.cfg
  ```
 
 
 
-### **至此 安装结束**
+## **至此 安装结束**
 
- #退出
+#### 退出
  ```
  exit
  ```
 
- #重启
+#### 重启
  ```
  reboot
  ```
