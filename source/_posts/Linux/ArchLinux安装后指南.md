@@ -164,7 +164,12 @@ export XMODIFIERS=@im=fcitx
 
 ````
 
+ #zsh
+通过pacman安装zsh，然后将[此文件](../../files/zshrc)的内容覆盖到~/.zshrc中，完成配置。
+> - 需要事先安装git命令
+>	 - 使用`chsh -s /bin/zsh`来更改当前用户的默认终端
 
+ref:[Archlinux 安装笔记](https://www.bwsl.wang/linux/34.html)
 
 ## ArchLinuxCN镜像源以及AUR
 
