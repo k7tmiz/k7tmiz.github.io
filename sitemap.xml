@@ -101,6 +101,15 @@
   </url>
   
   <url>
+    <loc>https://k7tmiz.github.io/about/index.html</loc>
+    
+    <lastmod>2025-05-18</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
     <loc>https://k7tmiz.github.io/tags/index.html</loc>
     
     <lastmod>2025-05-18</lastmod>
@@ -111,15 +120,6 @@
   
   <url>
     <loc>https://k7tmiz.github.io/categories/index.html</loc>
-    
-    <lastmod>2025-05-18</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>https://k7tmiz.github.io/about/index.html</loc>
     
     <lastmod>2025-05-18</lastmod>
     
@@ -151,6 +151,13 @@
   </url>
   
   <url>
+    <loc>https://k7tmiz.github.io/tags/Spanish/</loc>
+    <lastmod>2025-05-19</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
     <loc>https://k7tmiz.github.io/tags/Tech/</loc>
     <lastmod>2025-05-19</lastmod>
     <changefreq>weekly</changefreq>
@@ -159,13 +166,6 @@
   
   <url>
     <loc>https://k7tmiz.github.io/tags/Travel/</loc>
-    <lastmod>2025-05-19</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.2</priority>
-  </url>
-  
-  <url>
-    <loc>https://k7tmiz.github.io/tags/Spanish/</loc>
     <lastmod>2025-05-19</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
@@ -188,6 +188,13 @@
   </url>
   
   <url>
+    <loc>https://k7tmiz.github.io/categories/Spanish/</loc>
+    <lastmod>2025-05-19</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
     <loc>https://k7tmiz.github.io/categories/Tech/</loc>
     <lastmod>2025-05-19</lastmod>
     <changefreq>weekly</changefreq>
@@ -196,13 +203,6 @@
   
   <url>
     <loc>https://k7tmiz.github.io/categories/Travel/</loc>
-    <lastmod>2025-05-19</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.2</priority>
-  </url>
-  
-  <url>
-    <loc>https://k7tmiz.github.io/categories/Spanish/</loc>
     <lastmod>2025-05-19</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
