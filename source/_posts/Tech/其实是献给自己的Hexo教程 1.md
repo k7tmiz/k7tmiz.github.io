@@ -87,6 +87,16 @@ scheme: Gemini
 打开 `themes/next/_config.yml` ，搜索关键字 `scrollpercent` ,把 false 改为 true
 >如果想把 top 按钮放在侧边栏，搜索关键字sidebar ,把 false 改为 true
 
+### 侧边栏加入网易云音乐播放器插件
+首先在网页搜索网易云音乐，选择音乐或者歌单，并生成外链：
+![外链](../../images/Hexo/f.png)
+
+然后得到外链html代码：
+![插件html](../../images/Hexo/g.png)
+
+将代码粘贴到一个合适的位置，建议放在侧边栏，在Blog/themes/next/layout/_macro/sidebar.swig文件下，选择位置复制进去，不同位置效果不同：
+![效果](../../images/Hexo/h.png)
+
 ### 隐藏网页底部powered By Hexo / 强力驱动
 打开 `themes/next/layout/_partials/footer.swig` ,使用注释隐藏之间的代码即可，或者直接删除。位置如下：
 ```
