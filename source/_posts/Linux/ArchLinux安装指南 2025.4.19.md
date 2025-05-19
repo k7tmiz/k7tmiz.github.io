@@ -6,7 +6,6 @@ categories:
   - Linux
 date: 2025-04-19 22:28:32
 ---
-# ArchLinux安装指南 2025.4.19
 
 ## 初步配置
 

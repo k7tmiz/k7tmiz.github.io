@@ -7,8 +7,6 @@ categories:
 date: 2025-04-23 19:06:38
 ---
 
-# ArchLinux安装后指南
-
 ## root登录
 
 #### 联网,基于之前装的NetworkManager
