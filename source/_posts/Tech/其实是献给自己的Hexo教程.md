@@ -266,8 +266,17 @@ avatar:
   rotated: true #鼠标放在头像上时是否旋转
 ```
 
-
-
+### 添加博客自定义图标
+博客网站的图标可以在[easyicon](https://www.easyicon.cc/)、[bitbug](https://www.bitbug.net/)、[iconfont](https://www.iconfont.cn/)等网站选择和制作，然后选择或者创建相应大小的图标文件，放置在 `themes/next/sources/images` 目录下，然后修改 `themes/next/_config.yml`
+```
+favicon:
+  small: /images/favicon-16.png
+  medium: /images/favicon-32.png
+  apple_touch_icon: /images/favicon-128.png
+  safari_pinned_tab: /images/favicon-512.png
+  #android_manifest: /images/manifest.json
+  #ms_browserconfig: /images/browserconfig.xml
+```
 
 ### 定制Next主题的Sidebar_state
 因为只有true和false 而我想定制在Hexo的NexT主题中仅显示侧边栏的archive部分并隐藏tags
