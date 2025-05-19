@@ -278,6 +278,41 @@ favicon:
   #ms_browserconfig: /images/browserconfig.xml
 ```
 
+### 增加文章置顶功能
+```
+npm uninstall hexo-generator-index --save
+npm install hexo-generator-index-pin-top --save
+```
+然后在需要置顶的文章的Front-matter中加上top: true即可。比如下面这篇文章：
+```
+---
+title: 我与Linux的情缘
+tags: Linux
+categories:
+  - Linux
+abbrlink: d773eb13
+date: 2025-05-11 22:24:04
+top: true
+---
+```
+
+到目前为止，置顶功能已经可以实现了。
+
+不过置顶的文章显示在最上面之后，如果没有明确的置顶标志，是不是感觉有点怪怪的
+
+**设置置顶标志**
+打开： `themes/next/layout/_macro` 目录下的`post.swig`文件，定位到 `<div class="post-meta">`标签下，插入如下代码：
+
+```
+       {% if post.top %}
+            <font color=7D26CD>置顶</font>
+            <span class="post-meta-divider">|</span>
+          {% endif %}
+```
+![效果如图](../../images/Hexo/e.png "效果如图")
+ref: [Hexo博客优化之彻底解决博文置顶问题](https://zhuanlan.zhihu.com/p/33617563)
+ref: [Hexo博客置顶功能优化](https://www.itfanr.cc/2019/09/05/hexo-top-optimize/)
+
 ### 定制Next主题的Sidebar_state
 因为只有true和false 而我想定制在Hexo的NexT主题中仅显示侧边栏的archive部分并隐藏tags
 
