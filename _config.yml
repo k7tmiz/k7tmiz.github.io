@@ -122,6 +122,11 @@ auto_category:
  enable: true
  depth:
 
+# 谷歌站点地图生成
+Plugins:
+- hexo-generator-sitemap
+sitemap:
+    path: sitemap.xml
 ## Plugins: https://hexo.io/plugins/
 ## Themes: https://hexo.io/themes/
 theme: next

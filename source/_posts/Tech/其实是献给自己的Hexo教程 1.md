@@ -304,10 +304,10 @@ top: true
 打开： `themes/next/layout/_macro` 目录下的`post.swig`文件，定位到 `<div class="post-meta">`标签下，插入如下代码：
 
 ```
-       {% if post.top %}
-            <font color=7D26CD>置顶</font>
-            <span class="post-meta-divider">|</span>
-          {% endif %}
+					{% if post.top %}
+						<font color=7D26CD>置顶</font>
+						<span class="post-meta-divider">|</span>
+					{% endif %}
 ```
 ![效果如图](../../images/Hexo/e.png "效果如图")
 ref: [Hexo博客优化之彻底解决博文置顶问题](https://zhuanlan.zhihu.com/p/33617563)
