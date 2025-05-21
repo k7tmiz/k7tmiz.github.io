@@ -8,7 +8,7 @@ categories:
   - Linux
 date: 2025-04-19 22:28:32
 ---
-# Switch_SteamLibrary-in-Linux
+# Switch-SteamLibrary-Linux
 
 > 这是一个用于电脑中有多Linux系统，并且希望自己的游戏统一存放在NTFS格式盘的小脚本。它旨在可以让你的多Linux系统，包括Windows都可以调用一个同一个Steam游戏库的小脚本。
 
@@ -16,11 +16,11 @@ date: 2025-04-19 22:28:32
 ### 使用说明:
 
 ```
-git clone https://github.com/k7tmiz/Switch_SteamLibrary-in-Linux.git
+git clone https://github.com/k7tmiz/Switch-SteamLibrary-Linux.git
 ```
 
 ```
-cd Switch_SteamLibrary-in-Linux
+cd Switch-SteamLibrary-Linux
 ```
 
 #### 使用文本编辑器进行编辑
