@@ -2,6 +2,15 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>https://k7tmiz.github.io/posts/2a1b98b0.html</loc>
+    
+    <lastmod>2025-05-21</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
     <loc>https://k7tmiz.github.io/posts/e85c1bad.html</loc>
     
     <lastmod>2025-05-21</lastmod>
@@ -12,15 +21,6 @@
   
   <url>
     <loc>https://k7tmiz.github.io/posts/5a88bde.html</loc>
-    
-    <lastmod>2025-05-21</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>https://k7tmiz.github.io/posts/2a1b98b0.html</loc>
     
     <lastmod>2025-05-21</lastmod>
     
@@ -197,14 +197,14 @@
   </url>
   
   <url>
-    <loc>https://k7tmiz.github.io/categories/Msi/</loc>
+    <loc>https://k7tmiz.github.io/categories/Tech/</loc>
     <lastmod>2025-05-21</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
-    <loc>https://k7tmiz.github.io/categories/Tech/</loc>
+    <loc>https://k7tmiz.github.io/categories/Msi/</loc>
     <lastmod>2025-05-21</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
