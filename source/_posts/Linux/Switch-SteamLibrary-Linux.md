@@ -1,5 +1,5 @@
 ---
-title: Switch_SteamLibrary-in-Linux
+title: Switch-SteamLibrary-Linux
 tags:
   - Linux
   - Tech
