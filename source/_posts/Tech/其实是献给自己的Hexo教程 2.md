@@ -79,3 +79,5 @@ npm install -g hexo-cli
 npm install hexo-deployer-git -save
 npm install #安装所有依赖模块
 ```
+
+>插曲，其实不设置成默认的也可以，只不过拉取的时候要git clone -b `branch_name` `source`
