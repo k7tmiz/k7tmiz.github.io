@@ -1,6 +1,8 @@
 ---
 title: MSI-PERKEYRGB
-tags: Msi
+tags: 
+		- Msi
+		- Linux
 abbrlink: 5a88bde
 categories:
   - Msi

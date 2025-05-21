@@ -1,9 +1,11 @@
 ---
 title: Switch_SteamLibrary-in-Linux
-tags: Tech
+tags:
+  - Linux
+  - Tech
 abbrlink: 2a1b98b0
 categories:
-  - Tech
+  - Linux
 date: 2025-04-19 22:28:32
 ---
 # Switch_SteamLibrary-in-Linux
