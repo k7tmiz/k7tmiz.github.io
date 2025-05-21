@@ -2,6 +2,15 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>https://k7tmiz.github.io/posts/5e452484.html</loc>
+    
+    <lastmod>2025-05-21</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
     <loc>https://k7tmiz.github.io/posts/2a1b98b0.html</loc>
     
     <lastmod>2025-05-21</lastmod>
@@ -65,15 +74,6 @@
   </url>
   
   <url>
-    <loc>https://k7tmiz.github.io/posts/5e452484.html</loc>
-    
-    <lastmod>2025-05-19</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
     <loc>https://k7tmiz.github.io/posts/b8718f34.html</loc>
     
     <lastmod>2025-05-18</lastmod>
@@ -110,15 +110,6 @@
   </url>
   
   <url>
-    <loc>https://k7tmiz.github.io/categories/index.html</loc>
-    
-    <lastmod>2025-05-18</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
     <loc>https://k7tmiz.github.io/about/index.html</loc>
     
     <lastmod>2025-05-18</lastmod>
@@ -136,6 +127,15 @@
     <priority>0.6</priority>
   </url>
   
+  <url>
+    <loc>https://k7tmiz.github.io/categories/index.html</loc>
+    
+    <lastmod>2025-05-18</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
 
   <url>
     <loc>https://k7tmiz.github.io/</loc>
@@ -144,13 +144,6 @@
     <priority>1.0</priority>
   </url>
 
-  
-  <url>
-    <loc>https://k7tmiz.github.io/tags/Msi/</loc>
-    <lastmod>2025-05-21</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.2</priority>
-  </url>
   
   <url>
     <loc>https://k7tmiz.github.io/tags/Linux/</loc>
@@ -167,7 +160,7 @@
   </url>
   
   <url>
-    <loc>https://k7tmiz.github.io/tags/Travel/</loc>
+    <loc>https://k7tmiz.github.io/tags/Msi/</loc>
     <lastmod>2025-05-21</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
@@ -180,7 +173,21 @@
     <priority>0.2</priority>
   </url>
   
+  <url>
+    <loc>https://k7tmiz.github.io/tags/Travel/</loc>
+    <lastmod>2025-05-21</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
 
+  
+  <url>
+    <loc>https://k7tmiz.github.io/categories/Linux/</loc>
+    <lastmod>2025-05-21</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
   
   <url>
     <loc>https://k7tmiz.github.io/categories/Msi/</loc>
@@ -190,14 +197,7 @@
   </url>
   
   <url>
-    <loc>https://k7tmiz.github.io/categories/Tech/</loc>
-    <lastmod>2025-05-21</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.2</priority>
-  </url>
-  
-  <url>
-    <loc>https://k7tmiz.github.io/categories/Linux/</loc>
+    <loc>https://k7tmiz.github.io/categories/Spanish/</loc>
     <lastmod>2025-05-21</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
@@ -211,7 +211,7 @@
   </url>
   
   <url>
-    <loc>https://k7tmiz.github.io/categories/Spanish/</loc>
+    <loc>https://k7tmiz.github.io/categories/Tech/</loc>
     <lastmod>2025-05-21</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
