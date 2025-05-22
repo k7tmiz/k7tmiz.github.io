@@ -148,7 +148,7 @@ CursorTheme=breeze_cursors
  yay -S fcitx5-pinyin-sougou
  ```
 
-编辑 `~/.xprofile` 文件
+编辑 `~/.xprofile` 和 `/etc/environment`文件
 
 ````
 
