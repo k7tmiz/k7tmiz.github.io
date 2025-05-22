@@ -152,9 +152,9 @@ CursorTheme=breeze_cursors
 
 ````
 
-export GTK*IM*MODULE=fcitx
+export GTK_IM_MODULE=fcitx
 
-export QT*IM*MODULE=fcitx
+export QT_IM_MODULE=fcitx
 
 export XMODIFIERS=@im=fcitx
 
