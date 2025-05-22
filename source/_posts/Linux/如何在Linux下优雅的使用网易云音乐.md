@@ -87,6 +87,11 @@ KDE的系统托盘也能正常识别使用
 yay -S bottles
 ```
 
+Flatpak通过这个命令安装
+```
+flatpak install flathub com.usebottles.bottles
+```
+
 安装好以后打开它，等加载一会
 
 左上角➕号新建一个Bottle，名字随便写
