@@ -1,4 +1,4 @@
-# k7tmiz.github.io ✨
+# k7tmiz.com ✨
 
 👋 欢迎来到我的个人小站！
 
