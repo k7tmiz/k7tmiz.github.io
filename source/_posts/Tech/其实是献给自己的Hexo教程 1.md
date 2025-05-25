@@ -239,6 +239,76 @@ marked:
 
 Github仓库: [hexo-renderer-marked](https://github.com/hexojs/hexo-renderer-marked)
 
+### Hexo插入音视频等等
+
+有图片，那怎么少得了音视频呢
+
+安装插件：
+```
+ npm install hexo-tag-mmedia@1 --save
+```
+
+>别问为什么不用dplayer和apldayer,原因就是用不了，不兼容新版本
+
+修改博客配置文件（根目录/_config.yml），修改添加以下代码
+```
+mmedia:
+  audio:
+    default:
+  video:
+    default:
+  aplayer:
+    js: https://cdn.jsdelivr.net/npm/aplayer@1/dist/APlayer.min.js
+    css: https://cdn.jsdelivr.net/npm/aplayer@1/dist/APlayer.min.css
+    default:
+      contents:
+  meting:
+    js: https://cdn.jsdelivr.net/npm/meting@2/dist/Meting.min.js
+    api:
+    default:
+  dplayer:
+    js: https://cdn.jsdelivr.net/npm/dplayer@1/dist/DPlayer.min.js
+    hls_js: https://cdn.jsdelivr.net/npm/hls.js/dist/hls.min.js
+    dash_js: https://cdn.jsdelivr.net/npm/dashjs/dist/dash.all.min.js
+    shaka_dash_js: https://cdn.jsdelivr.net/npm/shaka-player/dist/shaka-player.compiled.js
+    flv_js: https://cdn.jsdelivr.net/npm/flv.js/dist/flv.min.js
+    webtorrent_js: https://cdn.jsdelivr.net/npm/webtorrent/webtorrent.min.js
+    default:
+      contents:
+  bilibili:
+    default:
+      page: 1
+      danmaku: true
+      allowfullscreen: allowfullscreen
+      sandbox: allow-top-navigation allow-same-origin allow-forms allow-scripts allow-popups
+      width: 100%
+      max_width: 850px
+      margin: auto
+  xigua:
+    default:
+      autoplay: false
+      startTime: 0
+      allowfullscreen: allowfullscreen
+      sandbox: allow-top-navigation allow-same-origin allow-forms allow-scripts allow-popups
+      width: 100%
+      max_width: 850px
+      margin: auto
+```
+
+使用方法：
+
+Aplayer：
+```
+{% mmedia "aplayer" "name:songName" "url:a.mp3" %}
+```
+
+Dplayer：
+```
+{% mmedia "dplayer" "url:a.mp4" %}
+```
+
+ref：[hexo-tag-mmedia](https://www.u2sb.com/OpenSw/hexo-tag-mmedia/)
+
 ### 一键回顶部
 
 修改Next配置文件（themes/next/_config.yml），修改以下代码
