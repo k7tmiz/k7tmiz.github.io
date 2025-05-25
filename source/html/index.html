@@ -1,0 +1,369 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>学习计时器</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#3B82F6',
+                        secondary: '#10B981',
+                        accent: '#F59E0B',
+                        dark: '#1F2937',
+                        light: '#F3F4F6'
+                    },
+                    fontFamily: {
+                        inter: ['Inter', 'system-ui', 'sans-serif'],
+                    },
+                }
+            }
+        }
+    </script>
+    <style type="text/tailwindcss">
+        @layer utilities {
+            .content-auto {
+                content-visibility: auto;
+            }
+            .timer-shadow {
+                box-shadow: 0 0 30px rgba(59, 130, 246, 0.3);
+            }
+            .btn-hover {
+                transition: all 0.3s ease;
+            }
+            .btn-hover:hover {
+                transform: translateY(-2px);
+            }
+            .progress-animation {
+                transition: width 1s linear;
+            }
+            .pulse {
+                animation: pulse 2s infinite;
+            }
+            @keyframes pulse {
+                0% { transform: scale(1); }
+                50% { transform: scale(1.05); }
+                100% { transform: scale(1); }
+            }
+            .breathe {
+                animation: breathe 4s infinite;
+            }
+            @keyframes breathe {
+                0% { transform: scale(1); opacity: 1; }
+                50% { transform: scale(1.1); opacity: 0.7; }
+                100% { transform: scale(1); opacity: 1; }
+            }
+        }
+    </style>
+</head>
+<body class="font-inter bg-gradient-to-br from-slate-50 to-slate-100 min-h-screen flex flex-col items-center justify-center p-4">
+    <div class="max-w-md w-full bg-white rounded-2xl shadow-xl overflow-hidden transform transition-all duration-300 hover:shadow-2xl">
+        <!-- 头部区域 -->
+        <div class="bg-primary text-white p-6">
+            <h1 class="text-[clamp(1.5rem,3vw,2rem)] font-bold text-center mb-2">学习计时器</h1>
+            <p class="text-center text-slate-100 text-sm">专注学习，科学休息</p>
+        </div>
+        
+        <!-- 计时器显示区域 -->
+        <div class="p-6">
+            <div class="flex justify-center mb-8">
+                <div id="timer-display" class="relative w-64 h-64 rounded-full bg-gradient-to-br from-primary/10 to-primary/20 flex items-center justify-center timer-shadow">
+                    <div class="absolute inset-0 rounded-full border-8 border-primary/20"></div>
+                    <div class="absolute inset-4 rounded-full border-4 border-primary/40 flex items-center justify-center">
+                        <span id="time-left" class="text-[clamp(2rem,5vw,3rem)] font-bold text-dark">90:00</span>
+                    </div>
+                    <div id="progress-ring" class="absolute inset-0 rounded-full">
+                        <svg class="w-full h-full" viewBox="0 0 100 100">
+                            <circle cx="50" cy="50" r="46" fill="none" stroke="#E5E7EB" stroke-width="4" />
+                            <circle id="progress-circle" cx="50" cy="50" r="46" fill="none" stroke="#3B82F6" stroke-width="4" stroke-dasharray="289.0265241342812" stroke-dashoffset="0" transform="rotate(-90 50 50)" />
+                        </svg>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 状态和倒计时 -->
+            <div class="mb-6">
+                <div class="flex justify-between items-center mb-2">
+                    <span id="session-type" class="text-lg font-medium text-dark">学习时段</span>
+                    <span id="session-count" class="text-sm text-slate-500">第 1 个周期</span>
+                </div>
+                <div class="h-2 bg-slate-100 rounded-full overflow-hidden">
+                    <div id="session-progress" class="h-full bg-primary rounded-full progress-animation" style="width: 0%"></div>
+                </div>
+            </div>
+            
+            <!-- 随机提醒倒计时 -->
+            <div id="random-reminder-container" class="mb-8 bg-blue-50 p-4 rounded-xl border border-blue-100">
+                <div class="flex items-center">
+                    <i class="fa fa-clock-o text-primary mr-3"></i>
+                    <div>
+                        <p class="text-sm text-slate-500">下次提醒</p>
+                        <div class="flex items-center">
+                            <span id="random-reminder-time" class="text-lg font-medium text-primary">03:45</span>
+                            <span class="text-sm text-slate-400 ml-1">后提醒</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 操作按钮 -->
+            <div class="flex justify-center gap-4">
+                <button id="start-btn" class="px-6 py-3 bg-primary text-white rounded-lg shadow-md btn-hover flex items-center">
+                    <i class="fa fa-play mr-2"></i> 开始
+                </button>
+                <button id="reset-btn" class="px-6 py-3 bg-slate-200 text-slate-700 rounded-lg shadow-md btn-hover flex items-center">
+                    <i class="fa fa-refresh mr-2"></i> 重置
+                </button>
+            </div>
+        </div>
+        
+        <!-- 底部信息 -->
+        <div class="bg-slate-50 p-4 text-center text-xs text-slate-500">
+            <p>科学学习法：90分钟学习 + 20分钟休息</p>
+        </div>
+    </div>
+    
+    <!-- 闭眼提示模态框 -->
+    <div id="rest-modal" class="fixed inset-0 bg-black/70 flex items-center justify-center z-50 opacity-0 pointer-events-none transition-opacity duration-300">
+        <div class="bg-white rounded-2xl p-8 max-w-md w-full mx-4 transform transition-transform duration-300 scale-95">
+            <div class="text-center">
+                <div class="w-20 h-20 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                    <i class="fa fa-eye-slash text-3xl text-secondary"></i>
+                </div>
+                <h2 class="text-xl font-bold text-dark mb-2">闭眼休息</h2>
+                <p class="text-slate-600 mb-6">放松眼睛，休息片刻</p>
+                <div class="relative w-32 h-32 mx-auto mb-6">
+                    <div id="rest-timer" class="text-4xl font-bold text-secondary breathe">10</div>
+                </div>
+                <button id="continue-btn" class="w-full px-6 py-3 bg-secondary text-white rounded-lg shadow-md btn-hover">
+                    继续学习
+                </button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- 音频元素 -->
+    <audio id="alert-sound" preload="auto">
+        <source src="https://assets.mixkit.co/sfx/preview/mixkit-software-interface-button-click-2575.mp3" type="audio/mpeg">
+    </audio>
+    <audio id="session-end-sound" preload="auto">
+        <source src="https://assets.mixkit.co/sfx/preview/mixkit-correct-answer-tone-2870.mp3" type="audio/mpeg">
+    </audio>
+
+    <script>
+        // 全局变量
+        let studyTime = 90 * 60; // 90分钟，单位秒
+        let breakTime = 20 * 60; // 20分钟，单位秒
+        let currentTime = studyTime;
+        let timerInterval;
+        let isStudying = true;
+        let sessionCount = 1;
+        let randomReminderTime;
+        let randomReminderInterval;
+        let isRunning = false;
+        
+        // DOM元素
+        const timeLeftEl = document.getElementById('time-left');
+        const sessionTypeEl = document.getElementById('session-type');
+        const sessionCountEl = document.getElementById('session-count');
+        const sessionProgressEl = document.getElementById('session-progress');
+        const startBtn = document.getElementById('start-btn');
+        const resetBtn = document.getElementById('reset-btn');
+        const randomReminderTimeEl = document.getElementById('random-reminder-time');
+        const randomReminderContainer = document.getElementById('random-reminder-container');
+        const restModal = document.getElementById('rest-modal');
+        const restTimerEl = document.getElementById('rest-timer');
+        const continueBtn = document.getElementById('continue-btn');
+        const alertSound = document.getElementById('alert-sound');
+        const sessionEndSound = document.getElementById('session-end-sound');
+        const progressCircle = document.getElementById('progress-circle');
+        
+        // 圆周长 (2 * π * r)
+        const CIRCUMFERENCE = 2 * Math.PI * 46;
+        progressCircle.style.strokeDasharray = CIRCUMFERENCE;
+        progressCircle.style.strokeDashoffset = '0';
+        
+        // 格式化时间显示
+        function formatTime(seconds) {
+            const mins = Math.floor(seconds / 60);
+            const secs = seconds % 60;
+            return `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
+        }
+        
+        // 更新计时器显示
+        function updateTimerDisplay() {
+            timeLeftEl.textContent = formatTime(currentTime);
+            
+            // 更新进度环
+            const totalTime = isStudying ? studyTime : breakTime;
+            const progress = (totalTime - currentTime) / totalTime;
+            const dashoffset = CIRCUMFERENCE * (1 - progress);
+            progressCircle.style.strokeDashoffset = dashoffset;
+            
+            // 更新进度条
+            sessionProgressEl.style.width = `${progress * 100}%`;
+        }
+        
+        // 更新随机提醒计时器
+        function updateRandomReminderDisplay() {
+            if (randomReminderTime > 0 && isStudying) {
+                randomReminderTime--;
+                randomReminderTimeEl.textContent = formatTime(randomReminderTime);
+            }
+        }
+        
+        // 设置新的随机提醒时间 (3-5分钟)
+        function setRandomReminderTime() {
+            const min = 3 * 60; // 3分钟
+            const max = 5 * 60; // 5分钟
+            randomReminderTime = Math.floor(Math.random() * (max - min + 1)) + min;
+            randomReminderTimeEl.textContent = formatTime(randomReminderTime);
+        }
+        
+        // 显示休息模态框
+        function showRestModal() {
+            let restSeconds = 10; // 10秒休息时间
+            restTimerEl.textContent = restSeconds;
+            
+            // 显示模态框
+            restModal.classList.remove('opacity-0', 'pointer-events-none');
+            restModal.querySelector('div').classList.remove('scale-95');
+            restModal.querySelector('div').classList.add('scale-100');
+            
+            // 播放提示音
+            alertSound.play();
+            
+            // 倒计时
+            const restInterval = setInterval(() => {
+                restSeconds--;
+                restTimerEl.textContent = restSeconds;
+                
+                if (restSeconds <= 0) {
+                    clearInterval(restInterval);
+                    // 自动关闭模态框
+                    hideRestModal();
+                }
+            }, 1000);
+        }
+        
+        // 隐藏休息模态框
+        function hideRestModal() {
+            restModal.classList.add('opacity-0', 'pointer-events-none');
+            restModal.querySelector('div').classList.remove('scale-100');
+            restModal.querySelector('div').classList.add('scale-95');
+            
+            // 设置新的随机提醒时间
+            if (isRunning && isStudying) {
+                setRandomReminderTime();
+            }
+        }
+        
+        // 切换学习/休息状态
+        function toggleSession() {
+            isStudying = !isStudying;
+            
+            if (isStudying) {
+                currentTime = studyTime;
+                sessionTypeEl.textContent = '学习时段';
+                sessionTypeEl.className = 'text-lg font-medium text-dark';
+                sessionCount++;
+                sessionCountEl.textContent = `第 ${sessionCount} 个周期`;
+                randomReminderContainer.classList.remove('hidden');
+                setRandomReminderTime();
+                sessionEndSound.play();
+            } else {
+                currentTime = breakTime;
+                sessionTypeEl.textContent = '休息时段';
+                sessionTypeEl.className = 'text-lg font-medium text-secondary';
+                randomReminderContainer.classList.add('hidden');
+                clearInterval(randomReminderInterval);
+                sessionEndSound.play();
+            }
+            
+            updateTimerDisplay();
+        }
+        
+        // 开始/暂停计时器
+        function startStopTimer() {
+            if (isRunning) {
+                // 暂停计时器
+                clearInterval(timerInterval);
+                clearInterval(randomReminderInterval);
+                startBtn.innerHTML = '<i class="fa fa-play mr-2"></i> 开始';
+                startBtn.classList.remove('bg-red-500');
+                startBtn.classList.add('bg-primary');
+            } else {
+                // 开始计时器
+                timerInterval = setInterval(() => {
+                    currentTime--;
+                    updateTimerDisplay();
+                    
+                    if (currentTime <= 0) {
+                        toggleSession();
+                    }
+                }, 1000);
+                
+                // 如果是学习状态，启动随机提醒计时器
+                if (isStudying) {
+                    setRandomReminderTime();
+                    randomReminderInterval = setInterval(() => {
+                        updateRandomReminderDisplay();
+                        
+                        if (randomReminderTime <= 0) {
+                            // 时间到，显示休息提示
+                            showRestModal();
+                        }
+                    }, 1000);
+                }
+                
+                startBtn.innerHTML = '<i class="fa fa-pause mr-2"></i> 暂停';
+                startBtn.classList.remove('bg-primary');
+                startBtn.classList.add('bg-red-500');
+            }
+            
+            isRunning = !isRunning;
+        }
+        
+        // 重置计时器
+        function resetTimer() {
+            clearInterval(timerInterval);
+            clearInterval(randomReminderInterval);
+            
+            isStudying = true;
+            currentTime = studyTime;
+            sessionCount = 1;
+            isRunning = false;
+            
+            startBtn.innerHTML = '<i class="fa fa-play mr-2"></i> 开始';
+            startBtn.classList.remove('bg-red-500');
+            startBtn.classList.add('bg-primary');
+            
+            sessionTypeEl.textContent = '学习时段';
+            sessionTypeEl.className = 'text-lg font-medium text-dark';
+            sessionCountEl.textContent = `第 ${sessionCount} 个周期`;
+            sessionProgressEl.style.width = '0%';
+            randomReminderContainer.classList.remove('hidden');
+            
+            updateTimerDisplay();
+            setRandomReminderTime();
+            
+            // 重置进度环
+            progressCircle.style.strokeDashoffset = '0';
+        }
+        
+        // 事件监听
+        startBtn.addEventListener('click', startStopTimer);
+        resetBtn.addEventListener('click', resetTimer);
+        continueBtn.addEventListener('click', hideRestModal);
+        
+        // 初始化显示
+        updateTimerDisplay();
+        setRandomReminderTime();
+    </script>
+</body>
+</html>
+    
