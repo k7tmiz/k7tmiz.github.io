@@ -2,6 +2,7 @@
 title: 因上传过大文件而导致hexo部署时Spawn failed报错的解决方法以及注意事项
 categories:
   - Tech
+abbrlink: 5618ea3e
 date: 2025-05-25 19:10:58
 tags:
 ---
