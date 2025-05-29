@@ -1,11 +1,11 @@
 ---
 title: MSI-PERKEYRGB
 tags: 
-		- Msi
+		- Tech
 		- Linux
 abbrlink: 5a88bde
 categories:
-  - Msi
+  - Tech
 date: 2025-04-19 22:28:32
 ---
 # MSI-PERKEYRGB
