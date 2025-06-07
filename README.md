@@ -40,7 +40,7 @@
 ## 🙏 致谢
 
 感谢所有为这个网站的诞生和运营提供过灵感、帮助和支持的朋友们！
-*   特别感谢 [Hexo 框架](https://hexo.io/) 和 [你使用的主题的作者/社区]。
+*   特别感谢 [Hexo 框架](https://hexo.io/) 和 [hexo-theme-next](https://github.com/theme-next/hexo-theme-next)
 *   我的父母，家人和一路上陪伴我的老师和朋友
 
 

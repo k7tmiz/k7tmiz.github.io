@@ -6,7 +6,7 @@
   <link href="https://k7tmiz.github.io/atom.xml" rel="self"/>
   
   <link href="https://k7tmiz.github.io/"/>
-  <updated>2025-06-07T13:32:43.614Z</updated>
+  <updated>2025-06-07T13:32:58.187Z</updated>
   <id>https://k7tmiz.github.io/</id>
   
   <author>
@@ -21,13 +21,15 @@
     <link href="https://k7tmiz.github.io/posts/87bb185d.html"/>
     <id>https://k7tmiz.github.io/posts/87bb185d.html</id>
     <published>2025-06-07T13:23:05.000Z</published>
-    <updated>2025-06-07T13:32:43.614Z</updated>
+    <updated>2025-06-07T13:32:58.187Z</updated>
     
     
     <summary type="html">&lt;h2 id=&quot;起因&quot;&gt;&lt;a href=&quot;#起因&quot; class=&quot;headerlink&quot; title=&quot;起因&quot;&gt;&lt;/a&gt;起因&lt;/h2&gt;&lt;p&gt;每次git push都要用用户名和密码，每次都要去复制一下然后粘贴过去… 是真的很烦人&lt;/p&gt;
 &lt;h2 id=&quot;教程&quot;&gt;&lt;a href=&quot;#教程&quot; class=&quot;headerlink&quot; title=&quot;教程&quot;&gt;&lt;/a&gt;教程&lt;/h2&gt;</summary>
     
     
+    
+    <category term="Tech" scheme="https://k7tmiz.github.io/categories/Tech/"/>
     
     
   </entry>
