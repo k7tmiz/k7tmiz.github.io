@@ -1,0 +1,536 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 7.3.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/favicon-128.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16.png">
+  <link rel="mask-icon" href="/images/favicon-512.png" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"k7tmiz.github.io","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","width":300,"display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":true,"style":"flat"},"back2top":{"enable":true,"sidebar":false,"scrollpercent":true},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.json"};
+  </script>
+
+  <meta name="description" content="目前我所知晓的方法有几种 网页端网易云 用electron封装网页版 第三方客户端(如yesplayer,splayer等) 下载到本地用音乐播放器播放 用wine安装Windows版本   这里网页端的使用方法就不多赘述了，直接点击 网易云音乐 便可进入网页端">
+<meta property="og:type" content="article">
+<meta property="og:title" content="如何在Linux下优雅的使用网易云音乐">
+<meta property="og:url" content="https://k7tmiz.github.io/posts/e85c1bad.html">
+<meta property="og:site_name" content="k7tmiz">
+<meta property="og:description" content="目前我所知晓的方法有几种 网页端网易云 用electron封装网页版 第三方客户端(如yesplayer,splayer等) 下载到本地用音乐播放器播放 用wine安装Windows版本   这里网页端的使用方法就不多赘述了，直接点击 网易云音乐 便可进入网页端">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://k7tmiz.github.io/images/CloudMusicOnLinux/a.png">
+<meta property="og:image" content="https://k7tmiz.github.io/images/CloudMusicOnLinux/b.png">
+<meta property="og:image" content="https://k7tmiz.github.io/images/CloudMusicOnLinux/c.png">
+<meta property="og:image" content="https://k7tmiz.github.io/images/CloudMusicOnLinux/d.png">
+<meta property="og:image" content="https://k7tmiz.github.io/images/CloudMusicOnLinux/e.png">
+<meta property="og:image" content="https://k7tmiz.github.io/images/CloudMusicOnLinux/f.png">
+<meta property="og:image" content="https://k7tmiz.github.io/images/CloudMusicOnLinux/g.png">
+<meta property="og:image" content="https://k7tmiz.github.io/images/CloudMusicOnLinux/h.png">
+<meta property="og:image" content="https://k7tmiz.github.io/images/CloudMusicOnLinux/i.png">
+<meta property="article:published_time" content="2025-05-21T03:45:24.000Z">
+<meta property="article:modified_time" content="2025-06-07T13:08:50.089Z">
+<meta property="article:author" content="k7tmiz">
+<meta property="article:tag" content="Linux">
+<meta property="article:tag" content="Tech">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://k7tmiz.github.io/images/CloudMusicOnLinux/a.png">
+
+<link rel="canonical" href="https://k7tmiz.github.io/posts/e85c1bad.html">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>如何在Linux下优雅的使用网易云音乐 | k7tmiz</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+<!-- hexo injector head_end start --><script> let HEXO_MMEDIA_DATA = { js: [], css: [], aplayerData: [], metingData: [], artPlayerData: [], dplayerData: []}; </script><!-- hexo injector head_end end --><link rel="alternate" href="/atom.xml" title="k7tmiz" type="application/atom+xml">
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">k7tmiz</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">k7tmiz Blog</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-计时器">
+
+    <a href="/html/index.html" rel="section"><i class="fa fa-clock fa-fw"></i>计时器</a>
+
+  </li>
+        <li class="menu-item menu-item-rss">
+
+    <a href="/atom.xml" rel="section"><i class="fa fa-rss fa-fw"></i>RSS</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+  <div class="reading-progress-bar"></div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://k7tmiz.github.io/posts/e85c1bad.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/author.jpeg">
+      <meta itemprop="name" content="k7tmiz">
+      <meta itemprop="description" content="一些碎碎念">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="k7tmiz">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          如何在Linux下优雅的使用网易云音乐
+        </h1>
+
+        <div class="post-meta">
+          
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2025-05-21 11:45:24" itemprop="dateCreated datePublished" datetime="2025-05-21T11:45:24+08:00">2025-05-21</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2025-06-07 21:08:50" itemprop="dateModified" datetime="2025-06-07T21:08:50+08:00">2025-06-07</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Linux/" itemprop="url" rel="index"><span itemprop="name">Linux</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h2 id="目前我所知晓的方法有几种"><a href="#目前我所知晓的方法有几种" class="headerlink" title="目前我所知晓的方法有几种"></a>目前我所知晓的方法有几种</h2><ul>
+<li>网页端网易云</li>
+<li>用electron封装网页版</li>
+<li>第三方客户端(如yesplayer,splayer等)</li>
+<li>下载到本地用音乐播放器播放</li>
+<li>用wine安装Windows版本</li>
+</ul>
+<blockquote>
+<p>这里网页端的使用方法就不多赘述了，直接点击 <a target="_blank" rel="noopener" href="https://music.163.com/">网易云音乐</a> 便可进入网页端</p>
+</blockquote>
+<h2 id="这里我们说说后几种方法"><a href="#这里我们说说后几种方法" class="headerlink" title="这里我们说说后几种方法"></a>这里我们说说后几种方法</h2><h3 id="首先用electron封装"><a href="#首先用electron封装" class="headerlink" title="首先用electron封装"></a>首先用electron封装</h3><p>不要害怕，我其实有写过一篇帖子来介绍怎么使用一个工具名叫 <code>Nativerfier</code> 的封装工具</p>
+<p>帖子如下： <a target="_blank" rel="noopener" href="https://k7tmiz.com/posts/b56059f9.html">Nativefier 使用教程</a></p>
+<p>我没有尝试过把网易云网页版封装成electron程序，我其实更推荐后几种方案…</p>
+<h3 id="第三方客户端"><a href="#第三方客户端" class="headerlink" title="第三方客户端"></a>第三方客户端</h3><p>以Arch Linux为例 我推荐以下几个App(按顺序)：
+	</p>
+<ol>
+<li><p>Splayer 项目地址：<a target="_blank" rel="noopener" href="https://github.com/imsyy/SPlayer">Splayer</a></p>
+ <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">yay -S splayer-git</span><br></pre></td></tr></table></figure></li>
+</ol>
+<p>一款极其简约好用的音乐播放器，功能丰富操作简单直接，多系统可用，我就通过的AppImage来进行了安装，当然它也被收录到了AUR，我十分喜爱这款软件！</p>
+<ol start="2">
+<li>FeelUOwn 项目地址：<a target="_blank" rel="noopener" href="https://github.com/feeluown/FeelUOwn">FeelUOwn</a></li>
+</ol>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">yay -S feeluown          # 安装稳定版，最新版的包名为 feeluown-git</span><br><span class="line">yay -S feeluown-netease  # 按需安装其它扩展</span><br><span class="line">yay -S feeluown-ytmusic</span><br><span class="line">yay -S feeluown-bilibili</span><br></pre></td></tr></table></figure>
+
+
+<p>一个稳定、用户友好以及高度可定制的音乐播放器。基于文本的歌单，方便与朋友分享、设备之间同步。一键安装，各流行平台均有打包（如 Arch Linux, Windows, macOS 等）但是在我的Arch上使用，会出现网易云无法正常登录的情况，我不知道是个例还是什么情况…但是我仍然认为他的可拓展性很强，值得一个第二<br>	<br>3. YesPlayMusic 项目地址：<a target="_blank" rel="noopener" href="https://github.com/qier222/YesPlayMusic">YesPlayMusic</a></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">yay -S yesplaymusic</span><br></pre></td></tr></table></figure>
+
+<p>高颜值的第三方网易云播放器，支持 Windows &#x2F; macOS &#x2F; Linux ，是我第一款开始使用的软件，问题是偶尔会掉线，然后颜值很高，很简约，但是作者似乎不咋打算更新新功能了，包会有点旧，介意的选前两个(我三个都要😋)</p>
+<hr>
+<h3 id="下载到本地然后用播放器不用过多赘述了"><a href="#下载到本地然后用播放器不用过多赘述了" class="headerlink" title="下载到本地然后用播放器不用过多赘述了"></a>下载到本地然后用播放器不用过多赘述了</h3><hr>
+<h3 id="接下来用讲讲如何wine安装Windows版本的网易云"><a href="#接下来用讲讲如何wine安装Windows版本的网易云" class="headerlink" title="接下来用讲讲如何wine安装Windows版本的网易云"></a>接下来用讲讲如何wine安装Windows版本的网易云</h3><h4 id="优势：体验完美，功能齐全，不用担心掉号，不用担心被检测第三方等等，还有HiDPI支持"><a href="#优势：体验完美，功能齐全，不用担心掉号，不用担心被检测第三方等等，还有HiDPI支持" class="headerlink" title="优势：体验完美，功能齐全，不用担心掉号，不用担心被检测第三方等等，还有HiDPI支持"></a>优势：体验完美，功能齐全，不用担心掉号，不用担心被检测第三方等等，还有HiDPI支持</h4><h4 id="劣势：配置麻烦，转译后可能会有一定的性能损耗"><a href="#劣势：配置麻烦，转译后可能会有一定的性能损耗" class="headerlink" title="劣势：配置麻烦，转译后可能会有一定的性能损耗"></a>劣势：配置麻烦，转译后可能会有一定的性能损耗</h4><hr>
+<h4 id="效果如下："><a href="#效果如下：" class="headerlink" title="效果如下："></a>效果如下：</h4><p><img src="/../../images/CloudMusicOnLinux/a.png"></p>
+<p>KDE的系统托盘也能正常识别使用</p>
+<p><img src="/../../images/CloudMusicOnLinux/b.png"></p>
+<h4 id="开始教学："><a href="#开始教学：" class="headerlink" title="开始教学："></a>开始教学：</h4><p>首先Arch的话通过AUR安装 <code>bottles</code> 这个包</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">yay -S bottles</span><br></pre></td></tr></table></figure>
+
+<p>Flatpak通过这个命令安装</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">flatpak install flathub com.usebottles.bottles</span><br></pre></td></tr></table></figure>
+
+<p>安装好以后打开它，等加载一会</p>
+<p>左上角➕号新建一个Bottle，名字随便写</p>
+<p><img src="/../../images/CloudMusicOnLinux/c.png"></p>
+<p>然后去依赖的地方：</p>
+<p><img src="/../../images/CloudMusicOnLinux/d.png"></p>
+<p>安装这些依赖：</p>
+<p><img src="/../../images/CloudMusicOnLinux/e.png"></p>
+<p>去设置里边开符合自己电脑配置的选项：</p>
+<p><img src="/../../images/CloudMusicOnLinux/f.png"></p>
+<p>点击运行可执行文件，选择<a target="_blank" rel="noopener" href="https://music.163.com/#/download">官网直链下载</a>下载下来的exe文件</p>
+<p><img src="/../../images/CloudMusicOnLinux/g.png"></p>
+<p>安装后可以在下面直接打开,也可以添加快捷方式</p>
+<p>效果如下：</p>
+<p><img src="/../../images/CloudMusicOnLinux/h.png"></p>
+<h4 id="HiDPI"><a href="#HiDPI" class="headerlink" title="HiDPI"></a>HiDPI</h4><p><img src="/../../images/CloudMusicOnLinux/i.png"></p>
+<p>ref： <a target="_blank" rel="noopener" href="https://renil.cc/archives/47/">网易云音乐最新版 Wine方案 （网易云Beta）</a></p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/Linux/" rel="tag"># Linux</a>
+              <a href="/tags/Tech/" rel="tag"># Tech</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/posts/5e452484.html" rel="prev" title="其实是献给自己的Hexo教程 2">
+      <i class="fa fa-chevron-left"></i> 其实是献给自己的Hexo教程 2
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/posts/ac1a683e.html" rel="next" title="Linux使用Wayland协议下微信无法正常调用Fcitx5的中文输入法解决办法">
+      Linux使用Wayland协议下微信无法正常调用Fcitx5的中文输入法解决办法 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%9B%AE%E5%89%8D%E6%88%91%E6%89%80%E7%9F%A5%E6%99%93%E7%9A%84%E6%96%B9%E6%B3%95%E6%9C%89%E5%87%A0%E7%A7%8D"><span class="nav-number">1.</span> <span class="nav-text">目前我所知晓的方法有几种</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%BF%99%E9%87%8C%E6%88%91%E4%BB%AC%E8%AF%B4%E8%AF%B4%E5%90%8E%E5%87%A0%E7%A7%8D%E6%96%B9%E6%B3%95"><span class="nav-number">2.</span> <span class="nav-text">这里我们说说后几种方法</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%A6%96%E5%85%88%E7%94%A8electron%E5%B0%81%E8%A3%85"><span class="nav-number">2.1.</span> <span class="nav-text">首先用electron封装</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%AC%AC%E4%B8%89%E6%96%B9%E5%AE%A2%E6%88%B7%E7%AB%AF"><span class="nav-number">2.2.</span> <span class="nav-text">第三方客户端</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%8B%E8%BD%BD%E5%88%B0%E6%9C%AC%E5%9C%B0%E7%84%B6%E5%90%8E%E7%94%A8%E6%92%AD%E6%94%BE%E5%99%A8%E4%B8%8D%E7%94%A8%E8%BF%87%E5%A4%9A%E8%B5%98%E8%BF%B0%E4%BA%86"><span class="nav-number">2.3.</span> <span class="nav-text">下载到本地然后用播放器不用过多赘述了</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%8E%A5%E4%B8%8B%E6%9D%A5%E7%94%A8%E8%AE%B2%E8%AE%B2%E5%A6%82%E4%BD%95wine%E5%AE%89%E8%A3%85Windows%E7%89%88%E6%9C%AC%E7%9A%84%E7%BD%91%E6%98%93%E4%BA%91"><span class="nav-number">2.4.</span> <span class="nav-text">接下来用讲讲如何wine安装Windows版本的网易云</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E4%BC%98%E5%8A%BF%EF%BC%9A%E4%BD%93%E9%AA%8C%E5%AE%8C%E7%BE%8E%EF%BC%8C%E5%8A%9F%E8%83%BD%E9%BD%90%E5%85%A8%EF%BC%8C%E4%B8%8D%E7%94%A8%E6%8B%85%E5%BF%83%E6%8E%89%E5%8F%B7%EF%BC%8C%E4%B8%8D%E7%94%A8%E6%8B%85%E5%BF%83%E8%A2%AB%E6%A3%80%E6%B5%8B%E7%AC%AC%E4%B8%89%E6%96%B9%E7%AD%89%E7%AD%89%EF%BC%8C%E8%BF%98%E6%9C%89HiDPI%E6%94%AF%E6%8C%81"><span class="nav-number">2.4.1.</span> <span class="nav-text">优势：体验完美，功能齐全，不用担心掉号，不用担心被检测第三方等等，还有HiDPI支持</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%8A%A3%E5%8A%BF%EF%BC%9A%E9%85%8D%E7%BD%AE%E9%BA%BB%E7%83%A6%EF%BC%8C%E8%BD%AC%E8%AF%91%E5%90%8E%E5%8F%AF%E8%83%BD%E4%BC%9A%E6%9C%89%E4%B8%80%E5%AE%9A%E7%9A%84%E6%80%A7%E8%83%BD%E6%8D%9F%E8%80%97"><span class="nav-number">2.4.2.</span> <span class="nav-text">劣势：配置麻烦，转译后可能会有一定的性能损耗</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%95%88%E6%9E%9C%E5%A6%82%E4%B8%8B%EF%BC%9A"><span class="nav-number">2.4.3.</span> <span class="nav-text">效果如下：</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%BC%80%E5%A7%8B%E6%95%99%E5%AD%A6%EF%BC%9A"><span class="nav-number">2.4.4.</span> <span class="nav-text">开始教学：</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#HiDPI"><span class="nav-number">2.4.5.</span> <span class="nav-text">HiDPI</span></a></li></ol></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="k7tmiz"
+      src="/images/author.jpeg">
+  <p class="site-author-name" itemprop="name">k7tmiz</p>
+  <div class="site-description" itemprop="description">一些碎碎念</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives">
+          <span class="site-state-item-count">19</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+
+  <!--
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">5</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">5</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  -->
+
+  </nav>
+</div>
+
+
+
+      </div>
+
+      <iframe frameborder="no" border="0" marginwidth="0" marginheight="0" width=320 height=470 src="//music.163.com/outchain/player?type=0&id=13735371900&auto=0&height=430"></iframe>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2025</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">k7tmiz</span>
+</div>
+
+<!--
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+-->
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+<!-- hexo injector body_end start --><script src="/assets/mmedia/mmedia-loader.js"></script><!-- hexo injector body_end end --></body>
+</html>
