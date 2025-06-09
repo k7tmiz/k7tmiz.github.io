@@ -6,7 +6,7 @@
   <link href="https://k7tmiz.github.io/atom.xml" rel="self"/>
   
   <link href="https://k7tmiz.github.io/"/>
-  <updated>2025-06-09T07:01:38.557Z</updated>
+  <updated>2025-06-09T09:05:25.367Z</updated>
   <id>https://k7tmiz.github.io/</id>
   
   <author>
@@ -17,11 +17,29 @@
   <generator uri="https://hexo.io/">Hexo</generator>
   
   <entry>
+    <title>KDE美化教程</title>
+    <link href="https://k7tmiz.github.io/posts/a3d041ec.html"/>
+    <id>https://k7tmiz.github.io/posts/a3d041ec.html</id>
+    <published>2025-06-09T07:46:30.000Z</published>
+    <updated>2025-06-09T09:05:25.367Z</updated>
+    
+    
+    <summary type="html">&lt;h2 id=&quot;前言&quot;&gt;&lt;a href=&quot;#前言&quot; class=&quot;headerlink&quot; title=&quot;前言&quot;&gt;&lt;/a&gt;前言&lt;/h2&gt;&lt;p&gt;KDE是我接触Linux以来接触的较早，并且最多的一个桌面环境了。几乎每次安装所有系统，我都是首选KDE&lt;/p&gt;
+&lt;p&gt;原因就在于其友好，强大，美观，操作逻辑简单。&lt;/p&gt;</summary>
+    
+    
+    
+    <category term="Linux" scheme="https://k7tmiz.github.io/categories/Linux/"/>
+    
+    
+  </entry>
+  
+  <entry>
     <title>KDE崩溃了怎么办</title>
     <link href="https://k7tmiz.github.io/posts/fff51a63.html"/>
     <id>https://k7tmiz.github.io/posts/fff51a63.html</id>
     <published>2025-06-09T06:48:03.000Z</published>
-    <updated>2025-06-09T07:01:38.557Z</updated>
+    <updated>2025-06-09T07:01:47.668Z</updated>
     
     
     <summary type="html">&lt;h2 id=&quot;起因&quot;&gt;&lt;a href=&quot;#起因&quot; class=&quot;headerlink&quot; title=&quot;起因&quot;&gt;&lt;/a&gt;起因&lt;/h2&gt;&lt;p&gt;因为这个Wallpaper Engine暂时没有适配Linux端，所以我就一直在用这个第三方的插件&lt;/p&gt;
@@ -32,8 +50,6 @@
     
     
     <category term="Linux" scheme="https://k7tmiz.github.io/categories/Linux/"/>
-    
-    <category term="Tech" scheme="https://k7tmiz.github.io/categories/Linux/Tech/"/>
     
     
     <category term="Linux" scheme="https://k7tmiz.github.io/tags/Linux/"/>
@@ -430,25 +446,6 @@
   </entry>
   
   <entry>
-    <title>Nativefier 使用教程</title>
-    <link href="https://k7tmiz.github.io/posts/b56059f9.html"/>
-    <id>https://k7tmiz.github.io/posts/b56059f9.html</id>
-    <published>2025-04-19T14:28:32.000Z</published>
-    <updated>2025-06-07T13:08:50.090Z</updated>
-    
-    
-    <summary type="html">&lt;h1 id=&quot;Nativefier-使用教程&quot;&gt;&lt;a href=&quot;#Nativefier-使用教程&quot; class=&quot;headerlink&quot; title=&quot;Nativefier 使用教程&quot;&gt;&lt;/a&gt;Nativefier 使用教程&lt;/h1&gt;&lt;h4 id=&quot;基于electron的打包软件&quot;&gt;&lt;a href=&quot;#基于electron的打包软件&quot; class=&quot;headerlink&quot; title=&quot;基于electron的打包软件&quot;&gt;&lt;/a&gt;基于electron的打包软件&lt;/h4&gt;&lt;h5 id=&quot;nativefier-n-p-—-arch-—-weight-—-height&quot;&gt;&lt;a href=&quot;#nativefier-n-p-—-arch-—-weight-—-height&quot; class=&quot;headerlink&quot; title=&quot;nativefier -n &amp;lt;打包后的应用名称&amp;gt; -p &amp;lt;程序兼容的平台&amp;gt; —-arch &amp;lt;架构&amp;gt; —- weight &amp;lt;窗口宽度&amp;gt; —-height &amp;lt;窗口高度&amp;gt; &amp;lt;网页URL&amp;gt;&quot;&gt;&lt;/a&gt;nativefier -n &amp;lt;打包后的应用名称&amp;gt; -p &amp;lt;程序兼容的平台&amp;gt; —-arch &amp;lt;架构&amp;gt; —- weight &amp;lt;窗口宽度&amp;gt; —-height &amp;lt;窗口高度&amp;gt; &amp;lt;网页URL&amp;gt;&lt;/h5&gt;</summary>
-    
-    
-    
-    <category term="Tech" scheme="https://k7tmiz.github.io/categories/Tech/"/>
-    
-    
-    <category term="Tech" scheme="https://k7tmiz.github.io/tags/Tech/"/>
-    
-  </entry>
-  
-  <entry>
     <title>MSI-PERKEYRGB</title>
     <link href="https://k7tmiz.github.io/posts/5a88bde.html"/>
     <id>https://k7tmiz.github.io/posts/5a88bde.html</id>
@@ -467,6 +464,25 @@
     
     
     <category term="Linux" scheme="https://k7tmiz.github.io/tags/Linux/"/>
+    
+    <category term="Tech" scheme="https://k7tmiz.github.io/tags/Tech/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>Nativefier 使用教程</title>
+    <link href="https://k7tmiz.github.io/posts/b56059f9.html"/>
+    <id>https://k7tmiz.github.io/posts/b56059f9.html</id>
+    <published>2025-04-19T14:28:32.000Z</published>
+    <updated>2025-06-07T13:08:50.090Z</updated>
+    
+    
+    <summary type="html">&lt;h1 id=&quot;Nativefier-使用教程&quot;&gt;&lt;a href=&quot;#Nativefier-使用教程&quot; class=&quot;headerlink&quot; title=&quot;Nativefier 使用教程&quot;&gt;&lt;/a&gt;Nativefier 使用教程&lt;/h1&gt;&lt;h4 id=&quot;基于electron的打包软件&quot;&gt;&lt;a href=&quot;#基于electron的打包软件&quot; class=&quot;headerlink&quot; title=&quot;基于electron的打包软件&quot;&gt;&lt;/a&gt;基于electron的打包软件&lt;/h4&gt;&lt;h5 id=&quot;nativefier-n-p-—-arch-—-weight-—-height&quot;&gt;&lt;a href=&quot;#nativefier-n-p-—-arch-—-weight-—-height&quot; class=&quot;headerlink&quot; title=&quot;nativefier -n &amp;lt;打包后的应用名称&amp;gt; -p &amp;lt;程序兼容的平台&amp;gt; —-arch &amp;lt;架构&amp;gt; —- weight &amp;lt;窗口宽度&amp;gt; —-height &amp;lt;窗口高度&amp;gt; &amp;lt;网页URL&amp;gt;&quot;&gt;&lt;/a&gt;nativefier -n &amp;lt;打包后的应用名称&amp;gt; -p &amp;lt;程序兼容的平台&amp;gt; —-arch &amp;lt;架构&amp;gt; —- weight &amp;lt;窗口宽度&amp;gt; —-height &amp;lt;窗口高度&amp;gt; &amp;lt;网页URL&amp;gt;&lt;/h5&gt;</summary>
+    
+    
+    
+    <category term="Tech" scheme="https://k7tmiz.github.io/categories/Tech/"/>
+    
     
     <category term="Tech" scheme="https://k7tmiz.github.io/tags/Tech/"/>
     
