@@ -388,7 +388,7 @@
     <link href="https://k7tmiz.github.io/posts/f48c939a.html"/>
     <id>https://k7tmiz.github.io/posts/f48c939a.html</id>
     <published>2025-04-23T11:06:38.000Z</published>
-    <updated>2025-06-07T13:08:50.089Z</updated>
+    <updated>2025-06-11T05:53:10.132Z</updated>
     
     
     <summary type="html">&lt;h2 id=&quot;root登录&quot;&gt;&lt;a href=&quot;#root登录&quot; class=&quot;headerlink&quot; title=&quot;root登录&quot;&gt;&lt;/a&gt;root登录&lt;/h2&gt;&lt;h4 id=&quot;联网-基于之前装的NetworkManager&quot;&gt;&lt;a href=&quot;#联网-基于之前装的NetworkManager&quot; class=&quot;headerlink&quot; title=&quot;联网,基于之前装的NetworkManager&quot;&gt;&lt;/a&gt;联网,基于之前装的NetworkManager&lt;/h4&gt; &lt;figure class=&quot;highlight plaintext&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;systemctl start NetworkManager #这里必须大写&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;</summary>
