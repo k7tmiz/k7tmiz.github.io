@@ -20,15 +20,15 @@
     var CONFIG = {"hostname":"k7tmiz.github.io","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","width":300,"display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":true,"style":"flat"},"back2top":{"enable":true,"sidebar":false,"scrollpercent":true},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.json"};
   </script>
 
-  <meta name="description" content="Git 是一个强大的分布式版本控制系统，以下是核心命令的简明介绍： 1. git add - 添加文件到暂存区 git add &lt;file&gt;: 添加指定文件。 git add .: 添加所有新建、修改、删除的文件（不含忽略文件）。 git add -u: 添加所有已跟踪文件的修改和删除。 git add -A: 添加所有新建、修改、删除的文件（包括未跟踪文件）。 git add -p:">
+  <meta name="description" content="Git 常用命令介绍Git 是一个分布式版本控制系统，广泛用于软件开发中的代码管理。以下是一些常用的 Git 命令，按照逻辑顺序和常用次序进行介绍，帮助您更好地理解和使用 Git。 1. git clone">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Git 常用命令详解">
 <meta property="og:url" content="https://k7tmiz.github.io/posts/c819bd8f.html">
 <meta property="og:site_name" content="k7tmiz">
-<meta property="og:description" content="Git 是一个强大的分布式版本控制系统，以下是核心命令的简明介绍： 1. git add - 添加文件到暂存区 git add &lt;file&gt;: 添加指定文件。 git add .: 添加所有新建、修改、删除的文件（不含忽略文件）。 git add -u: 添加所有已跟踪文件的修改和删除。 git add -A: 添加所有新建、修改、删除的文件（包括未跟踪文件）。 git add -p:">
+<meta property="og:description" content="Git 常用命令介绍Git 是一个分布式版本控制系统，广泛用于软件开发中的代码管理。以下是一些常用的 Git 命令，按照逻辑顺序和常用次序进行介绍，帮助您更好地理解和使用 Git。 1. git clone">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2025-06-07T12:48:52.000Z">
-<meta property="article:modified_time" content="2025-06-07T13:11:55.704Z">
+<meta property="article:modified_time" content="2025-06-12T14:56:29.068Z">
 <meta property="article:author" content="k7tmiz">
 <meta property="article:tag" content="Linux">
 <meta property="article:tag" content="Tech">
@@ -221,10 +221,16 @@
                 <i class="far fa-calendar"></i>
               </span>
               <span class="post-meta-item-text">发表于</span>
-              
 
-              <time title="创建时间：2025-06-07 20:48:52 / 修改时间：21:11:55" itemprop="dateCreated datePublished" datetime="2025-06-07T20:48:52+08:00">2025-06-07</time>
+              <time title="创建时间：2025-06-07 20:48:52" itemprop="dateCreated datePublished" datetime="2025-06-07T20:48:52+08:00">2025-06-07</time>
             </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2025-06-12 22:56:29" itemprop="dateModified" datetime="2025-06-12T22:56:29+08:00">2025-06-12</time>
+              </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
                 <i class="far fa-folder"></i>
@@ -246,79 +252,70 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        <p>Git 是一个强大的分布式版本控制系统，以下是核心命令的简明介绍：</p>
-<h3 id="1-git-add-添加文件到暂存区"><a href="#1-git-add-添加文件到暂存区" class="headerlink" title="1. git add - 添加文件到暂存区"></a>1. <code>git add</code> - 添加文件到暂存区</h3><ul>
-<li><strong><code>git add &lt;file&gt;</code></strong>: 添加指定文件。</li>
-<li><strong><code>git add .</code></strong>: 添加所有新建、修改、删除的文件（不含忽略文件）。</li>
-<li><strong><code>git add -u</code></strong>: 添加所有已跟踪文件的修改和删除。</li>
-<li><strong><code>git add -A</code></strong>: 添加所有新建、修改、删除的文件（包括未跟踪文件）。</li>
-<li><strong><code>git add -p</code></strong>: 交互式选择文件中的修改块。</li>
+        <h1 id="Git-常用命令介绍"><a href="#Git-常用命令介绍" class="headerlink" title="Git 常用命令介绍"></a>Git 常用命令介绍</h1><p>Git 是一个分布式版本控制系统，广泛用于软件开发中的代码管理。以下是一些常用的 Git 命令，按照逻辑顺序和常用次序进行介绍，帮助您更好地理解和使用 Git。</p>
+<h2 id="1-git-clone"><a href="#1-git-clone" class="headerlink" title="1. git clone"></a>1. git clone</h2><p><strong>git clone</strong> 用于从远程仓库克隆一个项目到本地。这是您开始使用 Git 项目时的第一步。</p>
+<ul>
+<li><strong>常规用法</strong>：<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git <span class="built_in">clone</span> &lt;repository_url&gt;</span><br></pre></td></tr></table></figure></li>
+<li><strong>说明</strong>：<code>&lt;repository_url&gt;</code> 是远程仓库的 URL，克隆后会在本地创建一个与远程仓库同名的目录，并下载所有文件和提交历史。</li>
 </ul>
-<hr>
-<h3 id="2-git-commit-提交到本地仓库"><a href="#2-git-commit-提交到本地仓库" class="headerlink" title="2. git commit - 提交到本地仓库"></a>2. <code>git commit</code> - 提交到本地仓库</h3><ul>
-<li><strong><code>git commit -m &quot;Your message&quot;</code></strong>: 提交暂存区的修改，并附带提交信息。</li>
-<li><strong><code>git commit</code></strong>: 打开编辑器输入详细提交信息。</li>
-<li><strong><code>git commit -a -m &quot;Your message&quot;</code></strong>: 跳过 <code>git add -u</code>，直接提交所有已跟踪的修改。</li>
-<li><strong><code>git commit --amend</code></strong>: 修正上一次提交（<strong>慎用</strong>已推送的提交）。</li>
+<h2 id="2-git-add"><a href="#2-git-add" class="headerlink" title="2. git add"></a>2. git add</h2><p><strong>git add</strong> 用于将工作区的更改添加到暂存区，准备进行提交。</p>
+<ul>
+<li><strong>常规用法</strong>：<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git add &lt;file&gt;</span><br></pre></td></tr></table></figure></li>
+<li><strong>说明</strong>：<code>&lt;file&gt;</code> 是您要添加的文件或目录。可以使用 <code>git add .</code> 将所有更改添加到暂存区。</li>
 </ul>
-<hr>
-<h3 id="3-git-push-推送到远程仓库"><a href="#3-git-push-推送到远程仓库" class="headerlink" title="3. git push - 推送到远程仓库"></a>3. <code>git push</code> - 推送到远程仓库</h3><ul>
-<li><strong><code>git push &lt;remote&gt; &lt;branch&gt;</code></strong>: 将本地分支推送到远程仓库。</li>
-<li><strong><code>git push -u &lt;remote&gt; &lt;branch&gt;</code></strong>: 首次推送时，设置本地分支与远程分支的跟踪关系。</li>
-<li><strong><code>git push</code></strong>: 如果已设置跟踪，直接推送。</li>
-<li><strong><code>git push --force</code></strong>: 强制推送（<strong>极度危险</strong>，会覆盖远程历史）。</li>
-<li><strong><code>git push --delete &lt;remote&gt; &lt;branch&gt;</code></strong>: 删除远程分支。</li>
+<h2 id="3-git-commit"><a href="#3-git-commit" class="headerlink" title="3. git commit"></a>3. git commit</h2><p><strong>git commit</strong> 用于将暂存区的更改提交到本地仓库，并记录提交信息。</p>
+<ul>
+<li><strong>常规用法</strong>：<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git commit -m <span class="string">&quot;提交信息&quot;</span></span><br></pre></td></tr></table></figure></li>
+<li><strong>说明</strong>：<code>-m</code> 选项后跟提交信息，描述本次提交的更改内容。</li>
 </ul>
-<hr>
-<h3 id="4-git-remote-管理远程仓库"><a href="#4-git-remote-管理远程仓库" class="headerlink" title="4. git remote - 管理远程仓库"></a>4. <code>git remote</code> - 管理远程仓库</h3><ul>
-<li><strong><code>git remote</code></strong>: 列出所有远程仓库。</li>
-<li><strong><code>git remote -v</code></strong>: 列出远程仓库及URL。</li>
-<li><strong><code>git remote add &lt;name&gt; &lt;url&gt;</code></strong>: 添加新的远程仓库。</li>
-<li><strong><code>git remote rm &lt;name&gt;</code></strong>: 删除远程仓库。</li>
-<li><strong><code>git remote set-url &lt;name&gt; &lt;new_url&gt;</code></strong>: 修改远程仓库URL。</li>
+<h2 id="4-git-push"><a href="#4-git-push" class="headerlink" title="4. git push"></a>4. git push</h2><p><strong>git push</strong> 用于将本地的提交推送到远程仓库。</p>
+<ul>
+<li><strong>常规用法</strong>：<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git push origin &lt;branch_name&gt;</span><br></pre></td></tr></table></figure></li>
+<li><strong>说明</strong>：<code>origin</code> 是远程仓库的名称，<code>&lt;branch_name&gt;</code> 是要推送的分支名称。</li>
 </ul>
-<hr>
-<h3 id="5-git-rm-从仓库中删除文件"><a href="#5-git-rm-从仓库中删除文件" class="headerlink" title="5. git rm - 从仓库中删除文件"></a>5. <code>git rm</code> - 从仓库中删除文件</h3><ul>
-<li><strong><code>git rm &lt;file&gt;</code></strong>: 从工作目录和暂存区删除文件。</li>
-<li><strong><code>git rm --cached &lt;file&gt;</code></strong>: 从暂存区删除文件，但保留工作目录中的文件。</li>
-<li><strong><code>git rm -r &lt;directory&gt;</code></strong>: 递归删除目录。</li>
+<h2 id="5-git-pull"><a href="#5-git-pull" class="headerlink" title="5. git pull"></a>5. git pull</h2><p><strong>git pull</strong> 用于从远程仓库拉取最新的更改并合并到本地仓库。</p>
+<ul>
+<li><strong>常规用法</strong>：<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git pull origin &lt;branch_name&gt;</span><br></pre></td></tr></table></figure></li>
+<li><strong>说明</strong>：<code>origin</code> 是远程仓库的名称，<code>&lt;branch_name&gt;</code> 是要拉取的分支名称。</li>
 </ul>
-<hr>
-<h3 id="6-git-pull-拉取并合并远程修改"><a href="#6-git-pull-拉取并合并远程修改" class="headerlink" title="6. git pull - 拉取并合并远程修改"></a>6. <code>git pull</code> - 拉取并合并远程修改</h3><ul>
-<li><strong><code>git pull &lt;remote&gt; &lt;branch&gt;</code></strong>: 拉取并合并指定远程分支。</li>
-<li><strong><code>git pull</code></strong>: 如果已设置跟踪，直接拉取并合并。</li>
-<li><strong><code>git pull --rebase</code></strong>: 拉取后进行变基（推荐，保持线性历史）。<ul>
-<li><strong><code>git fetch</code></strong>: 只拉取远程修改到本地，不自动合并。</li>
+<h2 id="6-git-remote"><a href="#6-git-remote" class="headerlink" title="6. git remote"></a>6. git remote</h2><p><strong>git remote</strong> 用于管理远程仓库，例如查看、添加或删除远程仓库。</p>
+<ul>
+<li><strong>常规用法</strong>：<ul>
+<li>查看远程仓库：<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git remote -v</span><br></pre></td></tr></table></figure></li>
+<li>添加远程仓库：<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git remote add &lt;name&gt; &lt;url&gt;</span><br></pre></td></tr></table></figure></li>
+<li>删除远程仓库：<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git remote remove &lt;name&gt;</span><br></pre></td></tr></table></figure></li>
 </ul>
 </li>
+<li><strong>说明</strong>：<code>&lt;name&gt;</code> 是远程仓库的名称，<code>&lt;url&gt;</code> 是远程仓库的 URL。</li>
 </ul>
-<hr>
-<h3 id="7-git-merge-合并分支"><a href="#7-git-merge-合并分支" class="headerlink" title="7. git merge - 合并分支"></a>7. <code>git merge</code> - 合并分支</h3><ul>
-<li><strong><code>git merge &lt;branch_name&gt;</code></strong>: 将指定分支合并到当前分支。</li>
-<li><strong>合并冲突</strong>: 出现冲突需手动解决，然后 <code>git add</code> -&gt; <code>git commit</code>。</li>
-<li><strong><code>git merge --no-ff</code></strong>: 强制创建合并提交，即使可以快进合并。</li>
-<li><strong><code>git merge --abort</code></strong>: 取消当前合并。</li>
-<li><strong><code>git merge --squash</code></strong>: 将一个分支的所有提交“压扁”成一个再合并。</li>
-</ul>
-<hr>
-<h3 id="8-git-rebase-变基"><a href="#8-git-rebase-变基" class="headerlink" title="8. git rebase - 变基"></a>8. <code>git rebase</code> - 变基</h3><ul>
-<li><strong><code>git rebase &lt;base_branch&gt;</code></strong>: 将当前分支的提交“移动”到指定基点之后。</li>
-<li><strong><code>git rebase --continue</code></strong>: 解决冲突后继续变基。</li>
-<li><strong><code>git rebase --abort</code></strong>: 取消变基。</li>
-<li><strong><code>git rebase -i &lt;commit_hash&gt;</code></strong>: 交互式变基，可用于修改、合并、删除提交。<ul>
-<li><strong>注意</strong>: <strong>切勿对已推送的公共分支进行变基操作</strong>，会重写历史，导致协作问题。</li>
+<h2 id="7-git-reset"><a href="#7-git-reset" class="headerlink" title="7. git reset"></a>7. git reset</h2><p><strong>git reset</strong> 用于重置暂存区或工作区的状态，常用于撤销更改。</p>
+<ul>
+<li><strong>常规用法</strong>：<ul>
+<li>撤销暂存区的更改：<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git reset &lt;file&gt;</span><br></pre></td></tr></table></figure></li>
+<li>撤销提交（软重置）：<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git reset --soft &lt;commit&gt;</span><br></pre></td></tr></table></figure></li>
+<li>撤销提交并重置工作区（硬重置）：<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git reset --hard &lt;commit&gt;</span><br></pre></td></tr></table></figure></li>
 </ul>
 </li>
+<li><strong>说明</strong>：<code>&lt;file&gt;</code> 是要重置的文件，<code>&lt;commit&gt;</code> 是要重置到的提交哈希或引用。</li>
+</ul>
+<h2 id="8-git-merge"><a href="#8-git-merge" class="headerlink" title="8. git merge"></a>8. git merge</h2><p><strong>git merge</strong> 用于合并分支，将一个分支的更改合并到当前分支。</p>
+<ul>
+<li><strong>常规用法</strong>：<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git merge &lt;branch_name&gt;</span><br></pre></td></tr></table></figure></li>
+<li><strong>说明</strong>：<code>&lt;branch_name&gt;</code> 是要合并的分支名称。</li>
+</ul>
+<h2 id="9-git-rm"><a href="#9-git-rm" class="headerlink" title="9. git rm"></a>9. git rm</h2><p><strong>git rm</strong> 用于删除文件并将删除操作添加到暂存区。</p>
+<ul>
+<li><strong>常规用法</strong>：<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git <span class="built_in">rm</span> &lt;file&gt;</span><br></pre></td></tr></table></figure></li>
+<li><strong>说明</strong>：<code>&lt;file&gt;</code> 是要删除的文件。删除后需要使用 <code>git commit</code> 提交更改。</li>
+</ul>
+<h2 id="10-git-rebase"><a href="#10-git-rebase" class="headerlink" title="10. git rebase"></a>10. git rebase</h2><p><strong>git rebase</strong> 用于变基，将一个分支的提交历史应用到另一个分支的顶部，常用于整理提交历史。</p>
+<ul>
+<li><strong>常规用法</strong>：<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git rebase &lt;base_branch&gt;</span><br></pre></td></tr></table></figure></li>
+<li><strong>说明</strong>：<code>&lt;base_branch&gt;</code> 是要变基到的基础分支。</li>
 </ul>
 <hr>
-<h3 id="9-git-clone-克隆远程仓库"><a href="#9-git-clone-克隆远程仓库" class="headerlink" title="9. git clone - 克隆远程仓库"></a>9. <code>git clone</code> - 克隆远程仓库</h3><ul>
-<li><strong><code>git clone &lt;repository_url&gt;</code></strong>: 克隆整个远程仓库到本地。</li>
-<li><strong><code>git clone &lt;url&gt; &lt;directory_name&gt;</code></strong>: 克隆到指定目录。</li>
-<li><strong><code>git clone -b &lt;branch_name&gt; &lt;url&gt;</code></strong>: 克隆指定分支。</li>
-<li><strong><code>git clone --depth &lt;number&gt;</code></strong>: 浅克隆，只克隆最新指定数量的提交。</li>
-</ul>
-<hr>
-<p><strong>这些是我用的比较多的命令了</strong></p>
+<p>以上是 Git 的一些常用命令及其常规用法。掌握这些命令将帮助您更高效地管理代码版本和协作开发。</p>
+<p><strong>以上内容由AI整理</strong></p>
 
     </div>
 
@@ -403,7 +400,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-git-add-%E6%B7%BB%E5%8A%A0%E6%96%87%E4%BB%B6%E5%88%B0%E6%9A%82%E5%AD%98%E5%8C%BA"><span class="nav-number">1.</span> <span class="nav-text">1. git add - 添加文件到暂存区</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-git-commit-%E6%8F%90%E4%BA%A4%E5%88%B0%E6%9C%AC%E5%9C%B0%E4%BB%93%E5%BA%93"><span class="nav-number">2.</span> <span class="nav-text">2. git commit - 提交到本地仓库</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-git-push-%E6%8E%A8%E9%80%81%E5%88%B0%E8%BF%9C%E7%A8%8B%E4%BB%93%E5%BA%93"><span class="nav-number">3.</span> <span class="nav-text">3. git push - 推送到远程仓库</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-git-remote-%E7%AE%A1%E7%90%86%E8%BF%9C%E7%A8%8B%E4%BB%93%E5%BA%93"><span class="nav-number">4.</span> <span class="nav-text">4. git remote - 管理远程仓库</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#5-git-rm-%E4%BB%8E%E4%BB%93%E5%BA%93%E4%B8%AD%E5%88%A0%E9%99%A4%E6%96%87%E4%BB%B6"><span class="nav-number">5.</span> <span class="nav-text">5. git rm - 从仓库中删除文件</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#6-git-pull-%E6%8B%89%E5%8F%96%E5%B9%B6%E5%90%88%E5%B9%B6%E8%BF%9C%E7%A8%8B%E4%BF%AE%E6%94%B9"><span class="nav-number">6.</span> <span class="nav-text">6. git pull - 拉取并合并远程修改</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#7-git-merge-%E5%90%88%E5%B9%B6%E5%88%86%E6%94%AF"><span class="nav-number">7.</span> <span class="nav-text">7. git merge - 合并分支</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#8-git-rebase-%E5%8F%98%E5%9F%BA"><span class="nav-number">8.</span> <span class="nav-text">8. git rebase - 变基</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#9-git-clone-%E5%85%8B%E9%9A%86%E8%BF%9C%E7%A8%8B%E4%BB%93%E5%BA%93"><span class="nav-number">9.</span> <span class="nav-text">9. git clone - 克隆远程仓库</span></a></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Git-%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4%E4%BB%8B%E7%BB%8D"><span class="nav-number">1.</span> <span class="nav-text">Git 常用命令介绍</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-git-clone"><span class="nav-number">1.1.</span> <span class="nav-text">1. git clone</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-git-add"><span class="nav-number">1.2.</span> <span class="nav-text">2. git add</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-git-commit"><span class="nav-number">1.3.</span> <span class="nav-text">3. git commit</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-git-push"><span class="nav-number">1.4.</span> <span class="nav-text">4. git push</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#5-git-pull"><span class="nav-number">1.5.</span> <span class="nav-text">5. git pull</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#6-git-remote"><span class="nav-number">1.6.</span> <span class="nav-text">6. git remote</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#7-git-reset"><span class="nav-number">1.7.</span> <span class="nav-text">7. git reset</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#8-git-merge"><span class="nav-number">1.8.</span> <span class="nav-text">8. git merge</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#9-git-rm"><span class="nav-number">1.9.</span> <span class="nav-text">9. git rm</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#10-git-rebase"><span class="nav-number">1.10.</span> <span class="nav-text">10. git rebase</span></a></li></ol></li></ol></div>
       </div>
       <!--/noindex-->
 

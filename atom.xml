@@ -79,17 +79,11 @@
     <link href="https://k7tmiz.github.io/posts/c819bd8f.html"/>
     <id>https://k7tmiz.github.io/posts/c819bd8f.html</id>
     <published>2025-06-07T12:48:52.000Z</published>
-    <updated>2025-06-07T13:11:55.704Z</updated>
+    <updated>2025-06-12T14:56:29.068Z</updated>
     
     
-    <summary type="html">&lt;p&gt;Git 是一个强大的分布式版本控制系统，以下是核心命令的简明介绍：&lt;/p&gt;
-&lt;h3 id=&quot;1-git-add-添加文件到暂存区&quot;&gt;&lt;a href=&quot;#1-git-add-添加文件到暂存区&quot; class=&quot;headerlink&quot; title=&quot;1. git add - 添加文件到暂存区&quot;&gt;&lt;/a&gt;1. &lt;code&gt;git add&lt;/code&gt; - 添加文件到暂存区&lt;/h3&gt;&lt;ul&gt;
-&lt;li&gt;&lt;strong&gt;&lt;code&gt;git add &amp;lt;file&amp;gt;&lt;/code&gt;&lt;/strong&gt;: 添加指定文件。&lt;/li&gt;
-&lt;li&gt;&lt;strong&gt;&lt;code&gt;git add .&lt;/code&gt;&lt;/strong&gt;: 添加所有新建、修改、删除的文件（不含忽略文件）。&lt;/li&gt;
-&lt;li&gt;&lt;strong&gt;&lt;code&gt;git add -u&lt;/code&gt;&lt;/strong&gt;: 添加所有已跟踪文件的修改和删除。&lt;/li&gt;
-&lt;li&gt;&lt;strong&gt;&lt;code&gt;git add -A&lt;/code&gt;&lt;/strong&gt;: 添加所有新建、修改、删除的文件（包括未跟踪文件）。&lt;/li&gt;
-&lt;li&gt;&lt;strong&gt;&lt;code&gt;git add -p&lt;/code&gt;&lt;/strong&gt;: 交互式选择文件中的修改块。&lt;/li&gt;
-&lt;/ul&gt;</summary>
+    <summary type="html">&lt;h1 id=&quot;Git-常用命令介绍&quot;&gt;&lt;a href=&quot;#Git-常用命令介绍&quot; class=&quot;headerlink&quot; title=&quot;Git 常用命令介绍&quot;&gt;&lt;/a&gt;Git 常用命令介绍&lt;/h1&gt;&lt;p&gt;Git 是一个分布式版本控制系统，广泛用于软件开发中的代码管理。以下是一些常用的 Git 命令，按照逻辑顺序和常用次序进行介绍，帮助您更好地理解和使用 Git。&lt;/p&gt;
+&lt;h2 id=&quot;1-git-clone&quot;&gt;&lt;a href=&quot;#1-git-clone&quot; class=&quot;headerlink&quot; title=&quot;1. git clone&quot;&gt;&lt;/a&gt;1. git clone&lt;/h2&gt;</summary>
     
     
     
