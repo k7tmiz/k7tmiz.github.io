@@ -310,29 +310,23 @@
   </entry>
   
   <entry>
-    <title>我与Linux的情缘</title>
+    <title>我与计算机的故事</title>
     <link href="https://k7tmiz.github.io/posts/d773eb13.html"/>
     <id>https://k7tmiz.github.io/posts/d773eb13.html</id>
     <published>2025-05-11T14:24:04.000Z</published>
-    <updated>2025-06-07T13:08:50.089Z</updated>
+    <updated>2025-06-25T10:11:27.442Z</updated>
     
     
-    <summary type="html">&lt;h1 id=&quot;我与Linux的故事&quot;&gt;&lt;a href=&quot;#我与Linux的故事&quot; class=&quot;headerlink&quot; title=&quot;我与Linux的故事&quot;&gt;&lt;/a&gt;我与Linux的故事&lt;/h1&gt;&lt;h2 id=&quot;个人简介与初遇&quot;&gt;&lt;a href=&quot;#个人简介与初遇&quot; class=&quot;headerlink&quot; title=&quot;个人简介与初遇&quot;&gt;&lt;/a&gt;个人简介与初遇&lt;/h2&gt;&lt;ul&gt;
-&lt;li&gt;&lt;strong&gt;背景&lt;/strong&gt;：北京人，父母工作忙，自幼接触电脑。&lt;/li&gt;
-&lt;li&gt;&lt;strong&gt;契机&lt;/strong&gt;：初中看视频了解并开始尝试 Linux。&lt;/li&gt;
-&lt;li&gt;&lt;strong&gt;初体验&lt;/strong&gt;：&lt;ul&gt;
-&lt;li&gt;第一个发行版：&lt;strong&gt;Deepin&lt;/strong&gt; (早期UI简洁,系统流畅)。&lt;/li&gt;
-&lt;li&gt;第二个发行版：&lt;strong&gt;Manjaro&lt;/strong&gt; (时间久远,放弃原因忘了，估计可能是因为滚挂了…🤣)。&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;/ul&gt;</summary>
+    <summary type="html">&lt;p&gt;我是一个行走在文理边界上的旅人，心中燃烧着对计算机世界的恒久热爱。&lt;/p&gt;
+&lt;p&gt;我的故事，始于北京的家中。&lt;/p&gt;
+&lt;p&gt;父母工作繁忙，陪伴我的，是家中那两台早早备下的电脑。或许这算得上一种时代的馈赠，让我在懵懂的年纪便与数字世界结缘。那时的热爱，纯粹而天真——利用电脑查找资料、沉浸游戏，服务器、Linux、编程这些深邃的概念，还远在认知的地平线之外。&lt;/p&gt;</summary>
     
     
     
-    <category term="Linux" scheme="https://k7tmiz.github.io/categories/Linux/"/>
+    <category term="Article" scheme="https://k7tmiz.github.io/categories/Article/"/>
     
     
-    <category term="Linux" scheme="https://k7tmiz.github.io/tags/Linux/"/>
+    <category term="Article" scheme="https://k7tmiz.github.io/tags/Article/"/>
     
   </entry>
   
@@ -438,14 +432,14 @@
   </entry>
   
   <entry>
-    <title>Switch-SteamLibrary-Linux</title>
+    <title>Switch-SteamLibrary</title>
     <link href="https://k7tmiz.github.io/posts/2a1b98b0.html"/>
     <id>https://k7tmiz.github.io/posts/2a1b98b0.html</id>
     <published>2025-04-19T14:28:32.000Z</published>
-    <updated>2025-06-07T13:08:50.089Z</updated>
+    <updated>2025-06-25T10:10:11.420Z</updated>
     
     
-    <summary type="html">&lt;h1 id=&quot;Switch-SteamLibrary-Linux&quot;&gt;&lt;a href=&quot;#Switch-SteamLibrary-Linux&quot; class=&quot;headerlink&quot; title=&quot;Switch-SteamLibrary-Linux&quot;&gt;&lt;/a&gt;Switch-SteamLibrary-Linux&lt;/h1&gt;&lt;blockquote&gt;
+    <summary type="html">&lt;h1 id=&quot;Switch-SteamLibrary&quot;&gt;&lt;a href=&quot;#Switch-SteamLibrary&quot; class=&quot;headerlink&quot; title=&quot;Switch-SteamLibrary&quot;&gt;&lt;/a&gt;Switch-SteamLibrary&lt;/h1&gt;&lt;blockquote&gt;
 &lt;p&gt;这是一个用于电脑中有多Linux系统，并且希望自己的游戏统一存放在NTFS格式盘的小脚本。它旨在可以让你的多Linux系统，包括Windows都可以调用一个同一个Steam游戏库的小脚本。&lt;/p&gt;
 &lt;/blockquote&gt;
 &lt;h3 id=&quot;使用说明&quot;&gt;&lt;a href=&quot;#使用说明&quot; class=&quot;headerlink&quot; title=&quot;使用说明:&quot;&gt;&lt;/a&gt;使用说明:&lt;/h3&gt;</summary>
