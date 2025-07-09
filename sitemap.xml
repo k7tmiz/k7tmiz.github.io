@@ -261,14 +261,7 @@
   </url>
   
   <url>
-    <loc>https://k7tmiz.github.io/tags/Study/</loc>
-    <lastmod>2025-07-09</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.2</priority>
-  </url>
-  
-  <url>
-    <loc>https://k7tmiz.github.io/tags/Spanish/</loc>
+    <loc>https://k7tmiz.github.io/tags/Tech/</loc>
     <lastmod>2025-07-09</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
@@ -282,14 +275,21 @@
   </url>
   
   <url>
-    <loc>https://k7tmiz.github.io/tags/Tech/</loc>
+    <loc>https://k7tmiz.github.io/tags/Travel/</loc>
     <lastmod>2025-07-09</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
-    <loc>https://k7tmiz.github.io/tags/Travel/</loc>
+    <loc>https://k7tmiz.github.io/tags/Study/</loc>
+    <lastmod>2025-07-09</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>https://k7tmiz.github.io/tags/Spanish/</loc>
     <lastmod>2025-07-09</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
@@ -305,7 +305,7 @@
   </url>
   
   <url>
-    <loc>https://k7tmiz.github.io/categories/Study/</loc>
+    <loc>https://k7tmiz.github.io/categories/Tech/</loc>
     <lastmod>2025-07-09</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
@@ -319,14 +319,14 @@
   </url>
   
   <url>
-    <loc>https://k7tmiz.github.io/categories/Tech/</loc>
+    <loc>https://k7tmiz.github.io/categories/Travel/</loc>
     <lastmod>2025-07-09</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
-    <loc>https://k7tmiz.github.io/categories/Travel/</loc>
+    <loc>https://k7tmiz.github.io/categories/Study/</loc>
     <lastmod>2025-07-09</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
