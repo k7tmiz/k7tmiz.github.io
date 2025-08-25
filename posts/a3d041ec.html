@@ -1,0 +1,510 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 7.3.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/favicon-128.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16.png">
+  <link rel="mask-icon" href="/images/favicon-512.png" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"k7tmiz.github.io","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","width":300,"display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":true,"style":"flat"},"back2top":{"enable":true,"sidebar":false,"scrollpercent":true},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.json"};
+  </script>
+
+  <meta name="description" content="前言KDE是我接触Linux以来接触的较早，并且最多的一个桌面环境了。几乎每次安装所有系统，我都是首选KDE 原因就在于其友好，强大，美观，操作逻辑简单。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="KDE美化教程">
+<meta property="og:url" content="https://k7tmiz.github.io/posts/a3d041ec.html">
+<meta property="og:site_name" content="k7tmiz">
+<meta property="og:description" content="前言KDE是我接触Linux以来接触的较早，并且最多的一个桌面环境了。几乎每次安装所有系统，我都是首选KDE 原因就在于其友好，强大，美观，操作逻辑简单。">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://k7tmiz.github.io/images/KDE/a.png">
+<meta property="og:image" content="https://k7tmiz.github.io/images/KDE/b.png">
+<meta property="og:image" content="https://k7tmiz.github.io/images/KDE/c.png">
+<meta property="og:image" content="https://k7tmiz.github.io/images/KDE/d.png">
+<meta property="og:image" content="https://k7tmiz.github.io/images/KDE/e.png">
+<meta property="og:image" content="https://k7tmiz.github.io/images/KDE/g.png">
+<meta property="og:image" content="https://k7tmiz.github.io/images/KDE/h.png">
+<meta property="og:image" content="https://k7tmiz.github.io/images/KDE/i.png">
+<meta property="article:published_time" content="2025-06-09T07:46:30.000Z">
+<meta property="article:modified_time" content="2025-08-21T18:03:56.092Z">
+<meta property="article:author" content="k7tmiz">
+<meta property="article:tag" content="“k7tmiz,Katmai”">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://k7tmiz.github.io/images/KDE/a.png">
+
+<link rel="canonical" href="https://k7tmiz.github.io/posts/a3d041ec.html">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>KDE美化教程 | k7tmiz</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+<!-- hexo injector head_end start --><script> let HEXO_MMEDIA_DATA = { js: [], css: [], aplayerData: [], metingData: [], artPlayerData: [], dplayerData: []}; </script><!-- hexo injector head_end end --><link rel="alternate" href="/atom.xml" title="k7tmiz" type="application/atom+xml">
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">k7tmiz</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">k7tmiz Blog</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-计时器">
+
+    <a href="/html/index.html" rel="section"><i class="fa fa-clock fa-fw"></i>计时器</a>
+
+  </li>
+        <li class="menu-item menu-item-rss">
+
+    <a href="/atom.xml" rel="section"><i class="fa fa-rss fa-fw"></i>RSS</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+  <div class="reading-progress-bar"></div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://k7tmiz.github.io/posts/a3d041ec.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/author.jpeg">
+      <meta itemprop="name" content="k7tmiz">
+      <meta itemprop="description" content="一些碎碎念">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="k7tmiz">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          KDE美化教程
+        </h1>
+
+        <div class="post-meta">
+          
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2025-06-09 15:46:30" itemprop="dateCreated datePublished" datetime="2025-06-09T15:46:30+08:00">2025-06-09</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2025-08-22 02:03:56" itemprop="dateModified" datetime="2025-08-22T02:03:56+08:00">2025-08-22</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Linux/" itemprop="url" rel="index"><span itemprop="name">Linux</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>KDE是我接触Linux以来接触的较早，并且最多的一个桌面环境了。几乎每次安装所有系统，我都是首选KDE</p>
+<p>原因就在于其友好，强大，美观，操作逻辑简单。</p>
+<p>再离开Linux这一年，没想到已经更新到了KDE6，刚回归的时候也走了一些弯路，现在我将制作一个教程以便自己的使用，也欢迎大家参考！</p>
+<h2 id="效果"><a href="#效果" class="headerlink" title="效果"></a>效果</h2><p><img src="/../../images/KDE/a.png"></p>
+<p>插件极少，相对来讲确实有点macOS那个感觉？</p>
+<h2 id="教程"><a href="#教程" class="headerlink" title="教程"></a>教程</h2><h3 id="Dock"><a href="#Dock" class="headerlink" title="Dock"></a>Dock</h3><h4 id="底部dock"><a href="#底部dock" class="headerlink" title="底部dock"></a>底部dock</h4><p><img src="/../../images/KDE/b.png"></p>
+<p>启动器图标:<a target="_blank" rel="noopener" href="https://github.com/JotaRandom/archlinux-artwork">archlinux-artwork</a></p>
+<h4 id="顶部应用程序菜单栏"><a href="#顶部应用程序菜单栏" class="headerlink" title="顶部应用程序菜单栏"></a>顶部应用程序菜单栏</h4><p><img src="/../../images/KDE/c.png"><br><strong>顶部按顺序</strong></p>
+<p>bar-全局菜单-间距-系统托盘-数字时钟-搜索-注销</p>
+<p>插件就两个，一个是 <code>Panel colorizer</code> 另一个是 <code>Application Title Bar</code> 都可以在KDE自带的官方插件商店找到</p>
+<h4 id="Panel-colorizer改底部dock-背景去掉"><a href="#Panel-colorizer改底部dock-背景去掉" class="headerlink" title="Panel colorizer改底部dock,背景去掉"></a>Panel colorizer改底部dock,背景去掉</h4><h4 id="Application-Title-Bar设置如下"><a href="#Application-Title-Bar设置如下" class="headerlink" title="Application Title Bar设置如下"></a>Application Title Bar设置如下</h4><p><img src="/../../images/KDE/d.png"><br><img src="/../../images/KDE/e.png"></p>
+<h3 id="系统配色"><a href="#系统配色" class="headerlink" title="系统配色"></a>系统配色</h3><p>就这个 <a target="_blank" rel="noopener" href="http://github.com/vinceliuice/WhiteSur-kde">WhiteSur-kde</a></p>
+<p>系统设置中—颜色与主题</p>
+<ul>
+<li>全局主题我选的Breeze微风</li>
+<li>颜色和Plasma外观样式我选择的是WhiteSur-alt 苹果</li>
+</ul>
+<h3 id="特效"><a href="#特效" class="headerlink" title="特效"></a>特效</h3><p>系统设置中—窗口管理—桌面特效</p>
+<ul>
+<li>惯性晃动</li>
+<li>粉碎动画</li>
+<li>背景虚化<br><img src="/../../images/KDE/g.png"></li>
+<li>窗口透明度<blockquote>
+<p>这个之前调的时候好像有bug？反正我没动</p>
+</blockquote>
+</li>
+<li>最小过渡动画-神灯</li>
+<li>窗口后滑动效</li>
+</ul>
+<h3 id="终端"><a href="#终端" class="headerlink" title="终端"></a>终端</h3><p><img src="/../../images/KDE/h.png"></p>
+<p>终端字体：<a href="../../files/ttf.zip">点击下载</a></p>
+<p>ref: <a target="_blank" rel="noopener" href="https://github.com/ryanoasis/nerd-fonts">nerd-fonts</a></p>
+<p>neofetch配置文件<a href="../../files/neofetch">点击下载</a><br>里边的内容替换 <code>~/.config/neofetch/config.conf</code><br><img src="/../../images/KDE/i.png"><br>ref: <a target="_blank" rel="noopener" href="https://github.com/Chick2D/neofetch-themes">neofetch-themes</a></p>
+<h3 id="壁纸"><a href="#壁纸" class="headerlink" title="壁纸"></a>壁纸</h3><p>鄙人倒是收集了一些壁纸，可以直接clone下来</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git clone https://github.com/k7tmiz/WallPaper.git</span><br></pre></td></tr></table></figure>
+
+<hr>
+<p>以后还能想起啥再补吧…</p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/posts/fff51a63.html" rel="prev" title="KDE崩溃了怎么办">
+      <i class="fa fa-chevron-left"></i> KDE崩溃了怎么办
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/posts/9ccc8650.html" rel="next" title="在Linux上优雅的使用Zotero">
+      在Linux上优雅的使用Zotero <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%89%8D%E8%A8%80"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%95%88%E6%9E%9C"><span class="nav-number">2.</span> <span class="nav-text">效果</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%95%99%E7%A8%8B"><span class="nav-number">3.</span> <span class="nav-text">教程</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Dock"><span class="nav-number">3.1.</span> <span class="nav-text">Dock</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%BA%95%E9%83%A8dock"><span class="nav-number">3.1.1.</span> <span class="nav-text">底部dock</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E9%A1%B6%E9%83%A8%E5%BA%94%E7%94%A8%E7%A8%8B%E5%BA%8F%E8%8F%9C%E5%8D%95%E6%A0%8F"><span class="nav-number">3.1.2.</span> <span class="nav-text">顶部应用程序菜单栏</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Panel-colorizer%E6%94%B9%E5%BA%95%E9%83%A8dock-%E8%83%8C%E6%99%AF%E5%8E%BB%E6%8E%89"><span class="nav-number">3.1.3.</span> <span class="nav-text">Panel colorizer改底部dock,背景去掉</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Application-Title-Bar%E8%AE%BE%E7%BD%AE%E5%A6%82%E4%B8%8B"><span class="nav-number">3.1.4.</span> <span class="nav-text">Application Title Bar设置如下</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%B3%BB%E7%BB%9F%E9%85%8D%E8%89%B2"><span class="nav-number">3.2.</span> <span class="nav-text">系统配色</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%89%B9%E6%95%88"><span class="nav-number">3.3.</span> <span class="nav-text">特效</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%BB%88%E7%AB%AF"><span class="nav-number">3.4.</span> <span class="nav-text">终端</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%A3%81%E7%BA%B8"><span class="nav-number">3.5.</span> <span class="nav-text">壁纸</span></a></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="k7tmiz"
+      src="/images/author.jpeg">
+  <p class="site-author-name" itemprop="name">k7tmiz</p>
+  <div class="site-description" itemprop="description">一些碎碎念</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives">
+          <span class="site-state-item-count">26</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+
+  <!--
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">5</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">6</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  -->
+
+  </nav>
+</div>
+
+
+
+      </div>
+
+      <iframe frameborder="no" border="0" marginwidth="0" marginheight="0" width=320 height=470 src="//music.163.com/outchain/player?type=0&id=13735371900&auto=0&height=430"></iframe>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2025</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">k7tmiz</span>
+</div>
+
+<!--
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+-->
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+<!-- hexo injector body_end start --><script src="/assets/mmedia/mmedia-loader.js"></script><!-- hexo injector body_end end --></body>
+</html>

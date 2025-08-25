@@ -1,0 +1,671 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 7.3.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/favicon-128.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16.png">
+  <link rel="mask-icon" href="/images/favicon-512.png" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"k7tmiz.github.io","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","width":300,"display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":true,"style":"flat"},"back2top":{"enable":true,"sidebar":false,"scrollpercent":true},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.json"};
+  </script>
+
+  <meta name="description" content="Hexo和Github Pages为什么选择Github Pages？作为一个大学生，其实已经经过了很多尝试，我从初二开始接触Linux,接触服务器，反复搭过很多次自己的网站，但因为学业繁重，最后基本都不了了之…甚至最开始只会用服务器搭建，很多时候没有备份，忘记续费于是资料就全没了。而Github Pages的话，最大的优点就是完全免费！所以你有兴趣的话就继续看下去吧！">
+<meta property="og:type" content="article">
+<meta property="og:title" content="其实是献给自己的Hexo教程">
+<meta property="og:url" content="https://k7tmiz.github.io/posts/8b69008.html">
+<meta property="og:site_name" content="k7tmiz">
+<meta property="og:description" content="Hexo和Github Pages为什么选择Github Pages？作为一个大学生，其实已经经过了很多尝试，我从初二开始接触Linux,接触服务器，反复搭过很多次自己的网站，但因为学业繁重，最后基本都不了了之…甚至最开始只会用服务器搭建，很多时候没有备份，忘记续费于是资料就全没了。而Github Pages的话，最大的优点就是完全免费！所以你有兴趣的话就继续看下去吧！">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://k7tmiz.github.io/images/Hexo/f.png">
+<meta property="og:image" content="https://k7tmiz.github.io/images/Hexo/g.png">
+<meta property="og:image" content="https://k7tmiz.github.io/images/Hexo/h.png">
+<meta property="og:image" content="https://k7tmiz.github.io/images/Hexo/e.png">
+<meta property="og:image" content="https://k7tmiz.github.io/images/Hexo/a.png">
+<meta property="article:published_time" content="2025-05-18T14:58:56.000Z">
+<meta property="article:modified_time" content="2025-08-21T18:03:56.093Z">
+<meta property="article:author" content="k7tmiz">
+<meta property="article:tag" content="Tech">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://k7tmiz.github.io/images/Hexo/f.png">
+
+<link rel="canonical" href="https://k7tmiz.github.io/posts/8b69008.html">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>其实是献给自己的Hexo教程 | k7tmiz</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+<!-- hexo injector head_end start --><script> let HEXO_MMEDIA_DATA = { js: [], css: [], aplayerData: [], metingData: [], artPlayerData: [], dplayerData: []}; </script><!-- hexo injector head_end end --><link rel="alternate" href="/atom.xml" title="k7tmiz" type="application/atom+xml">
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">k7tmiz</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">k7tmiz Blog</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-计时器">
+
+    <a href="/html/index.html" rel="section"><i class="fa fa-clock fa-fw"></i>计时器</a>
+
+  </li>
+        <li class="menu-item menu-item-rss">
+
+    <a href="/atom.xml" rel="section"><i class="fa fa-rss fa-fw"></i>RSS</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+  <div class="reading-progress-bar"></div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://k7tmiz.github.io/posts/8b69008.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/author.jpeg">
+      <meta itemprop="name" content="k7tmiz">
+      <meta itemprop="description" content="一些碎碎念">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="k7tmiz">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          其实是献给自己的Hexo教程
+        </h1>
+
+        <div class="post-meta">
+          
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2025-05-18 22:58:56" itemprop="dateCreated datePublished" datetime="2025-05-18T22:58:56+08:00">2025-05-18</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2025-08-22 02:03:56" itemprop="dateModified" datetime="2025-08-22T02:03:56+08:00">2025-08-22</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Tech/" itemprop="url" rel="index"><span itemprop="name">Tech</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h1 id="Hexo和Github-Pages"><a href="#Hexo和Github-Pages" class="headerlink" title="Hexo和Github Pages"></a>Hexo和Github Pages</h1><h2 id="为什么选择Github-Pages？"><a href="#为什么选择Github-Pages？" class="headerlink" title="为什么选择Github Pages？"></a>为什么选择Github Pages？</h2><p>作为一个大学生，其实已经经过了很多尝试，我从初二开始接触Linux,接触服务器，反复搭过很多次自己的网站，但因为学业繁重，最后基本都不了了之…甚至最开始只会用服务器搭建，很多时候没有备份，忘记续费于是资料就全没了。而Github Pages的话，最大的优点就是完全免费！所以你有兴趣的话就继续看下去吧！</p>
+<h2 id="科普"><a href="#科普" class="headerlink" title="科普"></a>科普</h2><ol>
+<li>Github Pages：<blockquote>
+<p>GitHub Pages 是一项静态站点托管服务，它直接从 GitHub 上获取 HTML、CSS 和 JavaScript 文件，通过构建过程运行文件，然后发布网站。<br>你可以在 GitHub 的 github.io 域或自己的自定义域上托管站点。</p>
+</blockquote>
+</li>
+</ol>
+<p>可以总结为以下几点：</p>
+<ul>
+<li>Github Pages 是 Github 提供的网页寄存服务，用于存放静态网页，也就是我们的博客。</li>
+<li>我们可以使用专业软件将文档转换成静态网页（如：Hexo），然后上传至 Github</li>
+<li>最后的结果就像现在这样，你们可以通过我的github.io子域名访问到我生成的静态网页，即本篇博客</li>
+</ul>
+<ol start="2">
+<li>Hexo：</li>
+</ol>
+<ul>
+<li>Hexo 是一款基于 Node.js 的快速、简洁且高效的静态博客框架。</li>
+<li>Hexo 使用 Markdown（或其他渲染引擎）解析文章，安装十分方便，配置简单，自定义功能强大，在几秒内，即可利用靓丽的主题生成静态网页。</li>
+<li>使用起来的效果就是：我仍然可以使用 Markdown 写博客内容，然后使用部署在本地的Hexo框架进行解析，生成相应的静态网页，最后一键上传即可。</li>
+</ul>
+<h1 id="教程开始："><a href="#教程开始：" class="headerlink" title="教程开始："></a>教程开始：</h1><h2 id="Step1-创建-github-账号和username-github-io-仓库"><a href="#Step1-创建-github-账号和username-github-io-仓库" class="headerlink" title="Step1: 创建 github 账号和username.github.io 仓库"></a>Step1: 创建 github 账号和<code>username</code>.github.io 仓库</h2><h2 id="Step2-在本地部署环境-Linux"><a href="#Step2-在本地部署环境-Linux" class="headerlink" title="Step2: 在本地部署环境(Linux)"></a>Step2: 在本地部署环境(Linux)</h2><ul>
+<li>安装:</li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo pacman -S git npm nodejs</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>部署Hexo:</li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm install -g hexo-cli</span><br></pre></td></tr></table></figure>
+<ul>
+<li>初始化 Hexo 框架:</li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">hexo init Blog</span><br></pre></td></tr></table></figure>
+<ul>
+<li>进入 Blog 文件夹:</li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cd Blog</span><br></pre></td></tr></table></figure>
+<ul>
+<li>安装依赖:</li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm install</span><br></pre></td></tr></table></figure>
+<ul>
+<li>启动 Hexo 服务:</li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">hexo s</span><br></pre></td></tr></table></figure>
+
+<h2 id="Step3-配置-Next-主题"><a href="#Step3-配置-Next-主题" class="headerlink" title="Step3: 配置 Next 主题"></a>Step3: 配置 Next 主题</h2><ul>
+<li>Github拉取Next主题:</li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git clone https://github.com/iissnan/hexo-theme-next themes/next</span><br></pre></td></tr></table></figure>
+<ul>
+<li>在根目录的 <code>_config.yml</code> 文件中修改 <code>theme: next</code></li>
+</ul>
+<h2 id="Step4-添加博客内容"><a href="#Step4-添加博客内容" class="headerlink" title="Step4: 添加博客内容"></a>Step4: 添加博客内容</h2><ul>
+<li>将写好的 Markdown 放到 <code>source\_posts</code> 目录</li>
+<li>将相应的图片放到 <code>source\images</code> 目录</li>
+<li>启动 Hexo 服务</li>
+</ul>
+<h2 id="Step5-Next主题美化"><a href="#Step5-Next主题美化" class="headerlink" title="Step5: Next主题美化"></a>Step5: Next主题美化</h2><h3 id="选择Scheme"><a href="#选择Scheme" class="headerlink" title="选择Scheme"></a><strong>选择Scheme</strong></h3><p>编辑主题配置文件 <code>themes\next_config.yml</code> ，确定喜爱的Scheme，我选择了Gemini</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"># Schemes</span><br><span class="line">scheme: Gemini</span><br><span class="line">#scheme: Mist</span><br><span class="line">#scheme: Pisces</span><br><span class="line">#scheme: Gemini</span><br></pre></td></tr></table></figure>
+
+<h3 id="侧边栏显示当前浏览进度"><a href="#侧边栏显示当前浏览进度" class="headerlink" title="侧边栏显示当前浏览进度"></a>侧边栏显示当前浏览进度</h3><p>打开 <code>themes/next/_config.yml</code> ，搜索关键字 <code>scrollpercent</code> ,把 false 改为 true</p>
+<blockquote>
+<p>如果想把 top 按钮放在侧边栏，搜索关键字sidebar ,把 false 改为 true</p>
+</blockquote>
+<h3 id="侧边栏加入网易云音乐播放器插件"><a href="#侧边栏加入网易云音乐播放器插件" class="headerlink" title="侧边栏加入网易云音乐播放器插件"></a>侧边栏加入网易云音乐播放器插件</h3><p>首先在网页搜索网易云音乐，选择音乐或者歌单，并生成外链：<br><img src="/../../images/Hexo/f.png" alt="外链"></p>
+<p>然后得到外链html代码：<br><img src="/../../images/Hexo/g.png" alt="插件html"></p>
+<p>将代码粘贴到一个合适的位置，建议放在侧边栏，在Blog&#x2F;themes&#x2F;next&#x2F;layout&#x2F;_macro&#x2F;sidebar.swig文件下，选择位置复制进去，不同位置效果不同：<br><img src="/../../images/Hexo/h.png" alt="效果"></p>
+<h3 id="隐藏网页底部powered-By-Hexo-强力驱动"><a href="#隐藏网页底部powered-By-Hexo-强力驱动" class="headerlink" title="隐藏网页底部powered By Hexo &#x2F; 强力驱动"></a>隐藏网页底部powered By Hexo &#x2F; 强力驱动</h3><p>打开 <code>themes/next/layout/_partials/footer.swig</code> ,使用注释隐藏之间的代码即可，或者直接删除。位置如下：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">&lt;!--</span><br><span class="line">&#123;%- if theme.footer.powered %&#125;</span><br><span class="line">  &lt;div class=&quot;powered-by&quot;&gt;</span><br><span class="line">    &#123;%- set next_site = &#x27;https://theme-next.org&#x27; %&#125;</span><br><span class="line">    &#123;%- if theme.scheme !== &#x27;Gemini&#x27; %&#125;</span><br><span class="line">      &#123;%- set next_site = &#x27;https://&#x27; + theme.scheme | lower + &#x27;.theme-next.org&#x27; %&#125;</span><br><span class="line">    &#123;%- endif %&#125;</span><br><span class="line">    &#123;&#123;- __(&#x27;footer.powered&#x27;, next_url(&#x27;https://hexo.io&#x27;, &#x27;Hexo&#x27;, &#123;class: &#x27;theme-link&#x27;&#125;) + &#x27; &amp; &#x27; + next_url(next_site, &#x27;NexT.&#x27; + theme.scheme, &#123;class: &#x27;theme-link&#x27;&#125;)) &#125;&#125;</span><br><span class="line">  &lt;/div&gt;</span><br><span class="line">&#123;%- endif %&#125;</span><br><span class="line">--&gt;</span><br></pre></td></tr></table></figure>
+
+<h3 id="设定菜单内容"><a href="#设定菜单内容" class="headerlink" title="设定菜单内容"></a>设定菜单内容</h3><p>编辑主题配置文件 <code>themes\next_config.yml</code></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">menu:</span><br><span class="line">  #home: / || fa fa-home</span><br><span class="line">  about: /about/ || fa fa-user</span><br><span class="line">  tags: /tags/ || fa fa-tags</span><br><span class="line">  categories: /categories/ || fa fa-th</span><br><span class="line">  #archives: /archives/ || fa fa-archive</span><br><span class="line">  #schedule: /schedule/ || fa fa-calendar</span><br><span class="line">  #sitemap: /sitemap.xml || fa fa-sitemap</span><br><span class="line">  #commonweal: /404/ || fa fa-heartbeat</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>按照上面的方式设置的菜单之后，点击标签，或者关于我都会出现错误页面，那这是怎么回事呢？<br>在默认情况，source 目录只有 _posts 一个文件夹的，并没有生成对应的 tags,about 等文件夹</p>
+</blockquote>
+<p>生成下菜单文件夹的可以了: <code>hexo new page tags</code></p>
+<h3 id="搜索功能"><a href="#搜索功能" class="headerlink" title="搜索功能"></a>搜索功能</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm install hexo-generator-search --安装插件，用于生成博客索引数据</span><br></pre></td></tr></table></figure>
+
+<p>修改博客配置文件（根目录&#x2F;_config.yml），添加以下代码</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">search:</span><br><span class="line">  path: search.json</span><br><span class="line">  field: post</span><br><span class="line">  format: html</span><br><span class="line">  limit: 1000</span><br></pre></td></tr></table></figure>
+
+<h3 id="文章自动折叠功能"><a href="#文章自动折叠功能" class="headerlink" title="文章自动折叠功能"></a>文章自动折叠功能</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm install hexo-excerpt --save</span><br></pre></td></tr></table></figure>
+
+<p>修改博客配置文件（根目录&#x2F;_config.yml），添加以下代码</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">excerpt:</span><br><span class="line">  depth: 10</span><br><span class="line">  excerpt_excludes: []</span><br><span class="line">  more_excludes: []</span><br><span class="line">  hideWholePostExcerpts: true</span><br></pre></td></tr></table></figure>
+
+<p><a target="_blank" rel="noopener" href="https://github.com/chekun/hexo-excerpt">Hexo-Excerpt</a></p>
+<h3 id="利用Hexo-abbrlink插件生成唯一文章链接"><a href="#利用Hexo-abbrlink插件生成唯一文章链接" class="headerlink" title="利用Hexo-abbrlink插件生成唯一文章链接"></a>利用Hexo-abbrlink插件生成唯一文章链接</h3><p>Hexo在生成博客文章链接时，默认是按照年、月、日、标题格式来生成的，可以在站点配置文件中指定new_post_name的值。默认是:year&#x2F;:month&#x2F;:day&#x2F;:title这样的格式。如果你的标题是中文的话，你的URL链接就会包含中文。复制后的url路径就是把中文变成了一大堆字符串编码，如果你在其它地方用了你自己这篇文章的url链接，偶然你又修改了该文章的标题，那这个url链接岂不是失效了。<br>为了给每一篇文章来上一个属于自己的链接，可以利用hexo-abbrlink插件，来解决这个问题。</p>
+<p>首先安装下hexo-abbrlink</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm install hexo-abbrlink --save</span><br></pre></td></tr></table></figure>
+
+<p>修改博客配置文件（根目录&#x2F;_config.yml），添加以下代码</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">permalink: post/:abbrlink.html</span><br><span class="line">abbrlink:</span><br><span class="line">  alg: crc32  # 算法：crc16(default) and crc32</span><br><span class="line">  rep: hex    # 进制：dec(default) and hex</span><br></pre></td></tr></table></figure>
+
+<h3 id="日志的自动分类插件"><a href="#日志的自动分类插件" class="headerlink" title="日志的自动分类插件"></a>日志的自动分类插件</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm install hexo-auto-category --save</span><br></pre></td></tr></table></figure>
+
+<p>修改博客配置文件（根目录&#x2F;_config.yml），添加以下代码</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">auto_category:</span><br><span class="line"> enable: true</span><br><span class="line"> depth:</span><br></pre></td></tr></table></figure>
+
+<h3 id="给Hexo博客添加RSS订阅"><a href="#给Hexo博客添加RSS订阅" class="headerlink" title="给Hexo博客添加RSS订阅"></a>给Hexo博客添加RSS订阅</h3><p>ref：<a target="_blank" rel="noopener" href="https://github.com/hexojs/hexo-generator-feed">hexo-generator-feed</a></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm install hexo-generator-feed --save</span><br></pre></td></tr></table></figure>
+
+<p>然后在 <code>hexo</code> 根目录下的 <code>_config.yml</code> 文件中添加配置</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"># RSS订阅</span><br><span class="line">feed:</span><br><span class="line">  enable: true</span><br><span class="line">  type: atom</span><br><span class="line">  path: atom.xml</span><br><span class="line">  limit: 0</span><br><span class="line">  hub:</span><br><span class="line">  content:</span><br><span class="line">  content_limit: 140</span><br><span class="line">  content_limit_delim: &#x27; &#x27;</span><br><span class="line">  order_by: -date</span><br><span class="line">  icon: icon.png</span><br><span class="line">  autodiscovery: true</span><br><span class="line">  template:</span><br></pre></td></tr></table></figure>
+
+<p>在主题目录的 <code>_config.yml</code> 的menu目录添加</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">RSS: /atom.xml || fa fa-rss</span><br></pre></td></tr></table></figure>
+
+<h3 id="Hexo插入图片并解决图片的路径问题"><a href="#Hexo插入图片并解决图片的路径问题" class="headerlink" title="Hexo插入图片并解决图片的路径问题"></a>Hexo插入图片并解决图片的路径问题</h3><p>ref: <a target="_blank" rel="noopener" href="https://www.hwpo.top/posts/d87f7e0c/index.html">Hexo插入图片并解决图片的路径问题</a></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm install hexo-renderer-marked --save</span><br></pre></td></tr></table></figure>
+
+<p>修改博客配置文件（根目录&#x2F;_config.yml），修改添加以下代码</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">post_asset_folder: true</span><br><span class="line">relative_link: false</span><br><span class="line">marked:</span><br><span class="line">  prependRoot: true</span><br><span class="line">  postAsset: true</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>post_asset_folder: true<blockquote>
+<p>执行hexo new post xxx时，会同时生成.&#x2F;source&#x2F;_posts&#x2F;xxx.md文件和.&#x2F;source&#x2F;_posts&#x2F;xxx目录，可以将该文章相关联的资源放置在该资源目录中。</p>
+</blockquote>
+</li>
+<li>relative_link: false<blockquote>
+<p>不要将链接改为与根目录的相对地址。此为默认配置。</p>
+</blockquote>
+</li>
+<li>prependRoot: true<blockquote>
+<p>将文章根路径添加到文章内的链接之前。此为默认配置。</p>
+</blockquote>
+</li>
+<li>postAsset: true<blockquote>
+<p>在post_asset_folder设置为true的情况下，在根据prependRoot的设置在所有链接开头添加文章根路径之前，先将文章内资源的路径解析为相对于资源目录的路径。</p>
+</blockquote>
+</li>
+</ul>
+<p>举例说明：<br>执行hexo new post demo后，在demo文章的资源路径下存放了a.jpg和cover.jpg（用作封面），目录组织结构如下：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">./source/_posts</span><br><span class="line">├── demo.md</span><br><span class="line">└── demo</span><br><span class="line">    ├── a.jpg</span><br><span class="line">    └── cover.jpg</span><br></pre></td></tr></table></figure>
+
+<p>在demo.md的适当位置引用这两张图片，指定图片相对路径时需要假设当前目录为.&#x2F;source&#x2F;_posts&#x2F;demo&#x2F;，而不是demo.md文件本身的所在目录。</p>
+<p>图片语法:<br><code>![这是图片](/assets/img/philly-magic-garden.jpg &quot;Magic Gardens&quot;)</code></p>
+<p>Github仓库: <a target="_blank" rel="noopener" href="https://github.com/hexojs/hexo-renderer-marked">hexo-renderer-marked</a></p>
+<h3 id="Hexo插入音视频等等"><a href="#Hexo插入音视频等等" class="headerlink" title="Hexo插入音视频等等"></a>Hexo插入音视频等等</h3><p>有图片，那怎么少得了音视频呢</p>
+<p>安装插件：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm install hexo-tag-mmedia@1 --save</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>别问为什么不用dplayer和apldayer,原因就是用不了，不兼容新版本</p>
+</blockquote>
+<p>修改博客配置文件（根目录&#x2F;_config.yml），修改添加以下代码</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br></pre></td><td class="code"><pre><span class="line">mmedia:</span><br><span class="line">  audio:</span><br><span class="line">    default:</span><br><span class="line">  video:</span><br><span class="line">    default:</span><br><span class="line">  aplayer:</span><br><span class="line">    js: https://cdn.jsdelivr.net/npm/aplayer@1/dist/APlayer.min.js</span><br><span class="line">    css: https://cdn.jsdelivr.net/npm/aplayer@1/dist/APlayer.min.css</span><br><span class="line">    default:</span><br><span class="line">      contents:</span><br><span class="line">  meting:</span><br><span class="line">    js: https://cdn.jsdelivr.net/npm/meting@2/dist/Meting.min.js</span><br><span class="line">    api:</span><br><span class="line">    default:</span><br><span class="line">  dplayer:</span><br><span class="line">    js: https://cdn.jsdelivr.net/npm/dplayer@1/dist/DPlayer.min.js</span><br><span class="line">    hls_js: https://cdn.jsdelivr.net/npm/hls.js/dist/hls.min.js</span><br><span class="line">    dash_js: https://cdn.jsdelivr.net/npm/dashjs/dist/dash.all.min.js</span><br><span class="line">    shaka_dash_js: https://cdn.jsdelivr.net/npm/shaka-player/dist/shaka-player.compiled.js</span><br><span class="line">    flv_js: https://cdn.jsdelivr.net/npm/flv.js/dist/flv.min.js</span><br><span class="line">    webtorrent_js: https://cdn.jsdelivr.net/npm/webtorrent/webtorrent.min.js</span><br><span class="line">    default:</span><br><span class="line">      contents:</span><br><span class="line">  bilibili:</span><br><span class="line">    default:</span><br><span class="line">      page: 1</span><br><span class="line">      danmaku: true</span><br><span class="line">      allowfullscreen: allowfullscreen</span><br><span class="line">      sandbox: allow-top-navigation allow-same-origin allow-forms allow-scripts allow-popups</span><br><span class="line">      width: 100%</span><br><span class="line">      max_width: 850px</span><br><span class="line">      margin: auto</span><br><span class="line">  xigua:</span><br><span class="line">    default:</span><br><span class="line">      autoplay: false</span><br><span class="line">      startTime: 0</span><br><span class="line">      allowfullscreen: allowfullscreen</span><br><span class="line">      sandbox: allow-top-navigation allow-same-origin allow-forms allow-scripts allow-popups</span><br><span class="line">      width: 100%</span><br><span class="line">      max_width: 850px</span><br><span class="line">      margin: auto</span><br></pre></td></tr></table></figure>
+
+<p>使用方法：</p>
+<p>Aplayer：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&#123;% mmedia &quot;aplayer&quot; &quot;name:songName&quot; &quot;url:a.mp3&quot; %&#125;</span><br></pre></td></tr></table></figure>
+
+<p>Dplayer：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&#123;% mmedia &quot;dplayer&quot; &quot;url:a.mp4&quot; %&#125;</span><br></pre></td></tr></table></figure>
+
+<p>ref：<a target="_blank" rel="noopener" href="https://www.u2sb.com/OpenSw/hexo-tag-mmedia/">hexo-tag-mmedia</a></p>
+<h3 id="一键回顶部"><a href="#一键回顶部" class="headerlink" title="一键回顶部"></a>一键回顶部</h3><p>修改Next配置文件（themes&#x2F;next&#x2F;_config.yml），修改以下代码</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">back2top:</span><br><span class="line">  enable: true</span><br><span class="line">  # Back to top in sidebar.</span><br><span class="line">  sidebar: false</span><br><span class="line">  # Scroll percent label in b2t button.</span><br><span class="line">  scrollpercent: true</span><br></pre></td></tr></table></figure>
+
+<h3 id="阅读进度条"><a href="#阅读进度条" class="headerlink" title="阅读进度条"></a>阅读进度条</h3><p>修改Next配置文件（themes&#x2F;next&#x2F;_config.yml），修改以下代码</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">reading_progress:</span><br><span class="line">  enable: true</span><br><span class="line">  # Available values: top | bottom</span><br><span class="line">  position: top</span><br><span class="line">  color: &quot;#37c6c0&quot;</span><br><span class="line">  height: 3px</span><br></pre></td></tr></table></figure>
+
+<h3 id="作者头像设置"><a href="#作者头像设置" class="headerlink" title="作者头像设置"></a>作者头像设置</h3><p>将我们的头像图片放置在 <code>themes/next/source/images</code> 目录下，然后修改 <code>themes/next/_config.yml</code></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"># Sidebar Avatar</span><br><span class="line">avatar:</span><br><span class="line">  # Replace the default image and set the url here.</span><br><span class="line">  url: /images/author.jpeg</span><br><span class="line">  # If true, the avatar will be dispalyed in circle.</span><br><span class="line">  rounded: false #头像是否设为圆形，否则为矩形</span><br><span class="line">  # If true, the avatar will be rotated with the cursor.</span><br><span class="line">  rotated: true #鼠标放在头像上时是否旋转</span><br></pre></td></tr></table></figure>
+
+<h3 id="添加博客自定义图标"><a href="#添加博客自定义图标" class="headerlink" title="添加博客自定义图标"></a>添加博客自定义图标</h3><p>博客网站的图标可以在<a target="_blank" rel="noopener" href="https://www.easyicon.cc/">easyicon</a>、<a target="_blank" rel="noopener" href="https://www.bitbug.net/">bitbug</a>、<a target="_blank" rel="noopener" href="https://www.iconfont.cn/">iconfont</a>等网站选择和制作，然后选择或者创建相应大小的图标文件，放置在 <code>themes/next/sources/images</code> 目录下，然后修改 <code>themes/next/_config.yml</code></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">favicon:</span><br><span class="line">  small: /images/favicon-16.png</span><br><span class="line">  medium: /images/favicon-32.png</span><br><span class="line">  apple_touch_icon: /images/favicon-128.png</span><br><span class="line">  safari_pinned_tab: /images/favicon-512.png</span><br><span class="line">  #android_manifest: /images/manifest.json</span><br><span class="line">  #ms_browserconfig: /images/browserconfig.xml</span><br></pre></td></tr></table></figure>
+
+<h3 id="增加文章置顶功能"><a href="#增加文章置顶功能" class="headerlink" title="增加文章置顶功能"></a>增加文章置顶功能</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">npm uninstall hexo-generator-index --save</span><br><span class="line">npm install hexo-generator-index-pin-top --save</span><br></pre></td></tr></table></figure>
+<p>然后在需要置顶的文章的Front-matter中加上top: true即可。比如下面这篇文章：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">---</span><br><span class="line">title: 我与Linux的情缘</span><br><span class="line">tags: Linux</span><br><span class="line">categories:</span><br><span class="line">  - Linux</span><br><span class="line">abbrlink: d773eb13</span><br><span class="line">date: 2025-05-11 22:24:04</span><br><span class="line">top: true</span><br><span class="line">---</span><br></pre></td></tr></table></figure>
+
+<p>到目前为止，置顶功能已经可以实现了。</p>
+<p>不过置顶的文章显示在最上面之后，如果没有明确的置顶标志，是不是感觉有点怪怪的</p>
+<p><strong>设置置顶标志</strong><br>打开： <code>themes/next/layout/_macro</code> 目录下的<code>post.swig</code>文件，定位到 <code>&lt;div class=&quot;post-meta&quot;&gt;</code>标签下，插入如下代码：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">&#123;% if post.top %&#125;</span><br><span class="line">	&lt;font color=7D26CD&gt;置顶&lt;/font&gt;</span><br><span class="line">	&lt;span class=&quot;post-meta-divider&quot;&gt;|&lt;/span&gt;</span><br><span class="line">&#123;% endif %&#125;</span><br></pre></td></tr></table></figure>
+<p><img src="/../../images/Hexo/e.png" alt="效果如图" title="效果如图"><br>ref: <a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/33617563">Hexo博客优化之彻底解决博文置顶问题</a><br>ref: <a target="_blank" rel="noopener" href="https://www.itfanr.cc/2019/09/05/hexo-top-optimize/">Hexo博客置顶功能优化</a></p>
+<h3 id="定制Next主题的Sidebar-state"><a href="#定制Next主题的Sidebar-state" class="headerlink" title="定制Next主题的Sidebar_state"></a>定制Next主题的Sidebar_state</h3><p>因为只有true和false 而我想定制在Hexo的NexT主题中仅显示侧边栏的archive部分并隐藏tags</p>
+<p>修改Next配置文件 <code>theme/next/layout/_partials/sidebar/site-overview.swig</code> ，注释你想注释掉的，比如我注释掉了 <code>categories</code> 和 <code>tags</code> </p>
+<p><img src="/../../images/Hexo/a.png" alt="效果如图" title="效果如图"></p>
+<h2 id="Step6-将生成的静态页面部署到-Github-上"><a href="#Step6-将生成的静态页面部署到-Github-上" class="headerlink" title="Step6: 将生成的静态页面部署到 Github 上"></a>Step6: 将生成的静态页面部署到 Github 上</h2><ul>
+<li>具体操作：修改站点配置文件_config.yml的最后部分</li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">deploy:</span><br><span class="line">  type: git</span><br><span class="line">  repo: https://github.com/k7tmiz/k7tmiz.github.io.git</span><br><span class="line">  branch: master</span><br></pre></td></tr></table></figure>
+<p><strong>要先安装deploy-git，才能用命令部署到GitHub</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm install hexo-deployer-git --save</span><br></pre></td></tr></table></figure>
+
+<p>然后</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">hexo clean #清除之前生成的东西</span><br><span class="line">hexo generate  #生成静态文章，缩写hexo g</span><br><span class="line">hexo deploy  #部署文章，缩写hexo d</span><br></pre></td></tr></table></figure>
+
+<p>过一会儿就可以在 <code>yourname.github.io</code> 这个网站看到你的博客了</p>
+<p>暂时也想不太起来还改了哪些内容，等想起来或者有扩充我再接着完善文档好吧</p>
+<blockquote>
+<p>还有使用Git分支保存Hexo博客源码到Github有空再更… 2025.5.19日凌晨0:45分先立下Flag(doge)</p>
+</blockquote>
+<h2 id="其他参考的一些帖子"><a href="#其他参考的一些帖子" class="headerlink" title="其他参考的一些帖子"></a>其他参考的一些帖子</h2><p>ref: <a target="_blank" rel="noopener" href="https://mini-pi.github.io/2024/02/28/how-to-make-blog-wedsite/">2024年，如何使用 github pages + Hexo + Next 搭建个人博客</a><br>ref: <a target="_blank" rel="noopener" href="https://losophy.github.io/post/71afd747.html">NexT主题美化</a><br>ref: <a target="_blank" rel="noopener" href="https://huangpiao.tech/2019/01/24/Hexo%E5%8D%9A%E5%AE%A2%E4%BC%98%E5%8C%96%E4%B9%8BNext%E4%B8%BB%E9%A2%98%E7%BE%8E%E5%8C%96/">Hexo博客优化之Next主题美化</a></p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/Tech/" rel="tag"># Tech</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/posts/d773eb13.html" rel="prev" title="我与计算机的故事">
+      <i class="fa fa-chevron-left"></i> 我与计算机的故事
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/posts/5e452484.html" rel="next" title="其实是献给自己的Hexo教程 2">
+      其实是献给自己的Hexo教程 2 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Hexo%E5%92%8CGithub-Pages"><span class="nav-number">1.</span> <span class="nav-text">Hexo和Github Pages</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%BA%E4%BB%80%E4%B9%88%E9%80%89%E6%8B%A9Github-Pages%EF%BC%9F"><span class="nav-number">1.1.</span> <span class="nav-text">为什么选择Github Pages？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%A7%91%E6%99%AE"><span class="nav-number">1.2.</span> <span class="nav-text">科普</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%95%99%E7%A8%8B%E5%BC%80%E5%A7%8B%EF%BC%9A"><span class="nav-number">2.</span> <span class="nav-text">教程开始：</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Step1-%E5%88%9B%E5%BB%BA-github-%E8%B4%A6%E5%8F%B7%E5%92%8Cusername-github-io-%E4%BB%93%E5%BA%93"><span class="nav-number">2.1.</span> <span class="nav-text">Step1: 创建 github 账号和username.github.io 仓库</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Step2-%E5%9C%A8%E6%9C%AC%E5%9C%B0%E9%83%A8%E7%BD%B2%E7%8E%AF%E5%A2%83-Linux"><span class="nav-number">2.2.</span> <span class="nav-text">Step2: 在本地部署环境(Linux)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Step3-%E9%85%8D%E7%BD%AE-Next-%E4%B8%BB%E9%A2%98"><span class="nav-number">2.3.</span> <span class="nav-text">Step3: 配置 Next 主题</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Step4-%E6%B7%BB%E5%8A%A0%E5%8D%9A%E5%AE%A2%E5%86%85%E5%AE%B9"><span class="nav-number">2.4.</span> <span class="nav-text">Step4: 添加博客内容</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Step5-Next%E4%B8%BB%E9%A2%98%E7%BE%8E%E5%8C%96"><span class="nav-number">2.5.</span> <span class="nav-text">Step5: Next主题美化</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%80%89%E6%8B%A9Scheme"><span class="nav-number">2.5.1.</span> <span class="nav-text">选择Scheme</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BE%A7%E8%BE%B9%E6%A0%8F%E6%98%BE%E7%A4%BA%E5%BD%93%E5%89%8D%E6%B5%8F%E8%A7%88%E8%BF%9B%E5%BA%A6"><span class="nav-number">2.5.2.</span> <span class="nav-text">侧边栏显示当前浏览进度</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BE%A7%E8%BE%B9%E6%A0%8F%E5%8A%A0%E5%85%A5%E7%BD%91%E6%98%93%E4%BA%91%E9%9F%B3%E4%B9%90%E6%92%AD%E6%94%BE%E5%99%A8%E6%8F%92%E4%BB%B6"><span class="nav-number">2.5.3.</span> <span class="nav-text">侧边栏加入网易云音乐播放器插件</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%9A%90%E8%97%8F%E7%BD%91%E9%A1%B5%E5%BA%95%E9%83%A8powered-By-Hexo-%E5%BC%BA%E5%8A%9B%E9%A9%B1%E5%8A%A8"><span class="nav-number">2.5.4.</span> <span class="nav-text">隐藏网页底部powered By Hexo &#x2F; 强力驱动</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%AE%BE%E5%AE%9A%E8%8F%9C%E5%8D%95%E5%86%85%E5%AE%B9"><span class="nav-number">2.5.5.</span> <span class="nav-text">设定菜单内容</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%90%9C%E7%B4%A2%E5%8A%9F%E8%83%BD"><span class="nav-number">2.5.6.</span> <span class="nav-text">搜索功能</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%96%87%E7%AB%A0%E8%87%AA%E5%8A%A8%E6%8A%98%E5%8F%A0%E5%8A%9F%E8%83%BD"><span class="nav-number">2.5.7.</span> <span class="nav-text">文章自动折叠功能</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%88%A9%E7%94%A8Hexo-abbrlink%E6%8F%92%E4%BB%B6%E7%94%9F%E6%88%90%E5%94%AF%E4%B8%80%E6%96%87%E7%AB%A0%E9%93%BE%E6%8E%A5"><span class="nav-number">2.5.8.</span> <span class="nav-text">利用Hexo-abbrlink插件生成唯一文章链接</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%97%A5%E5%BF%97%E7%9A%84%E8%87%AA%E5%8A%A8%E5%88%86%E7%B1%BB%E6%8F%92%E4%BB%B6"><span class="nav-number">2.5.9.</span> <span class="nav-text">日志的自动分类插件</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%BB%99Hexo%E5%8D%9A%E5%AE%A2%E6%B7%BB%E5%8A%A0RSS%E8%AE%A2%E9%98%85"><span class="nav-number">2.5.10.</span> <span class="nav-text">给Hexo博客添加RSS订阅</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Hexo%E6%8F%92%E5%85%A5%E5%9B%BE%E7%89%87%E5%B9%B6%E8%A7%A3%E5%86%B3%E5%9B%BE%E7%89%87%E7%9A%84%E8%B7%AF%E5%BE%84%E9%97%AE%E9%A2%98"><span class="nav-number">2.5.11.</span> <span class="nav-text">Hexo插入图片并解决图片的路径问题</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Hexo%E6%8F%92%E5%85%A5%E9%9F%B3%E8%A7%86%E9%A2%91%E7%AD%89%E7%AD%89"><span class="nav-number">2.5.12.</span> <span class="nav-text">Hexo插入音视频等等</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%80%E9%94%AE%E5%9B%9E%E9%A1%B6%E9%83%A8"><span class="nav-number">2.5.13.</span> <span class="nav-text">一键回顶部</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%98%85%E8%AF%BB%E8%BF%9B%E5%BA%A6%E6%9D%A1"><span class="nav-number">2.5.14.</span> <span class="nav-text">阅读进度条</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BD%9C%E8%80%85%E5%A4%B4%E5%83%8F%E8%AE%BE%E7%BD%AE"><span class="nav-number">2.5.15.</span> <span class="nav-text">作者头像设置</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%B7%BB%E5%8A%A0%E5%8D%9A%E5%AE%A2%E8%87%AA%E5%AE%9A%E4%B9%89%E5%9B%BE%E6%A0%87"><span class="nav-number">2.5.16.</span> <span class="nav-text">添加博客自定义图标</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%A2%9E%E5%8A%A0%E6%96%87%E7%AB%A0%E7%BD%AE%E9%A1%B6%E5%8A%9F%E8%83%BD"><span class="nav-number">2.5.17.</span> <span class="nav-text">增加文章置顶功能</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AE%9A%E5%88%B6Next%E4%B8%BB%E9%A2%98%E7%9A%84Sidebar-state"><span class="nav-number">2.5.18.</span> <span class="nav-text">定制Next主题的Sidebar_state</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Step6-%E5%B0%86%E7%94%9F%E6%88%90%E7%9A%84%E9%9D%99%E6%80%81%E9%A1%B5%E9%9D%A2%E9%83%A8%E7%BD%B2%E5%88%B0-Github-%E4%B8%8A"><span class="nav-number">2.6.</span> <span class="nav-text">Step6: 将生成的静态页面部署到 Github 上</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%85%B6%E4%BB%96%E5%8F%82%E8%80%83%E7%9A%84%E4%B8%80%E4%BA%9B%E5%B8%96%E5%AD%90"><span class="nav-number">2.7.</span> <span class="nav-text">其他参考的一些帖子</span></a></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="k7tmiz"
+      src="/images/author.jpeg">
+  <p class="site-author-name" itemprop="name">k7tmiz</p>
+  <div class="site-description" itemprop="description">一些碎碎念</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives">
+          <span class="site-state-item-count">26</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+
+  <!--
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">5</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">6</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  -->
+
+  </nav>
+</div>
+
+
+
+      </div>
+
+      <iframe frameborder="no" border="0" marginwidth="0" marginheight="0" width=320 height=470 src="//music.163.com/outchain/player?type=0&id=13735371900&auto=0&height=430"></iframe>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2025</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">k7tmiz</span>
+</div>
+
+<!--
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+-->
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+<!-- hexo injector body_end start --><script src="/assets/mmedia/mmedia-loader.js"></script><!-- hexo injector body_end end --></body>
+</html>

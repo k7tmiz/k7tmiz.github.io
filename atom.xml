@@ -1,0 +1,564 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <title>k7tmiz</title>
+  <icon>https://k7tmiz.github.io/icon.png</icon>
+  <subtitle>k7tmiz Blog</subtitle>
+  <link href="https://k7tmiz.github.io/atom.xml" rel="self"/>
+  
+  <link href="https://k7tmiz.github.io/"/>
+  <updated>2025-08-25T10:39:49.160Z</updated>
+  <id>https://k7tmiz.github.io/</id>
+  
+  <author>
+    <name>k7tmiz</name>
+    
+  </author>
+  
+  <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>谈谈我为什么放弃了无纸化学习</title>
+    <link href="https://k7tmiz.github.io/posts/4fa1af2a.html"/>
+    <id>https://k7tmiz.github.io/posts/4fa1af2a.html</id>
+    <published>2025-08-25T10:38:03.000Z</published>
+    <updated>2025-08-25T10:39:49.160Z</updated>
+    
+    
+    <summary type="html">&lt;p&gt;如标题所见，我最终还是放弃了无纸化学习。这个决定并非一时兴起，而是经历了反复尝试与深刻反思之后的结果。很多人称赞数字化工具的便捷与环保，我也曾满怀期待地拥抱这一切，却发现它并不如想象中那般适合我。原因很多，听我一一道来。&lt;/p&gt;
+&lt;p&gt;作为24年高考生，我高考结束以后便在网络上搜寻大学的高效率学习模式，然而作为一名文科生，电脑的使用率较低，而平板和手写笔成为了我的首选。&lt;/p&gt;
+&lt;p&gt;刚进入大学的前两个星期，大约是新鲜期，那时候基本上使用率比较高，原因或许是内容强度不高，记忆难度小。直到大一上学期过完，回到学校以后，情况开始有所改变。&lt;/p&gt;</summary>
+    
+    
+    
+    <category term="Article" scheme="https://k7tmiz.github.io/categories/Article/"/>
+    
+    
+    <category term="Article" scheme="https://k7tmiz.github.io/tags/Article/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>如何在Linux上优雅的使用小黄鸭</title>
+    <link href="https://k7tmiz.github.io/posts/5982c65e.html"/>
+    <id>https://k7tmiz.github.io/posts/5982c65e.html</id>
+    <published>2025-07-19T08:50:55.000Z</published>
+    <updated>2025-08-21T18:03:56.093Z</updated>
+    
+    
+    <summary type="html">&lt;h2 id=&quot;前言&quot;&gt;&lt;a href=&quot;#前言&quot; class=&quot;headerlink&quot; title=&quot;前言&quot;&gt;&lt;/a&gt;前言&lt;/h2&gt;&lt;p&gt;起因我在小黑盒看到了一个给SteamDeck开发的小黄鸭插件,然后我就想着Linux上面肯定也有&lt;/p&gt;
+&lt;p&gt;插件:&lt;a href=&quot;https://github.com/xXJSONDeruloXx/decky-lossless-scaling-vk&quot;&gt;decky-lossless-scaling-vk&lt;/a&gt;&lt;/p&gt;</summary>
+    
+    
+    
+    <category term="Linux" scheme="https://k7tmiz.github.io/categories/Linux/"/>
+    
+    
+  </entry>
+  
+  <entry>
+    <title>在Linux上优雅的使用Wemod</title>
+    <link href="https://k7tmiz.github.io/posts/400b687c.html"/>
+    <id>https://k7tmiz.github.io/posts/400b687c.html</id>
+    <published>2025-07-09T14:43:46.000Z</published>
+    <updated>2025-08-21T18:03:56.092Z</updated>
+    
+    
+    <summary type="html">&lt;h2 id=&quot;引言&quot;&gt;&lt;a href=&quot;#引言&quot; class=&quot;headerlink&quot; title=&quot;引言&quot;&gt;&lt;/a&gt;引言&lt;/h2&gt;&lt;p&gt;最近在玩Escape the backroom,里边那个耐力真的很难受,所以开了个无限耐力的,但是我不想在windows下游玩,我就去找了一下linux下的wemod的替代品,结果找到了这个项目&lt;a href=&quot;https://github.com/DeckCheatz/wemod-launcher&quot;&gt;wemod-launcher&lt;/a&gt;,现在想写一篇博客介绍一下怎么使用它&lt;/p&gt;
+&lt;h2 id=&quot;教程&quot;&gt;&lt;a href=&quot;#教程&quot; class=&quot;headerlink&quot; title=&quot;教程&quot;&gt;&lt;/a&gt;教程&lt;/h2&gt;</summary>
+    
+    
+    
+    <category term="Linux" scheme="https://k7tmiz.github.io/categories/Linux/"/>
+    
+    
+    <category term="Linux" scheme="https://k7tmiz.github.io/tags/Linux/"/>
+    
+    <category term="Tech" scheme="https://k7tmiz.github.io/tags/Tech/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>在Linux上优雅的使用Zotero</title>
+    <link href="https://k7tmiz.github.io/posts/9ccc8650.html"/>
+    <id>https://k7tmiz.github.io/posts/9ccc8650.html</id>
+    <published>2025-06-13T07:35:38.000Z</published>
+    <updated>2025-08-21T18:03:56.093Z</updated>
+    
+    
+    <summary type="html">&lt;h2 id=&quot;引言&quot;&gt;&lt;a href=&quot;#引言&quot; class=&quot;headerlink&quot; title=&quot;引言&quot;&gt;&lt;/a&gt;引言&lt;/h2&gt;&lt;p&gt;由于我选的一个课需要我现在大一就写论文，我就在寻找在Linux上的文献管理方案。在gitee上找到了一个项目&lt;a href=&quot;https://gitee.com/wangrui5015/Zotero-WPSJS&quot;&gt;Zotero-WPSJS&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;感谢大佬的付出&lt;/p&gt;</summary>
+    
+    
+    
+    <category term="Linux" scheme="https://k7tmiz.github.io/categories/Linux/"/>
+    
+    
+    <category term="Linux" scheme="https://k7tmiz.github.io/tags/Linux/"/>
+    
+    <category term="Tech" scheme="https://k7tmiz.github.io/tags/Tech/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>KDE美化教程</title>
+    <link href="https://k7tmiz.github.io/posts/a3d041ec.html"/>
+    <id>https://k7tmiz.github.io/posts/a3d041ec.html</id>
+    <published>2025-06-09T07:46:30.000Z</published>
+    <updated>2025-08-21T18:03:56.092Z</updated>
+    
+    
+    <summary type="html">&lt;h2 id=&quot;前言&quot;&gt;&lt;a href=&quot;#前言&quot; class=&quot;headerlink&quot; title=&quot;前言&quot;&gt;&lt;/a&gt;前言&lt;/h2&gt;&lt;p&gt;KDE是我接触Linux以来接触的较早，并且最多的一个桌面环境了。几乎每次安装所有系统，我都是首选KDE&lt;/p&gt;
+&lt;p&gt;原因就在于其友好，强大，美观，操作逻辑简单。&lt;/p&gt;</summary>
+    
+    
+    
+    <category term="Linux" scheme="https://k7tmiz.github.io/categories/Linux/"/>
+    
+    
+  </entry>
+  
+  <entry>
+    <title>KDE崩溃了怎么办</title>
+    <link href="https://k7tmiz.github.io/posts/fff51a63.html"/>
+    <id>https://k7tmiz.github.io/posts/fff51a63.html</id>
+    <published>2025-06-09T06:48:03.000Z</published>
+    <updated>2025-08-21T18:03:56.092Z</updated>
+    
+    
+    <summary type="html">&lt;h2 id=&quot;起因&quot;&gt;&lt;a href=&quot;#起因&quot; class=&quot;headerlink&quot; title=&quot;起因&quot;&gt;&lt;/a&gt;起因&lt;/h2&gt;&lt;p&gt;因为这个Wallpaper Engine暂时没有适配Linux端，所以我就一直在用这个第三方的插件&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;因为SteamOS也是基于ArchLinux的，那我用Arch的，拿儿子点东西不过分哈&lt;/p&gt;
+&lt;/blockquote&gt;</summary>
+    
+    
+    
+    <category term="Linux" scheme="https://k7tmiz.github.io/categories/Linux/"/>
+    
+    
+    <category term="Linux" scheme="https://k7tmiz.github.io/tags/Linux/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>GIT提交时不用输入用户名密码的方法</title>
+    <link href="https://k7tmiz.github.io/posts/87bb185d.html"/>
+    <id>https://k7tmiz.github.io/posts/87bb185d.html</id>
+    <published>2025-06-07T13:23:05.000Z</published>
+    <updated>2025-08-21T18:03:56.093Z</updated>
+    
+    
+    <summary type="html">&lt;h2 id=&quot;起因&quot;&gt;&lt;a href=&quot;#起因&quot; class=&quot;headerlink&quot; title=&quot;起因&quot;&gt;&lt;/a&gt;起因&lt;/h2&gt;&lt;p&gt;每次git push都要用用户名和密码，每次都要去复制一下然后粘贴过去… 是真的很烦人&lt;/p&gt;
+&lt;h2 id=&quot;教程&quot;&gt;&lt;a href=&quot;#教程&quot; class=&quot;headerlink&quot; title=&quot;教程&quot;&gt;&lt;/a&gt;教程&lt;/h2&gt;</summary>
+    
+    
+    
+    <category term="Tech" scheme="https://k7tmiz.github.io/categories/Tech/"/>
+    
+    
+  </entry>
+  
+  <entry>
+    <title>Git 常用命令详解</title>
+    <link href="https://k7tmiz.github.io/posts/c819bd8f.html"/>
+    <id>https://k7tmiz.github.io/posts/c819bd8f.html</id>
+    <published>2025-06-07T12:48:52.000Z</published>
+    <updated>2025-08-21T18:03:56.093Z</updated>
+    
+    
+    <summary type="html">&lt;h1 id=&quot;Git-常用命令介绍&quot;&gt;&lt;a href=&quot;#Git-常用命令介绍&quot; class=&quot;headerlink&quot; title=&quot;Git 常用命令介绍&quot;&gt;&lt;/a&gt;Git 常用命令介绍&lt;/h1&gt;&lt;p&gt;Git 是一个分布式版本控制系统，广泛用于软件开发中的代码管理。以下是一些常用的 Git 命令，按照逻辑顺序和常用次序进行介绍，帮助您更好地理解和使用 Git。&lt;/p&gt;
+&lt;h2 id=&quot;1-git-clone&quot;&gt;&lt;a href=&quot;#1-git-clone&quot; class=&quot;headerlink&quot; title=&quot;1. git clone&quot;&gt;&lt;/a&gt;1. git clone&lt;/h2&gt;</summary>
+    
+    
+    
+    <category term="Tech" scheme="https://k7tmiz.github.io/categories/Tech/"/>
+    
+    
+    <category term="Linux" scheme="https://k7tmiz.github.io/tags/Linux/"/>
+    
+    <category term="Tech" scheme="https://k7tmiz.github.io/tags/Tech/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>关于Spotify桌面端的美化</title>
+    <link href="https://k7tmiz.github.io/posts/4795de82.html"/>
+    <id>https://k7tmiz.github.io/posts/4795de82.html</id>
+    <published>2025-06-05T09:55:18.000Z</published>
+    <updated>2025-08-21T18:03:56.093Z</updated>
+    
+    
+    <summary type="html">&lt;h2 id=&quot;简单的开头：为什么我切换到了Spotify&quot;&gt;&lt;a href=&quot;#简单的开头：为什么我切换到了Spotify&quot; class=&quot;headerlink&quot; title=&quot;简单的开头：为什么我切换到了Spotify&quot;&gt;&lt;/a&gt;简单的开头：为什么我切换到了Spotify&lt;/h2&gt;&lt;p&gt;前两天，我收到了一条短信&lt;br&gt;&lt;img src=&quot;/../../images/Spicetify/a.png&quot;&gt;&lt;/p&gt;
+&lt;p&gt;由于Linux端的网易云已经年久失修，最新的一个官方包大概是七八年前维护的，无论是功能性还是美观度都无法支撑我继续使用。wine模拟出的官方版有时候占用也比较高，Splayer就成为了我的首选。&lt;/p&gt;</summary>
+    
+    
+    
+    <category term="Tech" scheme="https://k7tmiz.github.io/categories/Tech/"/>
+    
+    
+    <category term="Linux" scheme="https://k7tmiz.github.io/tags/Linux/"/>
+    
+    <category term="Tech" scheme="https://k7tmiz.github.io/tags/Tech/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>记录我电脑外放消失的一次</title>
+    <link href="https://k7tmiz.github.io/posts/8c7c6a2b.html"/>
+    <id>https://k7tmiz.github.io/posts/8c7c6a2b.html</id>
+    <published>2025-05-30T16:19:59.000Z</published>
+    <updated>2025-08-21T18:03:56.093Z</updated>
+    
+    
+    <summary type="html">&lt;p&gt;&lt;strong&gt;很偶然的发现&lt;/strong&gt;&lt;/p&gt;
+&lt;h2 id=&quot;起因&quot;&gt;&lt;a href=&quot;#起因&quot; class=&quot;headerlink&quot; title=&quot;起因&quot;&gt;&lt;/a&gt;起因&lt;/h2&gt;&lt;p&gt;起因是我要做pre,然后昨天晚上十二点半去楼道的自习室加班加点，然后当时刚好忘记带耳机了，大半夜也没什么人，我就打算外放了，然后没声音，我还以为是系统bug,重启了一下，发现还是没声，没管它接着弄了…回到宿舍插上耳机又有声音了？？？&lt;/p&gt;</summary>
+    
+    
+    
+    <category term="Tech" scheme="https://k7tmiz.github.io/categories/Tech/"/>
+    
+    
+    <category term="Tech" scheme="https://k7tmiz.github.io/tags/Tech/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>高考一年后有感</title>
+    <link href="https://k7tmiz.github.io/posts/e74fd7e6.html"/>
+    <id>https://k7tmiz.github.io/posts/e74fd7e6.html</id>
+    <published>2025-05-29T11:52:18.000Z</published>
+    <updated>2025-08-25T10:40:28.725Z</updated>
+    
+    
+    <summary type="html">&lt;h2 id=&quot;防喷设置&quot;&gt;&lt;a href=&quot;#防喷设置&quot; class=&quot;headerlink&quot; title=&quot;防喷设置&quot;&gt;&lt;/a&gt;防喷设置&lt;/h2&gt;&lt;p&gt;鄙人的文笔不是十分优秀，博客只是写给自己看的…&lt;/p&gt;
+&lt;h2 id=&quot;回忆&quot;&gt;&lt;a href=&quot;#回忆&quot; class=&quot;headerlink&quot; title=&quot;回忆&quot;&gt;&lt;/a&gt;回忆&lt;/h2&gt;</summary>
+    
+    
+    
+    <category term="Article" scheme="https://k7tmiz.github.io/categories/Article/"/>
+    
+    
+    <category term="Article" scheme="https://k7tmiz.github.io/tags/Article/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>因上传过大文件而导致hexo部署时Spawn failed报错的解决方法以及注意事项</title>
+    <link href="https://k7tmiz.github.io/posts/5618ea3e.html"/>
+    <id>https://k7tmiz.github.io/posts/5618ea3e.html</id>
+    <published>2025-05-25T11:10:58.000Z</published>
+    <updated>2025-08-21T18:03:56.093Z</updated>
+    
+    
+    <summary type="html">&lt;p&gt;之前我发布了一篇&lt;a href=&quot;https://k7tmiz.com/posts/f78c38a6.html#more&quot;&gt;学习计时器&lt;/a&gt;的文章,当时上传的音频我没注意体积有多大，是在&lt;code&gt;hexo d&lt;/code&gt;这一步没有成功, warning警告说“GitHub建议上传最大体积为50MB, 上限为100MB”, 很明显我上传的音频文件体积已经超过了100MB. 因此我删掉了那个大文件, 但是当我再次尝试部署时, 还是弹出来一样的warning, 报错文件的路径也和之前的一样, 可是我明明已经删除了那个文件, 后来经过不断的尝试以及在网上搜索, 我找到了一篇和我遇到问题一样的情况&lt;a href=&quot;https://ultrafisher.github.io/2020/09/06/%E5%9B%A0%E4%B8%8A%E4%BC%A0%E8%BF%87%E5%A4%A7%E6%96%87%E4%BB%B6%E8%80%8C%E5%AF%BC%E8%87%B4hexo%E9%83%A8%E7%BD%B2%E6%97%B6Spawnfailed%E6%8A%A5%E9%94%99%E7%9A%84%E8%A7%A3%E5%86%B3%E6%96%B9%E6%B3%95%E4%BB%A5%E5%8F%8A%E6%B3%A8%E6%84%8F%E4%BA%8B%E9%A1%B9/&quot;&gt;因上传过大文件而导致hexo部署时Spawn failed报错的解决方法以及注意事项&lt;/a&gt; 这里再在自己的博客上做一个记录：&lt;/p&gt;
+&lt;h2 id=&quot;首先恢复仓库文件&quot;&gt;&lt;a href=&quot;#首先恢复仓库文件&quot; class=&quot;headerlink&quot; title=&quot;首先恢复仓库文件&quot;&gt;&lt;/a&gt;首先恢复仓库文件&lt;/h2&gt;&lt;figure class=&quot;highlight plaintext&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;cd .deploy_git&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;</summary>
+    
+    
+    
+    <category term="Tech" scheme="https://k7tmiz.github.io/categories/Tech/"/>
+    
+    
+    <category term="Tech" scheme="https://k7tmiz.github.io/tags/Tech/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>学习计时器</title>
+    <link href="https://k7tmiz.github.io/posts/f78c38a6.html"/>
+    <id>https://k7tmiz.github.io/posts/f78c38a6.html</id>
+    <published>2025-05-25T10:11:58.000Z</published>
+    <updated>2025-08-21T18:03:56.093Z</updated>
+    
+    
+    <summary type="html">&lt;h2 id=&quot;学习方法介绍&quot;&gt;&lt;a href=&quot;#学习方法介绍&quot; class=&quot;headerlink&quot; title=&quot;学习方法介绍&quot;&gt;&lt;/a&gt;学习方法介绍&lt;/h2&gt;&lt;p&gt;大概是90min学习后再休息20min，&lt;/p&gt;
+&lt;p&gt;在这90min中，设置一个在3-5分钟内就会响一声的闹钟&lt;/p&gt;</summary>
+    
+    
+    
+    <category term="Study" scheme="https://k7tmiz.github.io/categories/Study/"/>
+    
+    
+    <category term="Study" scheme="https://k7tmiz.github.io/tags/Study/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>Linux使用Wayland协议下微信无法正常调用Fcitx5的中文输入法解决办法</title>
+    <link href="https://k7tmiz.github.io/posts/ac1a683e.html"/>
+    <id>https://k7tmiz.github.io/posts/ac1a683e.html</id>
+    <published>2025-05-22T11:58:03.000Z</published>
+    <updated>2025-08-21T18:03:56.092Z</updated>
+    
+    
+    <summary type="html">&lt;h2 id=&quot;我的环境&quot;&gt;&lt;a href=&quot;#我的环境&quot; class=&quot;headerlink&quot; title=&quot;我的环境&quot;&gt;&lt;/a&gt;我的环境&lt;/h2&gt;&lt;p&gt;我在用ArchLinux的时候没有遇到这个问题，但是今天突发奇想，想在Fedora42+KDE+Wayland上打游戏的时候，发现自己的微信无法正常调用fcitx5的中文输入法，故来这里记录分享一下自己的经验&lt;/p&gt;
+&lt;p&gt;废话不多说，直接上图！&lt;br&gt;&lt;img src=&quot;/../../images/Fcitx5wx/a.png&quot;&gt;&lt;/p&gt;</summary>
+    
+    
+    
+    <category term="Linux" scheme="https://k7tmiz.github.io/categories/Linux/"/>
+    
+    
+    <category term="Linux" scheme="https://k7tmiz.github.io/tags/Linux/"/>
+    
+    <category term="Tech" scheme="https://k7tmiz.github.io/tags/Tech/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>如何在Linux下优雅的使用网易云音乐</title>
+    <link href="https://k7tmiz.github.io/posts/e85c1bad.html"/>
+    <id>https://k7tmiz.github.io/posts/e85c1bad.html</id>
+    <published>2025-05-21T03:45:24.000Z</published>
+    <updated>2025-08-21T18:03:56.093Z</updated>
+    
+    
+    <summary type="html">&lt;h2 id=&quot;目前我所知晓的方法有几种&quot;&gt;&lt;a href=&quot;#目前我所知晓的方法有几种&quot; class=&quot;headerlink&quot; title=&quot;目前我所知晓的方法有几种&quot;&gt;&lt;/a&gt;目前我所知晓的方法有几种&lt;/h2&gt;&lt;ul&gt;
+&lt;li&gt;网页端网易云&lt;/li&gt;
+&lt;li&gt;用electron封装网页版&lt;/li&gt;
+&lt;li&gt;第三方客户端(如yesplayer,splayer等)&lt;/li&gt;
+&lt;li&gt;下载到本地用音乐播放器播放&lt;/li&gt;
+&lt;li&gt;用wine安装Windows版本&lt;/li&gt;
+&lt;/ul&gt;
+&lt;blockquote&gt;
+&lt;p&gt;这里网页端的使用方法就不多赘述了，直接点击 &lt;a href=&quot;https://music.163.com/&quot;&gt;网易云音乐&lt;/a&gt; 便可进入网页端&lt;/p&gt;
+&lt;/blockquote&gt;</summary>
+    
+    
+    
+    <category term="Linux" scheme="https://k7tmiz.github.io/categories/Linux/"/>
+    
+    
+    <category term="Linux" scheme="https://k7tmiz.github.io/tags/Linux/"/>
+    
+    <category term="Tech" scheme="https://k7tmiz.github.io/tags/Tech/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>其实是献给自己的Hexo教程 2</title>
+    <link href="https://k7tmiz.github.io/posts/5e452484.html"/>
+    <id>https://k7tmiz.github.io/posts/5e452484.html</id>
+    <published>2025-05-19T00:46:03.000Z</published>
+    <updated>2025-08-21T18:03:56.093Z</updated>
+    
+    
+    <summary type="html">&lt;h1 id=&quot;使用git分支保存Hexo源码到Github&quot;&gt;&lt;a href=&quot;#使用git分支保存Hexo源码到Github&quot; class=&quot;headerlink&quot; title=&quot;使用git分支保存Hexo源码到Github&quot;&gt;&lt;/a&gt;使用git分支保存Hexo源码到Github&lt;/h1&gt;&lt;p&gt;引言：最开始想弄这个主要是因为我有多系统，多台设备，每次都要把整个文件夹进行压缩备份到U盘，效率低且不够优雅，偶然搜索到两篇帖子，助我解决了这一大难题，这里感谢&lt;a href=&quot;https://zhuanlan.zhihu.com/p/71544809&quot;&gt;使用git分支保存hexo博客源码到github&lt;/a&gt; 和 &lt;a href=&quot;https://www.cnblogs.com/eidolonw/p/13066869.html&quot;&gt;hexo源码上传到GitHub&lt;/a&gt; 这两篇帖子的编写者！&lt;/p&gt;
+&lt;p&gt;那么，教程开始&lt;/p&gt;</summary>
+    
+    
+    
+    <category term="Tech" scheme="https://k7tmiz.github.io/categories/Tech/"/>
+    
+    
+    <category term="Tech" scheme="https://k7tmiz.github.io/tags/Tech/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>其实是献给自己的Hexo教程</title>
+    <link href="https://k7tmiz.github.io/posts/8b69008.html"/>
+    <id>https://k7tmiz.github.io/posts/8b69008.html</id>
+    <published>2025-05-18T14:58:56.000Z</published>
+    <updated>2025-08-21T18:03:56.093Z</updated>
+    
+    
+    <summary type="html">&lt;h1 id=&quot;Hexo和Github-Pages&quot;&gt;&lt;a href=&quot;#Hexo和Github-Pages&quot; class=&quot;headerlink&quot; title=&quot;Hexo和Github Pages&quot;&gt;&lt;/a&gt;Hexo和Github Pages&lt;/h1&gt;&lt;h2 id=&quot;为什么选择Github-Pages？&quot;&gt;&lt;a href=&quot;#为什么选择Github-Pages？&quot; class=&quot;headerlink&quot; title=&quot;为什么选择Github Pages？&quot;&gt;&lt;/a&gt;为什么选择Github Pages？&lt;/h2&gt;&lt;p&gt;作为一个大学生，其实已经经过了很多尝试，我从初二开始接触Linux,接触服务器，反复搭过很多次自己的网站，但因为学业繁重，最后基本都不了了之…甚至最开始只会用服务器搭建，很多时候没有备份，忘记续费于是资料就全没了。而Github Pages的话，最大的优点就是完全免费！所以你有兴趣的话就继续看下去吧！&lt;/p&gt;</summary>
+    
+    
+    
+    <category term="Tech" scheme="https://k7tmiz.github.io/categories/Tech/"/>
+    
+    
+    <category term="Tech" scheme="https://k7tmiz.github.io/tags/Tech/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>我与计算机的故事</title>
+    <link href="https://k7tmiz.github.io/posts/d773eb13.html"/>
+    <id>https://k7tmiz.github.io/posts/d773eb13.html</id>
+    <published>2025-05-11T14:24:04.000Z</published>
+    <updated>2025-08-21T18:03:56.092Z</updated>
+    
+    
+    <summary type="html">&lt;p&gt;我是一个行走在文理边界上的旅人，心中燃烧着对计算机世界的恒久热爱。&lt;/p&gt;
+&lt;p&gt;我的故事，始于北京的家中。&lt;/p&gt;
+&lt;p&gt;父母工作繁忙，陪伴我的，是家中那两台早早备下的电脑。或许这算得上一种时代的馈赠，让我在懵懂的年纪便与数字世界结缘。那时的热爱，纯粹而天真——利用电脑查找资料、沉浸游戏，服务器、Linux、编程这些深邃的概念，还远在认知的地平线之外。&lt;/p&gt;</summary>
+    
+    
+    
+    <category term="Article" scheme="https://k7tmiz.github.io/categories/Article/"/>
+    
+    
+    <category term="Article" scheme="https://k7tmiz.github.io/tags/Article/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>西班牙语简单过去时</title>
+    <link href="https://k7tmiz.github.io/posts/b8718f34.html"/>
+    <id>https://k7tmiz.github.io/posts/b8718f34.html</id>
+    <published>2025-05-11T11:01:32.000Z</published>
+    <updated>2025-08-21T18:03:56.093Z</updated>
+    
+    
+    <summary type="html">&lt;h1 id=&quot;西班牙语简单过去时-Preterito-Indefinido-Preterito-Perfecto-Simple&quot;&gt;&lt;a href=&quot;#西班牙语简单过去时-Preterito-Indefinido-Preterito-Perfecto-Simple&quot; class=&quot;headerlink&quot; title=&quot;西班牙语简单过去时 (Pretérito Indefinido &amp;#x2F; Pretérito Perfecto Simple)&quot;&gt;&lt;/a&gt;西班牙语简单过去时 (Pretérito Indefinido &amp;#x2F; Pretérito Perfecto Simple)&lt;/h1&gt;&lt;p&gt;简单过去时用于描述在过去特定时间点完成的、一次性的动作或事件。&lt;/p&gt;
+&lt;h2 id=&quot;一、规则动词变位&quot;&gt;&lt;a href=&quot;#一、规则动词变位&quot; class=&quot;headerlink&quot; title=&quot;一、规则动词变位&quot;&gt;&lt;/a&gt;一、规则动词变位&lt;/h2&gt;</summary>
+    
+    
+    
+    <category term="Study" scheme="https://k7tmiz.github.io/categories/Study/"/>
+    
+    
+    <category term="Study" scheme="https://k7tmiz.github.io/tags/Study/"/>
+    
+    <category term="Spanish" scheme="https://k7tmiz.github.io/tags/Spanish/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>西班牙语陈述式过去未完成时</title>
+    <link href="https://k7tmiz.github.io/posts/567971b1.html"/>
+    <id>https://k7tmiz.github.io/posts/567971b1.html</id>
+    <published>2025-05-11T10:36:32.000Z</published>
+    <updated>2025-08-21T18:03:56.093Z</updated>
+    
+    
+    <summary type="html">&lt;h1 id=&quot;西班牙语陈述式过去未完成时-Preterito-Imperfecto-de-Indicativo&quot;&gt;&lt;a href=&quot;#西班牙语陈述式过去未完成时-Preterito-Imperfecto-de-Indicativo&quot; class=&quot;headerlink&quot; title=&quot;西班牙语陈述式过去未完成时 (Pretérito Imperfecto de Indicativo)&quot;&gt;&lt;/a&gt;西班牙语陈述式过去未完成时 (Pretérito Imperfecto de Indicativo)&lt;/h1&gt;&lt;p&gt;过去未完成时主要用于描述过去持续的、习惯性的动作，或对过去的背景、状态、人物进行描述，相当于英语中的 “used to”, “would (for habitual past actions)”, 或 “was&amp;#x2F;were + -ing” (描述背景或持续动作时)。&lt;/p&gt;
+&lt;h2 id=&quot;一、规则动词变位&quot;&gt;&lt;a href=&quot;#一、规则动词变位&quot; class=&quot;headerlink&quot; title=&quot;一、规则动词变位&quot;&gt;&lt;/a&gt;一、规则动词变位&lt;/h2&gt;</summary>
+    
+    
+    
+    <category term="Study" scheme="https://k7tmiz.github.io/categories/Study/"/>
+    
+    
+    <category term="Study" scheme="https://k7tmiz.github.io/tags/Study/"/>
+    
+    <category term="Spanish" scheme="https://k7tmiz.github.io/tags/Spanish/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>云南旅游攻略4天2025.5.1</title>
+    <link href="https://k7tmiz.github.io/posts/4a1e9301.html"/>
+    <id>https://k7tmiz.github.io/posts/4a1e9301.html</id>
+    <published>2025-05-10T13:54:06.000Z</published>
+    <updated>2025-08-21T18:03:56.093Z</updated>
+    
+    
+    <summary type="html">&lt;h1 id=&quot;云南旅游攻略&quot;&gt;&lt;a href=&quot;#云南旅游攻略&quot; class=&quot;headerlink&quot; title=&quot;云南旅游攻略&quot;&gt;&lt;/a&gt;云南旅游攻略&lt;/h1&gt;&lt;h1 id=&quot;昆明部分&quot;&gt;&lt;a href=&quot;#昆明部分&quot; class=&quot;headerlink&quot; title=&quot;昆明部分&quot;&gt;&lt;/a&gt;昆明部分&lt;/h1&gt;&lt;h2 id=&quot;昆明部分是自己做的-大理大部分是购买的，秉承着Opensource的原则全部分享出来&quot;&gt;&lt;a href=&quot;#昆明部分是自己做的-大理大部分是购买的，秉承着Opensource的原则全部分享出来&quot; class=&quot;headerlink&quot; title=&quot;昆明部分是自己做的 大理大部分是购买的，秉承着Opensource的原则全部分享出来&quot;&gt;&lt;/a&gt;&lt;strong&gt;昆明部分是自己做的 大理大部分是购买的，秉承着Opensource的原则全部分享出来&lt;/strong&gt;&lt;/h2&gt;</summary>
+    
+    
+    
+    <category term="Travel" scheme="https://k7tmiz.github.io/categories/Travel/"/>
+    
+    
+    <category term="Travel" scheme="https://k7tmiz.github.io/tags/Travel/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>ArchLinux安装后指南</title>
+    <link href="https://k7tmiz.github.io/posts/f48c939a.html"/>
+    <id>https://k7tmiz.github.io/posts/f48c939a.html</id>
+    <published>2025-04-23T11:06:38.000Z</published>
+    <updated>2025-08-21T18:03:56.092Z</updated>
+    
+    
+    <summary type="html">&lt;h2 id=&quot;root登录&quot;&gt;&lt;a href=&quot;#root登录&quot; class=&quot;headerlink&quot; title=&quot;root登录&quot;&gt;&lt;/a&gt;root登录&lt;/h2&gt;&lt;h4 id=&quot;联网-基于之前装的NetworkManager&quot;&gt;&lt;a href=&quot;#联网-基于之前装的NetworkManager&quot; class=&quot;headerlink&quot; title=&quot;联网,基于之前装的NetworkManager&quot;&gt;&lt;/a&gt;联网,基于之前装的NetworkManager&lt;/h4&gt; &lt;figure class=&quot;highlight plaintext&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;systemctl start NetworkManager #这里必须大写&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;</summary>
+    
+    
+    
+    <category term="Linux" scheme="https://k7tmiz.github.io/categories/Linux/"/>
+    
+    
+    <category term="Linux" scheme="https://k7tmiz.github.io/tags/Linux/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>Archlinux安装指南</title>
+    <link href="https://k7tmiz.github.io/posts/a907d758.html"/>
+    <id>https://k7tmiz.github.io/posts/a907d758.html</id>
+    <published>2025-04-19T14:28:32.000Z</published>
+    <updated>2025-08-21T18:03:56.092Z</updated>
+    
+    
+    <summary type="html">&lt;h2 id=&quot;初步配置&quot;&gt;&lt;a href=&quot;#初步配置&quot; class=&quot;headerlink&quot; title=&quot;初步配置&quot;&gt;&lt;/a&gt;初步配置&lt;/h2&gt;&lt;h4 id=&quot;联网&quot;&gt;&lt;a href=&quot;#联网&quot; class=&quot;headerlink&quot; title=&quot;联网&quot;&gt;&lt;/a&gt;联网&lt;/h4&gt; &lt;figure class=&quot;highlight plaintext&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;dhcpcd/iwctl&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;</summary>
+    
+    
+    
+    <category term="Linux" scheme="https://k7tmiz.github.io/categories/Linux/"/>
+    
+    
+    <category term="Linux" scheme="https://k7tmiz.github.io/tags/Linux/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>Switch-SteamLibrary</title>
+    <link href="https://k7tmiz.github.io/posts/2a1b98b0.html"/>
+    <id>https://k7tmiz.github.io/posts/2a1b98b0.html</id>
+    <published>2025-04-19T14:28:32.000Z</published>
+    <updated>2025-08-21T18:03:56.092Z</updated>
+    
+    
+    <summary type="html">&lt;h1 id=&quot;Switch-SteamLibrary&quot;&gt;&lt;a href=&quot;#Switch-SteamLibrary&quot; class=&quot;headerlink&quot; title=&quot;Switch-SteamLibrary&quot;&gt;&lt;/a&gt;Switch-SteamLibrary&lt;/h1&gt;&lt;blockquote&gt;
+&lt;p&gt;这是一个用于电脑中有多Linux系统，并且希望自己的游戏统一存放在NTFS格式盘的小脚本。它旨在可以让你的多Linux系统，包括Windows都可以调用一个同一个Steam游戏库的小脚本。&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;h3 id=&quot;使用说明&quot;&gt;&lt;a href=&quot;#使用说明&quot; class=&quot;headerlink&quot; title=&quot;使用说明:&quot;&gt;&lt;/a&gt;使用说明:&lt;/h3&gt;</summary>
+    
+    
+    
+    <category term="Linux" scheme="https://k7tmiz.github.io/categories/Linux/"/>
+    
+    
+    <category term="Linux" scheme="https://k7tmiz.github.io/tags/Linux/"/>
+    
+    <category term="Tech" scheme="https://k7tmiz.github.io/tags/Tech/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>MSI-PERKEYRGB</title>
+    <link href="https://k7tmiz.github.io/posts/5a88bde.html"/>
+    <id>https://k7tmiz.github.io/posts/5a88bde.html</id>
+    <published>2025-04-19T14:28:32.000Z</published>
+    <updated>2025-08-21T18:03:56.093Z</updated>
+    
+    
+    <summary type="html">&lt;h1 id=&quot;MSI-PERKEYRGB&quot;&gt;&lt;a href=&quot;#MSI-PERKEYRGB&quot; class=&quot;headerlink&quot; title=&quot;MSI-PERKEYRGB&quot;&gt;&lt;/a&gt;MSI-PERKEYRGB&lt;/h1&gt;&lt;blockquote&gt;
+&lt;p&gt;适用于我MSI-GP68HX的键盘RGB调光的git项目&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;下面是Github的项目地址： &lt;a href=&quot;https://github.com/Askannz/msi-perkeyrgb&quot;&gt;msi-perkeyrgb&lt;/a&gt;&lt;/p&gt;</summary>
+    
+    
+    
+    <category term="Tech" scheme="https://k7tmiz.github.io/categories/Tech/"/>
+    
+    
+    <category term="Linux" scheme="https://k7tmiz.github.io/tags/Linux/"/>
+    
+    <category term="Tech" scheme="https://k7tmiz.github.io/tags/Tech/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>Nativefier 使用教程</title>
+    <link href="https://k7tmiz.github.io/posts/b56059f9.html"/>
+    <id>https://k7tmiz.github.io/posts/b56059f9.html</id>
+    <published>2025-04-19T14:28:32.000Z</published>
+    <updated>2025-08-21T18:03:56.093Z</updated>
+    
+    
+    <summary type="html">&lt;h1 id=&quot;Nativefier-使用教程&quot;&gt;&lt;a href=&quot;#Nativefier-使用教程&quot; class=&quot;headerlink&quot; title=&quot;Nativefier 使用教程&quot;&gt;&lt;/a&gt;Nativefier 使用教程&lt;/h1&gt;&lt;h4 id=&quot;基于electron的打包软件&quot;&gt;&lt;a href=&quot;#基于electron的打包软件&quot; class=&quot;headerlink&quot; title=&quot;基于electron的打包软件&quot;&gt;&lt;/a&gt;基于electron的打包软件&lt;/h4&gt;&lt;h5 id=&quot;nativefier-n-p-—-arch-—-weight-—-height&quot;&gt;&lt;a href=&quot;#nativefier-n-p-—-arch-—-weight-—-height&quot; class=&quot;headerlink&quot; title=&quot;nativefier -n &amp;lt;打包后的应用名称&amp;gt; -p &amp;lt;程序兼容的平台&amp;gt; —-arch &amp;lt;架构&amp;gt; —- weight &amp;lt;窗口宽度&amp;gt; —-height &amp;lt;窗口高度&amp;gt; &amp;lt;网页URL&amp;gt;&quot;&gt;&lt;/a&gt;nativefier -n &amp;lt;打包后的应用名称&amp;gt; -p &amp;lt;程序兼容的平台&amp;gt; —-arch &amp;lt;架构&amp;gt; —- weight &amp;lt;窗口宽度&amp;gt; —-height &amp;lt;窗口高度&amp;gt; &amp;lt;网页URL&amp;gt;&lt;/h5&gt;</summary>
+    
+    
+    
+    <category term="Tech" scheme="https://k7tmiz.github.io/categories/Tech/"/>
+    
+    
+    <category term="Tech" scheme="https://k7tmiz.github.io/tags/Tech/"/>
+    
+  </entry>
+  
+</feed>

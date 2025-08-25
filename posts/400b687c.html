@@ -1,0 +1,520 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 7.3.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/favicon-128.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16.png">
+  <link rel="mask-icon" href="/images/favicon-512.png" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"k7tmiz.github.io","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","width":300,"display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":true,"style":"flat"},"back2top":{"enable":true,"sidebar":false,"scrollpercent":true},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.json"};
+  </script>
+
+  <meta name="description" content="引言最近在玩Escape the backroom,里边那个耐力真的很难受,所以开了个无限耐力的,但是我不想在windows下游玩,我就去找了一下linux下的wemod的替代品,结果找到了这个项目wemod-launcher,现在想写一篇博客介绍一下怎么使用它 教程">
+<meta property="og:type" content="article">
+<meta property="og:title" content="在Linux上优雅的使用Wemod">
+<meta property="og:url" content="https://k7tmiz.github.io/posts/400b687c.html">
+<meta property="og:site_name" content="k7tmiz">
+<meta property="og:description" content="引言最近在玩Escape the backroom,里边那个耐力真的很难受,所以开了个无限耐力的,但是我不想在windows下游玩,我就去找了一下linux下的wemod的替代品,结果找到了这个项目wemod-launcher,现在想写一篇博客介绍一下怎么使用它 教程">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2025-07-09T14:43:46.000Z">
+<meta property="article:modified_time" content="2025-08-21T18:03:56.092Z">
+<meta property="article:author" content="k7tmiz">
+<meta property="article:tag" content="Linux">
+<meta property="article:tag" content="Tech">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="https://k7tmiz.github.io/posts/400b687c.html">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>在Linux上优雅的使用Wemod | k7tmiz</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+<!-- hexo injector head_end start --><script> let HEXO_MMEDIA_DATA = { js: [], css: [], aplayerData: [], metingData: [], artPlayerData: [], dplayerData: []}; </script><!-- hexo injector head_end end --><link rel="alternate" href="/atom.xml" title="k7tmiz" type="application/atom+xml">
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">k7tmiz</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">k7tmiz Blog</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-计时器">
+
+    <a href="/html/index.html" rel="section"><i class="fa fa-clock fa-fw"></i>计时器</a>
+
+  </li>
+        <li class="menu-item menu-item-rss">
+
+    <a href="/atom.xml" rel="section"><i class="fa fa-rss fa-fw"></i>RSS</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+  <div class="reading-progress-bar"></div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://k7tmiz.github.io/posts/400b687c.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/author.jpeg">
+      <meta itemprop="name" content="k7tmiz">
+      <meta itemprop="description" content="一些碎碎念">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="k7tmiz">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          在Linux上优雅的使用Wemod
+        </h1>
+
+        <div class="post-meta">
+          
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2025-07-09 22:43:46" itemprop="dateCreated datePublished" datetime="2025-07-09T22:43:46+08:00">2025-07-09</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2025-08-22 02:03:56" itemprop="dateModified" datetime="2025-08-22T02:03:56+08:00">2025-08-22</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Linux/" itemprop="url" rel="index"><span itemprop="name">Linux</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h2 id="引言"><a href="#引言" class="headerlink" title="引言"></a>引言</h2><p>最近在玩Escape the backroom,里边那个耐力真的很难受,所以开了个无限耐力的,但是我不想在windows下游玩,我就去找了一下linux下的wemod的替代品,结果找到了这个项目<a target="_blank" rel="noopener" href="https://github.com/DeckCheatz/wemod-launcher">wemod-launcher</a>,现在想写一篇博客介绍一下怎么使用它</p>
+<h2 id="教程"><a href="#教程" class="headerlink" title="教程"></a>教程</h2><p>首先我们需要一个 <code>Python容器</code> ,在linux下我使用的是 <code>python-venv</code> 以下演示基于ArchLinux</p>
+<h4 id="1-先装所需的依赖包"><a href="#1-先装所需的依赖包" class="headerlink" title="1. 先装所需的依赖包"></a>1. 先装所需的依赖包</h4><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo pacman -Sy tk</span><br></pre></td></tr></table></figure>
+
+<p>然后把项目拉到本地</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git clone https://github.com/DeckCheatz/wemod-launcher.git</span><br></pre></td></tr></table></figure>
+
+<p>创建一个虚拟容器</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">python -m venv wemod-launcher</span><br></pre></td></tr></table></figure>
+
+<p>切换</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">source wemod-launcher/bin/activate.fish</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>因为我用的是fish所以这里用.fish,如果</p>
+</blockquote>
+<p>这时你的python容器和wemod容器在同一个文件夹中</p>
+<h4 id="2-GE-Proton"><a href="#2-GE-Proton" class="headerlink" title="2.  GE-Proton"></a>2.  GE-Proton</h4><p>建议使用GE-Proton,通过 <code>Protonup-qt</code> 来安装GE-Proton</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">yay -S protonup-qt</span><br></pre></td></tr></table></figure>
+
+<h3 id="3-重启"><a href="#3-重启" class="headerlink" title="3. 重启"></a>3. 重启</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">reboot</span><br></pre></td></tr></table></figure>
+
+<h4 id="4-准备"><a href="#4-准备" class="headerlink" title="4. 准备"></a>4. 准备</h4><p>先查看 <code>wemod-launcher</code> 的目录</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">readlink -f wemod-launcher</span><br></pre></td></tr></table></figure>
+
+<p>改成可执行权限</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">chmod -R ug+x wemod-launcher</span><br></pre></td></tr></table></figure>
+
+<h4 id="5-更改设置"><a href="#5-更改设置" class="headerlink" title="5. 更改设置"></a>5. 更改设置</h4><ul>
+<li><p>在Steam库中,兼容性选项中,强制使用你刚才下载的GE-Proton版本</p>
+</li>
+<li><p>在 <code>Launch Options （启动选项 </code>） 下，输入 <code>&#123;path/to/wemod-launcher&#125;/wemod %command%</code></p>
+</li>
+</ul>
+<h4 id="6-开游戏"><a href="#6-开游戏" class="headerlink" title="6. 开游戏"></a>6. 开游戏</h4><ul>
+<li><p>如果 “copy prefix question” 出现并显示 <code>might work</code> ，请选择 “no”</p>
+</li>
+<li><p>如果它提到 <code>可能有效</code> （或更好），就可以直接安全地忽略所有 rundll32.exe 错误（通过单击 <code>no</code>）</p>
+</li>
+<li><p>选择 <code>Download</code> </p>
+</li>
+<li><p>选择 Yes&#x2F;Ok 直到不再显示窗口</p>
+</li>
+<li><p>可以安全地忽略所有 rundll32.exe 错误（通过单击 <code>no</code>）</p>
+</li>
+</ul>
+<blockquote>
+<p>Wemod应该能启动了</p>
+</blockquote>
+<h4 id="7-登录Wemod-仅一次"><a href="#7-登录Wemod-仅一次" class="headerlink" title="7. 登录Wemod (仅一次)"></a>7. 登录Wemod (仅一次)</h4><h4 id="现在你应该就可以正常使用你的Wemod来爽快的进行游戏了"><a href="#现在你应该就可以正常使用你的Wemod来爽快的进行游戏了" class="headerlink" title="现在你应该就可以正常使用你的Wemod来爽快的进行游戏了"></a>现在你应该就可以正常使用你的Wemod来爽快的进行游戏了</h4><blockquote>
+<p>遇到问题请自行查看: <a target="_blank" rel="noopener" href="https://github.com/DeckCheatz/wemod-launcher/wiki/Config-Usage">Config Usage</a></p>
+</blockquote>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/Linux/" rel="tag"># Linux</a>
+              <a href="/tags/Tech/" rel="tag"># Tech</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/posts/9ccc8650.html" rel="prev" title="在Linux上优雅的使用Zotero">
+      <i class="fa fa-chevron-left"></i> 在Linux上优雅的使用Zotero
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/posts/5982c65e.html" rel="next" title="如何在Linux上优雅的使用小黄鸭">
+      如何在Linux上优雅的使用小黄鸭 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%BC%95%E8%A8%80"><span class="nav-number">1.</span> <span class="nav-text">引言</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%95%99%E7%A8%8B"><span class="nav-number">2.</span> <span class="nav-text">教程</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-%E5%85%88%E8%A3%85%E6%89%80%E9%9C%80%E7%9A%84%E4%BE%9D%E8%B5%96%E5%8C%85"><span class="nav-number">2.0.1.</span> <span class="nav-text">1. 先装所需的依赖包</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-GE-Proton"><span class="nav-number">2.0.2.</span> <span class="nav-text">2.  GE-Proton</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-%E9%87%8D%E5%90%AF"><span class="nav-number">2.1.</span> <span class="nav-text">3. 重启</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#4-%E5%87%86%E5%A4%87"><span class="nav-number">2.1.1.</span> <span class="nav-text">4. 准备</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#5-%E6%9B%B4%E6%94%B9%E8%AE%BE%E7%BD%AE"><span class="nav-number">2.1.2.</span> <span class="nav-text">5. 更改设置</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#6-%E5%BC%80%E6%B8%B8%E6%88%8F"><span class="nav-number">2.1.3.</span> <span class="nav-text">6. 开游戏</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#7-%E7%99%BB%E5%BD%95Wemod-%E4%BB%85%E4%B8%80%E6%AC%A1"><span class="nav-number">2.1.4.</span> <span class="nav-text">7. 登录Wemod (仅一次)</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E7%8E%B0%E5%9C%A8%E4%BD%A0%E5%BA%94%E8%AF%A5%E5%B0%B1%E5%8F%AF%E4%BB%A5%E6%AD%A3%E5%B8%B8%E4%BD%BF%E7%94%A8%E4%BD%A0%E7%9A%84Wemod%E6%9D%A5%E7%88%BD%E5%BF%AB%E7%9A%84%E8%BF%9B%E8%A1%8C%E6%B8%B8%E6%88%8F%E4%BA%86"><span class="nav-number">2.1.5.</span> <span class="nav-text">现在你应该就可以正常使用你的Wemod来爽快的进行游戏了</span></a></li></ol></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="k7tmiz"
+      src="/images/author.jpeg">
+  <p class="site-author-name" itemprop="name">k7tmiz</p>
+  <div class="site-description" itemprop="description">一些碎碎念</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives">
+          <span class="site-state-item-count">26</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+
+  <!--
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">5</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">6</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  -->
+
+  </nav>
+</div>
+
+
+
+      </div>
+
+      <iframe frameborder="no" border="0" marginwidth="0" marginheight="0" width=320 height=470 src="//music.163.com/outchain/player?type=0&id=13735371900&auto=0&height=430"></iframe>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2025</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">k7tmiz</span>
+</div>
+
+<!--
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+-->
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+<!-- hexo injector body_end start --><script src="/assets/mmedia/mmedia-loader.js"></script><!-- hexo injector body_end end --></body>
+</html>

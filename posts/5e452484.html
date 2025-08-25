@@ -1,0 +1,496 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 7.3.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/favicon-128.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16.png">
+  <link rel="mask-icon" href="/images/favicon-512.png" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"k7tmiz.github.io","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","width":300,"display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":true,"style":"flat"},"back2top":{"enable":true,"sidebar":false,"scrollpercent":true},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.json"};
+  </script>
+
+  <meta name="description" content="使用git分支保存Hexo源码到Github引言：最开始想弄这个主要是因为我有多系统，多台设备，每次都要把整个文件夹进行压缩备份到U盘，效率低且不够优雅，偶然搜索到两篇帖子，助我解决了这一大难题，这里感谢使用git分支保存hexo博客源码到github 和 hexo源码上传到GitHub 这两篇帖子的编写者！ 那么，教程开始">
+<meta property="og:type" content="article">
+<meta property="og:title" content="其实是献给自己的Hexo教程 2">
+<meta property="og:url" content="https://k7tmiz.github.io/posts/5e452484.html">
+<meta property="og:site_name" content="k7tmiz">
+<meta property="og:description" content="使用git分支保存Hexo源码到Github引言：最开始想弄这个主要是因为我有多系统，多台设备，每次都要把整个文件夹进行压缩备份到U盘，效率低且不够优雅，偶然搜索到两篇帖子，助我解决了这一大难题，这里感谢使用git分支保存hexo博客源码到github 和 hexo源码上传到GitHub 这两篇帖子的编写者！ 那么，教程开始">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://k7tmiz.github.io/images/Hexo/b.png">
+<meta property="og:image" content="https://k7tmiz.github.io/images/Hexo/c.png">
+<meta property="og:image" content="https://k7tmiz.github.io/images/Hexo/d.png">
+<meta property="article:published_time" content="2025-05-19T00:46:03.000Z">
+<meta property="article:modified_time" content="2025-08-21T18:03:56.093Z">
+<meta property="article:author" content="k7tmiz">
+<meta property="article:tag" content="Tech">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://k7tmiz.github.io/images/Hexo/b.png">
+
+<link rel="canonical" href="https://k7tmiz.github.io/posts/5e452484.html">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>其实是献给自己的Hexo教程 2 | k7tmiz</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+<!-- hexo injector head_end start --><script> let HEXO_MMEDIA_DATA = { js: [], css: [], aplayerData: [], metingData: [], artPlayerData: [], dplayerData: []}; </script><!-- hexo injector head_end end --><link rel="alternate" href="/atom.xml" title="k7tmiz" type="application/atom+xml">
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">k7tmiz</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">k7tmiz Blog</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-计时器">
+
+    <a href="/html/index.html" rel="section"><i class="fa fa-clock fa-fw"></i>计时器</a>
+
+  </li>
+        <li class="menu-item menu-item-rss">
+
+    <a href="/atom.xml" rel="section"><i class="fa fa-rss fa-fw"></i>RSS</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+  <div class="reading-progress-bar"></div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://k7tmiz.github.io/posts/5e452484.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/author.jpeg">
+      <meta itemprop="name" content="k7tmiz">
+      <meta itemprop="description" content="一些碎碎念">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="k7tmiz">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          其实是献给自己的Hexo教程 2
+        </h1>
+
+        <div class="post-meta">
+          
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2025-05-19 08:46:03" itemprop="dateCreated datePublished" datetime="2025-05-19T08:46:03+08:00">2025-05-19</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2025-08-22 02:03:56" itemprop="dateModified" datetime="2025-08-22T02:03:56+08:00">2025-08-22</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Tech/" itemprop="url" rel="index"><span itemprop="name">Tech</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h1 id="使用git分支保存Hexo源码到Github"><a href="#使用git分支保存Hexo源码到Github" class="headerlink" title="使用git分支保存Hexo源码到Github"></a>使用git分支保存Hexo源码到Github</h1><p>引言：最开始想弄这个主要是因为我有多系统，多台设备，每次都要把整个文件夹进行压缩备份到U盘，效率低且不够优雅，偶然搜索到两篇帖子，助我解决了这一大难题，这里感谢<a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/71544809">使用git分支保存hexo博客源码到github</a> 和 <a target="_blank" rel="noopener" href="https://www.cnblogs.com/eidolonw/p/13066869.html">hexo源码上传到GitHub</a> 这两篇帖子的编写者！</p>
+<p>那么，教程开始</p>
+<h2 id="教程"><a href="#教程" class="headerlink" title="教程"></a>教程</h2><h3 id="1-如图："><a href="#1-如图：" class="headerlink" title="1. 如图："></a>1. 如图：</h3><p><img src="/../../images/Hexo/b.png" alt="如图" title="如图"></p>
+<h3 id="2-然后将其设置成默认分支："><a href="#2-然后将其设置成默认分支：" class="headerlink" title="2. 然后将其设置成默认分支："></a>2. 然后将其设置成默认分支：</h3><p><img src="/../../images/Hexo/c.png" alt="如图" title="如图"></p>
+<p>然后你这时候如果直接按照文章来的话，不行，大概率会<strong>报错</strong>…(问就是试过)</p>
+<h3 id="3-初始化"><a href="#3-初始化" class="headerlink" title="3. 初始化"></a>3. 初始化</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git init #先初始化</span><br></pre></td></tr></table></figure>
+
+<h3 id="4-然后将本地Hexo目录与远程仓库关联"><a href="#4-然后将本地Hexo目录与远程仓库关联" class="headerlink" title="4. 然后将本地Hexo目录与远程仓库关联"></a>4. <strong>然后将本地Hexo目录与远程仓库关联</strong></h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git remote add origin https://github.com/k7tmiz/k7tmiz.github.io.git</span><br></pre></td></tr></table></figure>
+
+<h3 id="5-此时进入目录"><a href="#5-此时进入目录" class="headerlink" title="5. 此时进入目录"></a>5. 此时进入目录</h3><p><code>Ctrl+H</code> 显示所有文件。删掉 <code>.deploy_git</code> 文件夹，如果已经clone过主题文件，那么需要把theme主题文件夹里的 <code>.git</code> 也删除。因为git不能嵌套上传，最好是显示隐藏文件，检查一下有没有，否则上传的时候会出错，导致你的主题文件无法上传，这样你的配置在别的电脑上就无法正常使用了。<strong>根目录中应该有个 <code>.gitignore</code> 文件</strong>，如果没有，请自行创建并添加以下内容:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">.DS_Store</span><br><span class="line">Thumbs.db</span><br><span class="line">db.json</span><br><span class="line">*.log</span><br><span class="line">node_modules/</span><br><span class="line">public/</span><br><span class="line">.deploy*/</span><br><span class="line">_multiconfig.yml</span><br></pre></td></tr></table></figure>
+
+
+<h3 id="6-将clone并修改以后的文件夹推送到远程库"><a href="#6-将clone并修改以后的文件夹推送到远程库" class="headerlink" title="6. 将clone并修改以后的文件夹推送到远程库"></a>6. 将clone并修改以后的文件夹推送到远程库</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">git add .</span><br><span class="line">git commit –m &quot;Description&quot;</span><br><span class="line">git push origin Hexo</span><br></pre></td></tr></table></figure>
+<p>此时已经成功将整个网站的源码全部推送到了远程库的默认分支Hexo中</p>
+<h3 id="7-删除public等文件（可选）"><a href="#7-删除public等文件（可选）" class="headerlink" title="7. 删除public等文件（可选）"></a>7. 删除public等文件（可选）</h3><p>因为source分支是从master分支新建的，初始代码实际就是master的拷贝，因而master中已有的public等deploy生成的文件也会一起带过来，这些都不算是博客源文件，如果你也觉着source分支还存着这些有些别扭，就可以先在本地把它删掉，然后执行：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">git add .</span><br><span class="line">git commit -m &#x27;DEL: public things which only for deploy&#x27;</span><br><span class="line">git push origin source</span><br></pre></td></tr></table></figure>
+<p>执行完之后，你的仓库大概就是长这个样子：</p>
+<p><img src="/../../images/Hexo/d.png" alt="如图" title="如图"></p>
+<p>后续即便你再发布博客时，deploy生成public文件，在提交博客源码时，也不会将其带上去，因为有.gitignore将其忽略了。</p>
+<h3 id="8-新环境"><a href="#8-新环境" class="headerlink" title="8. 新环境"></a>8. 新环境</h3><p>假设我们换电脑了，要在新环境继续在原有仓库基础上撸文章，此时通过 <code>git clone</code> 将博客源码拉到本地，然后安装、初始化Hexo就能搞定：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">git clone https://github.com/k7tmiz/k7tmiz.github.io.git Blog</span><br><span class="line">cd Blog</span><br><span class="line">npm install -g hexo-cli</span><br><span class="line">npm install hexo-deployer-git -save</span><br><span class="line">npm install #安装所有依赖模块</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>插曲，其实不设置成默认的也可以，只不过拉取的时候要git clone -b <code>branch_name</code> <code>source</code></p>
+</blockquote>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/Tech/" rel="tag"># Tech</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/posts/8b69008.html" rel="prev" title="其实是献给自己的Hexo教程">
+      <i class="fa fa-chevron-left"></i> 其实是献给自己的Hexo教程
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/posts/e85c1bad.html" rel="next" title="如何在Linux下优雅的使用网易云音乐">
+      如何在Linux下优雅的使用网易云音乐 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%BD%BF%E7%94%A8git%E5%88%86%E6%94%AF%E4%BF%9D%E5%AD%98Hexo%E6%BA%90%E7%A0%81%E5%88%B0Github"><span class="nav-number">1.</span> <span class="nav-text">使用git分支保存Hexo源码到Github</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%95%99%E7%A8%8B"><span class="nav-number">1.1.</span> <span class="nav-text">教程</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-%E5%A6%82%E5%9B%BE%EF%BC%9A"><span class="nav-number">1.1.1.</span> <span class="nav-text">1. 如图：</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-%E7%84%B6%E5%90%8E%E5%B0%86%E5%85%B6%E8%AE%BE%E7%BD%AE%E6%88%90%E9%BB%98%E8%AE%A4%E5%88%86%E6%94%AF%EF%BC%9A"><span class="nav-number">1.1.2.</span> <span class="nav-text">2. 然后将其设置成默认分支：</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-%E5%88%9D%E5%A7%8B%E5%8C%96"><span class="nav-number">1.1.3.</span> <span class="nav-text">3. 初始化</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-%E7%84%B6%E5%90%8E%E5%B0%86%E6%9C%AC%E5%9C%B0Hexo%E7%9B%AE%E5%BD%95%E4%B8%8E%E8%BF%9C%E7%A8%8B%E4%BB%93%E5%BA%93%E5%85%B3%E8%81%94"><span class="nav-number">1.1.4.</span> <span class="nav-text">4. 然后将本地Hexo目录与远程仓库关联</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#5-%E6%AD%A4%E6%97%B6%E8%BF%9B%E5%85%A5%E7%9B%AE%E5%BD%95"><span class="nav-number">1.1.5.</span> <span class="nav-text">5. 此时进入目录</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#6-%E5%B0%86clone%E5%B9%B6%E4%BF%AE%E6%94%B9%E4%BB%A5%E5%90%8E%E7%9A%84%E6%96%87%E4%BB%B6%E5%A4%B9%E6%8E%A8%E9%80%81%E5%88%B0%E8%BF%9C%E7%A8%8B%E5%BA%93"><span class="nav-number">1.1.6.</span> <span class="nav-text">6. 将clone并修改以后的文件夹推送到远程库</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#7-%E5%88%A0%E9%99%A4public%E7%AD%89%E6%96%87%E4%BB%B6%EF%BC%88%E5%8F%AF%E9%80%89%EF%BC%89"><span class="nav-number">1.1.7.</span> <span class="nav-text">7. 删除public等文件（可选）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#8-%E6%96%B0%E7%8E%AF%E5%A2%83"><span class="nav-number">1.1.8.</span> <span class="nav-text">8. 新环境</span></a></li></ol></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="k7tmiz"
+      src="/images/author.jpeg">
+  <p class="site-author-name" itemprop="name">k7tmiz</p>
+  <div class="site-description" itemprop="description">一些碎碎念</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives">
+          <span class="site-state-item-count">26</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+
+  <!--
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">5</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">6</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  -->
+
+  </nav>
+</div>
+
+
+
+      </div>
+
+      <iframe frameborder="no" border="0" marginwidth="0" marginheight="0" width=320 height=470 src="//music.163.com/outchain/player?type=0&id=13735371900&auto=0&height=430"></iframe>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2025</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">k7tmiz</span>
+</div>
+
+<!--
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+-->
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+<!-- hexo injector body_end start --><script src="/assets/mmedia/mmedia-loader.js"></script><!-- hexo injector body_end end --></body>
+</html>
