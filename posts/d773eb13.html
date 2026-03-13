@@ -1,0 +1,566 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 7.3.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/favicon-128.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16.png">
+  <link rel="mask-icon" href="/images/favicon-512.png" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"k7tmiz.github.io","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","width":300,"display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":true,"style":"flat"},"back2top":{"enable":true,"sidebar":false,"scrollpercent":true},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.json"};
+  </script>
+
+  <meta name="description" content="我是一个行走在文理边界上的旅人，心中始终燃烧着对计算机世界的恒久热爱。 我的故事，始于北京的家中。 父母工作繁忙，陪伴我成长的，是家里那两台早早备下的电脑。或许这算得上一种时代的馈赠，让我在懵懂的年纪便与数字世界结缘。那时的热爱简单而纯粹——查资料、玩游戏、折腾软件。至于服务器、Linux、编程这些更深的概念，还远在认知的地平线之外。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="我与计算机的故事">
+<meta property="og:url" content="https://k7tmiz.github.io/posts/d773eb13.html">
+<meta property="og:site_name" content="k7tmiz">
+<meta property="og:description" content="我是一个行走在文理边界上的旅人，心中始终燃烧着对计算机世界的恒久热爱。 我的故事，始于北京的家中。 父母工作繁忙，陪伴我成长的，是家里那两台早早备下的电脑。或许这算得上一种时代的馈赠，让我在懵懂的年纪便与数字世界结缘。那时的热爱简单而纯粹——查资料、玩游戏、折腾软件。至于服务器、Linux、编程这些更深的概念，还远在认知的地平线之外。">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2025-05-11T14:24:04.000Z">
+<meta property="article:modified_time" content="2026-03-13T06:46:35.847Z">
+<meta property="article:author" content="k7tmiz">
+<meta property="article:tag" content="Article">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="https://k7tmiz.github.io/posts/d773eb13.html">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>我与计算机的故事 | k7tmiz</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+<!-- hexo injector head_end start --><script> let HEXO_MMEDIA_DATA = { js: [], css: [], aplayerData: [], metingData: [], artPlayerData: [], dplayerData: []}; </script><!-- hexo injector head_end end --><link rel="alternate" href="/atom.xml" title="k7tmiz" type="application/atom+xml">
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">k7tmiz</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">k7tmiz Blog</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-计时器">
+
+    <a href="/html/index.html" rel="section"><i class="fa fa-clock fa-fw"></i>计时器</a>
+
+  </li>
+        <li class="menu-item menu-item-rss">
+
+    <a href="/atom.xml" rel="section"><i class="fa fa-rss fa-fw"></i>RSS</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+  <div class="reading-progress-bar"></div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://k7tmiz.github.io/posts/d773eb13.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/author.jpeg">
+      <meta itemprop="name" content="k7tmiz">
+      <meta itemprop="description" content="一些碎碎念">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="k7tmiz">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          我与计算机的故事
+        </h1>
+
+        <div class="post-meta">
+          
+            <font color=7D26CD>置顶</font>
+            <span class="post-meta-divider">|</span>
+          
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2025-05-11 22:24:04" itemprop="dateCreated datePublished" datetime="2025-05-11T22:24:04+08:00">2025-05-11</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2026-03-13 14:46:35" itemprop="dateModified" datetime="2026-03-13T14:46:35+08:00">2026-03-13</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Article/" itemprop="url" rel="index"><span itemprop="name">Article</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>我是一个行走在文理边界上的旅人，心中始终燃烧着对计算机世界的恒久热爱。</p>
+<p>我的故事，始于北京的家中。</p>
+<p>父母工作繁忙，陪伴我成长的，是家里那两台早早备下的电脑。或许这算得上一种时代的馈赠，让我在懵懂的年纪便与数字世界结缘。那时的热爱简单而纯粹——查资料、玩游戏、折腾软件。至于服务器、Linux、编程这些更深的概念，还远在认知的地平线之外。</p>
+<p>直到初中。</p>
+<p>某一天，我在视频中第一次看见了 Linux 的世界。那种与 Windows 完全不同的系统结构与操作方式，让我产生了一种难以言说的好奇。像是无意间推开了一扇门，我开始试着迈进去看看。</p>
+<p>我安装的第一个 Linux 发行版，是 <strong>Deepin</strong>。</p>
+<p>大约是在 <strong>2018 年，Deepin 15 的时代</strong>。那时的 DDE 桌面还没有如今这般复杂，界面简洁，风格优雅。直到今天，我依然会偶尔关注 Deepin 的更新，比如现在的 <strong>Deepin 25</strong>。看着它一点点变化，总会生出一种奇妙的感慨。</p>
+<p>不过 Deepin 并没有成为终点。</p>
+<p>很快，我被 <strong>Arch Linux</strong> 的理念吸引了。</p>
+<p>“简单、现代、实用。”</p>
+<p>那种几乎带着一点极客气质的系统哲学，在当时的我看来格外迷人。不过第一次接触 Arch，我多少还是有些谨慎，于是选择了基于 Arch 的发行版 <strong>Manjaro + KDE</strong> 作为过渡。</p>
+<p>也正是在那段时间，我和 <strong>KDE Plasma</strong> 结下了某种长期的缘分。</p>
+<p>从那次与 Manjaro 的邂逅开始，KDE 就像一位默契的老朋友。无论我后来换过多少发行版，它总会在某个时刻重新出现。</p>
+<p>至于后来究竟是因为什么最终真正投入 Arch Linux 的怀抱——</p>
+<p>是 Arch 那极具设计感的图标？<br>还是当年 Manjaro 偶尔出现的“滚挂”风波？</p>
+<p>如今已经有些记不清了。</p>
+<p>总之，从那之后，<strong>Arch Linux 逐渐成为了我的主力系统</strong>。</p>
+<p>那是一段相当狂热的时期。我开始不断尝试各种 Linux 发行版：</p>
+<ul>
+<li>Kali</li>
+<li>elementaryOS</li>
+<li>PopOS</li>
+<li>FydeOS</li>
+<li>等等等等……</li>
+</ul>
+<p>至于许多发行版例如 <strong>Linux Mint</strong>，它们只在虚拟机中短暂地停留过一段时间。</p>
+<p>如今再回头看，我已记不起我到底重装过几次系统，用过多少个发行版。</p>
+<p>但也是因为在那个阶段，我的兴趣逐渐向更深处延伸。</p>
+<p>我开始接触 <strong>服务器</strong> 与 <strong>编程</strong>。</p>
+<p>初中时期，我学习了 <strong>C++</strong>。<br>而在 <strong>初三毕业的那个暑假</strong>，我又拥抱了 <strong>Python</strong>。</p>
+<p>服务器系统方面，我曾经非常喜欢 <strong>CentOS 7</strong>。<br>后来随着它的发展路线发生变化，我逐渐转向 <strong>Debian</strong>。</p>
+<p>从 <strong>Debian 9 到 Debian 12</strong>，我几乎都亲身经历过。</p>
+<p>进入高中之后，生活节奏开始改变。</p>
+<p>疫情时代的网课需求突然增加，而 Linux 对腾讯会议等工具的支持当时还不够完善。再加上学业压力逐渐加重，可以自由折腾系统的时间越来越少。</p>
+<p>但那份热爱始终没有真正消失。</p>
+<p>那台老旧的电脑上，依旧保持着<strong>Arch Linux 与 Windows 双系统</strong>。我仍然会在某个闲暇的夜晚，打开终端，敲下那条熟悉的命令：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo pacman -Syu</span><br></pre></td></tr></table></figure>
+
+<p>有趣的是，一直到高三毕业，这个系统竟然从未真正“滚挂”。<br>它安静而稳定地陪伴了我整整三年。</p>
+<p>大学开始之后，新电脑到手。</p>
+<p>那时候电脑的主要用途变成了游戏，再加上我是文科生，于是 <strong>Windows 再次成为主角</strong>。那段时间里，我几乎很少再折腾系统。</p>
+<p>直到某一天。</p>
+<p>Windows 在一次关机之后并没有真正休眠，而是在背包里“空转”了整整一个月。等我再次打开电脑时，屏幕上只剩下一片花屏。</p>
+<p>进入 <strong>PE 环境</strong> 排查之后确认是系统问题，仅仅是官方驱动的安装与调试，就花费了整整一天。</p>
+<p>这次并不愉快的经历，加上 Windows 的强制更新、“假休眠”导致的风扇狂转，以及各种我被当作“宝宝”一样过度保护的设计——</p>
+<p>终于再次唤醒了我对 <strong>Linux 开源，自由精神</strong>的怀念。</p>
+<p>于是行动变得异常迅速。</p>
+<p>我买了一块新的硬盘。</p>
+<p><strong>十分钟之后，Arch Linux 安装完成。</strong></p>
+<p>那种熟悉的感觉几乎是瞬间回来了。</p>
+<p>不过世界也已经改变。</p>
+<p>KDE 完成了重要的版本演进；<br>Steam 正在重新塑造 Linux 游戏生态；<br>许多新的工具与技术不断出现。</p>
+<p>曾经积累的很多经验，已经不再完全适用。</p>
+<p>但这并没有让我沮丧，反而重新点燃了探索的欲望。</p>
+<p>再次深入之后，我发现整个生态早已不同：</p>
+<ul>
+<li>原生 Linux 版微信不再只是梦想</li>
+<li>QQ 也开始认真对待 Linux 用户</li>
+<li>Valve 通过 <strong>SteamDeck（搭载 Arch 系 SteamOS）</strong> 与 <strong>Proton</strong> 极大推动了 Linux 游戏生态</li>
+<li>UOS 在政企领域的推广，也让国内 Linux 用户整体受益</li>
+</ul>
+<p>如今，在 Linux 上畅玩游戏，早已不再是一件需要自嘲的事情。</p>
+<p>这也让我重新燃起了体验不同发行版的兴趣：</p>
+<ul>
+<li>openSUSE Tumbleweed 的优雅滚动</li>
+<li>Ubuntu 的庞大生态</li>
+<li>Fedora 的前沿特性</li>
+<li>openSUSE Leap 的稳健</li>
+<li>Debian 12 的纯粹</li>
+<li>NixOS 那近乎革命性的理念</li>
+</ul>
+<p>有趣的是，尽管我长期管理 <strong>Debian &#x2F; Ubuntu 服务器</strong>，桌面端却始终没有真正深入使用过原生 Debian。</p>
+<hr>
+<h2 id="我的设备"><a href="#我的设备" class="headerlink" title="我的设备"></a>我的设备</h2><p>如今，我的数字世界由两台电脑组成。</p>
+<p><strong>轻薄本</strong></p>
+<ul>
+<li>MacBook Air（主力）</li>
+</ul>
+<p><strong>游戏本</strong></p>
+<ul>
+<li>Arch Linux（主力系统）</li>
+<li>Fedora 43</li>
+<li>Windows 11（备用）</li>
+</ul>
+<p>相比过去动辄四五个系统的年代，现在的设备已经经历了一轮彻底的优化。系统数量减少了，但使用体验反而更加从容。</p>
+<p>或许，这正是折腾多年之后的一种平衡。</p>
+<hr>
+<h2 id="更新记录"><a href="#更新记录" class="headerlink" title="更新记录"></a>更新记录</h2><p>本文最初完善于 <strong>2025 年 6 月 25 日</strong>。</p>
+<p><strong>2025 年 7 月 20 日</strong>，游戏本上的 <strong>openSUSE Tumbleweed</strong> 在一次 <code>zypper dup</code> 更新中因为驱动问题“壮烈牺牲”。借此机会，我也重新审视了自己的系统结构，并将系统数量精简为三个：</p>
+<ul>
+<li>Arch Linux</li>
+<li>Fedora</li>
+<li>Windows 11</li>
+</ul>
+<p><strong>2025年8月13日</strong>，我换了一台轻薄本机械革命无界 14X Pro 2025 AI9 H365 32G+1T的最高配版本，遗憾的是其BIOS并不完善，没有做对Linux的支持，导致无线网卡无法正常在Linux环境下驱动。被迫在用Windows 11。这时候也把之前的洋垃圾轻薄本卖掉了。</p>
+<p><strong>2026年3月6日</strong>，通过国补以及以旧换新补贴，机械革命正式退役，换成了MacBook Air。</p>
+<p>折腾仍在继续，但设备与系统组合，也逐渐走向稳定。</p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/Article/" rel="tag"># Article</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/posts/b8718f34.html" rel="prev" title="西班牙语简单过去时">
+      <i class="fa fa-chevron-left"></i> 西班牙语简单过去时
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/posts/8b69008.html" rel="next" title="其实是献给自己的Hexo教程">
+      其实是献给自己的Hexo教程 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%88%91%E7%9A%84%E8%AE%BE%E5%A4%87"><span class="nav-number">1.</span> <span class="nav-text">我的设备</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%9B%B4%E6%96%B0%E8%AE%B0%E5%BD%95"><span class="nav-number">2.</span> <span class="nav-text">更新记录</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="k7tmiz"
+      src="/images/author.jpeg">
+  <p class="site-author-name" itemprop="name">k7tmiz</p>
+  <div class="site-description" itemprop="description">一些碎碎念</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives">
+          <span class="site-state-item-count">27</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+
+  <!--
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">5</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">6</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  -->
+
+  </nav>
+</div>
+
+
+
+      </div>
+
+      <iframe frameborder="no" border="0" marginwidth="0" marginheight="0" width=320 height=470 src="//music.163.com/outchain/player?type=0&id=13735371900&auto=0&height=430"></iframe>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2026</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">k7tmiz</span>
+</div>
+
+<!--
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+-->
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+<!-- hexo injector body_end start --><script src="/assets/mmedia/mmedia-loader.js"></script><!-- hexo injector body_end end --></body>
+</html>
