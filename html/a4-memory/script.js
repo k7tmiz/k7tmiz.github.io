@@ -137,6 +137,7 @@ function setModalVisible(modalEl, visible) {
 }
 
 function openImportModal() {
+  renderCustomWordbooksManage()
   setModalVisible(dom.importModal, true)
 }
 
@@ -187,6 +188,8 @@ const dom = {
   importLocalBtn: document.getElementById("importLocalBtn"),
   importCet4Btn: document.getElementById("importCet4Btn"),
   importCet6Btn: document.getElementById("importCet6Btn"),
+  customWordbooksList: document.getElementById("customWordbooksList"),
+  customWordbooksEmpty: document.getElementById("customWordbooksEmpty"),
   introBtn: document.getElementById("introBtn"),
   introModal: document.getElementById("introModal"),
   introBackdrop: document.getElementById("introBackdrop"),
@@ -227,6 +230,64 @@ const appState = {
 
 function getAllWordbooks() {
   return [...appState.builtInWordbooks, ...appState.customWordbooks]
+}
+
+function isCustomWordbookId(wordbookId) {
+  return appState.customWordbooks.some((b) => b.id === wordbookId)
+}
+
+function renderCustomWordbooksManage() {
+  const listEl = dom.customWordbooksList
+  const emptyEl = dom.customWordbooksEmpty
+  if (!listEl || !emptyEl) return
+
+  listEl.innerHTML = ""
+  const books = appState.customWordbooks
+  if (!books.length) {
+    emptyEl.classList.remove("hidden")
+    return
+  }
+  emptyEl.classList.add("hidden")
+
+  for (const b of books) {
+    const row = document.createElement("div")
+    row.className = "import-manage-row"
+
+    const meta = document.createElement("div")
+    meta.className = "import-manage-meta"
+    meta.textContent = `${b.name}（${Array.isArray(b.words) ? b.words.length : 0}）`
+
+    const del = document.createElement("button")
+    del.className = "ghost"
+    del.type = "button"
+    del.textContent = "删除"
+    del.addEventListener("click", () => {
+      const ok = window.confirm(`确定删除词书「${b.name}」？`)
+      if (!ok) return
+      deleteCustomWordbook(b.id)
+    })
+
+    row.appendChild(meta)
+    row.appendChild(del)
+    listEl.appendChild(row)
+  }
+}
+
+function deleteCustomWordbook(wordbookId) {
+  if (!isCustomWordbookId(wordbookId)) return
+  appState.customWordbooks = appState.customWordbooks.filter((b) => b.id !== wordbookId)
+
+  if (appState.selectedWordbookId === wordbookId) {
+    const fallback = appState.builtInWordbooks[0]?.id || "empty"
+    appState.selectedWordbookId = fallback
+  }
+
+  renderWordbookSelect()
+  updateSourceWords()
+  appState.pool = []
+  appState.poolIndex = 0
+  persist()
+  renderCustomWordbooksManage()
 }
 
 function getSelectedWordbook() {

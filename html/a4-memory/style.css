@@ -164,6 +164,36 @@ select:hover {
   gap: 10px;
 }
 
+.import-manage {
+  border-top: 1px solid #eef1f7;
+  padding-top: 12px;
+}
+
+.import-manage-list {
+  margin-top: 10px;
+  display: grid;
+  gap: 8px;
+}
+
+.import-manage-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  border: 1px solid #eef1f7;
+  background: #ffffff;
+  border-radius: 12px;
+  padding: 10px;
+}
+
+.import-manage-meta {
+  font-size: 13px;
+  color: #0b1220;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
 .import-help {
   border-top: 1px solid #eef1f7;
   padding-top: 12px;
