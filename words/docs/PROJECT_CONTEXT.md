@@ -16,6 +16,8 @@
 - 跨浏览器 UI：对常见控件样式做基础归一，尽量减少 Chromium/Safari 的默认渲染差异
 - 打印/导出 PDF：记录页打开打印窗口并调用 `window.print()`；由浏览器“另存为 PDF”
 - AI：兼容 OpenAI 风格 `chat/completions`；配置项含 `provider/baseUrl/apiKey/model`（仅本地保存）
+  - AI 生成词书：生成时支持实时预览（优先使用 `stream` SSE；不支持时自动降级为非流式）
+  - 主题输入：不只自定义类型可用，小语种类型也可填写主题以影响生成
 
 ## 3) 当前项目结构（真实目录）
 
@@ -50,7 +52,7 @@ A4-Memory
 ## 4) 模块职责边界（真实实现）
 
 - `js/core/common.js`
-  - 跨页面共享的轻量常量与纯工具函数（状态/轮次/时间/分页/学习统计/AI provider 归一化）
+  - 跨页面共享的轻量常量与纯工具函数（状态/轮次/时间/分页/学习统计/AI provider 归一化、全局最新状态聚合）
 - `js/utils.js`
   - 下载工具与文件名清洗：`downloadTextFile/downloadJsonFile/downloadBlob/sanitizeFilename`
 - `js/storage.js`
@@ -63,6 +65,7 @@ A4-Memory
   - 依赖 `A4Storage/A4Utils/A4Speech`，不重复实现通用能力
 - `js/app.js`
   - 首页学习流程：取词、A4 排版、复习弹窗、轮次推进、词书导入管理、状态恢复/保存
+  - 复习弹窗：每次打开默认打乱顺序（可手动恢复顺序）
   - 多页 A4 翻页：只渲染当前页（`pageIndex === currentPageIndex`）
 - `js/records.js`
   - 学习记录页：轮次视图 + 状态视图、统计、导出 CSV、导出 PDF（按 `pageIndex` 分页）、删除轮次
@@ -105,6 +108,7 @@ A4-Memory
   - 遍历 `rounds[].items[]`，按 term（忽略大小写）构建“最新记录”
   - 最新判定优先级：`lastReviewedAt` > `createdAt` > round 的 `finishedAt/startedAt`
   - 当时间相等或字段缺失时：使用稳定的 tie-break 规则（后出现的记录优先），避免旧记录覆盖新记录导致“状态卡住”
+  - 当前实现由 `js/core/common.js` 提供公共聚合函数（供首页与记录页复用）
 - 首次出现轮次映射：用于展示来源轮次（第 N 轮）
 - 待复习集合
   - 当 `reviewSystemEnabled=true` 且 `nextReviewAt <= now` 时归入待复习分组

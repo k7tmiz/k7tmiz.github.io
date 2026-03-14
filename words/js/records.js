@@ -6,7 +6,7 @@ function saveState(state) {
   window.A4Storage?.saveState?.(state)
 }
 
-const { downloadTextFile, downloadBlob } = window.A4Utils || {}
+const { downloadTextFile } = window.A4Utils || {}
 
 const {
   STATUS_MASTERED,
@@ -20,6 +20,7 @@ const {
   parseIsoTime,
   formatDateTime,
   computeStudyStats,
+  buildLatestTermMap,
   getRoundPageCount,
   getRoundItemsByPage,
 } = window.A4Common || {}
@@ -43,10 +44,12 @@ function formatMeaning(word) {
   return `${pos} ${meaning}`
 }
 
-function normalizeRoundCap(value) {
-  const n = Math.round(Number(value) || 30)
-  return Math.max(20, Math.min(30, n || 30))
-}
+const normalizeRoundCap =
+  window.A4Settings?.normalizeRoundCap ||
+  ((value) => {
+    const n = Math.round(Number(value) || 30)
+    return Math.max(20, Math.min(30, n || 30))
+  })
 
 function truncateText(ctx, text, maxWidth) {
   const s = String(text || "")
@@ -205,46 +208,6 @@ function buildPaperPreview(items) {
   })
 
   return paper
-}
-
-function buildLatestTermMap(rounds) {
-  const map = new Map()
-  const rs = Array.isArray(rounds) ? rounds : []
-  let seq = 0
-  for (let ri = 0; ri < rs.length; ri++) {
-    const r = rs[ri]
-    const items = Array.isArray(r?.items) ? r.items : []
-    for (let ii = 0; ii < items.length; ii++) {
-      const it = items[ii]
-      seq += 1
-      const term = String(it?.word?.term || "").trim()
-      if (!term) continue
-      const key = term.toLowerCase()
-      const reviewedAt = parseIsoTime(it?.lastReviewedAt)
-      const createdAt = parseIsoTime(it?.createdAt)
-      const fallbackAt = parseIsoTime(r?.finishedAt) || parseIsoTime(r?.startedAt)
-      const ts = reviewedAt ?? createdAt ?? fallbackAt ?? 0
-      const rank = reviewedAt != null ? 3 : createdAt != null ? 2 : fallbackAt != null ? 1 : 0
-      const prev = map.get(key)
-      if (prev) {
-        if (ts < prev.ts) continue
-        if (ts === prev.ts) {
-          if ((rank || 0) < (prev.rank || 0)) continue
-          if ((rank || 0) === (prev.rank || 0) && seq <= (prev.seq || 0)) continue
-        }
-      }
-      map.set(key, {
-        ts,
-        rank,
-        seq,
-        term,
-        status: normalizeStatus(it?.status),
-        lastReviewedAt: String(it?.lastReviewedAt || "").trim(),
-        nextReviewAt: String(it?.nextReviewAt || "").trim(),
-      })
-    }
-  }
-  return map
 }
 
 function buildFirstSeenRoundMap(rounds) {
@@ -598,7 +561,7 @@ function renderStatusView({ rounds, state }) {
 function normalizeState(raw) {
   const themeMode = typeof raw?.themeMode === "string" ? raw.themeMode : ""
   const normalizedThemeMode = themeMode === "light" || themeMode === "dark" || themeMode === "auto" ? themeMode : ""
-  const roundCap = Math.max(20, Math.min(30, Math.round(Number(raw?.roundCap) || 30)))
+  const roundCap = normalizeRoundCap(raw?.roundCap)
   const dailyGoalRounds = Math.max(0, Math.min(20, Math.round(Number(raw?.dailyGoalRounds) || 0)))
   const dailyGoalWords = Math.max(0, Math.min(500, Math.round(Number(raw?.dailyGoalWords) || 0)))
   if (!raw)

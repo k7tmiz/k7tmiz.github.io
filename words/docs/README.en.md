@@ -9,7 +9,7 @@ A pure front-end vocabulary tool based on the “A4 paper memory method”. Word
 ## Features
 
 - A4 random layout with collision avoidance
-- Forced review after each new word (optional shuffle)
+- Forced review after each new word (shuffled by default, can restore order)
 - Configurable round cap (20–30), start next round or restart
 - Meaning toggle, immersive mode, theme modes (Auto/Light/Dark)
 - Learning status: mark each word as Mastered / Learning / Unknown during review
@@ -27,8 +27,9 @@ A pure front-end vocabulary tool based on the “A4 paper memory method”. Word
 - Wordbooks: built-in samples + local import (TXT/CSV/JSON) + online import (CET4/CET6)
 - Pronunciation: SpeechSynthesis (en/es/ja/ko/pt/fr/de/it/eo), Auto/Manual voice selection
 - Backup: import/export full local data (records + settings)
-- AI wordbook generator: configure API → generate → preview → save
+- AI wordbook generator: configure API → generate → live preview → save (optional topic, also for non-English)
 - AI API presets: OpenAI / Gemini / DeepSeek / SiliconCloud / Custom
+- Maintenance: cross-page shared logic is centralized in js/core/common.js (including latest-status aggregation)
 
 ## Usage
 

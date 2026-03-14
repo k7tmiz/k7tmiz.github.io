@@ -104,6 +104,48 @@
     return { totalWords, todayWords, completedRounds, todayCompletedRounds, streak }
   }
 
+  function buildLatestTermMap(rounds) {
+    const map = new Map()
+    const rs = Array.isArray(rounds) ? rounds : []
+    let seq = 0
+    for (let ri = 0; ri < rs.length; ri++) {
+      const r = rs[ri]
+      const items = Array.isArray(r?.items) ? r.items : []
+      for (let ii = 0; ii < items.length; ii++) {
+        const it = items[ii]
+        seq += 1
+        const term = String(it?.word?.term || "").trim()
+        if (!term) continue
+        const key = term.toLowerCase()
+        const reviewedAt = parseIsoTime(it?.lastReviewedAt)
+        const createdAt = parseIsoTime(it?.createdAt)
+        const fallbackAt = parseIsoTime(r?.finishedAt) || parseIsoTime(r?.startedAt)
+        const ts = reviewedAt ?? createdAt ?? fallbackAt ?? 0
+        const rank = reviewedAt != null ? 3 : createdAt != null ? 2 : fallbackAt != null ? 1 : 0
+        const prev = map.get(key)
+        if (prev) {
+          if (ts < prev.ts) continue
+          if (ts === prev.ts) {
+            if ((rank || 0) < (prev.rank || 0)) continue
+            if ((rank || 0) === (prev.rank || 0) && seq <= (prev.seq || 0)) continue
+          }
+        }
+        map.set(key, {
+          key,
+          ts,
+          rank,
+          seq,
+          term,
+          word: it?.word || { term },
+          status: normalizeStatus(it?.status),
+          lastReviewedAt: String(it?.lastReviewedAt || "").trim(),
+          nextReviewAt: String(it?.nextReviewAt || "").trim(),
+        })
+      }
+    }
+    return map
+  }
+
   function getRoundPageCount(round) {
     const items = Array.isArray(round?.items) ? round.items : []
     let maxPage = 0
@@ -148,6 +190,7 @@
     formatDateTime,
     toLocalDateKey,
     computeStudyStats,
+    buildLatestTermMap,
     getRoundPageCount,
     getRoundItemsByPage,
     normalizeAiProvider,

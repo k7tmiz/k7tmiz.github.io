@@ -15,6 +15,7 @@ const {
   normalizeAiProvider,
   parseIsoTime,
   formatDateTime,
+  buildLatestTermMap,
   getRoundPageCount,
   getRoundItemsByPage,
 } = window.A4Common || {}
@@ -831,51 +832,9 @@ function getRoundStatusCounts(round) {
   return { mastered, learning, unknown, total: items.length }
 }
 
-function getLatestTermMap() {
-  const map = new Map()
-  const rounds = Array.isArray(appState.rounds) ? appState.rounds : []
-  let seq = 0
-  for (let ri = 0; ri < rounds.length; ri++) {
-    const r = rounds[ri]
-    const items = Array.isArray(r?.items) ? r.items : []
-    for (let ii = 0; ii < items.length; ii++) {
-      const it = items[ii]
-      seq += 1
-      const term = String(it?.word?.term || "").trim()
-      if (!term) continue
-      const key = term.toLowerCase()
-      const reviewedAt = parseIsoTime(it?.lastReviewedAt)
-      const createdAt = parseIsoTime(it?.createdAt)
-      const fallbackAt = parseIsoTime(r?.finishedAt) || parseIsoTime(r?.startedAt)
-      const ts = reviewedAt ?? createdAt ?? fallbackAt ?? 0
-      const rank = reviewedAt != null ? 3 : createdAt != null ? 2 : fallbackAt != null ? 1 : 0
-      const prev = map.get(key)
-      if (prev) {
-        if (ts < prev.ts) continue
-        if (ts === prev.ts) {
-          if ((rank || 0) < (prev.rank || 0)) continue
-          if ((rank || 0) === (prev.rank || 0) && seq <= (prev.seq || 0)) continue
-        }
-      }
-      map.set(key, {
-        key,
-        ts,
-        rank,
-        seq,
-        term,
-        word: it?.word || { term },
-        status: normalizeStatus(it?.status),
-        lastReviewedAt: reviewedAt ? new Date(reviewedAt).toISOString() : "",
-        nextReviewAt: String(it?.nextReviewAt || "").trim(),
-      })
-    }
-  }
-  return map
-}
-
 function getDueTerms(nowMs) {
   if (!appState.reviewSystemEnabled) return []
-  const map = getLatestTermMap()
+  const map = buildLatestTermMap(appState.rounds)
   const due = []
   for (const entry of map.values()) {
     const t = parseIsoTime(entry.nextReviewAt)
@@ -1009,6 +968,8 @@ function renderReviewCard() {
 }
 
 function openReviewModal() {
+  appState.reviewShuffled = true
+  if (dom.shuffleBtn) dom.shuffleBtn.textContent = "恢复顺序"
   refreshReviewList()
   setModalVisible(dom.reviewModal, true)
 }
@@ -1034,7 +995,7 @@ function closeRoundFullModal() {
 function generateStatusRound(kind) {
   const cap = normalizeRoundCap(appState.roundCap)
   const nowMs = Date.now()
-  const map = getLatestTermMap()
+  const map = buildLatestTermMap(appState.rounds)
 
   let list = []
   let title = "生成一轮"
@@ -1295,7 +1256,7 @@ function restore() {
         it.pageIndex = Number.isFinite(pi) ? Math.max(0, Math.floor(pi)) : 0
       }
     }
-    for (const entry of getLatestTermMap().values()) {
+    for (const entry of buildLatestTermMap(appState.rounds).values()) {
       if (normalizeStatus(entry.status) === STATUS_UNKNOWN) normalizedUnknown.add(entry.term)
     }
     appState.unknownTerms = Array.from(normalizedUnknown)

@@ -202,7 +202,10 @@
       ru: { name: "俄语词汇", language: "ru" },
       custom: { name: String(customTopic || "").trim() || "自定义主题词书", language: "auto" },
     }
-    const meta = map[type] || map.custom
+    const base = map[type] || map.custom
+    const topic = String(customTopic || "").trim()
+    const meta =
+      base === map.custom ? base : { ...base, name: topic ? `${base.name}（主题：${topic}）` : base.name }
 
     const user = [
       `请为「${meta.name}」生成一个词书，词数约 ${n} 个。`,
@@ -469,9 +472,9 @@
               </div>
             </div>
             <div class="form-row">
-              <div class="form-label">自定义主题</div>
+              <div class="form-label">主题（可选）</div>
               <div class="form-control">
-                <input id="aiCustomTopicInput" class="text-input" type="text" placeholder="仅在“自定义主题”时生效" />
+                <input id="aiCustomTopicInput" class="text-input" type="text" placeholder="可选：为词书增加主题/领域（小语种也可用）" />
               </div>
             </div>
             <div class="form-row">
@@ -823,16 +826,18 @@
       dom.aiGenerateBtn.disabled = !!busy
     }
 
-    async function requestAiChatCompletion({ endpoint, apiKey, model, system, user }) {
+    async function requestAiChatCompletion({ endpoint, apiKey, model, system, user, stream, signal }) {
       const res = await fetch(endpoint, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
           Authorization: `Bearer ${apiKey}`,
         },
+        signal,
         body: JSON.stringify({
           model,
           temperature: 0.2,
+          stream: !!stream,
           messages: [
             { role: "system", content: system },
             { role: "user", content: user },
@@ -840,6 +845,160 @@
         }),
       })
       return res
+    }
+
+    function normalizeAiWordEntry(raw) {
+      const term = String(raw?.term || "").trim()
+      const pos = String(raw?.pos || "").trim()
+      const meaning = String(raw?.meaning || "").trim()
+      if (!term || !pos || !meaning) return null
+      const example = String(raw?.example || "").trim()
+      const tags = Array.isArray(raw?.tags) ? raw.tags.map((t) => String(t || "").trim()).filter(Boolean) : []
+      return { term, pos, meaning, example, tags }
+    }
+
+    function createAiStreamPreviewer() {
+      const state = {
+        raw: "",
+        scanIndex: 0,
+        wordsStartIndex: -1,
+        inString: false,
+        escape: false,
+        collecting: false,
+        braceDepth: 0,
+        objStart: 0,
+        seen: new Set(),
+        words: [],
+      }
+
+      function findWordsArrayStartIndex(text) {
+        const raw = String(text || "")
+        const key = '"words"'
+        const idx = raw.indexOf(key)
+        if (idx < 0) return -1
+        const bracket = raw.indexOf("[", idx + key.length)
+        return bracket >= 0 ? bracket + 1 : -1
+      }
+
+      function push(delta) {
+        if (!delta) return
+        state.raw += String(delta || "")
+        if (state.wordsStartIndex < 0) {
+          state.wordsStartIndex = findWordsArrayStartIndex(state.raw)
+          if (state.wordsStartIndex >= 0) state.scanIndex = state.wordsStartIndex
+        }
+        if (state.wordsStartIndex < 0) return
+
+        const s = state.raw
+        for (let i = state.scanIndex; i < s.length; i++) {
+          const ch = s[i]
+          if (state.inString) {
+            if (state.escape) {
+              state.escape = false
+            } else if (ch === "\\") {
+              state.escape = true
+            } else if (ch === '"') {
+              state.inString = false
+            }
+            continue
+          }
+          if (ch === '"') {
+            state.inString = true
+            continue
+          }
+          if (!state.collecting) {
+            if (ch === "{") {
+              state.collecting = true
+              state.braceDepth = 1
+              state.objStart = i
+            } else if (ch === "]") {
+              state.scanIndex = i + 1
+              return
+            }
+            continue
+          }
+          if (ch === "{") state.braceDepth += 1
+          else if (ch === "}") {
+            state.braceDepth -= 1
+            if (state.braceDepth === 0) {
+              const objText = s.slice(state.objStart, i + 1)
+              state.collecting = false
+              state.objStart = 0
+              let parsed = null
+              try {
+                parsed = JSON.parse(objText)
+              } catch (e) {
+                continue
+              }
+              const entry = normalizeAiWordEntry(parsed)
+              if (!entry) continue
+              const key = entry.term.toLowerCase()
+              if (state.seen.has(key)) continue
+              state.seen.add(key)
+              state.words.push(entry)
+            }
+          }
+        }
+        state.scanIndex = s.length
+      }
+
+      function getPartialBook() {
+        return { name: "AI 词书", description: "", language: "auto", words: state.words }
+      }
+
+      function getRaw() {
+        return state.raw
+      }
+
+      return { push, getPartialBook, getRaw }
+    }
+
+    async function readChatCompletionsStream(res, { onDelta } = {}) {
+      const reader = res?.body?.getReader?.()
+      if (!reader) return ""
+      const decoder = new TextDecoder("utf-8")
+      let buf = ""
+      let content = ""
+
+      while (true) {
+        const { value, done } = await reader.read()
+        if (done) break
+        buf += decoder.decode(value, { stream: true })
+
+        let idx = 0
+        while (true) {
+          const sep = buf.indexOf("\n\n", idx)
+          if (sep < 0) break
+          const chunk = buf.slice(idx, sep)
+          idx = sep + 2
+
+          const lines = chunk
+            .split("\n")
+            .map((l) => String(l || "").trim())
+            .filter(Boolean)
+          for (const line of lines) {
+            if (!line.startsWith("data:")) continue
+            const dataStr = String(line.slice(5) || "").trim()
+            if (!dataStr) continue
+            if (dataStr === "[DONE]") return content
+            let obj = null
+            try {
+              obj = JSON.parse(dataStr)
+            } catch (e) {
+              continue
+            }
+            const delta =
+              String(obj?.choices?.[0]?.delta?.content || "") ||
+              String(obj?.choices?.[0]?.delta?.text || "") ||
+              String(obj?.choices?.[0]?.message?.content || "")
+            if (!delta) continue
+            content += delta
+            if (typeof onDelta === "function") onDelta(delta)
+          }
+        }
+        buf = buf.slice(idx)
+      }
+      return content
     }
 
     function open() {
@@ -1042,12 +1201,31 @@
       renderAiProviderUi()
     })
 
-    function openAiPreviewModal({ book, meta }) {
+    let aiAbortController = null
+    let aiPreviewer = null
+    let aiPreviewRenderReq = 0
+    let lastPreviewWordCount = -1
+    let lastPreviewMeta = ""
+
+    function setAiPreviewConfirmEnabled(enabled) {
+      if (!aiDom.confirmBtn) return
+      aiDom.confirmBtn.disabled = !enabled
+    }
+
+    function renderAiPreviewModal({ book, meta }) {
       pendingAiBook = book
-      if (aiDom.meta) aiDom.meta.textContent = meta
+      const metaText = String(meta || "")
+      if (aiDom.meta && metaText !== lastPreviewMeta) {
+        aiDom.meta.textContent = metaText
+        lastPreviewMeta = metaText
+      }
+      const words = Array.isArray(book?.words) ? book.words : []
+      const count = words.length
+      if (count === lastPreviewWordCount) return
+      lastPreviewWordCount = count
       if (aiDom.list) aiDom.list.innerHTML = ""
       if (aiDom.list) {
-        for (const w of book.words.slice(0, 200)) {
+        for (const w of words.slice(0, 200)) {
           const row = document.createElement("div")
           row.className = "word-row"
           const left = document.createElement("div")
@@ -1061,10 +1239,34 @@
           aiDom.list.appendChild(row)
         }
       }
+    }
+
+    function openAiPreviewModal({ book, meta }) {
+      lastPreviewWordCount = -1
+      lastPreviewMeta = ""
+      renderAiPreviewModal({ book, meta })
       setModalVisible(aiDom.modal, true)
     }
 
+    function scheduleAiPreviewRender(meta) {
+      if (aiPreviewRenderReq) return
+      aiPreviewRenderReq = requestAnimationFrame(() => {
+        aiPreviewRenderReq = 0
+        if (!aiPreviewer) return
+        const partial = aiPreviewer.getPartialBook()
+        renderAiPreviewModal({
+          book: partial,
+          meta,
+        })
+      })
+    }
+
     function closeAiPreviewModal() {
+      if (aiAbortController) {
+        try {
+          aiAbortController.abort()
+        } catch (e) {}
+      }
       setModalVisible(aiDom.modal, false)
     }
 
@@ -1085,6 +1287,10 @@
 
       setAiBusy(true)
       setAiStatus("生成中…")
+      setAiPreviewConfirmEnabled(false)
+      aiPreviewer = createAiStreamPreviewer()
+      aiAbortController = new AbortController()
+      openAiPreviewModal({ book: aiPreviewer.getPartialBook(), meta: "生成中… · 已解析 0 个词条" })
 
       let content = ""
       try {
@@ -1094,14 +1300,36 @@
           model: cfg.model,
           system,
           user,
+          stream: true,
+          signal: aiAbortController.signal,
         })
         if (!res.ok) return setAiStatus(`生成失败：HTTP ${res.status}`)
-        const data = await res.json()
-        content = String(data?.choices?.[0]?.message?.content || "")
+        const ct = String(res.headers?.get?.("content-type") || "").toLowerCase()
+        if (ct.includes("text/event-stream")) {
+          content = await readChatCompletionsStream(res, {
+            onDelta: (delta) => {
+              aiPreviewer?.push?.(delta)
+              const n = aiPreviewer?.getPartialBook?.()?.words?.length || 0
+              scheduleAiPreviewRender(`生成中… · 已解析 ${n} 个词条`)
+            },
+          })
+        } else {
+          const data = await res.json()
+          content = String(data?.choices?.[0]?.message?.content || "")
+          aiPreviewer?.push?.(content)
+          const n = aiPreviewer?.getPartialBook?.()?.words?.length || 0
+          scheduleAiPreviewRender(`生成中… · 已解析 ${n} 个词条`)
+        }
       } catch (e) {
+        if (String(e?.name || "") === "AbortError") {
+          setAiStatus("已取消生成。")
+          scheduleAiPreviewRender("已取消生成。")
+          return
+        }
         return setAiStatus("生成失败：网络或接口错误。")
       } finally {
         setAiBusy(false)
+        aiAbortController = null
       }
 
       let parsed = null
@@ -1126,7 +1354,9 @@
         .filter(Boolean)
         .join(" · ")
 
+      aiPreviewer = null
       openAiPreviewModal({ book: normalized, meta })
+      setAiPreviewConfirmEnabled(true)
       setAiStatus("已生成：请在预览中确认保存。")
     })
 
