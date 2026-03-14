@@ -6,13 +6,27 @@ function saveState(state) {
   window.A4Storage?.saveState?.(state)
 }
 
-function formatDateTime(value) {
-  const d = value instanceof Date ? value : new Date(value)
-  if (Number.isNaN(d.getTime())) return ""
-  const pad = (n) => String(n).padStart(2, "0")
-  return `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())} ${pad(d.getHours())}:${pad(
-    d.getMinutes()
-  )}`
+const { downloadTextFile, downloadBlob } = window.A4Utils || {}
+
+const {
+  STATUS_MASTERED,
+  STATUS_LEARNING,
+  STATUS_UNKNOWN,
+  ROUND_TYPE_NORMAL,
+  normalizeStatus,
+  getStatusLabel,
+  normalizeRoundType,
+  getRoundTypeLabel,
+  parseIsoTime,
+  formatDateTime,
+  computeStudyStats,
+  getRoundPageCount,
+  getRoundItemsByPage,
+} = window.A4Common || {}
+
+function formatDateTimeText(value) {
+  if (!value) return ""
+  return formatDateTime(value)
 }
 
 function escapeCsv(value) {
@@ -32,72 +46,6 @@ function formatMeaning(word) {
 function normalizeRoundCap(value) {
   const n = Math.round(Number(value) || 30)
   return Math.max(20, Math.min(30, n || 30))
-}
-
-function toLocalDateKey(value) {
-  const d = value instanceof Date ? value : new Date(value)
-  if (Number.isNaN(d.getTime())) return ""
-  const pad = (n) => String(n).padStart(2, "0")
-  return `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}`
-}
-
-function computeStudyStats(rounds) {
-  const todayKey = toLocalDateKey(new Date())
-  const daySet = new Set()
-  let totalWords = 0
-  let todayWords = 0
-  let completedRounds = 0
-  let todayCompletedRounds = 0
-
-  for (const r of Array.isArray(rounds) ? rounds : []) {
-    const items = Array.isArray(r?.items) ? r.items : []
-    totalWords += items.length
-    const finishedKey = r?.finishedAt ? toLocalDateKey(r.finishedAt) : ""
-    if (r?.finishedAt) completedRounds += 1
-    if (finishedKey && finishedKey === todayKey) todayCompletedRounds += 1
-    for (const it of items) {
-      const key = toLocalDateKey(it?.createdAt || r?.startedAt)
-      if (!key) continue
-      daySet.add(key)
-      if (key === todayKey) todayWords += 1
-    }
-  }
-
-  let streak = 0
-  if (daySet.has(todayKey)) {
-    let cursor = new Date()
-    while (true) {
-      const key = toLocalDateKey(cursor)
-      if (!daySet.has(key)) break
-      streak += 1
-      cursor.setDate(cursor.getDate() - 1)
-    }
-  }
-
-  return { totalWords, todayWords, completedRounds, todayCompletedRounds, streak }
-}
-
-function downloadTextFile({ filename, mime, content }) {
-  const blob = new Blob([content], { type: mime })
-  const url = URL.createObjectURL(blob)
-  const a = document.createElement("a")
-  a.href = url
-  a.download = filename
-  document.body.appendChild(a)
-  a.click()
-  a.remove()
-  URL.revokeObjectURL(url)
-}
-
-function downloadBlob({ filename, blob }) {
-  const url = URL.createObjectURL(blob)
-  const a = document.createElement("a")
-  a.href = url
-  a.download = filename
-  document.body.appendChild(a)
-  a.click()
-  a.remove()
-  URL.revokeObjectURL(url)
 }
 
 function truncateText(ctx, text, maxWidth) {
@@ -164,26 +112,61 @@ async function exportRoundAsPng({ round, roundNo }) {
   return blob || null
 }
 
+async function exportRoundPageAsPng({ round, roundNo, pageIndex }) {
+  const pageItems = getRoundItemsByPage(round, pageIndex)
+  const nextRound = { ...round, items: pageItems }
+  return exportRoundAsPng({ round: nextRound, roundNo })
+}
+
 function buildCsv(rounds) {
-  const header = ["轮次", "开始时间", "完成时间", "单词", "释义"]
+  const header = [
+    "轮次编号",
+    "轮次类型",
+    "单词",
+    "词性",
+    "释义",
+    "当前状态",
+    "开始时间",
+    "完成时间",
+    "上次复习时间",
+    "下次复习时间",
+  ]
   const rows = [header]
+  const latest = buildLatestTermMap(rounds)
 
   for (let i = 0; i < rounds.length; i++) {
     const r = rounds[i]
     const roundNo = i + 1
-    const startedAt = formatDateTime(r.startedAt)
-    const finishedAt = r.finishedAt ? formatDateTime(r.finishedAt) : ""
+    const roundType = getRoundTypeLabel(r?.type)
+    const startedAt = formatDateTimeText(r.startedAt)
+    const finishedAt = r.finishedAt ? formatDateTimeText(r.finishedAt) : ""
     const items = Array.isArray(r.items) ? r.items : []
-    if (items.length === 0) rows.push([roundNo, startedAt, finishedAt, "", ""])
+    if (!items.length) rows.push([roundNo, roundType, "", "", "", "", startedAt, finishedAt, "", ""])
     for (const it of items) {
-      const w = it?.word
-      rows.push([roundNo, startedAt, finishedAt, w?.term || "", formatMeaning(w)])
+      const w = it?.word || {}
+      const term = String(w?.term || "").trim()
+      const key = term ? term.toLowerCase() : ""
+      const cur = key ? latest.get(key) : null
+      const status = getStatusLabel(cur?.status ?? it?.status)
+      const lastReviewedAt = cur?.lastReviewedAt ? formatDateTimeText(cur.lastReviewedAt) : ""
+      const nextReviewAt = cur?.nextReviewAt ? formatDateTimeText(cur.nextReviewAt) : ""
+      rows.push([
+        roundNo,
+        roundType,
+        term,
+        String(w?.pos || "").trim(),
+        String(w?.meaning || "").trim(),
+        status,
+        startedAt,
+        finishedAt,
+        lastReviewedAt,
+        nextReviewAt,
+      ])
     }
   }
 
-  const bom = "\ufeff"
   const csv = rows.map((r) => r.map(escapeCsv).join(",")).join("\r\n")
-  return bom + csv
+  return "\ufeff" + csv
 }
 
 function el(tag, className, text) {
@@ -224,25 +207,7 @@ function buildPaperPreview(items) {
   return paper
 }
 
-const STATUS_MASTERED = "mastered"
-const STATUS_LEARNING = "learning"
-const STATUS_UNKNOWN = "unknown"
-
-function normalizeStatus(value) {
-  const v = String(value || "").trim().toLowerCase()
-  if (v === STATUS_MASTERED || v === STATUS_LEARNING || v === STATUS_UNKNOWN) return v
-  return STATUS_UNKNOWN
-}
-
-function parseIsoTime(value) {
-  const raw = String(value || "").trim()
-  if (!raw) return null
-  const t = Date.parse(raw)
-  if (!Number.isFinite(t)) return null
-  return t
-}
-
-function buildLatestTermStatusMap(rounds) {
+function buildLatestTermMap(rounds) {
   const map = new Map()
   for (const r of Array.isArray(rounds) ? rounds : []) {
     const items = Array.isArray(r?.items) ? r.items : []
@@ -256,40 +221,184 @@ function buildLatestTermStatusMap(rounds) {
       const ts = reviewedAt ?? createdAt ?? fallbackAt ?? 0
       const prev = map.get(key)
       if (prev && ts <= prev.ts) continue
-      map.set(key, { ts, status: normalizeStatus(it?.status) })
+      map.set(key, {
+        ts,
+        term,
+        status: normalizeStatus(it?.status),
+        lastReviewedAt: String(it?.lastReviewedAt || "").trim(),
+        nextReviewAt: String(it?.nextReviewAt || "").trim(),
+      })
     }
   }
   return map
 }
 
-function computeStatusCounts(items, latestStatusMap) {
+function buildFirstSeenRoundMap(rounds) {
+  const map = new Map()
+  for (let i = 0; i < (Array.isArray(rounds) ? rounds.length : 0); i++) {
+    const r = rounds[i]
+    const items = Array.isArray(r?.items) ? r.items : []
+    for (const it of items) {
+      const term = String(it?.word?.term || "").trim()
+      if (!term) continue
+      const key = term.toLowerCase()
+      if (map.has(key)) continue
+      map.set(key, { roundIndex: i, roundId: String(r?.id || "") })
+    }
+  }
+  return map
+}
+
+function buildDueKeySet(latestMap, { reviewSystemEnabled, nowMs }) {
+  if (!reviewSystemEnabled) return new Set()
+  const due = new Set()
+  for (const [key, entry] of latestMap.entries()) {
+    const t = parseIsoTime(entry?.nextReviewAt)
+    if (t !== null && t <= nowMs) due.add(key)
+  }
+  return due
+}
+
+function computeStatusCounts(items, latestStatusMap, dueKeySet) {
   let mastered = 0
   let learning = 0
   let unknown = 0
+  let due = 0
   for (const it of Array.isArray(items) ? items : []) {
     const term = String(it?.word?.term || "").trim()
     const key = term ? term.toLowerCase() : ""
-    const s = key && latestStatusMap?.get(key) ? normalizeStatus(latestStatusMap.get(key).status) : normalizeStatus(it?.status)
+    const s =
+      key && latestStatusMap?.get(key) ? normalizeStatus(latestStatusMap.get(key).status) : normalizeStatus(it?.status)
     if (s === STATUS_MASTERED) mastered += 1
     else if (s === STATUS_LEARNING) learning += 1
     else unknown += 1
+    if (key && dueKeySet?.has(key)) due += 1
   }
-  return { mastered, learning, unknown }
+  return { mastered, learning, unknown, due }
 }
 
-function getStatusLabel(status) {
-  const s = normalizeStatus(status)
-  if (s === STATUS_MASTERED) return "已掌握"
-  if (s === STATUS_LEARNING) return "学习中"
-  return "不会"
+
+function buildStatusViewGroups({ rounds, state }) {
+  const nowMs = Date.now()
+  const latest = buildLatestTermMap(rounds)
+  const firstSeen = buildFirstSeenRoundMap(rounds)
+  const reviewSystemEnabled = !!state?.reviewSystemEnabled
+  const dueKeySet = buildDueKeySet(latest, { reviewSystemEnabled, nowMs })
+
+  const entries = []
+  for (const [key, v] of latest.entries()) {
+    const source = firstSeen.get(key)
+    const sourceRoundNo = source ? source.roundIndex + 1 : 0
+    entries.push({
+      key,
+      term: String(v?.term || "").trim() || key,
+      status: normalizeStatus(v?.status),
+      lastReviewedAt: String(v?.lastReviewedAt || "").trim(),
+      nextReviewAt: String(v?.nextReviewAt || "").trim(),
+      sourceRoundNo,
+    })
+  }
+
+  const sortedByTerm = (a, b) => String(a.term || "").localeCompare(String(b.term || ""))
+  const sortedByDueTime = (a, b) => (parseIsoTime(a.nextReviewAt) || 0) - (parseIsoTime(b.nextReviewAt) || 0)
+
+  const due = entries.filter((e) => dueKeySet.has(e.key)).sort(sortedByDueTime)
+  const nonDue = entries.filter((e) => !dueKeySet.has(e.key))
+  const mastered = nonDue.filter((e) => e.status === STATUS_MASTERED).sort(sortedByTerm)
+  const learning = nonDue.filter((e) => e.status === STATUS_LEARNING).sort(sortedByTerm)
+  const unknown = nonDue.filter((e) => e.status === STATUS_UNKNOWN).sort(sortedByTerm)
+
+  const termToMeaning = new Map()
+  for (const r of Array.isArray(rounds) ? rounds : []) {
+    for (const it of Array.isArray(r?.items) ? r.items : []) {
+      const w = it?.word || {}
+      const term = String(w?.term || "").trim()
+      if (!term) continue
+      const key = term.toLowerCase()
+      if (termToMeaning.has(key)) continue
+      termToMeaning.set(key, { pos: String(w?.pos || "").trim(), meaning: String(w?.meaning || "").trim() })
+    }
+  }
+
+  const enrich = (list) =>
+    list.map((e) => ({
+      ...e,
+      pos: termToMeaning.get(e.key)?.pos || "",
+      meaning: termToMeaning.get(e.key)?.meaning || "",
+      due: dueKeySet.has(e.key),
+      reviewSystemEnabled,
+    }))
+
+  return {
+    groups: [
+      { id: "due", title: "待复习", items: enrich(due) },
+      { id: STATUS_MASTERED, title: "已掌握", items: enrich(mastered) },
+      { id: STATUS_LEARNING, title: "学习中", items: enrich(learning) },
+      { id: STATUS_UNKNOWN, title: "不会", items: enrich(unknown) },
+    ],
+    latest,
+    dueKeySet,
+  }
 }
 
-function renderRounds(rounds, { onDeleteRound, onReviewRound, getRoundCap } = {}) {
+function buildRoundPreview(round, { roundNo, initialPageIndex } = {}) {
+  const preview = el("div", "round-preview")
+  const previewTitle = el("div", "section-title", "A4 排版预览")
+  preview.appendChild(previewTitle)
+
+  const pageCount = getRoundPageCount(round)
+  let pageIndex = Math.max(0, Math.min(pageCount - 1, Math.floor(Number(initialPageIndex) || 0)))
+
+  const nav = el("div", "page-nav no-print")
+  const prevBtn = el("button", "ghost", "Previous")
+  prevBtn.type = "button"
+  const indicator = el("div", "page-indicator", "1 / 1")
+  const nextBtn = el("button", "ghost", "Next")
+  nextBtn.type = "button"
+  nav.appendChild(prevBtn)
+  nav.appendChild(indicator)
+  nav.appendChild(nextBtn)
+
+  const paperWrap = el("div", "")
+
+  const render = () => {
+    if (pageCount <= 1) {
+      nav.classList.add("hidden")
+    } else {
+      nav.classList.remove("hidden")
+      indicator.textContent = `${pageIndex + 1} / ${pageCount}`
+      prevBtn.disabled = pageIndex <= 0
+      nextBtn.disabled = pageIndex >= pageCount - 1
+    }
+    paperWrap.innerHTML = ""
+    paperWrap.appendChild(buildPaperPreview(getRoundItemsByPage(round, pageIndex)))
+  }
+
+  prevBtn.addEventListener("click", () => {
+    if (pageIndex <= 0) return
+    pageIndex -= 1
+    render()
+  })
+  nextBtn.addEventListener("click", () => {
+    if (pageIndex >= pageCount - 1) return
+    pageIndex += 1
+    render()
+  })
+
+  preview.appendChild(nav)
+  preview.appendChild(paperWrap)
+  render()
+  return preview
+}
+
+function renderRounds(rounds, { state, onDeleteRound, onReviewRound, getRoundCap } = {}) {
   const roundsEl = document.getElementById("rounds")
   const emptyEl = document.getElementById("emptyState")
 
   roundsEl.innerHTML = ""
-  const latestStatusMap = buildLatestTermStatusMap(rounds)
+  const nowMs = Date.now()
+  const latestStatusMap = buildLatestTermMap(rounds)
+  const dueKeySet = buildDueKeySet(latestStatusMap, { reviewSystemEnabled: !!state?.reviewSystemEnabled, nowMs })
 
   if (!rounds.length) {
     emptyEl.classList.remove("hidden")
@@ -304,55 +413,51 @@ function renderRounds(rounds, { onDeleteRound, onReviewRound, getRoundCap } = {}
     card.dataset.roundId = r.id
 
     const head = el("div", "round-head")
+    const headMain = el("div", "round-head-main")
+    const titleRow = el("div", "round-title-row")
     const title = el("div", "round-title", `第${roundNo}轮`)
     const cap = typeof getRoundCap === "function" ? getRoundCap(r) : 30
+    const roundTypeLabel = getRoundTypeLabel(r?.type)
+    const pageCount = getRoundPageCount(r)
+    const statusCounts = computeStatusCounts(Array.isArray(r.items) ? r.items : [], latestStatusMap, dueKeySet)
+    const typeTag = el("span", "round-tag", roundTypeLabel)
+    titleRow.appendChild(title)
+    titleRow.appendChild(typeTag)
+    const typeMeta = el("div", "round-meta", `本轮共 ${pageCount} 页 A4`)
     const meta = el(
       "div",
       "round-meta",
-      `开始：${formatDateTime(r.startedAt)}  ·  完成：${r.finishedAt ? formatDateTime(r.finishedAt) : "未完成"}  ·  单词：${
-        Array.isArray(r.items) ? r.items.length : 0
-      }/${cap}`
+      `单词：${Array.isArray(r.items) ? r.items.length : 0}/${cap}  ·  待复习：${statusCounts.due}  ·  开始：${formatDateTime(
+        r.startedAt
+      )}  ·  完成：${r.finishedAt ? formatDateTime(r.finishedAt) : "未完成"}`
     )
-    const statusCounts = computeStatusCounts(Array.isArray(r.items) ? r.items : [], latestStatusMap)
     const statusMeta = el(
       "div",
       "round-meta",
       `已掌握：${statusCounts.mastered} · 学习中：${statusCounts.learning} · 不会：${statusCounts.unknown}`
     )
-    head.appendChild(title)
-    head.appendChild(meta)
-    head.appendChild(statusMeta)
+    headMain.appendChild(titleRow)
+    headMain.appendChild(typeMeta)
+    headMain.appendChild(meta)
+    headMain.appendChild(statusMeta)
 
     const actions = el("div", "round-actions no-print")
-    const exportBtn = el("button", "", "导出本轮 CSV")
-    exportBtn.addEventListener("click", () => {
+    const exportRoundCsvBtn = el("button", "", "导出 CSV")
+    exportRoundCsvBtn.addEventListener("click", () => {
       const csv = buildCsv([r])
       downloadTextFile({
-        filename: `a4-memory-round-${roundNo}.csv`,
+        filename: `a4-memory-round-${roundNo}-${Date.now()}.csv`,
         mime: "text/csv;charset=utf-8",
         content: csv,
       })
     })
-    actions.appendChild(exportBtn)
+    actions.appendChild(exportRoundCsvBtn)
 
-    const exportImgBtn = el("button", "", "导出图片")
-    exportImgBtn.addEventListener("click", async () => {
-      const blob = await exportRoundAsPng({ round: r, roundNo })
-      if (!blob) {
-        window.alert("导出失败：无法生成图片。")
-        return
-      }
-      const filename = `a4-memory-round-${roundNo}-${Date.now()}.png`
-      const file = new File([blob], filename, { type: "image/png" })
-      if (navigator.share && navigator.canShare && navigator.canShare({ files: [file] })) {
-        try {
-          await navigator.share({ files: [file], title: `A4 Word Memory 第${roundNo}轮` })
-          return
-        } catch (e) {}
-      }
-      downloadBlob({ filename, blob })
+    const exportRoundPdfBtn = el("button", "", "导出 PDF")
+    exportRoundPdfBtn.addEventListener("click", () => {
+      openPrintRoundsAsPdf([{ round: r, roundNo }])
     })
-    actions.appendChild(exportImgBtn)
+    actions.appendChild(exportRoundPdfBtn)
 
     const reviewBtn = el("button", "", "复习本轮")
     reviewBtn.addEventListener("click", () => {
@@ -366,15 +471,12 @@ function renderRounds(rounds, { onDeleteRound, onReviewRound, getRoundCap } = {}
     })
     actions.appendChild(deleteBtn)
 
+    head.appendChild(headMain)
     head.appendChild(actions)
     card.appendChild(head)
 
     const grid = el("div", "round-grid")
-    const preview = el("div", "round-preview")
-    const previewTitle = el("div", "section-title", "A4 排版预览")
-    preview.appendChild(previewTitle)
-    preview.appendChild(buildPaperPreview(Array.isArray(r.items) ? r.items : []))
-    grid.appendChild(preview)
+    grid.appendChild(buildRoundPreview(r, { roundNo, initialPageIndex: 0 }))
 
     const listWrap = el("div", "round-words")
     const listTitle = el("div", "section-title", "单词列表")
@@ -388,7 +490,8 @@ function renderRounds(rounds, { onDeleteRound, onReviewRound, getRoundCap } = {}
       const w = el("div", "w")
       w.textContent = word?.term || ""
       const termKey = String(word?.term || "").trim().toLowerCase()
-      const currentStatus = termKey && latestStatusMap.get(termKey) ? latestStatusMap.get(termKey).status : it?.status
+      const currentStatus =
+        termKey && latestStatusMap.get(termKey) ? latestStatusMap.get(termKey).status : it?.status
       const status = el(
         "span",
         `word-status word-status-${normalizeStatus(currentStatus)}`,
@@ -406,6 +509,75 @@ function renderRounds(rounds, { onDeleteRound, onReviewRound, getRoundCap } = {}
 
     card.appendChild(grid)
     roundsEl.appendChild(card)
+  }
+}
+
+function renderStatusView({ rounds, state }) {
+  const container = document.getElementById("statusView")
+  if (!container) return
+  container.innerHTML = ""
+
+  const { groups } = buildStatusViewGroups({ rounds, state })
+
+  for (const g of groups) {
+    const card = el("article", "round-card")
+    const head = el("div", "round-head")
+    const title = el("div", "round-title", g.title)
+    const meta = el("div", "round-meta", `共 ${g.items.length} 个`)
+    const actions = el("div", "round-actions no-print")
+    if (g.items.length) {
+      const genBtn = el("button", "", "生成一轮")
+      genBtn.addEventListener("click", () => {
+        const kind = g.id === "due" ? "due" : g.id
+        const next = { ...state, rounds, pendingGenerateStatusKind: kind }
+        saveState(next)
+        window.location.href = "./index.html"
+      })
+      actions.appendChild(genBtn)
+    }
+    head.appendChild(title)
+    head.appendChild(meta)
+    head.appendChild(actions)
+    card.appendChild(head)
+
+    const grid = el("div", "round-grid round-grid-single status-grid")
+    const listWrap = el("div", "round-words")
+    const listTitle = el("div", "section-title", "单词列表")
+    listWrap.appendChild(listTitle)
+
+    const list = el("div", "words-list")
+    for (const it of g.items) {
+      const row = el("div", "word-row")
+
+      const left = el("div", "w")
+      left.textContent = it.term
+      const status = el("span", `word-status word-status-${normalizeStatus(it.status)}`, ` ${getStatusLabel(it.status)}`)
+      left.appendChild(status)
+      row.appendChild(left)
+
+      const right = el("div", "")
+      const meaningLine = formatMeaning({ pos: it.pos, meaning: it.meaning })
+      right.appendChild(el("div", "m", meaningLine))
+      const metaParts = [
+        it.sourceRoundNo ? `来源：第${it.sourceRoundNo}轮` : "来源：—",
+        it.lastReviewedAt ? `上次：${formatDateTime(it.lastReviewedAt)}` : "上次：—",
+        it.reviewSystemEnabled
+          ? it.nextReviewAt
+            ? `下次：${formatDateTime(it.nextReviewAt)}`
+            : "下次：—"
+          : "下次：未启用复习系统",
+      ]
+      right.appendChild(el("div", "meta", metaParts.join(" · ")))
+      row.appendChild(right)
+
+      list.appendChild(row)
+    }
+    if (!g.items.length) list.appendChild(el("div", "words-empty", "暂无记录"))
+
+    listWrap.appendChild(list)
+    grid.appendChild(listWrap)
+    card.appendChild(grid)
+    container.appendChild(card)
   }
 }
 
@@ -437,6 +609,7 @@ function normalizeState(raw) {
       roundCap,
       dailyGoalRounds,
       dailyGoalWords,
+      rounds: raw.rounds.map((r) => ({ ...r, type: normalizeRoundType(r?.type) })),
     }
 
   const placed = Array.isArray(raw.placed) ? raw.placed : []
@@ -452,8 +625,10 @@ function normalizeState(raw) {
       status: STATUS_UNKNOWN,
       lastReviewedAt: "",
       nextReviewAt: "",
+      pageIndex: 0,
     })),
     roundCap,
+    type: ROUND_TYPE_NORMAL,
   }
   const showMeaning = !!raw.showMeaning
   const fallbackThemeMode = typeof raw.darkMode === "boolean" ? (raw.darkMode ? "dark" : "light") : "auto"
@@ -471,32 +646,30 @@ function normalizeState(raw) {
   }
 }
 
-function openPrintA4(rounds) {
+function openPrintRoundsAsPdf(list) {
   const pageMarginMm = 10
   const innerW = 210 - pageMarginMm * 2
   const innerH = 297 - pageMarginMm * 2
 
-  const pages = rounds
-    .map((r, idx) => {
-      const roundNo = idx + 1
-      const items = Array.isArray(r.items) ? r.items : []
-      const wordsHtml = items
-        .map((it) => {
-          const pos = it?.pos
-          const term = String(it?.word?.term || "").trim()
-          if (!pos || !term) return ""
-          const x = Math.max(0, Math.min(1, pos.x)) * innerW
-          const y = Math.max(0, Math.min(1, pos.y)) * innerH
-          const basePx = Number.parseFloat(String(it?.fontSize || "").replace("px", "")) || 16
-          const pt = Math.max(9, Math.min(18, basePx * 0.75))
-          return `<div class="w" style="left:${x}mm;top:${y}mm;font-size:${pt}pt;">${term}</div>`
-        })
-        .join("")
+  const win = window.open("", "_blank")
+  if (!win) return
 
+  const pages = list
+    .flatMap((item, idx) => {
+      const r = item.round
+      const roundNo = Number(item.roundNo) || idx + 1
+      const pageCount = getRoundPageCount(r)
+      const safeRoundId = String(r?.id || idx).replaceAll(/[^a-zA-Z0-9_-]/g, "_")
+      return Array.from({ length: pageCount }).map((_, pageIndex) => {
+        const safeId = `${safeRoundId}_${pageIndex}`
+        const title = `第${roundNo}轮 · 第${pageIndex + 1}/${pageCount}页`
+        return { round: r, roundNo, pageIndex, safeId, title }
+      })
+    })
+    .map(({ safeId, title }) => {
       return `<section class="page">
         <div class="inner">
-          ${wordsHtml}
-          <div class="footer">第${roundNo}轮 · ${formatDateTime(r.startedAt)}</div>
+          <img class="img" id="img_${safeId}" alt="${title}" />
         </div>
       </section>`
     })
@@ -511,35 +684,57 @@ function openPrintA4(rounds) {
     <style>
       @page { size: A4; margin: ${pageMarginMm}mm; }
       html, body { padding: 0; margin: 0; }
-      body { font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif; color: #0b1220; }
+      body { font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif; color: #0b1220; background: #ffffff; }
       .page { width: 210mm; height: 297mm; page-break-after: always; position: relative; }
       .page:last-child { page-break-after: auto; }
-      .inner { position: absolute; left: ${pageMarginMm}mm; top: ${pageMarginMm}mm; width: ${innerW}mm; height: ${innerH}mm; border: 1px solid #cfd6e6; border-radius: 8mm; overflow: hidden; }
-      .w { position: absolute; transform: translate(0, 0); white-space: nowrap; max-width: 70mm; overflow: hidden; text-overflow: ellipsis; }
-      .footer { position: absolute; left: 6mm; bottom: 4mm; font-size: 9pt; color: #5b6477; }
+      .inner { position: absolute; left: ${pageMarginMm}mm; top: ${pageMarginMm}mm; width: ${innerW}mm; height: ${innerH}mm; border: 1px solid #cfd6e6; border-radius: 8mm; overflow: hidden; display: flex; align-items: center; justify-content: center; }
+      .img { width: 100%; height: 100%; object-fit: contain; }
     </style>
   </head>
   <body>${pages}</body>
 </html>`
 
-  const win = window.open("", "_blank")
-  if (!win) return
   win.document.open()
   win.document.write(html)
   win.document.close()
   win.focus()
-  win.onload = () => {
-    win.print()
-  }
+
+  ;(async () => {
+    for (const page of list.flatMap((item, idx) => {
+      const r = item.round
+      const roundNo = Number(item.roundNo) || idx + 1
+      const pageCount = getRoundPageCount(r)
+      const safeRoundId = String(r?.id || idx).replaceAll(/[^a-zA-Z0-9_-]/g, "_")
+      return Array.from({ length: pageCount }).map((_, pageIndex) => ({
+        round: r,
+        roundNo,
+        pageIndex,
+        safeId: `${safeRoundId}_${pageIndex}`,
+      }))
+    })) {
+      const img = win.document.getElementById(`img_${page.safeId}`)
+      if (!img) continue
+      const blob = await exportRoundPageAsPng({ round: page.round, roundNo: page.roundNo, pageIndex: page.pageIndex })
+      if (!blob) continue
+      const url = URL.createObjectURL(blob)
+      img.src = url
+      img.onload = () => URL.revokeObjectURL(url)
+    }
+    setTimeout(() => win.print(), 120)
+  })()
 }
 
 function main() {
   const exportBtn = document.getElementById("exportCsvBtn")
   const printBtn = document.getElementById("printPdfBtn")
+  const viewRoundsBtn = document.getElementById("viewRoundsBtn")
+  const viewStatusBtn = document.getElementById("viewStatusBtn")
+  const roundsView = document.getElementById("rounds")
+  const statusView = document.getElementById("statusView")
   const openSettingsBtn = document.getElementById("openSettingsBtn")
   const clearBtn = document.getElementById("clearBtn")
 
-  const state = normalizeState(loadState())
+  let state = normalizeState(loadState())
   let rounds = Array.isArray(state.rounds) ? state.rounds : []
   const recordsStats = document.getElementById("recordsStats")
 
@@ -589,8 +784,21 @@ function main() {
     })
   }
 
+  let currentView = "rounds"
+  const setView = (next) => {
+    currentView = next === "status" ? "status" : "rounds"
+    const roundsActive = currentView === "rounds"
+    if (roundsView) roundsView.classList.toggle("hidden", !roundsActive)
+    if (statusView) statusView.classList.toggle("hidden", roundsActive)
+    if (viewRoundsBtn) viewRoundsBtn.classList.toggle("active", roundsActive)
+    if (viewStatusBtn) viewStatusBtn.classList.toggle("active", !roundsActive)
+    if (viewRoundsBtn) viewRoundsBtn.setAttribute("aria-selected", roundsActive ? "true" : "false")
+    if (viewStatusBtn) viewStatusBtn.setAttribute("aria-selected", roundsActive ? "false" : "true")
+  }
+
   const render = () => {
     renderRounds(rounds, {
+      state,
       onDeleteRound: (roundId) => {
         const idx = rounds.findIndex((r) => r.id === roundId)
         if (idx < 0) return
@@ -613,6 +821,8 @@ function main() {
       },
       getRoundCap: (r) => normalizeRoundCap(r?.roundCap || state.roundCap),
     })
+    renderStatusView({ rounds, state })
+    setView(currentView)
   }
 
   const renderStats = () => {
@@ -643,6 +853,9 @@ function main() {
     renderStats()
   })
 
+  viewRoundsBtn?.addEventListener("click", () => setView("rounds"))
+  viewStatusBtn?.addEventListener("click", () => setView("status"))
+
   exportBtn.addEventListener("click", () => {
     const csv = buildCsv(rounds)
     downloadTextFile({
@@ -653,7 +866,7 @@ function main() {
   })
 
   printBtn.addEventListener("click", () => {
-    openPrintA4(rounds)
+    openPrintRoundsAsPdf(rounds.map((r, idx) => ({ round: r, roundNo: idx + 1 })))
   })
 
   openSettingsBtn.addEventListener("click", () => {
@@ -673,6 +886,8 @@ function main() {
     render()
     renderStats()
   })
+
+  setView("rounds")
 }
 
 main()

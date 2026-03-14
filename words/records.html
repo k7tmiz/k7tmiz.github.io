@@ -19,20 +19,29 @@
     <header class="app-header no-print">
       <div class="title">
         <h1>学习记录</h1>
-        <p class="subtitle">按轮查看每张 A4 的日期与单词；支持导出 CSV 与打印 PDF</p>
+        <p class="subtitle">查看学习轮次、学习状态与导出记录</p>
       </div>
       <div class="status">
-        <a class="button-link" href="./index.html">返回背单词</a>
+        <div class="status-top">
+          <a class="button-link" href="./index.html">返回背单词</a>
+          <button class="ghost" id="openSettingsBtn" type="button">设置</button>
+        </div>
       </div>
     </header>
 
     <main class="app records">
-      <section class="controls no-print" aria-label="记录操作">
-        <button class="primary" id="exportCsvBtn" type="button">导出 CSV（Excel）</button>
-        <button id="printPdfBtn" type="button">打印 / 导出 PDF</button>
-        <button class="ghost" id="openSettingsBtn" type="button">设置</button>
-        <div class="spacer"></div>
-        <button class="ghost" id="clearBtn" type="button">清空记录</button>
+      <section class="controls no-print" aria-label="视图与导出">
+        <div class="view-tabs" role="tablist" aria-label="记录视图">
+          <button class="ghost active" id="viewRoundsBtn" type="button" role="tab" aria-selected="true">
+            轮次视图
+          </button>
+          <button class="ghost" id="viewStatusBtn" type="button" role="tab" aria-selected="false">状态视图</button>
+        </div>
+        <div class="records-controls-actions">
+          <button class="primary" id="exportCsvBtn" type="button">导出 CSV</button>
+          <button id="printPdfBtn" type="button">导出 PDF</button>
+          <button class="ghost" id="clearBtn" type="button">清空记录</button>
+        </div>
       </section>
       <div class="records-stats no-print" id="recordsStats"></div>
 
@@ -43,11 +52,13 @@
       </div>
 
       <section class="rounds" id="rounds"></section>
+      <section class="rounds hidden" id="statusView"></section>
     </main>
 
     <script src="./js/utils.js"></script>
     <script src="./js/storage.js"></script>
     <script src="./js/speech.js"></script>
+    <script src="./js/core/common.js"></script>
     <script src="./js/settings.js"></script>
     <script src="./js/records.js"></script>
   </body>

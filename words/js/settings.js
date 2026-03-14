@@ -1,6 +1,4 @@
 ;(function () {
-  const STORAGE_KEY = "a4-memory:v1"
-
   const clamp = (n, min, max) => Math.max(min, Math.min(max, n))
 
   function normalizeThemeMode(value) {
@@ -51,396 +49,6 @@
     return { unknownDays, learningDays, masteredDays }
   }
 
-  function normalizeLangTag(value) {
-    const raw = String(value || "").trim().replaceAll("_", "-")
-    if (!raw) return { tag: "", base: "" }
-    const parts = raw.split("-").filter(Boolean)
-    const base = String(parts[0] || "").toLowerCase()
-    const region = parts[1] ? String(parts[1]).toUpperCase() : ""
-    const tag = region ? `${base}-${region}` : base
-    return { tag, base }
-  }
-
-  const speechState = {
-    installed: false,
-    voices: [],
-    warnedNoSupport: false,
-    warnedNoVoice: false,
-    warnedFallbackLang: new Set(),
-    warnedNoLang: new Set(),
-    lastVoiceURI: "",
-  }
-
-  function refreshVoices() {
-    const synth = window.speechSynthesis
-    if (!synth) return []
-    const list = synth.getVoices()
-    speechState.voices = Array.isArray(list) ? list : []
-    return speechState.voices
-  }
-
-  function installSpeech({ onVoicesChanged } = {}) {
-    if (speechState.installed) return
-    speechState.installed = true
-    if (!window.speechSynthesis) return
-
-    const handler = () => {
-      refreshVoices()
-      if (typeof onVoicesChanged === "function") onVoicesChanged()
-    }
-
-    if (typeof window.speechSynthesis.addEventListener === "function") {
-      window.speechSynthesis.addEventListener("voiceschanged", handler)
-    } else if (typeof window.speechSynthesis.onvoiceschanged !== "undefined") {
-      window.speechSynthesis.onvoiceschanged = handler
-    }
-    refreshVoices()
-  }
-
-  function getVoicesSorted() {
-    refreshVoices()
-    return [...speechState.voices].sort((a, b) => {
-      const la = String(a?.lang || "")
-      const lb = String(b?.lang || "")
-      if (la !== lb) return la.localeCompare(lb)
-      const na = String(a?.name || "")
-      const nb = String(b?.name || "")
-      return na.localeCompare(nb)
-    })
-  }
-
-  function getVoiceLabel(v) {
-    const name = String(v?.name || "").trim()
-    const lang = String(v?.lang || "").trim()
-    return `${name || "Voice"}${lang ? ` (${lang})` : ""}`
-  }
-
-  function getCurrentLanguageBase({ pronunciationLang, wordbookLanguage }) {
-    const override = normalizePronunciationLang(pronunciationLang)
-    if (override !== "auto") return override
-    const raw = String(wordbookLanguage || "").trim()
-    const base = normalizeLangTag(raw).base
-    return base || "en"
-  }
-
-  function getVoiceCandidatesForLanguage({ base, accent }) {
-    const b = String(base || "").toLowerCase()
-    if (b === "en") {
-      if (accent === "us") return ["en-US", "en-GB", "en"]
-      if (accent === "gb") return ["en-GB", "en-US", "en"]
-      return ["en-US", "en-GB", "en"]
-    }
-    if (b === "es") return ["es-ES", "es-MX", "es"]
-    if (b === "ja") return ["ja-JP", "ja"]
-    if (b === "ko") return ["ko-KR", "ko"]
-    if (b === "pt") return ["pt-PT", "pt-BR", "pt"]
-    if (b === "fr") return ["fr-FR", "fr"]
-    if (b === "de") return ["de-DE", "de"]
-    if (b === "it") return ["it-IT", "it"]
-    if (b === "eo") return ["eo"]
-    if (b) return [b]
-    return ["en-US", "en-GB", "en"]
-  }
-
-  function scoreVoice(voice, { candidates, targetBase }) {
-    const v = voice || {}
-    const tag = normalizeLangTag(v.lang).tag.toLowerCase()
-    const base = normalizeLangTag(v.lang).base.toLowerCase()
-
-    let matchScore = -Infinity
-    let exactIndex = -1
-    const cand = Array.isArray(candidates) ? candidates : []
-    for (let i = 0; i < cand.length; i++) {
-      const c = String(cand[i] || "").toLowerCase()
-      if (!c) continue
-      if (tag === c) {
-        matchScore = 120 - i * 4
-        exactIndex = i
-        break
-      }
-    }
-
-    if (!Number.isFinite(matchScore)) {
-      if (base && base === String(targetBase || "").toLowerCase()) matchScore = 86
-      else return -Infinity
-    }
-
-    let score = matchScore
-    if (v.localService) score += 10
-    if (v.default) score += 6
-
-    const name = String(v.name || "").toLowerCase()
-    if (name.includes("neural") || name.includes("enhanced") || name.includes("premium") || name.includes("natural"))
-      score += 8
-    if (name.includes("compact") || name.includes("espeak")) score -= 14
-    if (exactIndex >= 0) score += 3
-    return score
-  }
-
-  function pickBestVoice({ candidates, targetBase }, voices) {
-    const list = Array.isArray(voices) ? voices : getVoicesSorted()
-    if (!list.length) return null
-    let best = null
-    let bestScore = -Infinity
-    for (const v of list) {
-      const sc = scoreVoice(v, { candidates, targetBase })
-      if (sc > bestScore) {
-        best = v
-        bestScore = sc
-      }
-    }
-    return best
-  }
-
-  function findVoiceByURI(voiceURI, voices) {
-    const id = String(voiceURI || "").trim()
-    if (!id) return null
-    const list = Array.isArray(voices) ? voices : getVoicesSorted()
-    return list.find((v) => String(v?.voiceURI || "") === id) || null
-  }
-
-  function getSystemDefaultVoice(voices) {
-    const list = Array.isArray(voices) ? voices : getVoicesSorted()
-    return list.find((v) => !!v?.default) || null
-  }
-
-  function resolveVoice({
-    pronunciationEnabled,
-    pronunciationLang,
-    wordbookLanguage,
-    accent,
-    voiceMode,
-    voiceURI,
-  }) {
-    if (!pronunciationEnabled) return { ok: false, reason: "disabled", voice: null, targetBase: "", candidates: [] }
-
-    const synth = window.speechSynthesis
-    if (!synth || typeof window.SpeechSynthesisUtterance !== "function") {
-      return { ok: false, reason: "no_support", voice: null, targetBase: "", candidates: [] }
-    }
-
-    const voices = getVoicesSorted()
-    if (!voices.length) return { ok: false, reason: "no_voice", voice: null, targetBase: "", candidates: [] }
-
-    const targetBase = getCurrentLanguageBase({ pronunciationLang, wordbookLanguage })
-    const candidates = getVoiceCandidatesForLanguage({ base: targetBase, accent: normalizeAccent(accent) })
-
-    const mode = normalizeVoiceMode(voiceMode)
-    if (mode === "manual") {
-      const v = findVoiceByURI(voiceURI, voices)
-      if (v) return { ok: true, reason: "manual", voice: v, targetBase, candidates, voices }
-      return { ok: true, reason: "manual_missing", voice: null, targetBase, candidates, voices }
-    }
-
-    const best = pickBestVoice({ candidates, targetBase }, voices)
-    if (best) return { ok: true, reason: "auto", voice: best, targetBase, candidates, voices }
-
-    const sys = getSystemDefaultVoice(voices)
-    if (sys) return { ok: true, reason: "fallback_default", voice: sys, targetBase, candidates, voices }
-    return { ok: true, reason: "fallback_first", voice: voices[0] || null, targetBase, candidates, voices }
-  }
-
-  function getVoiceStatusText(resolved, { voiceMode, voiceURI } = {}) {
-    if (!resolved || !resolved.ok) {
-      if (resolved?.reason === "disabled") return "发音已关闭。"
-      if (resolved?.reason === "no_support") return "当前浏览器不支持发音。"
-      if (resolved?.reason === "no_voice") return "当前设备没有可用语音（请在系统设置下载语音或更换浏览器）。"
-      return "语音状态未知。"
-    }
-
-    const chosen = resolved.voice
-    if (!chosen) {
-      if (normalizeVoiceMode(voiceMode) === "manual" && voiceURI) return "手动语音在当前设备不可用，已回退自动模式。"
-      return "未找到匹配语音，将使用系统默认语音。"
-    }
-
-    const chosenBase = normalizeLangTag(chosen.lang).base
-    const targetBase = String(resolved.targetBase || "")
-    const mode = normalizeVoiceMode(voiceMode)
-    if (mode === "manual") return `当前语音：${chosen.name}（${chosen.lang}）· 手动`
-    if (targetBase && chosenBase && targetBase !== chosenBase)
-      return `当前语音：${chosen.name}（${chosen.lang}）· 未找到该语言语音，已降级`
-    return `当前语音：${chosen.name}（${chosen.lang}）· 自动`
-  }
-
-  function getCurrentVoiceLabel(resolved) {
-    const v = resolved?.voice
-    if (!v) return "—"
-    return `${String(v.name || "").trim() || "Voice"}${v.lang ? ` (${v.lang})` : ""}`
-  }
-
-  function warnOnce(key, text) {
-    if (!text) return
-    const k = String(key || "")
-    if (!k) return
-    if (speechState.warnedNoLang.has(k)) return
-    speechState.warnedNoLang.add(k)
-    window.alert(text)
-  }
-
-  function warnSpeechFailure(resolved) {
-    if (!resolved) return
-    if (resolved.reason === "no_support") {
-      if (speechState.warnedNoSupport) return
-      speechState.warnedNoSupport = true
-      window.alert("当前浏览器不支持发音。")
-      return
-    }
-    if (resolved.reason === "no_voice") {
-      if (speechState.warnedNoVoice) return
-      speechState.warnedNoVoice = true
-      window.alert("当前设备没有可用语音。请在系统设置中下载语音，或更换支持 SpeechSynthesis 的浏览器。")
-    }
-  }
-
-  function warnFallbackLanguage(resolved) {
-    const v = resolved?.voice
-    const targetBase = String(resolved?.targetBase || "")
-    if (!v || !targetBase) return
-    const chosenBase = normalizeLangTag(v.lang).base
-    if (!chosenBase || chosenBase === targetBase) return
-    const key = `${targetBase}->${chosenBase}`
-    if (speechState.warnedFallbackLang.has(key)) return
-    speechState.warnedFallbackLang.add(key)
-    window.alert(`未找到「${targetBase}」语音，已使用「${chosenBase || "默认"}」语音：${v.name}（${v.lang}）`)
-  }
-
-  function waitForVoices({ timeoutMs } = {}) {
-    const timeout = clamp(Number(timeoutMs) || 800, 50, 3000)
-    return new Promise((resolve) => {
-      const synth = window.speechSynthesis
-      if (!synth || typeof synth.addEventListener !== "function") {
-        setTimeout(resolve, Math.min(200, timeout))
-        return
-      }
-      let done = false
-      const finish = () => {
-        if (done) return
-        done = true
-        try {
-          synth.removeEventListener("voiceschanged", onChange)
-        } catch (e) {}
-        resolve()
-      }
-      const onChange = () => finish()
-      try {
-        synth.addEventListener("voiceschanged", onChange)
-      } catch (e) {}
-      setTimeout(finish, timeout)
-    })
-  }
-
-  async function speak({ text, pronunciationEnabled, pronunciationLang, wordbookLanguage, accent, voiceMode, voiceURI }) {
-    const t = String(text || "").trim()
-    if (!t) return false
-    const resolved0 = resolveVoice({
-      pronunciationEnabled,
-      pronunciationLang,
-      wordbookLanguage,
-      accent,
-      voiceMode,
-      voiceURI,
-    })
-    if (!resolved0.ok) {
-      warnSpeechFailure(resolved0)
-      return false
-    }
-
-    if (!resolved0.voice) {
-      await waitForVoices({ timeoutMs: 900 })
-    }
-
-    const resolved = resolveVoice({
-      pronunciationEnabled,
-      pronunciationLang,
-      wordbookLanguage,
-      accent,
-      voiceMode,
-      voiceURI,
-    })
-    if (!resolved.ok) {
-      warnSpeechFailure(resolved)
-      return false
-    }
-
-    if (normalizeVoiceMode(voiceMode) === "manual" && voiceURI && !resolved.voice) {
-      warnOnce("manual_missing", "手动语音在当前设备不可用，已自动回退到自动选择。")
-    }
-
-    if (!resolved.voice) {
-      const voices = getVoicesSorted()
-      const sys = getSystemDefaultVoice(voices)
-      resolved.voice = sys || voices[0] || null
-    }
-
-    warnFallbackLanguage(resolved)
-
-    const synth = window.speechSynthesis
-    try {
-      synth.cancel()
-      const u = new SpeechSynthesisUtterance(t)
-      const v = resolved.voice
-      if (v) {
-        u.voice = v
-        u.lang = String(v.lang || "")
-        speechState.lastVoiceURI = String(v.voiceURI || "")
-      } else {
-        u.lang = String(resolved.candidates?.[0] || "en-US")
-      }
-      synth.speak(u)
-      return true
-    } catch (e) {
-      window.alert("发音失败：当前设备语音引擎不可用。")
-      return false
-    }
-  }
-
-  function readStateRaw() {
-    try {
-      const raw = localStorage.getItem(STORAGE_KEY)
-      if (!raw) return null
-      const parsed = JSON.parse(raw)
-      if (!parsed || typeof parsed !== "object") return null
-      return parsed
-    } catch (e) {
-      return null
-    }
-  }
-
-  function writeStateRaw(state) {
-    try {
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(state))
-      return true
-    } catch (e) {
-      return false
-    }
-  }
-
-  function sanitizeFilename(value) {
-    return String(value || "")
-      .trim()
-      .replaceAll(/[\\/:*?"<>|]/g, "-")
-      .replaceAll(/\s+/g, " ")
-      .slice(0, 80)
-  }
-
-  function downloadTextFile({ filename, mime, content }) {
-    const blob = new Blob([content], { type: mime })
-    const url = URL.createObjectURL(blob)
-    const a = document.createElement("a")
-    a.href = url
-    a.download = filename
-    document.body.appendChild(a)
-    a.click()
-    a.remove()
-    URL.revokeObjectURL(url)
-  }
-
-  function downloadJsonFile({ filename, data }) {
-    const json = JSON.stringify(data, null, 2)
-    downloadTextFile({ filename, mime: "application/json;charset=utf-8", content: json })
-  }
-
   function normalizeWordObject(raw) {
     const term = String(raw?.term || "").trim()
     const pos = String(raw?.pos || "").trim()
@@ -486,11 +94,12 @@
     next.aiConfig =
       next.aiConfig && typeof next.aiConfig === "object"
         ? {
+            provider: normalizeAiProvider(next.aiConfig.provider),
             baseUrl: String(next.aiConfig.baseUrl || "").trim(),
             apiKey: String(next.aiConfig.apiKey || "").trim(),
             model: String(next.aiConfig.model || "").trim(),
           }
-        : { baseUrl: "", apiKey: "", model: "" }
+        : { provider: "custom", baseUrl: "", apiKey: "", model: "" }
 
     next.unknownTerms = Array.isArray(next.unknownTerms)
       ? next.unknownTerms.map((s) => String(s || "").trim()).filter(Boolean)
@@ -562,10 +171,17 @@
     return raw
   }
 
+  function normalizeAiProvider(value) {
+    const fn = window.A4Common?.normalizeAiProvider
+    if (typeof fn === "function") return fn(value)
+    return "custom"
+  }
+
   function buildChatCompletionsUrl(baseUrl) {
     const b = String(baseUrl || "").trim().replace(/\/+$/, "")
     if (!b) return ""
     if (b.includes("/chat/completions")) return b
+    if (b.endsWith("/openai") || b.includes("/openai/")) return `${b}/chat/completions`
     if (b.endsWith("/v1")) return `${b}/chat/completions`
     if (b.includes("/v1/")) return `${b.replace(/\/+$/, "")}/chat/completions`
     return `${b}/v1/chat/completions`
@@ -803,6 +419,18 @@
           <section class="panel">
             <div class="section-title">AI 生成词书</div>
             <div class="form-row">
+              <div class="form-label">API 提供商</div>
+              <div class="form-control">
+                <select id="aiProviderSelect" aria-label="API 提供商">
+                  <option value="openai">OpenAI</option>
+                  <option value="gemini">Gemini</option>
+                  <option value="deepseek">DeepSeek</option>
+                  <option value="siliconcloud">SiliconCloud</option>
+                  <option value="custom">自定义</option>
+                </select>
+              </div>
+            </div>
+            <div class="form-row">
               <div class="form-label">API Base URL</div>
               <div class="form-control">
                 <input id="aiBaseUrlInput" class="text-input" type="text" placeholder="https://api.example.com/v1" />
@@ -817,10 +445,11 @@
             <div class="form-row">
               <div class="form-label">Model</div>
               <div class="form-control">
-                <input id="aiModelInput" class="text-input" type="text" placeholder="gpt-4o-mini / deepseek-chat / ..." />
+                <input id="aiModelInput" class="text-input" type="text" list="aiModelDatalist" placeholder="可直接输入或选常用模型" />
+                <datalist id="aiModelDatalist"></datalist>
               </div>
             </div>
-            <div class="form-help">API Key 仅保存在当前浏览器本地，请勿在不信任设备上使用。</div>
+            <div class="form-help">可先选择提供商自动填充建议值；API Key 仅保存在当前浏览器本地。</div>
             <div class="form-row">
               <div class="form-label">词书类型</div>
               <div class="form-control">
@@ -945,9 +574,11 @@
       exportBackupBtn: modal.querySelector("#exportBackupBtn"),
       importBackupBtn: modal.querySelector("#importBackupBtn"),
       importBackupFile: modal.querySelector("#importBackupFile"),
+      aiProviderSelect: modal.querySelector("#aiProviderSelect"),
       aiBaseUrlInput: modal.querySelector("#aiBaseUrlInput"),
       aiApiKeyInput: modal.querySelector("#aiApiKeyInput"),
       aiModelInput: modal.querySelector("#aiModelInput"),
+      aiModelDatalist: modal.querySelector("#aiModelDatalist"),
       aiTypeSelect: modal.querySelector("#aiTypeSelect"),
       aiCustomTopicInput: modal.querySelector("#aiCustomTopicInput"),
       aiCountInput: modal.querySelector("#aiCountInput"),
@@ -1063,10 +694,141 @@
       if (dom.aiModelInput) dom.aiModelInput.value = String(state?.aiConfig?.model || "")
       if (dom.aiStatus) dom.aiStatus.textContent = ""
       updateVoiceUi()
+      renderAiProviderUi()
+    }
+
+    const AI_PROVIDER_PRESETS = {
+      openai: {
+        baseUrl: "https://api.openai.com/v1",
+        models: ["gpt-4o-mini", "gpt-4.1-mini", "gpt-4o"],
+        defaultModel: "gpt-4o-mini",
+      },
+      gemini: {
+        baseUrl: "https://generativelanguage.googleapis.com/v1beta/openai",
+        models: ["gemini-1.5-flash", "gemini-1.5-pro"],
+        defaultModel: "gemini-1.5-flash",
+      },
+      deepseek: {
+        baseUrl: "https://api.deepseek.com/v1",
+        models: ["deepseek-chat", "deepseek-reasoner"],
+        defaultModel: "deepseek-chat",
+      },
+      siliconcloud: {
+        baseUrl: "https://api.siliconflow.cn/v1",
+        models: ["deepseek-ai/DeepSeek-V3", "deepseek-ai/DeepSeek-R1"],
+        defaultModel: "deepseek-ai/DeepSeek-V3",
+      },
+      custom: {
+        baseUrl: "",
+        models: [],
+        defaultModel: "",
+      },
+    }
+
+    function normalizeAiProviderLocal(value) {
+      return normalizeAiProvider(value)
+    }
+
+    function getAiPreset(provider) {
+      const p = normalizeAiProviderLocal(provider)
+      return AI_PROVIDER_PRESETS[p] || AI_PROVIDER_PRESETS.custom
+    }
+
+    function getAiConfigFromState(state) {
+      const s = state && typeof state === "object" ? state : {}
+      const cfg = s.aiConfig && typeof s.aiConfig === "object" ? s.aiConfig : {}
+      return {
+        provider: normalizeAiProviderLocal(cfg.provider),
+        baseUrl: String(cfg.baseUrl || "").trim(),
+        apiKey: String(cfg.apiKey || "").trim(),
+        model: String(cfg.model || "").trim(),
+      }
+    }
+
+    function patchAiConfig(patch, { syncInputs } = {}) {
+      const state = getState ? getState() : {}
+      const prev = getAiConfigFromState(state)
+      const next = {
+        provider: patch.provider != null ? normalizeAiProviderLocal(patch.provider) : prev.provider,
+        baseUrl: patch.baseUrl != null ? String(patch.baseUrl || "").trim() : prev.baseUrl,
+        apiKey: patch.apiKey != null ? String(patch.apiKey || "").trim() : prev.apiKey,
+        model: patch.model != null ? String(patch.model || "").trim() : prev.model,
+      }
+      if (typeof setState === "function") setState({ aiConfig: next })
+      if (syncInputs) {
+        if (dom.aiBaseUrlInput) dom.aiBaseUrlInput.value = next.baseUrl
+        if (dom.aiApiKeyInput) dom.aiApiKeyInput.value = next.apiKey
+        if (dom.aiModelInput) dom.aiModelInput.value = next.model
+      }
+      if (typeof persist === "function") persist()
+      if (typeof onAfterChange === "function") onAfterChange({ key: "aiConfig" })
+    }
+
+    function computeAiConfigOnProviderChange({ prevConfig, nextProvider }) {
+      const prevProvider = normalizeAiProviderLocal(prevConfig?.provider)
+      const nextProv = normalizeAiProviderLocal(nextProvider)
+      const prevPreset = getAiPreset(prevProvider)
+      const nextPreset = getAiPreset(nextProv)
+
+      let baseUrl = String(prevConfig?.baseUrl || "").trim()
+      let model = String(prevConfig?.model || "").trim()
+      const apiKey = String(prevConfig?.apiKey || "").trim()
+
+      if (!baseUrl || (prevPreset.baseUrl && baseUrl === prevPreset.baseUrl)) baseUrl = String(nextPreset.baseUrl || "").trim()
+      if (!model || (prevPreset.defaultModel && model === prevPreset.defaultModel)) model = String(nextPreset.defaultModel || "").trim()
+
+      return { provider: nextProv, baseUrl, apiKey, model }
+    }
+
+    function renderAiProviderUi() {
+      const state = getState ? getState() : {}
+      const cfg = getAiConfigFromState(state)
+      const preset = getAiPreset(cfg.provider)
+      if (dom.aiProviderSelect) dom.aiProviderSelect.value = cfg.provider
+      if (dom.aiBaseUrlInput) dom.aiBaseUrlInput.placeholder = preset.baseUrl || "https://api.example.com/v1"
+      if (dom.aiModelInput) dom.aiModelInput.placeholder = preset.defaultModel || "可直接输入或选常用模型"
+      if (dom.aiModelDatalist) {
+        dom.aiModelDatalist.innerHTML = ""
+        for (const m of preset.models || []) {
+          const opt = document.createElement("option")
+          opt.value = m
+          dom.aiModelDatalist.appendChild(opt)
+        }
+      }
+    }
+
+    function setAiStatus(text) {
+      if (!dom.aiStatus) return
+      dom.aiStatus.textContent = String(text || "")
+    }
+
+    function setAiBusy(busy) {
+      if (!dom.aiGenerateBtn) return
+      dom.aiGenerateBtn.disabled = !!busy
+    }
+
+    async function requestAiChatCompletion({ endpoint, apiKey, model, system, user }) {
+      const res = await fetch(endpoint, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${apiKey}`,
+        },
+        body: JSON.stringify({
+          model,
+          temperature: 0.2,
+          messages: [
+            { role: "system", content: system },
+            { role: "user", content: user },
+          ],
+        }),
+      })
+      return res
     }
 
     function open() {
       render()
+      renderAiProviderUi()
       setModalVisible(dom.modal, true)
     }
 
@@ -1247,37 +1009,21 @@
     })
 
     dom.aiBaseUrlInput?.addEventListener("change", () => {
-      const state = getState ? getState() : {}
-      const aiConfig = {
-        baseUrl: String(dom.aiBaseUrlInput.value || "").trim(),
-        apiKey: String(state?.aiConfig?.apiKey || ""),
-        model: String(state?.aiConfig?.model || ""),
-      }
-      if (typeof setState === "function") setState({ aiConfig })
-      if (typeof persist === "function") persist()
-      if (typeof onAfterChange === "function") onAfterChange({ key: "aiConfig" })
+      patchAiConfig({ baseUrl: dom.aiBaseUrlInput.value })
     })
     dom.aiApiKeyInput?.addEventListener("change", () => {
-      const state = getState ? getState() : {}
-      const aiConfig = {
-        baseUrl: String(state?.aiConfig?.baseUrl || ""),
-        apiKey: String(dom.aiApiKeyInput.value || "").trim(),
-        model: String(state?.aiConfig?.model || ""),
-      }
-      if (typeof setState === "function") setState({ aiConfig })
-      if (typeof persist === "function") persist()
-      if (typeof onAfterChange === "function") onAfterChange({ key: "aiConfig" })
+      patchAiConfig({ apiKey: dom.aiApiKeyInput.value })
     })
     dom.aiModelInput?.addEventListener("change", () => {
+      patchAiConfig({ model: dom.aiModelInput.value })
+    })
+
+    dom.aiProviderSelect?.addEventListener("change", () => {
       const state = getState ? getState() : {}
-      const aiConfig = {
-        baseUrl: String(state?.aiConfig?.baseUrl || ""),
-        apiKey: String(state?.aiConfig?.apiKey || ""),
-        model: String(dom.aiModelInput.value || "").trim(),
-      }
-      if (typeof setState === "function") setState({ aiConfig })
-      if (typeof persist === "function") persist()
-      if (typeof onAfterChange === "function") onAfterChange({ key: "aiConfig" })
+      const prev = getAiConfigFromState(state)
+      const next = computeAiConfigOnProviderChange({ prevConfig: prev, nextProvider: dom.aiProviderSelect.value })
+      patchAiConfig(next, { syncInputs: true })
+      renderAiProviderUi()
     })
 
     function openAiPreviewModal({ book, meta }) {
@@ -1307,80 +1053,51 @@
     }
 
     dom.aiGenerateBtn?.addEventListener("click", async () => {
-      if (dom.aiStatus) dom.aiStatus.textContent = ""
+      setAiStatus("")
       const state = getState ? getState() : {}
-      const apiKey = String(state?.aiConfig?.apiKey || "").trim()
-      const model = String(state?.aiConfig?.model || "").trim()
-      const endpoint = buildChatCompletionsUrl(state?.aiConfig?.baseUrl)
+      const cfg = getAiConfigFromState(state)
+      const endpoint = buildChatCompletionsUrl(cfg.baseUrl)
 
-      if (!endpoint) {
-        if (dom.aiStatus) dom.aiStatus.textContent = "请先填写 API Base URL。"
-        return
-      }
-      if (!model) {
-        if (dom.aiStatus) dom.aiStatus.textContent = "请先填写 Model。"
-        return
-      }
-      if (!apiKey) {
-        if (dom.aiStatus) dom.aiStatus.textContent = "请先填写 API Key。"
-        return
-      }
+      if (!endpoint) return setAiStatus("请先填写 API Base URL。")
+      if (!cfg.model) return setAiStatus("请先填写 Model。")
+      if (!cfg.apiKey) return setAiStatus("请先填写 API Key。")
 
       const type = String(dom.aiTypeSelect?.value || "custom")
       const customTopic = String(dom.aiCustomTopicInput?.value || "").trim()
       const count = Number(dom.aiCountInput?.value || 120)
       const { system, user } = buildAiRequest({ type, customTopic, count })
 
-      if (dom.aiGenerateBtn) dom.aiGenerateBtn.disabled = true
-      if (dom.aiStatus) dom.aiStatus.textContent = "生成中…"
+      setAiBusy(true)
+      setAiStatus("生成中…")
 
       let content = ""
       try {
-        const res = await fetch(endpoint, {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${apiKey}`,
-          },
-          body: JSON.stringify({
-            model,
-            temperature: 0.2,
-            messages: [
-              { role: "system", content: system },
-              { role: "user", content: user },
-            ],
-          }),
+        const res = await requestAiChatCompletion({
+          endpoint,
+          apiKey: cfg.apiKey,
+          model: cfg.model,
+          system,
+          user,
         })
-        if (!res.ok) {
-          if (dom.aiStatus) dom.aiStatus.textContent = `生成失败：HTTP ${res.status}`
-          return
-        }
+        if (!res.ok) return setAiStatus(`生成失败：HTTP ${res.status}`)
         const data = await res.json()
         content = String(data?.choices?.[0]?.message?.content || "")
       } catch (e) {
-        if (dom.aiStatus) dom.aiStatus.textContent = "生成失败：网络或接口错误。"
-        return
+        return setAiStatus("生成失败：网络或接口错误。")
       } finally {
-        if (dom.aiGenerateBtn) dom.aiGenerateBtn.disabled = false
+        setAiBusy(false)
       }
 
       let parsed = null
       try {
         parsed = JSON.parse(stripJsonFromText(content))
       } catch (e) {
-        if (dom.aiStatus) dom.aiStatus.textContent = "生成失败：AI 返回内容不是合法 JSON。"
-        return
+        return setAiStatus("生成失败：AI 返回内容不是合法 JSON。")
       }
 
       const normalized = normalizeAiWordbook(parsed)
-      if (!normalized) {
-        if (dom.aiStatus) dom.aiStatus.textContent = "生成失败：词书结构不符合要求。"
-        return
-      }
-      if (!normalized.words.length) {
-        if (dom.aiStatus) dom.aiStatus.textContent = "生成失败：没有可用词条。"
-        return
-      }
+      if (!normalized) return setAiStatus("生成失败：词书结构不符合要求。")
+      if (!normalized.words.length) return setAiStatus("生成失败：没有可用词条。")
 
       const meta = [
         `名称：${normalized.name}`,
@@ -1394,7 +1111,7 @@
         .join(" · ")
 
       openAiPreviewModal({ book: normalized, meta })
-      if (dom.aiStatus) dom.aiStatus.textContent = "已生成：请在预览中确认保存。"
+      setAiStatus("已生成：请在预览中确认保存。")
     })
 
     aiDom.backdrop?.addEventListener("click", () => closeAiPreviewModal())

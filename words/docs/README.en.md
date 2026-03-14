@@ -14,14 +14,20 @@ A pure front-end vocabulary tool based on the “A4 paper memory method”. Word
 - Meaning toggle, immersive mode, theme modes (Auto/Light/Dark)
 - Learning status: mark each word as Mastered / Learning / Unknown during review
 - Lightweight review: auto schedules next review time and counts “Due”
-- Status review: view status summary and generate a round by status / due
-- Records page: per-round view, delete, jump back to review
-- Records status: each word row shows its current learning status
-- Export: CSV (Excel), A4 print/PDF, A4 image (PNG)
+- Records:
+  - Round view: per-round stats, A4 preview (multi-page preview navigation)
+  - Status view: group by Due / Mastered / Learning / Unknown and “Generate a round”
+- Round types: Normal / Mastered review / Learning review / Unknown review / Due review
+- Status-generated rounds: one round may contain multiple A4 pages (auto-paged by round cap)
+- Multi-page navigation: when a round has multiple A4 pages, use Previous/Next on Home
+- Export:
+  - CSV: global/per-round (includes round type + review timestamps)
+  - PDF: exported from Records via browser print (Save as PDF); 1 round = 1 PDF, each A4 = 1 page
 - Wordbooks: built-in samples + local import (TXT/CSV/JSON) + online import (CET4/CET6)
 - Pronunciation: SpeechSynthesis (en/es/ja/ko/pt/fr/de/it/eo), Auto/Manual voice selection
 - Backup: import/export full local data (records + settings)
 - AI wordbook generator: configure API → generate → preview → save
+- AI API presets: OpenAI / Gemini / DeepSeek / SiliconCloud / Custom
 
 ## Usage
 
@@ -42,20 +48,33 @@ Open: http://localhost:8080/
 
 - Home: “Next word” → add a word → review the round
 - Home: “Review this round” anytime, and mark learning status
-- Records: export CSV / print-PDF / export PNG
-- “Learning status” (top): status summary and generate a round by status / due
+- Records:
+  - Round view: A4 preview + per-round CSV/PDF export + jump back to review
+  - Status view: group by status/due and generate a review round
+  - Top actions: Settings is next to “Back to Home”; “Clear records” is aligned with “Export PDF”
 - Settings: theme, pronunciation, round cap, lightweight review, backup, AI generator
 
 ## Project structure (brief)
 
 ```text
-.
+A4-Memory
 ├── index.html
 ├── records.html
+├── manifest.webmanifest
+├── assets/
 ├── css/style.css
 ├── data/words.js
-├── js/ (app/records/settings/speech/storage/utils)
-└── docs/ (README.en.md, PROJECT_CONTEXT.md)
+├── js/
+│   ├── core/common.js
+│   ├── app.js
+│   ├── records.js
+│   ├── settings.js
+│   ├── speech.js
+│   ├── storage.js
+│   └── utils.js
+└── docs/
+    ├── README.en.md
+    └── PROJECT_CONTEXT.md
 ```
 
 ## Contact

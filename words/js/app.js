@@ -1,9 +1,23 @@
 const DEFAULT_ROUND_CAP = 30
 const INTRO_SEEN_KEY = "a4-memory:intro-seen:v1"
-const STATUS_MASTERED = "mastered"
-const STATUS_LEARNING = "learning"
-const STATUS_UNKNOWN = "unknown"
 const DEFAULT_REVIEW_INTERVALS = { unknownDays: 1, learningDays: 3, masteredDays: 7 }
+const {
+  STATUS_MASTERED,
+  STATUS_LEARNING,
+  STATUS_UNKNOWN,
+  ROUND_TYPE_NORMAL,
+  ROUND_TYPE_MASTERED,
+  ROUND_TYPE_LEARNING,
+  ROUND_TYPE_UNKNOWN,
+  ROUND_TYPE_DUE,
+  normalizeStatus,
+  normalizeRoundType,
+  normalizeAiProvider,
+  parseIsoTime,
+  formatDateTime,
+  getRoundPageCount,
+  getRoundItemsByPage,
+} = window.A4Common || {}
 
 const { normalizeThemeMode, normalizeAccent, normalizeVoiceMode, normalizePronunciationLang } = window.A4Settings
 const { sanitizeFilename, downloadJsonFile } = window.A4Utils
@@ -14,15 +28,6 @@ function makeId() {
 
 function clamp(n, min, max) {
   return Math.max(min, Math.min(max, n))
-}
-
-function formatDateTime(value) {
-  const d = value instanceof Date ? value : new Date(value)
-  if (Number.isNaN(d.getTime())) return ""
-  const pad = (n) => String(n).padStart(2, "0")
-  return `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())} ${pad(d.getHours())}:${pad(
-    d.getMinutes()
-  )}`
 }
 
 function getWordsFromGlobal() {
@@ -196,7 +201,6 @@ const dom = {
   roundBadge: document.getElementById("roundBadge"),
   roundProgress: document.getElementById("roundProgress"),
   roundStatusCounts: document.getElementById("roundStatusCounts"),
-  statusPanelBtn: document.getElementById("statusPanelBtn"),
   settingsBtn: document.getElementById("settingsBtn"),
   nextBtn: document.getElementById("nextBtn"),
   reviewBtn: document.getElementById("reviewBtn"),
@@ -221,6 +225,10 @@ const dom = {
   paper: document.getElementById("paper"),
   paperInner: document.getElementById("paperInner"),
   paperHint: document.getElementById("paperHint"),
+  pageNav: document.getElementById("pageNav"),
+  pagePrevBtn: document.getElementById("pagePrevBtn"),
+  pageNextBtn: document.getElementById("pageNextBtn"),
+  pageIndicator: document.getElementById("pageIndicator"),
   reviewModal: document.getElementById("reviewModal"),
   reviewBackdrop: document.getElementById("reviewBackdrop"),
   reviewMeta: document.getElementById("reviewMeta"),
@@ -273,22 +281,6 @@ const dom = {
   aiPreviewMeta: document.getElementById("aiPreviewMeta"),
   aiPreviewList: document.getElementById("aiPreviewList"),
   aiConfirmBtn: document.getElementById("aiConfirmBtn"),
-  statusModal: document.getElementById("statusModal"),
-  statusBackdrop: document.getElementById("statusBackdrop"),
-  closeStatusBtn: document.getElementById("closeStatusBtn"),
-  statusSummary: document.getElementById("statusSummary"),
-  genDueA4Btn: document.getElementById("genDueA4Btn"),
-  genUnknownA4Btn: document.getElementById("genUnknownA4Btn"),
-  genLearningA4Btn: document.getElementById("genLearningA4Btn"),
-  genMasteredA4Btn: document.getElementById("genMasteredA4Btn"),
-  statusA4Modal: document.getElementById("statusA4Modal"),
-  statusA4Backdrop: document.getElementById("statusA4Backdrop"),
-  closeStatusA4Btn: document.getElementById("closeStatusA4Btn"),
-  printStatusA4Btn: document.getElementById("printStatusA4Btn"),
-  statusA4Title: document.getElementById("statusA4Title"),
-  statusA4Meta: document.getElementById("statusA4Meta"),
-  statusA4Paper: document.getElementById("statusA4Paper"),
-  statusA4PaperInner: document.getElementById("statusA4PaperInner"),
 }
 
 const appState = {
@@ -304,6 +296,8 @@ const appState = {
   rounds: [],
   currentRoundId: "",
   pendingReviewRoundId: "",
+  pendingGenerateStatusKind: "",
+  currentPageIndex: 0,
   immersiveMode: false,
   themeMode: "auto",
   systemPrefersDark: false,
@@ -320,7 +314,35 @@ const appState = {
   pronunciationLang: "auto",
   voiceMode: "auto",
   voiceURI: "",
-  aiConfig: { baseUrl: "", apiKey: "", model: "" },
+  aiConfig: { provider: "custom", baseUrl: "", apiKey: "", model: "" },
+}
+
+function getRoundTypeFromKind(kind) {
+  if (kind === "due") return ROUND_TYPE_DUE
+  const s = normalizeStatus(kind)
+  if (s === STATUS_MASTERED) return ROUND_TYPE_MASTERED
+  if (s === STATUS_LEARNING) return ROUND_TYPE_LEARNING
+  if (s === STATUS_UNKNOWN) return ROUND_TYPE_UNKNOWN
+  return ROUND_TYPE_NORMAL
+}
+
+function normalizePendingKind(value) {
+  const v = String(value || "").trim().toLowerCase()
+  if (v === "due") return "due"
+  if (v === STATUS_MASTERED || v === STATUS_LEARNING || v === STATUS_UNKNOWN) return v
+  return ""
+}
+
+
+function updatePageNav() {
+  const round = getCurrentRound()
+  const pageCount = getRoundPageCount(round)
+  const idx = clamp(Math.floor(Number(appState.currentPageIndex) || 0), 0, Math.max(0, pageCount - 1))
+  appState.currentPageIndex = idx
+  if (dom.pageNav) dom.pageNav.classList.toggle("hidden", pageCount <= 1)
+  if (dom.pageIndicator) dom.pageIndicator.textContent = `${idx + 1} / ${pageCount}`
+  if (dom.pagePrevBtn) dom.pagePrevBtn.disabled = idx <= 0
+  if (dom.pageNextBtn) dom.pageNextBtn.disabled = idx >= pageCount - 1
 }
 
 function updateImmersiveToggle() {
@@ -641,6 +663,7 @@ function ensureCurrentRound() {
     finishedAt: "",
     items: [],
     roundCap: normalizeRoundCap(appState.roundCap),
+    type: ROUND_TYPE_NORMAL,
   }
   appState.rounds = [round]
   appState.currentRoundId = round.id
@@ -676,6 +699,7 @@ function persist() {
     rounds: appState.rounds,
     currentRoundId: appState.currentRoundId,
     pendingReviewRoundId: appState.pendingReviewRoundId,
+    pendingGenerateStatusKind: appState.pendingGenerateStatusKind,
     currentCount: appState.placed.length,
     immersiveMode: appState.immersiveMode,
     darkMode,
@@ -703,7 +727,11 @@ function renderCurrentRound() {
   appState.placed = []
   const paper = getPaperInnerSize()
 
-  for (const item of Array.isArray(round.items) ? round.items : []) {
+  const pageCount = getRoundPageCount(round)
+  appState.currentPageIndex = clamp(Math.floor(Number(appState.currentPageIndex) || 0), 0, Math.max(0, pageCount - 1))
+  updatePageNav()
+  const items = getRoundItemsByPage(round, appState.currentPageIndex)
+  for (const item of items) {
     if (!item || !item.word || !item.word.term || !item.pos) continue
     const el = buildWordElement(item.word)
     if (item.fontSize) el.style.fontSize = item.fontSize
@@ -740,9 +768,11 @@ function startNextRound({ clearAll = false } = {}) {
     finishedAt: "",
     items: [],
     roundCap: normalizeRoundCap(appState.roundCap),
+    type: ROUND_TYPE_NORMAL,
   }
   appState.rounds.push(round)
   appState.currentRoundId = round.id
+  appState.currentPageIndex = 0
 
   appState.placed = []
   appState.reviewShuffled = false
@@ -758,74 +788,17 @@ function startNextRound({ clearAll = false } = {}) {
 function updateBadge() {
   ensureCurrentRound()
   const roundNo = getCurrentRoundIndex() + 1
+  const round = getCurrentRound()
+  const pageCount = getRoundPageCount(round)
+  const pageIndex = clamp(Math.floor(Number(appState.currentPageIndex) || 0), 0, Math.max(0, pageCount - 1))
   const cap = getCurrentRoundCap()
-  dom.roundBadge.textContent = `第${roundNo}轮 ${appState.placed.length}/${cap}`
+  dom.roundBadge.textContent = `第${roundNo}轮 · 第${pageIndex + 1}/${pageCount}张 · ${appState.placed.length}/${cap}`
   if (dom.roundProgress) dom.roundProgress.style.width = `${(appState.placed.length / cap) * 100}%`
   renderStats()
 }
 
 function updateHint() {
   dom.paperHint.style.display = appState.placed.length === 0 ? "block" : "none"
-}
-
-function toLocalDateKey(value) {
-  const d = value instanceof Date ? value : new Date(value)
-  if (Number.isNaN(d.getTime())) return ""
-  const pad = (n) => String(n).padStart(2, "0")
-  return `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}`
-}
-
-function computeStudyStats() {
-  const rounds = Array.isArray(appState.rounds) ? appState.rounds : []
-  const todayKey = toLocalDateKey(new Date())
-  const daySet = new Set()
-  let totalWords = 0
-  let todayWords = 0
-  let completedRounds = 0
-  let todayCompletedRounds = 0
-
-  for (const r of rounds) {
-    const items = Array.isArray(r?.items) ? r.items : []
-    totalWords += items.length
-
-    const finishedKey = r?.finishedAt ? toLocalDateKey(r.finishedAt) : ""
-    if (r?.finishedAt) completedRounds += 1
-    if (finishedKey && finishedKey === todayKey) todayCompletedRounds += 1
-
-    for (const it of items) {
-      const key = toLocalDateKey(it?.createdAt || r?.startedAt)
-      if (!key) continue
-      daySet.add(key)
-      if (key === todayKey) todayWords += 1
-    }
-  }
-
-  let streak = 0
-  if (daySet.has(todayKey)) {
-    let cursor = new Date()
-    while (true) {
-      const key = toLocalDateKey(cursor)
-      if (!daySet.has(key)) break
-      streak += 1
-      cursor.setDate(cursor.getDate() - 1)
-    }
-  }
-
-  return { totalWords, todayWords, completedRounds, todayCompletedRounds, streak }
-}
-
-function normalizeStatus(value) {
-  const v = String(value || "").trim().toLowerCase()
-  if (v === STATUS_MASTERED || v === STATUS_LEARNING || v === STATUS_UNKNOWN) return v
-  return STATUS_UNKNOWN
-}
-
-function parseIsoTime(value) {
-  const raw = String(value || "").trim()
-  if (!raw) return null
-  const t = Date.parse(raw)
-  if (!Number.isFinite(t)) return null
-  return t
 }
 
 function normalizeReviewIntervals(raw) {
@@ -972,7 +945,12 @@ function speakTerm(term) {
 }
 
 function refreshReviewList() {
-  const list = appState.reviewShuffled ? shuffle(appState.placed.slice()) : appState.placed.slice()
+  const round = getCurrentRound()
+  const rawItems = Array.isArray(round?.items) ? round.items : []
+  const base = rawItems
+    .filter((it) => it && it.word && it.word.term)
+    .map((it) => ({ word: it.word, roundItem: it }))
+  const list = appState.reviewShuffled ? shuffle(base) : base
   appState.reviewQueue = list
   appState.reviewIndex = 0
   renderReviewCard()
@@ -1040,42 +1018,6 @@ function closeRoundFullModal() {
   setModalVisible(dom.roundFullModal, false)
 }
 
-function openStatusModal() {
-  renderStatusModal()
-  setModalVisible(dom.statusModal, true)
-}
-
-function closeStatusModal() {
-  setModalVisible(dom.statusModal, false)
-}
-
-function renderStatusModal() {
-  const cap = normalizeRoundCap(appState.roundCap)
-  const nowMs = Date.now()
-  const map = getLatestTermMap()
-  let mastered = 0
-  let learning = 0
-  let unknown = 0
-  for (const entry of map.values()) {
-    const s = normalizeStatus(entry.status)
-    if (s === STATUS_MASTERED) mastered += 1
-    else if (s === STATUS_LEARNING) learning += 1
-    else unknown += 1
-  }
-  const dueList = getDueTerms(nowMs)
-  const due = dueList.length
-
-  if (dom.statusSummary) {
-    const enabledLabel = appState.reviewSystemEnabled ? "开" : "关"
-    dom.statusSummary.textContent = `已掌握：${mastered} · 学习中：${learning} · 不会：${unknown} · 待复习：${due}\n复习系统：${enabledLabel} · 每轮上限：${cap}`
-  }
-
-  if (dom.genMasteredA4Btn) dom.genMasteredA4Btn.disabled = mastered <= 0
-  if (dom.genLearningA4Btn) dom.genLearningA4Btn.disabled = learning <= 0
-  if (dom.genUnknownA4Btn) dom.genUnknownA4Btn.disabled = unknown <= 0
-  if (dom.genDueA4Btn) dom.genDueA4Btn.disabled = due <= 0 || !appState.reviewSystemEnabled
-}
-
 function generateStatusRound(kind) {
   const cap = normalizeRoundCap(appState.roundCap)
   const nowMs = Date.now()
@@ -1110,32 +1052,43 @@ function generateStatusRound(kind) {
     return
   }
 
-  const picked = list.slice(0, cap)
-  if (total < cap) {
-    window.alert(`${title}：共 ${total} 个，已按实际数量生成。`)
-  }
+  const pages = Math.max(1, Math.ceil(total / cap))
+  if (total <= cap) window.alert(`${title}：共 ${total} 个，已生成 1 页 A4。`)
+  else window.alert(`${title}：共 ${total} 个，已生成 ${pages} 页 A4（同一轮内）。`)
 
   startNextRound()
   const round = getCurrentRound()
   if (!round) return
+  round.type = getRoundTypeFromKind(kind)
+  round.items = []
+  appState.currentPageIndex = 0
 
-  for (const entry of picked) {
-    const word = entry?.word
-    if (!word || !word.term) continue
-    const placed = placeWordElement(word)
-    const fontSize = placed.el.style.fontSize || ""
-    const roundItem = {
-      word,
-      pos: placed.pos,
-      fontSize,
-      createdAt: new Date().toISOString(),
-      status: normalizeStatus(entry?.status),
-      lastReviewedAt: String(entry?.lastReviewedAt || ""),
-      nextReviewAt: String(entry?.nextReviewAt || ""),
+  for (let pageIndex = 0; pageIndex < pages; pageIndex++) {
+    clearPaper()
+    appState.placed = []
+    const chunk = list.slice(pageIndex * cap, (pageIndex + 1) * cap)
+    for (const entry of chunk) {
+      const word = entry?.word
+      if (!word || !word.term) continue
+      const placed = placeWordElement(word)
+      const fontSize = placed.el.style.fontSize || ""
+      const roundItem = {
+        word,
+        pos: placed.pos,
+        fontSize,
+        createdAt: new Date().toISOString(),
+        status: normalizeStatus(entry?.status),
+        lastReviewedAt: String(entry?.lastReviewedAt || ""),
+        nextReviewAt: String(entry?.nextReviewAt || ""),
+        pageIndex,
+      }
+      round.items.push(roundItem)
+      appState.placed.push({ word, roundItem, el: placed.el, box: placed.box, fontSize, pos: placed.pos })
     }
-    round.items.push(roundItem)
-    appState.placed.push({ word, roundItem, el: placed.el, box: placed.box, fontSize, pos: placed.pos })
   }
+
+  clearPaper()
+  renderCurrentRound()
 
   updateBadge()
   updateHint()
@@ -1285,11 +1238,12 @@ function restore() {
   appState.aiConfig =
     saved.aiConfig && typeof saved.aiConfig === "object"
       ? {
+          provider: normalizeAiProvider(saved.aiConfig.provider),
           baseUrl: String(saved.aiConfig.baseUrl || "").trim(),
           apiKey: String(saved.aiConfig.apiKey || "").trim(),
           model: String(saved.aiConfig.model || "").trim(),
         }
-      : { baseUrl: "", apiKey: "", model: "" }
+      : { provider: "custom", baseUrl: "", apiKey: "", model: "" }
 
   applyTheme()
 
@@ -1299,6 +1253,7 @@ function restore() {
   appState.selectedWordbookId = typeof saved.selectedWordbookId === "string" ? saved.selectedWordbookId : ""
   appState.pendingReviewRoundId =
     typeof saved.pendingReviewRoundId === "string" ? saved.pendingReviewRoundId : ""
+  appState.pendingGenerateStatusKind = normalizePendingKind(saved.pendingGenerateStatusKind)
   const pendingOpenSettings = !!saved.pendingOpenSettings
   if (pendingOpenSettings) {
     try {
@@ -1310,8 +1265,11 @@ function restore() {
   if (saved.version === 2 && Array.isArray(saved.rounds) && typeof saved.currentRoundId === "string") {
     appState.rounds = saved.rounds
     appState.currentRoundId = saved.currentRoundId
+    appState.currentPageIndex = 0
     const normalizedUnknown = new Set()
     for (const r of appState.rounds) {
+      if (!r.type) r.type = ROUND_TYPE_NORMAL
+      r.type = normalizeRoundType(r.type)
       const items = Array.isArray(r?.items) ? r.items : []
       for (const it of items) {
         const term = String(it?.word?.term || "").trim()
@@ -1320,6 +1278,8 @@ function restore() {
         it.status = normalizeStatus(it.status)
         if (typeof it.lastReviewedAt !== "string") it.lastReviewedAt = ""
         if (typeof it.nextReviewAt !== "string") it.nextReviewAt = ""
+        const pi = Number(it.pageIndex)
+        it.pageIndex = Number.isFinite(pi) ? Math.max(0, Math.floor(pi)) : 0
       }
     }
     for (const entry of getLatestTermMap().values()) {
@@ -1334,6 +1294,12 @@ function restore() {
       appState.pendingReviewRoundId = ""
       persist()
       openReviewModal()
+    }
+    if (appState.pendingGenerateStatusKind) {
+      const kind = appState.pendingGenerateStatusKind
+      appState.pendingGenerateStatusKind = ""
+      persist()
+      requestAnimationFrame(() => generateStatusRound(kind))
     }
     if (pendingOpenSettings) openSettingsModal()
     try {
@@ -1351,6 +1317,7 @@ function restore() {
     finishedAt: "",
     items: [],
     roundCap: normalizeRoundCap(appState.roundCap),
+    type: ROUND_TYPE_NORMAL,
   }
 
   for (const p of legacyPlaced) {
@@ -1363,12 +1330,14 @@ function restore() {
       status: STATUS_UNKNOWN,
       lastReviewedAt: "",
       nextReviewAt: "",
+      pageIndex: 0,
     })
   }
   if (round.items.length >= normalizeRoundCap(round.roundCap)) round.finishedAt = new Date().toISOString()
 
   appState.rounds = [round]
   appState.currentRoundId = round.id
+  appState.currentPageIndex = 0
   ensureCurrentRound()
   renderCurrentRound()
   updateBadge()
@@ -1396,11 +1365,13 @@ function addNextWord() {
     status: STATUS_UNKNOWN,
     lastReviewedAt: "",
     nextReviewAt: "",
+    pageIndex: 0,
   }
   appState.placed.push({ word, roundItem, el: placed.el, box: placed.box, fontSize, pos: placed.pos })
 
   const round = getCurrentRound()
   if (round) {
+    if (!round.type) round.type = ROUND_TYPE_NORMAL
     round.items.push(roundItem)
     if (round.items.length >= getCurrentRoundCap()) finalizeCurrentRound()
   }
@@ -1433,7 +1404,6 @@ if (window.A4Settings && typeof window.A4Settings.createSettingsModalController 
       if (key === "dailyGoalRounds" || key === "dailyGoalWords") renderStats()
       if (key === "reviewSystemEnabled" || key === "reviewIntervals") {
         renderStats()
-        if (dom.statusModal && !dom.statusModal.classList.contains("hidden")) renderStatusModal()
       }
       if (key === "roundCap") {
         const round = getCurrentRound()
@@ -1447,27 +1417,6 @@ if (window.A4Settings && typeof window.A4Settings.createSettingsModalController 
 }
 
 dom.settingsBtn.addEventListener("click", () => openSettingsModal())
-
-dom.statusPanelBtn?.addEventListener("click", () => openStatusModal())
-dom.statusBackdrop?.addEventListener("click", () => closeStatusModal())
-dom.closeStatusBtn?.addEventListener("click", () => closeStatusModal())
-
-dom.genDueA4Btn?.addEventListener("click", () => {
-  closeStatusModal()
-  generateStatusRound("due")
-})
-dom.genUnknownA4Btn?.addEventListener("click", () => {
-  closeStatusModal()
-  generateStatusRound(STATUS_UNKNOWN)
-})
-dom.genLearningA4Btn?.addEventListener("click", () => {
-  closeStatusModal()
-  generateStatusRound(STATUS_LEARNING)
-})
-dom.genMasteredA4Btn?.addEventListener("click", () => {
-  closeStatusModal()
-  generateStatusRound(STATUS_MASTERED)
-})
 
 dom.wordbookSelect.addEventListener("change", () => {
   appState.selectedWordbookId = dom.wordbookSelect.value
@@ -1557,6 +1506,26 @@ dom.reviewBackdrop.addEventListener("click", () => closeReviewModal())
 dom.closeReviewBtn.addEventListener("click", () => closeReviewModal())
 dom.doneReviewBtn.addEventListener("click", () => closeReviewModal())
 
+dom.pagePrevBtn?.addEventListener("click", () => {
+  const round = getCurrentRound()
+  const pageCount = getRoundPageCount(round)
+  if (pageCount <= 1) return
+  appState.currentPageIndex = clamp(appState.currentPageIndex - 1, 0, pageCount - 1)
+  renderCurrentRound()
+  updateBadge()
+  updateHint()
+})
+
+dom.pageNextBtn?.addEventListener("click", () => {
+  const round = getCurrentRound()
+  const pageCount = getRoundPageCount(round)
+  if (pageCount <= 1) return
+  appState.currentPageIndex = clamp(appState.currentPageIndex + 1, 0, pageCount - 1)
+  renderCurrentRound()
+  updateBadge()
+  updateHint()
+})
+
 function markCurrentReviewStatus(status) {
   const idx = appState.reviewIndex
   const entry = appState.reviewQueue[idx]
@@ -1572,7 +1541,6 @@ function markCurrentReviewStatus(status) {
     setTermUnknownFlag(term, nextStatus === STATUS_UNKNOWN)
     persist()
     renderStats()
-    if (dom.statusModal && !dom.statusModal.classList.contains("hidden")) renderStatusModal()
   }
 }
 
@@ -1644,9 +1612,7 @@ function isAnyModalOpen() {
     isModalOpen(dom.reviewModal) ||
     isModalOpen(dom.roundFullModal) ||
     isModalOpen(dom.importModal) ||
-    isModalOpen(dom.introModal) ||
-    isModalOpen(dom.statusModal) ||
-    isModalOpen(dom.statusA4Modal)
+    isModalOpen(dom.introModal)
   )
 }
 

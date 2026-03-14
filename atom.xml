@@ -92,9 +92,9 @@
     <category term="Linux" scheme="https://k7tmiz.github.io/categories/Linux/"/>
     
     
-    <category term="Tech" scheme="https://k7tmiz.github.io/tags/Tech/"/>
-    
     <category term="Linux" scheme="https://k7tmiz.github.io/tags/Linux/"/>
+    
+    <category term="Tech" scheme="https://k7tmiz.github.io/tags/Tech/"/>
     
   </entry>
   
@@ -114,9 +114,9 @@
     <category term="Linux" scheme="https://k7tmiz.github.io/categories/Linux/"/>
     
     
-    <category term="Tech" scheme="https://k7tmiz.github.io/tags/Tech/"/>
-    
     <category term="Linux" scheme="https://k7tmiz.github.io/tags/Linux/"/>
+    
+    <category term="Tech" scheme="https://k7tmiz.github.io/tags/Tech/"/>
     
   </entry>
   
@@ -194,9 +194,9 @@
     <category term="Tech" scheme="https://k7tmiz.github.io/categories/Tech/"/>
     
     
-    <category term="Tech" scheme="https://k7tmiz.github.io/tags/Tech/"/>
-    
     <category term="Linux" scheme="https://k7tmiz.github.io/tags/Linux/"/>
+    
+    <category term="Tech" scheme="https://k7tmiz.github.io/tags/Tech/"/>
     
   </entry>
   
@@ -216,9 +216,9 @@
     <category term="Tech" scheme="https://k7tmiz.github.io/categories/Tech/"/>
     
     
-    <category term="Tech" scheme="https://k7tmiz.github.io/tags/Tech/"/>
-    
     <category term="Linux" scheme="https://k7tmiz.github.io/tags/Linux/"/>
+    
+    <category term="Tech" scheme="https://k7tmiz.github.io/tags/Tech/"/>
     
   </entry>
   
@@ -318,9 +318,9 @@
     <category term="Linux" scheme="https://k7tmiz.github.io/categories/Linux/"/>
     
     
-    <category term="Tech" scheme="https://k7tmiz.github.io/tags/Tech/"/>
-    
     <category term="Linux" scheme="https://k7tmiz.github.io/tags/Linux/"/>
+    
+    <category term="Tech" scheme="https://k7tmiz.github.io/tags/Tech/"/>
     
   </entry>
   
@@ -348,9 +348,9 @@
     <category term="Linux" scheme="https://k7tmiz.github.io/categories/Linux/"/>
     
     
-    <category term="Tech" scheme="https://k7tmiz.github.io/tags/Tech/"/>
-    
     <category term="Linux" scheme="https://k7tmiz.github.io/tags/Linux/"/>
+    
+    <category term="Tech" scheme="https://k7tmiz.github.io/tags/Tech/"/>
     
   </entry>
   
@@ -497,49 +497,6 @@
   </entry>
   
   <entry>
-    <title>MSI-PERKEYRGB</title>
-    <link href="https://k7tmiz.github.io/posts/5a88bde.html"/>
-    <id>https://k7tmiz.github.io/posts/5a88bde.html</id>
-    <published>2025-04-19T14:28:32.000Z</published>
-    <updated>2026-03-06T14:15:22.306Z</updated>
-    
-    
-    <summary type="html">&lt;h1 id=&quot;MSI-PERKEYRGB&quot;&gt;&lt;a href=&quot;#MSI-PERKEYRGB&quot; class=&quot;headerlink&quot; title=&quot;MSI-PERKEYRGB&quot;&gt;&lt;/a&gt;MSI-PERKEYRGB&lt;/h1&gt;&lt;blockquote&gt;
-&lt;p&gt;适用于我MSI-GP68HX的键盘RGB调光的git项目&lt;/p&gt;
-&lt;/blockquote&gt;
-&lt;p&gt;下面是Github的项目地址： &lt;a href=&quot;https://github.com/Askannz/msi-perkeyrgb&quot;&gt;msi-perkeyrgb&lt;/a&gt;&lt;/p&gt;</summary>
-    
-    
-    
-    <category term="Tech" scheme="https://k7tmiz.github.io/categories/Tech/"/>
-    
-    
-    <category term="Tech" scheme="https://k7tmiz.github.io/tags/Tech/"/>
-    
-    <category term="Linux" scheme="https://k7tmiz.github.io/tags/Linux/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>Nativefier 使用教程</title>
-    <link href="https://k7tmiz.github.io/posts/b56059f9.html"/>
-    <id>https://k7tmiz.github.io/posts/b56059f9.html</id>
-    <published>2025-04-19T14:28:32.000Z</published>
-    <updated>2026-03-06T14:15:22.306Z</updated>
-    
-    
-    <summary type="html">&lt;h1 id=&quot;Nativefier-使用教程&quot;&gt;&lt;a href=&quot;#Nativefier-使用教程&quot; class=&quot;headerlink&quot; title=&quot;Nativefier 使用教程&quot;&gt;&lt;/a&gt;Nativefier 使用教程&lt;/h1&gt;&lt;h4 id=&quot;基于electron的打包软件&quot;&gt;&lt;a href=&quot;#基于electron的打包软件&quot; class=&quot;headerlink&quot; title=&quot;基于electron的打包软件&quot;&gt;&lt;/a&gt;基于electron的打包软件&lt;/h4&gt;&lt;h5 id=&quot;nativefier-n-p-—-arch-—-weight-—-height&quot;&gt;&lt;a href=&quot;#nativefier-n-p-—-arch-—-weight-—-height&quot; class=&quot;headerlink&quot; title=&quot;nativefier -n &amp;lt;打包后的应用名称&amp;gt; -p &amp;lt;程序兼容的平台&amp;gt; —-arch &amp;lt;架构&amp;gt; —- weight &amp;lt;窗口宽度&amp;gt; —-height &amp;lt;窗口高度&amp;gt; &amp;lt;网页URL&amp;gt;&quot;&gt;&lt;/a&gt;nativefier -n &amp;lt;打包后的应用名称&amp;gt; -p &amp;lt;程序兼容的平台&amp;gt; —-arch &amp;lt;架构&amp;gt; —- weight &amp;lt;窗口宽度&amp;gt; —-height &amp;lt;窗口高度&amp;gt; &amp;lt;网页URL&amp;gt;&lt;/h5&gt;</summary>
-    
-    
-    
-    <category term="Tech" scheme="https://k7tmiz.github.io/categories/Tech/"/>
-    
-    
-    <category term="Tech" scheme="https://k7tmiz.github.io/tags/Tech/"/>
-    
-  </entry>
-  
-  <entry>
     <title>Archlinux安装指南</title>
     <link href="https://k7tmiz.github.io/posts/a907d758.html"/>
     <id>https://k7tmiz.github.io/posts/a907d758.html</id>
@@ -576,9 +533,52 @@
     <category term="Linux" scheme="https://k7tmiz.github.io/categories/Linux/"/>
     
     
+    <category term="Linux" scheme="https://k7tmiz.github.io/tags/Linux/"/>
+    
     <category term="Tech" scheme="https://k7tmiz.github.io/tags/Tech/"/>
     
+  </entry>
+  
+  <entry>
+    <title>Nativefier 使用教程</title>
+    <link href="https://k7tmiz.github.io/posts/b56059f9.html"/>
+    <id>https://k7tmiz.github.io/posts/b56059f9.html</id>
+    <published>2025-04-19T14:28:32.000Z</published>
+    <updated>2026-03-06T14:15:22.306Z</updated>
+    
+    
+    <summary type="html">&lt;h1 id=&quot;Nativefier-使用教程&quot;&gt;&lt;a href=&quot;#Nativefier-使用教程&quot; class=&quot;headerlink&quot; title=&quot;Nativefier 使用教程&quot;&gt;&lt;/a&gt;Nativefier 使用教程&lt;/h1&gt;&lt;h4 id=&quot;基于electron的打包软件&quot;&gt;&lt;a href=&quot;#基于electron的打包软件&quot; class=&quot;headerlink&quot; title=&quot;基于electron的打包软件&quot;&gt;&lt;/a&gt;基于electron的打包软件&lt;/h4&gt;&lt;h5 id=&quot;nativefier-n-p-—-arch-—-weight-—-height&quot;&gt;&lt;a href=&quot;#nativefier-n-p-—-arch-—-weight-—-height&quot; class=&quot;headerlink&quot; title=&quot;nativefier -n &amp;lt;打包后的应用名称&amp;gt; -p &amp;lt;程序兼容的平台&amp;gt; —-arch &amp;lt;架构&amp;gt; —- weight &amp;lt;窗口宽度&amp;gt; —-height &amp;lt;窗口高度&amp;gt; &amp;lt;网页URL&amp;gt;&quot;&gt;&lt;/a&gt;nativefier -n &amp;lt;打包后的应用名称&amp;gt; -p &amp;lt;程序兼容的平台&amp;gt; —-arch &amp;lt;架构&amp;gt; —- weight &amp;lt;窗口宽度&amp;gt; —-height &amp;lt;窗口高度&amp;gt; &amp;lt;网页URL&amp;gt;&lt;/h5&gt;</summary>
+    
+    
+    
+    <category term="Tech" scheme="https://k7tmiz.github.io/categories/Tech/"/>
+    
+    
+    <category term="Tech" scheme="https://k7tmiz.github.io/tags/Tech/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>MSI-PERKEYRGB</title>
+    <link href="https://k7tmiz.github.io/posts/5a88bde.html"/>
+    <id>https://k7tmiz.github.io/posts/5a88bde.html</id>
+    <published>2025-04-19T14:28:32.000Z</published>
+    <updated>2026-03-06T14:15:22.306Z</updated>
+    
+    
+    <summary type="html">&lt;h1 id=&quot;MSI-PERKEYRGB&quot;&gt;&lt;a href=&quot;#MSI-PERKEYRGB&quot; class=&quot;headerlink&quot; title=&quot;MSI-PERKEYRGB&quot;&gt;&lt;/a&gt;MSI-PERKEYRGB&lt;/h1&gt;&lt;blockquote&gt;
+&lt;p&gt;适用于我MSI-GP68HX的键盘RGB调光的git项目&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;下面是Github的项目地址： &lt;a href=&quot;https://github.com/Askannz/msi-perkeyrgb&quot;&gt;msi-perkeyrgb&lt;/a&gt;&lt;/p&gt;</summary>
+    
+    
+    
+    <category term="Tech" scheme="https://k7tmiz.github.io/categories/Tech/"/>
+    
+    
     <category term="Linux" scheme="https://k7tmiz.github.io/tags/Linux/"/>
+    
+    <category term="Tech" scheme="https://k7tmiz.github.io/tags/Tech/"/>
     
   </entry>
   
