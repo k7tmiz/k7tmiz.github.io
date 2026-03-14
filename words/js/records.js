@@ -234,12 +234,42 @@ function normalizeStatus(value) {
   return STATUS_UNKNOWN
 }
 
-function computeStatusCounts(items) {
+function parseIsoTime(value) {
+  const raw = String(value || "").trim()
+  if (!raw) return null
+  const t = Date.parse(raw)
+  if (!Number.isFinite(t)) return null
+  return t
+}
+
+function buildLatestTermStatusMap(rounds) {
+  const map = new Map()
+  for (const r of Array.isArray(rounds) ? rounds : []) {
+    const items = Array.isArray(r?.items) ? r.items : []
+    for (const it of items) {
+      const term = String(it?.word?.term || "").trim()
+      if (!term) continue
+      const key = term.toLowerCase()
+      const reviewedAt = parseIsoTime(it?.lastReviewedAt)
+      const createdAt = parseIsoTime(it?.createdAt)
+      const fallbackAt = parseIsoTime(r?.finishedAt) || parseIsoTime(r?.startedAt)
+      const ts = reviewedAt ?? createdAt ?? fallbackAt ?? 0
+      const prev = map.get(key)
+      if (prev && ts <= prev.ts) continue
+      map.set(key, { ts, status: normalizeStatus(it?.status) })
+    }
+  }
+  return map
+}
+
+function computeStatusCounts(items, latestStatusMap) {
   let mastered = 0
   let learning = 0
   let unknown = 0
   for (const it of Array.isArray(items) ? items : []) {
-    const s = normalizeStatus(it?.status)
+    const term = String(it?.word?.term || "").trim()
+    const key = term ? term.toLowerCase() : ""
+    const s = key && latestStatusMap?.get(key) ? normalizeStatus(latestStatusMap.get(key).status) : normalizeStatus(it?.status)
     if (s === STATUS_MASTERED) mastered += 1
     else if (s === STATUS_LEARNING) learning += 1
     else unknown += 1
@@ -247,11 +277,19 @@ function computeStatusCounts(items) {
   return { mastered, learning, unknown }
 }
 
+function getStatusLabel(status) {
+  const s = normalizeStatus(status)
+  if (s === STATUS_MASTERED) return "已掌握"
+  if (s === STATUS_LEARNING) return "学习中"
+  return "不会"
+}
+
 function renderRounds(rounds, { onDeleteRound, onReviewRound, getRoundCap } = {}) {
   const roundsEl = document.getElementById("rounds")
   const emptyEl = document.getElementById("emptyState")
 
   roundsEl.innerHTML = ""
+  const latestStatusMap = buildLatestTermStatusMap(rounds)
 
   if (!rounds.length) {
     emptyEl.classList.remove("hidden")
@@ -275,7 +313,7 @@ function renderRounds(rounds, { onDeleteRound, onReviewRound, getRoundCap } = {}
         Array.isArray(r.items) ? r.items.length : 0
       }/${cap}`
     )
-    const statusCounts = computeStatusCounts(Array.isArray(r.items) ? r.items : [])
+    const statusCounts = computeStatusCounts(Array.isArray(r.items) ? r.items : [], latestStatusMap)
     const statusMeta = el(
       "div",
       "round-meta",
@@ -347,7 +385,17 @@ function renderRounds(rounds, { onDeleteRound, onReviewRound, getRoundCap } = {}
     for (const it of items) {
       const word = it?.word
       const row = el("div", "word-row")
-      row.appendChild(el("div", "w", word?.term || ""))
+      const w = el("div", "w")
+      w.textContent = word?.term || ""
+      const termKey = String(word?.term || "").trim().toLowerCase()
+      const currentStatus = termKey && latestStatusMap.get(termKey) ? latestStatusMap.get(termKey).status : it?.status
+      const status = el(
+        "span",
+        `word-status word-status-${normalizeStatus(currentStatus)}`,
+        ` ${getStatusLabel(currentStatus)}`
+      )
+      w.appendChild(status)
+      row.appendChild(w)
       row.appendChild(el("div", "m", formatMeaning(word)))
       list.appendChild(row)
     }
@@ -401,6 +449,9 @@ function normalizeState(raw) {
       pos: { x: 0.1, y: 0.1 },
       fontSize: p.fontSize || "",
       createdAt: new Date().toISOString(),
+      status: STATUS_UNKNOWN,
+      lastReviewedAt: "",
+      nextReviewAt: "",
     })),
     roundCap,
   }
@@ -581,6 +632,16 @@ function main() {
 
   render()
   renderStats()
+
+  const STORAGE_KEY = window.A4Storage?.STORAGE_KEY || "a4-memory:v1"
+  window.addEventListener("storage", (e) => {
+    if (!e || e.key !== STORAGE_KEY) return
+    const next = normalizeState(loadState())
+    state = next
+    rounds = Array.isArray(next.rounds) ? next.rounds : []
+    render()
+    renderStats()
+  })
 
   exportBtn.addEventListener("click", () => {
     const csv = buildCsv(rounds)

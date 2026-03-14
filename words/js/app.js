@@ -1040,8 +1040,6 @@ function closeRoundFullModal() {
   setModalVisible(dom.roundFullModal, false)
 }
 
-let lastGeneratedA4 = null
-
 function openStatusModal() {
   renderStatusModal()
   setModalVisible(dom.statusModal, true)
@@ -1049,10 +1047,6 @@ function openStatusModal() {
 
 function closeStatusModal() {
   setModalVisible(dom.statusModal, false)
-}
-
-function closeStatusA4Modal() {
-  setModalVisible(dom.statusA4Modal, false)
 }
 
 function renderStatusModal() {
@@ -1073,7 +1067,7 @@ function renderStatusModal() {
 
   if (dom.statusSummary) {
     const enabledLabel = appState.reviewSystemEnabled ? "开" : "关"
-    dom.statusSummary.textContent = `已掌握：${mastered} · 学习中：${learning} · 不会：${unknown} · 待复习：${due}\n复习系统：${enabledLabel} · 每页：${cap}`
+    dom.statusSummary.textContent = `已掌握：${mastered} · 学习中：${learning} · 不会：${unknown} · 待复习：${due}\n复习系统：${enabledLabel} · 每轮上限：${cap}`
   }
 
   if (dom.genMasteredA4Btn) dom.genMasteredA4Btn.disabled = mastered <= 0
@@ -1082,181 +1076,73 @@ function renderStatusModal() {
   if (dom.genDueA4Btn) dom.genDueA4Btn.disabled = due <= 0 || !appState.reviewSystemEnabled
 }
 
-function openStatusA4Modal({ title, meta }) {
-  if (dom.statusA4Title) dom.statusA4Title.textContent = title || "生成 A4"
-  if (dom.statusA4Meta) dom.statusA4Meta.textContent = meta || ""
-  setModalVisible(dom.statusA4Modal, true)
-}
-
-function renderStatusA4Words(words) {
-  if (!dom.statusA4PaperInner || !dom.statusA4Paper) return { items: [] }
-  dom.statusA4PaperInner.innerHTML = ""
-  const placed = []
-  const items = []
-
-  const measure = (el) => {
-    dom.statusA4PaperInner.appendChild(el)
-    el.style.left = "0px"
-    el.style.top = "0px"
-    const paperRect = dom.statusA4PaperInner.getBoundingClientRect()
-    const rect = el.getBoundingClientRect()
-    return {
-      w: rect.width,
-      h: rect.height,
-      paperW: paperRect.width,
-      paperH: paperRect.height,
-    }
-  }
-
-  const placeOne = (word) => {
-    const el = buildWordElement(word)
-    el.style.fontSize = "16px"
-    el.style.lineHeight = "1.2"
-
-    const padding = 10
-    const margin = 6
-    const sizeSteps = [18, 16, 14, 12]
-
-    for (const size of sizeSteps) {
-      el.style.fontSize = `${size}px`
-      const m = measure(el)
-      const maxX = Math.max(0, m.paperW - m.w)
-      const maxY = Math.max(0, m.paperH - m.h)
-
-      let attempts = 0
-      while (attempts < 240) {
-        attempts++
-        const x = Math.random() * maxX
-        const y = Math.random() * maxY
-        const candidate = { x: x + margin, y: y + margin, w: m.w, h: m.h }
-        let ok = true
-        for (const p of placed) {
-          if (intersects(candidate, p.box, padding)) {
-            ok = false
-            break
-          }
-        }
-        if (!ok) continue
-        el.style.left = `${candidate.x}px`
-        el.style.top = `${candidate.y}px`
-        const pos = { x: clamp(candidate.x / m.paperW, 0, 1), y: clamp(candidate.y / m.paperH, 0, 1) }
-        return { el, box: candidate, pos, fontSize: `${size}px` }
-      }
-
-      try {
-        dom.statusA4PaperInner.removeChild(el)
-      } catch (e) {}
-    }
-
-    const m = measure(el)
-    const x = Math.random() * Math.max(0, m.paperW - m.w)
-    const y = Math.random() * Math.max(0, m.paperH - m.h)
-    const candidate = { x, y, w: m.w, h: m.h }
-    el.style.left = `${candidate.x}px`
-    el.style.top = `${candidate.y}px`
-    const pos = { x: clamp(candidate.x / m.paperW, 0, 1), y: clamp(candidate.y / m.paperH, 0, 1) }
-    return { el, box: candidate, pos, fontSize: el.style.fontSize || "" }
-  }
-
-  for (const w of Array.isArray(words) ? words : []) {
-    const term = String(w?.term || "").trim()
-    if (!term) continue
-    const placedOne = placeOne(w)
-    if (!placedOne) continue
-    placed.push({ box: placedOne.box })
-    items.push({ word: w, pos: placedOne.pos, fontSize: placedOne.fontSize, createdAt: new Date().toISOString() })
-  }
-
-  return { items }
-}
-
-function openPrintForGeneratedA4({ title, items }) {
-  const pageMarginMm = 10
-  const innerW = 210 - pageMarginMm * 2
-  const innerH = 297 - pageMarginMm * 2
-  const wordsHtml = (Array.isArray(items) ? items : [])
-    .map((it) => {
-      const pos = it?.pos
-      const term = String(it?.word?.term || "").trim()
-      if (!pos || !term) return ""
-      const x = Math.max(0, Math.min(1, pos.x)) * innerW
-      const y = Math.max(0, Math.min(1, pos.y)) * innerH
-      const basePx = Number.parseFloat(String(it?.fontSize || "").replace("px", "")) || 16
-      const pt = Math.max(9, Math.min(18, basePx * 0.75))
-      return `<div class="w" style="left:${x}mm;top:${y}mm;font-size:${pt}pt;">${term}</div>`
-    })
-    .join("")
-
-  const html = `<!doctype html>
-<html lang="zh-CN">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>A4 Print</title>
-    <style>
-      @page { size: A4; margin: ${pageMarginMm}mm; }
-      html, body { padding: 0; margin: 0; }
-      body { font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif; }
-      .page { width: 210mm; height: 297mm; position: relative; }
-      .inner { position: absolute; left:${pageMarginMm}mm; top:${pageMarginMm}mm; width:${innerW}mm; height:${innerH}mm; border: 0.6mm solid #cfd6e6; box-sizing: border-box; }
-      .w { position: absolute; font-weight: 700; color: #0b1220; }
-      .footer { position: absolute; left: 3mm; bottom: 2mm; font-size: 9pt; color: #5b6477; }
-    </style>
-  </head>
-  <body>
-    <section class="page">
-      <div class="inner">
-        ${wordsHtml}
-        <div class="footer">${String(title || "").replaceAll("<", "&lt;").replaceAll(">", "&gt;")} · ${formatDateTime(
-    new Date()
-  )}</div>
-      </div>
-    </section>
-    <script>window.onload = () => setTimeout(() => window.print(), 80)</script>
-  </body>
-</html>`
-
-  const win = window.open("", "_blank", "noopener,noreferrer")
-  if (!win) {
-    window.alert("无法打开打印窗口：请检查浏览器是否拦截了弹窗。")
-    return
-  }
-  win.document.open()
-  win.document.write(html)
-  win.document.close()
-}
-
-function generateStatusA4(kind) {
+function generateStatusRound(kind) {
   const cap = normalizeRoundCap(appState.roundCap)
   const nowMs = Date.now()
   const map = getLatestTermMap()
 
   let list = []
-  let title = "生成 A4"
+  let title = "生成一轮"
   if (kind === "due") {
-    title = "待复习 A4"
+    title = "生成待复习一轮"
+    if (!appState.reviewSystemEnabled) {
+      window.alert("当前未启用轻量复习系统，无法生成待复习一轮。")
+      return
+    }
     list = getDueTerms(nowMs)
   } else {
     const status = normalizeStatus(kind)
     title =
-      status === STATUS_MASTERED ? "已掌握 A4" : status === STATUS_LEARNING ? "学习中 A4" : status === STATUS_UNKNOWN ? "不会 A4" : "生成 A4"
+      status === STATUS_MASTERED
+        ? "生成已掌握一轮"
+        : status === STATUS_LEARNING
+          ? "生成学习中一轮"
+          : status === STATUS_UNKNOWN
+            ? "生成不会一轮"
+            : "生成一轮"
     list = Array.from(map.values()).filter((e) => normalizeStatus(e.status) === status)
     list = shuffle(list)
   }
 
-  const picked = list.slice(0, cap)
   const total = list.length
-  const words = picked.map((e) => e.word)
+  if (!total) {
+    window.alert("没有可用单词可以生成。")
+    return
+  }
 
-  openStatusA4Modal({
-    title,
-    meta: total <= cap ? `共 ${total} 个，已按实际数量生成。` : `已生成 ${cap} 个（共 ${total} 个可用）。`,
-  })
+  const picked = list.slice(0, cap)
+  if (total < cap) {
+    window.alert(`${title}：共 ${total} 个，已按实际数量生成。`)
+  }
 
-  requestAnimationFrame(() => {
-    const rendered = renderStatusA4Words(words)
-    lastGeneratedA4 = { title, items: rendered.items }
-  })
+  startNextRound()
+  const round = getCurrentRound()
+  if (!round) return
+
+  for (const entry of picked) {
+    const word = entry?.word
+    if (!word || !word.term) continue
+    const placed = placeWordElement(word)
+    const fontSize = placed.el.style.fontSize || ""
+    const roundItem = {
+      word,
+      pos: placed.pos,
+      fontSize,
+      createdAt: new Date().toISOString(),
+      status: normalizeStatus(entry?.status),
+      lastReviewedAt: String(entry?.lastReviewedAt || ""),
+      nextReviewAt: String(entry?.nextReviewAt || ""),
+    }
+    round.items.push(roundItem)
+    appState.placed.push({ word, roundItem, el: placed.el, box: placed.box, fontSize, pos: placed.pos })
+  }
+
+  updateBadge()
+  updateHint()
+  renderStats()
+  persist()
+  refreshReviewList()
+  openReviewModal()
 }
 
 function ensurePool() {
@@ -1568,26 +1454,19 @@ dom.closeStatusBtn?.addEventListener("click", () => closeStatusModal())
 
 dom.genDueA4Btn?.addEventListener("click", () => {
   closeStatusModal()
-  generateStatusA4("due")
+  generateStatusRound("due")
 })
 dom.genUnknownA4Btn?.addEventListener("click", () => {
   closeStatusModal()
-  generateStatusA4(STATUS_UNKNOWN)
+  generateStatusRound(STATUS_UNKNOWN)
 })
 dom.genLearningA4Btn?.addEventListener("click", () => {
   closeStatusModal()
-  generateStatusA4(STATUS_LEARNING)
+  generateStatusRound(STATUS_LEARNING)
 })
 dom.genMasteredA4Btn?.addEventListener("click", () => {
   closeStatusModal()
-  generateStatusA4(STATUS_MASTERED)
-})
-
-dom.statusA4Backdrop?.addEventListener("click", () => closeStatusA4Modal())
-dom.closeStatusA4Btn?.addEventListener("click", () => closeStatusA4Modal())
-dom.printStatusA4Btn?.addEventListener("click", () => {
-  if (!lastGeneratedA4) return
-  openPrintForGeneratedA4(lastGeneratedA4)
+  generateStatusRound(STATUS_MASTERED)
 })
 
 dom.wordbookSelect.addEventListener("change", () => {
@@ -1693,6 +1572,7 @@ function markCurrentReviewStatus(status) {
     setTermUnknownFlag(term, nextStatus === STATUS_UNKNOWN)
     persist()
     renderStats()
+    if (dom.statusModal && !dom.statusModal.classList.contains("hidden")) renderStatusModal()
   }
 }
 
