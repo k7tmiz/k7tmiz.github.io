@@ -10,10 +10,10 @@
     <meta name="apple-mobile-web-app-title" content="A4 Memory" />
     <meta name="mobile-web-app-capable" content="yes" />
     <link rel="manifest" href="./manifest.webmanifest" />
-    <link rel="icon" href="./icon.svg" type="image/svg+xml" />
-    <link rel="mask-icon" href="./mask-icon.svg" color="#0b1220" />
-    <link rel="apple-touch-icon" href="./icon.svg" />
-    <link rel="stylesheet" href="./style.css" />
+    <link rel="icon" href="./assets/icon.svg" type="image/svg+xml" />
+    <link rel="mask-icon" href="./assets/mask-icon.svg" color="#0b1220" />
+    <link rel="apple-touch-icon" href="./assets/icon.svg" />
+    <link rel="stylesheet" href="./css/style.css" />
   </head>
   <body>
     <header class="app-header">
@@ -22,7 +22,10 @@
         <p class="subtitle">每新增一个单词，就完整复习一遍本轮 A4 上所有单词</p>
       </div>
       <div class="status">
-        <div class="badge" id="roundBadge">本轮 0/30</div>
+        <div class="badge" id="roundBadge">本轮 0/—</div>
+        <div class="status-progress" aria-hidden="true">
+          <div class="status-progress-bar" id="roundProgress"></div>
+        </div>
       </div>
     </header>
 
@@ -31,15 +34,17 @@
         <button class="primary" id="nextBtn" type="button">下一个单词</button>
         <button id="reviewBtn" type="button">复习本轮</button>
         <button id="newRoundBtn" type="button">新建一轮</button>
-        <a class="button-link" href="./records.html">学习记录</a>
-        <button class="ghost" id="introBtn" type="button">用法介绍</button>
-        <div class="select-wrap">
+        <button id="settingsBtn" type="button">设置</button>
+        <a class="button-link immersive-hide" href="./records.html">学习记录</a>
+        <button class="ghost immersive-hide" id="introBtn" type="button">用法介绍</button>
+        <div class="select-wrap immersive-hide">
           <select id="wordbookSelect" aria-label="选择词书"></select>
         </div>
-        <button id="importWordbookBtn" type="button">导入词书</button>
+        <button class="immersive-hide" id="importWordbookBtn" type="button">导入词书</button>
         <input id="importFile" type="file" accept=".csv,.txt,.json" hidden />
         <div class="spacer"></div>
         <button class="ghost" id="toggleMeaningBtn" type="button">显示释义：关</button>
+        <button class="ghost" id="toggleImmersiveBtn" type="button">沉浸模式：关</button>
       </section>
 
       <section class="paper-wrap" aria-label="A4纸区域">
@@ -54,7 +59,7 @@
       <div class="modal-backdrop" id="reviewBackdrop"></div>
       <div class="modal-panel" role="dialog" aria-modal="true" aria-labelledby="reviewTitle">
         <div class="modal-header">
-          <h2 id="reviewTitle">本轮复习</h2>
+          <h2 id="reviewTitle">复习本轮</h2>
           <div class="modal-actions">
             <button class="ghost" id="shuffleBtn" type="button">打乱顺序</button>
             <button class="ghost" id="closeReviewBtn" type="button">关闭</button>
@@ -62,7 +67,16 @@
         </div>
         <div class="modal-body">
           <div class="review-meta" id="reviewMeta"></div>
-          <div class="review-list" id="reviewList"></div>
+          <div class="review-card" id="reviewCard">
+            <div class="review-card-progress" id="reviewCardProgress"></div>
+            <div class="review-card-term" id="reviewCardTerm"></div>
+            <div class="review-card-meaning" id="reviewCardMeaning"></div>
+            <div class="review-card-hint" id="reviewCardHint">点击单词可发音</div>
+          </div>
+          <div class="review-card-actions">
+            <button class="review-btn review-btn-known" id="reviewKnownBtn" type="button">✓ 已掌握</button>
+            <button class="review-btn review-btn-unknown" id="reviewUnknownBtn" type="button">✗ 不会</button>
+          </div>
           <button class="primary full" id="doneReviewBtn" type="button">我已完整复习</button>
         </div>
       </div>
@@ -105,12 +119,12 @@
             <button class="full" id="importCet6Btn" type="button">线上导入：六级（完整）</button>
           </div>
           <div class="import-manage" aria-label="已导入词书">
-            <div class="import-help-title">已导入词书（可删除）</div>
+            <div class="import-help-title">已导入词书</div>
             <div class="import-help-text hidden" id="customWordbooksEmpty">暂无已导入词书</div>
             <div class="import-manage-list" id="customWordbooksList"></div>
           </div>
           <div class="import-help" aria-label="导入格式说明">
-            <div class="import-help-title">本地导入格式（简单版）</div>
+            <div class="import-help-title">本地导入格式</div>
             <div class="import-help-text">你只要保证每行有“单词”，释义/词性可选。</div>
             <div class="import-help-grid">
               <div class="import-help-card">
@@ -156,7 +170,7 @@ ability,n.,能力</pre>
             <div class="intro-block">
               <div class="intro-title">核心规则</div>
               <ul class="intro-list">
-                <li>一张 A4 纸算一轮，最多 30 个单词。</li>
+                <li>一张 A4 纸算一轮，最多 20–30 个单词（可在设置里调整）。</li>
                 <li>每新增 1 个单词，都要把本轮 A4 上已有的单词完整复习一遍。</li>
                 <li>单词会随机落在纸上的不同位置，留出间距，帮助“分散记忆”。</li>
               </ul>
@@ -164,21 +178,50 @@ ability,n.,能力</pre>
             <div class="intro-block">
               <div class="intro-title">怎么用这个网页</div>
               <ul class="intro-list">
-                <li>点「下一个单词」：写入一个新词，并立刻弹出本轮复习。</li>
+                <li>点「下一个单词」：写入一个新词，并立刻弹出复习本轮。</li>
                 <li>点「复习本轮」：随时复习当前 A4 上的全部单词。</li>
-                <li>本轮满 30 个后，再点「下一个单词」：选择继续下一轮或清空重开。</li>
+                <li>本轮写满后，再点「下一个单词」：选择继续下一轮或清空重开。</li>
                 <li>点「导入词书」：可本地导入或一键线上导入四级/六级。</li>
+                <li>点「沉浸模式」：隐藏非必要按钮，专注学习。</li>
+                <li>点「设置」：主题模式、发音设置、AI 生成词书。</li>
+                <li>点击单词：显示/隐藏该词释义；点击单词可发音。</li>
                 <li>在「学习记录」里：按轮查看/删除/复习，导出 CSV，打印 A4 单词纸。</li>
-                <li>在「学习记录」里：还支持导出/导入学习记录（JSON）。</li>
+                <li>在「学习记录」里：导出 A4 图片（PNG），用于分享。</li>
+                <li>在「复习本轮」里：可「标记不会」，下一轮优先出现。</li>
+                <li>在「设置」里：可导入/导出完整学习数据（学习记录 + 设置）。</li>
+              </ul>
+            </div>
+            <div class="intro-block">
+              <div class="intro-title">键盘快捷键（电脑端）</div>
+              <ul class="intro-list">
+                <li>Space：下一个单词</li>
+                <li>R：复习本轮</li>
+                <li>N：新建一轮</li>
+                <li>M：显示 / 隐藏释义</li>
+                <li>D：切换深色主题</li>
               </ul>
             </div>
             <div class="intro-foot">提示：开启「显示释义」会在单词下方显示小字释义。</div>
+            <div class="intro-block">
+              <div class="intro-title">联系开发者</div>
+              <div class="import-help-text">如果你在使用过程中遇到问题或有功能建议，欢迎联系开发者。</div>
+              <div class="stack">
+                <a class="button-link full" href="https://github.com/k7tmiz/A4-Memory" target="_blank" rel="noreferrer"
+                  >GitHub：https://github.com/k7tmiz/A4-Memory</a
+                >
+                <a class="button-link full" href="mailto:kcyx01@gmail.com">Email：kcyx01@gmail.com</a>
+              </div>
+            </div>
           </div>
         </div>
       </div>
     </div>
 
-    <script src="./words.js"></script>
-    <script src="./script.js"></script>
+    <script src="./data/words.js"></script>
+    <script src="./js/utils.js"></script>
+    <script src="./js/storage.js"></script>
+    <script src="./js/speech.js"></script>
+    <script src="./js/settings.js"></script>
+    <script src="./js/app.js"></script>
   </body>
 </html>

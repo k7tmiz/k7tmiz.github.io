@@ -1,21 +1,9 @@
-const STORAGE_KEY = "a4-memory:v1"
-
 function loadState() {
-  try {
-    const raw = localStorage.getItem(STORAGE_KEY)
-    if (!raw) return null
-    const parsed = JSON.parse(raw)
-    if (!parsed || typeof parsed !== "object") return null
-    return parsed
-  } catch (e) {
-    return null
-  }
+  return window.A4Storage?.loadState?.() || null
 }
 
 function saveState(state) {
-  try {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(state))
-  } catch (e) {}
+  window.A4Storage?.saveState?.(state)
 }
 
 function formatDateTime(value) {
@@ -41,6 +29,54 @@ function formatMeaning(word) {
   return `${pos} ${meaning}`
 }
 
+function normalizeRoundCap(value) {
+  const n = Math.round(Number(value) || 30)
+  return Math.max(20, Math.min(30, n || 30))
+}
+
+function toLocalDateKey(value) {
+  const d = value instanceof Date ? value : new Date(value)
+  if (Number.isNaN(d.getTime())) return ""
+  const pad = (n) => String(n).padStart(2, "0")
+  return `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}`
+}
+
+function computeStudyStats(rounds) {
+  const todayKey = toLocalDateKey(new Date())
+  const daySet = new Set()
+  let totalWords = 0
+  let todayWords = 0
+  let completedRounds = 0
+  let todayCompletedRounds = 0
+
+  for (const r of Array.isArray(rounds) ? rounds : []) {
+    const items = Array.isArray(r?.items) ? r.items : []
+    totalWords += items.length
+    const finishedKey = r?.finishedAt ? toLocalDateKey(r.finishedAt) : ""
+    if (r?.finishedAt) completedRounds += 1
+    if (finishedKey && finishedKey === todayKey) todayCompletedRounds += 1
+    for (const it of items) {
+      const key = toLocalDateKey(it?.createdAt || r?.startedAt)
+      if (!key) continue
+      daySet.add(key)
+      if (key === todayKey) todayWords += 1
+    }
+  }
+
+  let streak = 0
+  if (daySet.has(todayKey)) {
+    let cursor = new Date()
+    while (true) {
+      const key = toLocalDateKey(cursor)
+      if (!daySet.has(key)) break
+      streak += 1
+      cursor.setDate(cursor.getDate() - 1)
+    }
+  }
+
+  return { totalWords, todayWords, completedRounds, todayCompletedRounds, streak }
+}
+
 function downloadTextFile({ filename, mime, content }) {
   const blob = new Blob([content], { type: mime })
   const url = URL.createObjectURL(blob)
@@ -53,28 +89,79 @@ function downloadTextFile({ filename, mime, content }) {
   URL.revokeObjectURL(url)
 }
 
-function downloadJsonFile({ filename, data }) {
-  const json = JSON.stringify(data, null, 2)
-  downloadTextFile({ filename, mime: "application/json;charset=utf-8", content: json })
+function downloadBlob({ filename, blob }) {
+  const url = URL.createObjectURL(blob)
+  const a = document.createElement("a")
+  a.href = url
+  a.download = filename
+  document.body.appendChild(a)
+  a.click()
+  a.remove()
+  URL.revokeObjectURL(url)
 }
 
-function extractImportState(raw) {
-  if (!raw || typeof raw !== "object") return null
-  if (raw && typeof raw === "object" && raw.state && typeof raw.state === "object") return raw.state
-  return raw
+function truncateText(ctx, text, maxWidth) {
+  const s = String(text || "")
+  if (ctx.measureText(s).width <= maxWidth) return s
+  const ell = "…"
+  let lo = 0
+  let hi = s.length
+  while (lo < hi) {
+    const mid = Math.floor((lo + hi) / 2)
+    const t = s.slice(0, mid) + ell
+    if (ctx.measureText(t).width <= maxWidth) lo = mid + 1
+    else hi = mid
+  }
+  const n = Math.max(0, lo - 1)
+  return s.slice(0, n) + ell
 }
 
-function isValidImportState(state) {
-  if (!state || typeof state !== "object") return false
-  if (Array.isArray(state.rounds)) return true
-  if (Array.isArray(state.placed)) return true
-  return false
-}
+async function exportRoundAsPng({ round, roundNo }) {
+  const baseW = 1200
+  const baseH = Math.round((baseW * 297) / 210)
+  const ratio = Math.max(1, Math.min(2, window.devicePixelRatio || 1))
+  const canvas = document.createElement("canvas")
+  canvas.width = Math.round(baseW * ratio)
+  canvas.height = Math.round(baseH * ratio)
+  const ctx = canvas.getContext("2d")
+  if (!ctx) return null
+  ctx.scale(ratio, ratio)
 
-function normalizeImportedState(state) {
-  if (!state || typeof state !== "object") return null
-  if (Array.isArray(state.rounds) && state.version !== 2) return { ...state, version: 2 }
-  return normalizeState(state)
+  ctx.fillStyle = "#ffffff"
+  ctx.fillRect(0, 0, baseW, baseH)
+
+  const margin = 60
+  const innerW = baseW - margin * 2
+  const innerH = baseH - margin * 2
+
+  ctx.strokeStyle = "#cfd6e6"
+  ctx.lineWidth = 2
+  ctx.strokeRect(margin, margin, innerW, innerH)
+
+  const items = Array.isArray(round?.items) ? round.items : []
+  const scale = baseW / 520
+  ctx.textBaseline = "top"
+  ctx.fillStyle = "#0b1220"
+
+  for (const it of items) {
+    const term = String(it?.word?.term || "").trim()
+    const pos = it?.pos
+    if (!term || !pos) continue
+    const x = margin + Math.max(0, Math.min(1, pos.x)) * innerW
+    const y = margin + Math.max(0, Math.min(1, pos.y)) * innerH
+    const basePx = Number.parseFloat(String(it?.fontSize || "").replace("px", "")) || 16
+    const fontPx = Math.max(18, Math.min(52, basePx * scale))
+    ctx.font = `600 ${fontPx}px ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif`
+    const maxW = innerW * 0.7
+    ctx.fillText(truncateText(ctx, term, maxW), x, y)
+  }
+
+  ctx.font = `500 16px ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif`
+  ctx.fillStyle = "#5b6477"
+  ctx.fillText(`A4 Word Memory · 第${roundNo}轮 · ${formatDateTime(round?.startedAt)}`, margin, baseH - margin + 18)
+
+  const blob = await new Promise((resolve) => canvas.toBlob(resolve, "image/png"))
+  return blob || null
 }
 
 function buildCsv(rounds) {
@@ -137,7 +224,7 @@ function buildPaperPreview(items) {
   return paper
 }
 
-function renderRounds(rounds, { onDeleteRound, onReviewRound } = {}) {
+function renderRounds(rounds, { onDeleteRound, onReviewRound, getRoundCap } = {}) {
   const roundsEl = document.getElementById("rounds")
   const emptyEl = document.getElementById("emptyState")
 
@@ -157,12 +244,13 @@ function renderRounds(rounds, { onDeleteRound, onReviewRound } = {}) {
 
     const head = el("div", "round-head")
     const title = el("div", "round-title", `第${roundNo}轮`)
+    const cap = typeof getRoundCap === "function" ? getRoundCap(r) : 30
     const meta = el(
       "div",
       "round-meta",
       `开始：${formatDateTime(r.startedAt)}  ·  完成：${r.finishedAt ? formatDateTime(r.finishedAt) : "未完成"}  ·  单词：${
         Array.isArray(r.items) ? r.items.length : 0
-      }/${30}`
+      }/${cap}`
     )
     head.appendChild(title)
     head.appendChild(meta)
@@ -178,6 +266,25 @@ function renderRounds(rounds, { onDeleteRound, onReviewRound } = {}) {
       })
     })
     actions.appendChild(exportBtn)
+
+    const exportImgBtn = el("button", "", "导出图片")
+    exportImgBtn.addEventListener("click", async () => {
+      const blob = await exportRoundAsPng({ round: r, roundNo })
+      if (!blob) {
+        window.alert("导出失败：无法生成图片。")
+        return
+      }
+      const filename = `a4-memory-round-${roundNo}-${Date.now()}.png`
+      const file = new File([blob], filename, { type: "image/png" })
+      if (navigator.share && navigator.canShare && navigator.canShare({ files: [file] })) {
+        try {
+          await navigator.share({ files: [file], title: `A4 Word Memory 第${roundNo}轮` })
+          return
+        } catch (e) {}
+      }
+      downloadBlob({ filename, blob })
+    })
+    actions.appendChild(exportImgBtn)
 
     const reviewBtn = el("button", "", "复习本轮")
     reviewBtn.addEventListener("click", () => {
@@ -225,22 +332,62 @@ function renderRounds(rounds, { onDeleteRound, onReviewRound } = {}) {
 }
 
 function normalizeState(raw) {
-  if (!raw) return { version: 2, showMeaning: false, rounds: [], currentRoundId: "" }
-  if (raw.version === 2 && Array.isArray(raw.rounds)) return raw
+  const themeMode = typeof raw?.themeMode === "string" ? raw.themeMode : ""
+  const normalizedThemeMode = themeMode === "light" || themeMode === "dark" || themeMode === "auto" ? themeMode : ""
+  const roundCap = Math.max(20, Math.min(30, Math.round(Number(raw?.roundCap) || 30)))
+  const dailyGoalRounds = Math.max(0, Math.min(20, Math.round(Number(raw?.dailyGoalRounds) || 0)))
+  const dailyGoalWords = Math.max(0, Math.min(500, Math.round(Number(raw?.dailyGoalWords) || 0)))
+  if (!raw)
+    return {
+      version: 2,
+      showMeaning: false,
+      meaningVisible: false,
+      darkMode: false,
+      themeMode: "auto",
+      roundCap: 30,
+      dailyGoalRounds: 0,
+      dailyGoalWords: 0,
+      rounds: [],
+      currentRoundId: "",
+    }
+  if (raw.version === 2 && Array.isArray(raw.rounds))
+    return {
+      ...raw,
+      darkMode: !!raw.darkMode,
+      themeMode:
+        normalizedThemeMode || (typeof raw.darkMode === "boolean" ? (raw.darkMode ? "dark" : "light") : "auto"),
+      roundCap,
+      dailyGoalRounds,
+      dailyGoalWords,
+    }
 
   const placed = Array.isArray(raw.placed) ? raw.placed : []
   const round = {
     id: `${Date.now()}`,
     startedAt: new Date().toISOString(),
-    finishedAt: placed.length >= 30 ? new Date().toISOString() : "",
+    finishedAt: placed.length >= roundCap ? new Date().toISOString() : "",
     items: placed.map((p) => ({
       word: p.word,
       pos: { x: 0.1, y: 0.1 },
       fontSize: p.fontSize || "",
       createdAt: new Date().toISOString(),
     })),
+    roundCap,
   }
-  return { version: 2, showMeaning: !!raw.showMeaning, rounds: [round], currentRoundId: round.id }
+  const showMeaning = !!raw.showMeaning
+  const fallbackThemeMode = typeof raw.darkMode === "boolean" ? (raw.darkMode ? "dark" : "light") : "auto"
+  return {
+    version: 2,
+    showMeaning,
+    meaningVisible: showMeaning,
+    darkMode: !!raw.darkMode,
+    themeMode: normalizedThemeMode || fallbackThemeMode,
+    roundCap,
+    dailyGoalRounds,
+    dailyGoalWords,
+    rounds: [round],
+    currentRoundId: round.id,
+  }
 }
 
 function openPrintA4(rounds) {
@@ -307,14 +454,59 @@ function openPrintA4(rounds) {
 
 function main() {
   const exportBtn = document.getElementById("exportCsvBtn")
-  const exportJsonBtn = document.getElementById("exportJsonBtn")
-  const importJsonBtn = document.getElementById("importJsonBtn")
-  const importJsonFile = document.getElementById("importJsonFile")
   const printBtn = document.getElementById("printPdfBtn")
+  const openSettingsBtn = document.getElementById("openSettingsBtn")
   const clearBtn = document.getElementById("clearBtn")
 
   const state = normalizeState(loadState())
   let rounds = Array.isArray(state.rounds) ? state.rounds : []
+  const recordsStats = document.getElementById("recordsStats")
+
+  const getResolvedDark = () => {
+    if (state.themeMode === "dark") return true
+    if (state.themeMode === "light") return false
+    const mq = window.matchMedia ? window.matchMedia("(prefers-color-scheme: dark)") : null
+    return !!mq?.matches
+  }
+
+  const applyTheme = () => {
+    if (getResolvedDark()) document.body.classList.add("theme-dark")
+    else document.body.classList.remove("theme-dark")
+  }
+
+  applyTheme()
+
+  const themeMedia = window.matchMedia ? window.matchMedia("(prefers-color-scheme: dark)") : null
+  if (themeMedia && typeof themeMedia.addEventListener === "function") {
+    themeMedia.addEventListener("change", () => {
+      if (state.themeMode === "auto") applyTheme()
+    })
+  } else if (themeMedia && typeof themeMedia.addListener === "function") {
+    themeMedia.addListener(() => {
+      if (state.themeMode === "auto") applyTheme()
+    })
+  }
+
+  let settingsController = null
+  if (window.A4Settings && typeof window.A4Settings.createSettingsModalController === "function") {
+    settingsController = window.A4Settings.createSettingsModalController({
+      getState: () => state,
+      setState: (patch) => Object.assign(state, patch),
+      persist: () => saveState({ ...state, rounds }),
+      applyTheme,
+      onAfterChange: ({ key } = {}) => {
+        if (key === "dailyGoalRounds" || key === "dailyGoalWords") renderStats()
+        if (key === "roundCap") render()
+      },
+      getWordbookLanguage: () => {
+        const selected = String(state.selectedWordbookId || "")
+        const books = Array.isArray(state.customWordbooks) ? state.customWordbooks : []
+        const book = books.find((b) => String(b?.id || "") === selected)
+        const lang = String(book?.language || "").trim()
+        return lang || "en"
+      },
+    })
+  }
 
   const render = () => {
     renderRounds(rounds, {
@@ -329,6 +521,7 @@ function main() {
         const next = { ...state, rounds, currentRoundId: state.currentRoundId === roundId ? "" : state.currentRoundId }
         saveState(next)
         render()
+        renderStats()
       },
       onReviewRound: (roundId) => {
         const has = rounds.some((r) => r.id === roundId)
@@ -337,10 +530,27 @@ function main() {
         saveState(next)
         window.location.href = "./index.html"
       },
+      getRoundCap: (r) => normalizeRoundCap(r?.roundCap || state.roundCap),
     })
   }
 
+  const renderStats = () => {
+    if (!recordsStats) return
+    const s = computeStudyStats(rounds)
+    const goalRounds = Math.max(0, Math.min(20, Number(state.dailyGoalRounds) || 0))
+    const goalWords = Math.max(0, Math.min(500, Number(state.dailyGoalWords) || 0))
+    const goalDone =
+      (goalRounds > 0 && s.todayCompletedRounds >= goalRounds) || (goalWords > 0 && s.todayWords >= goalWords)
+    const goalRows = []
+    if (goalRounds > 0) goalRows.push(`每日目标（轮次）：${s.todayCompletedRounds}/${goalRounds}`)
+    if (goalWords > 0) goalRows.push(`每日目标（单词）：${s.todayWords}/${goalWords}`)
+    const goalLine = goalRows.length ? goalRows.join(" · ") : "每日目标：未设置"
+    const goalState = goalDone ? "已达成" : goalRows.length ? "未达成" : ""
+    recordsStats.textContent = `总学习单词：${s.totalWords} · 完成轮次：${s.completedRounds} · 连续学习：${s.streak}天\n今日学习：${s.todayWords}词 · 今日完成：${s.todayCompletedRounds}轮\n${goalLine}${goalState ? ` · ${goalState}` : ""}`
+  }
+
   render()
+  renderStats()
 
   exportBtn.addEventListener("click", () => {
     const csv = buildCsv(rounds)
@@ -351,61 +561,26 @@ function main() {
     })
   })
 
-  exportJsonBtn.addEventListener("click", () => {
-    const raw = loadState()
-    const safe = raw && typeof raw === "object" ? raw : state
-    const payload = { exportedAt: new Date().toISOString(), state: safe }
-    downloadJsonFile({ filename: `a4-memory-records-${Date.now()}.json`, data: payload })
-  })
-
-  importJsonBtn.addEventListener("click", () => {
-    importJsonFile.click()
-  })
-
-  importJsonFile.addEventListener("change", async () => {
-    const file = importJsonFile.files && importJsonFile.files[0]
-    importJsonFile.value = ""
-    if (!file) return
-
-    let parsed = null
-    try {
-      parsed = JSON.parse(await file.text())
-    } catch (e) {
-      window.alert("导入失败：文件不是有效的 JSON。")
-      return
-    }
-
-    const extracted = extractImportState(parsed)
-    if (!isValidImportState(extracted)) {
-      window.alert("导入失败：JSON 结构不符合学习记录格式（缺少 rounds）。")
-      return
-    }
-
-    const normalized = normalizeImportedState(extracted)
-    if (!normalized) {
-      window.alert("导入失败：学习记录内容无效。")
-      return
-    }
-
-    try {
-      saveState(normalized)
-    } catch (e) {
-      window.alert("导入失败：无法写入本地存储（可能是空间不足或浏览器限制）。")
-      return
-    }
-
-    window.location.reload()
-  })
-
   printBtn.addEventListener("click", () => {
     openPrintA4(rounds)
   })
 
+  openSettingsBtn.addEventListener("click", () => {
+    if (settingsController) settingsController.open()
+  })
+
   clearBtn.addEventListener("click", () => {
-    const next = { version: 2, showMeaning: state.showMeaning, meaningVisible: state.showMeaning, rounds: [], currentRoundId: "" }
+    const next = {
+      ...state,
+      rounds: [],
+      currentRoundId: "",
+      pendingReviewRoundId: "",
+      darkMode: getResolvedDark(),
+    }
     saveState(next)
     rounds = []
     render()
+    renderStats()
   })
 }
 

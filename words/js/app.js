@@ -1,6 +1,8 @@
-const ROUND_CAP = 30
-const STORAGE_KEY = "a4-memory:v1"
+const DEFAULT_ROUND_CAP = 30
 const INTRO_SEEN_KEY = "a4-memory:intro-seen:v1"
+
+const { normalizeThemeMode, normalizeAccent, normalizeVoiceMode, normalizePronunciationLang } = window.A4Settings
+const { sanitizeFilename, downloadJsonFile } = window.A4Utils
 
 function makeId() {
   return `${Date.now()}-${Math.random().toString(16).slice(2)}`
@@ -67,13 +69,15 @@ function normalizeWordObject(w) {
   if (typeof w === "string") {
     const term = w.trim()
     if (!term) return null
-    return { term, pos: "", meaning: "" }
+    return { term, pos: "", meaning: "", example: "", tags: [] }
   }
   const term = String(w.term || "").trim()
   const pos = String(w.pos || "").trim()
   const meaning = String(w.meaning || "").trim()
   if (!term) return null
-  return { term, pos, meaning }
+  const example = String(w.example || "").trim()
+  const tags = Array.isArray(w.tags) ? w.tags.map((t) => String(t || "").trim()).filter(Boolean) : []
+  return { term, pos, meaning, example, tags }
 }
 
 function normalizeWordbookObject(b) {
@@ -82,7 +86,9 @@ function normalizeWordbookObject(b) {
   const wordsRaw = Array.isArray(b?.words) ? b.words : []
   if (!id || !name) return null
   const words = wordsRaw.map(normalizeWordObject).filter(Boolean)
-  return { id, name, words }
+  const description = String(b?.description || "").trim()
+  const language = String(b?.language || "").trim()
+  return { id, name, description, language, words }
 }
 
 function shuffle(input) {
@@ -156,26 +162,36 @@ function closeIntroModal() {
   setModalVisible(dom.introModal, false)
 }
 
+let settingsController = null
+
+function openSettingsModal() {
+  if (settingsController) {
+    settingsController.open()
+    return
+  }
+  setModalVisible(dom.settingsModal, true)
+}
+
+function closeSettingsModal() {
+  if (settingsController) {
+    settingsController.close()
+    return
+  }
+  setModalVisible(dom.settingsModal, false)
+}
+
 function saveState(state) {
-  try {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(state))
-  } catch (e) {}
+  window.A4Storage?.saveState?.(state)
 }
 
 function loadState() {
-  try {
-    const raw = localStorage.getItem(STORAGE_KEY)
-    if (!raw) return null
-    const parsed = JSON.parse(raw)
-    if (!parsed || typeof parsed !== "object") return null
-    return parsed
-  } catch (e) {
-    return null
-  }
+  return window.A4Storage?.loadState?.() || null
 }
 
 const dom = {
   roundBadge: document.getElementById("roundBadge"),
+  roundProgress: document.getElementById("roundProgress"),
+  settingsBtn: document.getElementById("settingsBtn"),
   nextBtn: document.getElementById("nextBtn"),
   reviewBtn: document.getElementById("reviewBtn"),
   newRoundBtn: document.getElementById("newRoundBtn"),
@@ -195,13 +211,20 @@ const dom = {
   introBackdrop: document.getElementById("introBackdrop"),
   closeIntroBtn: document.getElementById("closeIntroBtn"),
   toggleMeaningBtn: document.getElementById("toggleMeaningBtn"),
+  toggleImmersiveBtn: document.getElementById("toggleImmersiveBtn"),
   paper: document.getElementById("paper"),
   paperInner: document.getElementById("paperInner"),
   paperHint: document.getElementById("paperHint"),
   reviewModal: document.getElementById("reviewModal"),
   reviewBackdrop: document.getElementById("reviewBackdrop"),
-  reviewList: document.getElementById("reviewList"),
   reviewMeta: document.getElementById("reviewMeta"),
+  reviewCard: document.getElementById("reviewCard"),
+  reviewCardProgress: document.getElementById("reviewCardProgress"),
+  reviewCardTerm: document.getElementById("reviewCardTerm"),
+  reviewCardMeaning: document.getElementById("reviewCardMeaning"),
+  reviewCardHint: document.getElementById("reviewCardHint"),
+  reviewKnownBtn: document.getElementById("reviewKnownBtn"),
+  reviewUnknownBtn: document.getElementById("reviewUnknownBtn"),
   closeReviewBtn: document.getElementById("closeReviewBtn"),
   doneReviewBtn: document.getElementById("doneReviewBtn"),
   shuffleBtn: document.getElementById("shuffleBtn"),
@@ -211,6 +234,38 @@ const dom = {
   roundFullMeta: document.getElementById("roundFullMeta"),
   continueRoundBtn: document.getElementById("continueRoundBtn"),
   restartAllBtn: document.getElementById("restartAllBtn"),
+  settingsModal: document.getElementById("settingsModal"),
+  settingsBackdrop: document.getElementById("settingsBackdrop"),
+  closeSettingsBtn: document.getElementById("closeSettingsBtn"),
+  themeModeSelect: document.getElementById("themeModeSelect"),
+  dailyGoalRoundsInput: document.getElementById("dailyGoalRoundsInput"),
+  dailyGoalWordsInput: document.getElementById("dailyGoalWordsInput"),
+  roundCapInput: document.getElementById("roundCapInput"),
+  pronounceToggleBtn: document.getElementById("pronounceToggleBtn"),
+  accentSelect: document.getElementById("accentSelect"),
+  pronunciationLangSelect: document.getElementById("pronunciationLangSelect"),
+  voiceModeSelect: document.getElementById("voiceModeSelect"),
+  voiceManualRow: document.getElementById("voiceManualRow"),
+  voiceSelect: document.getElementById("voiceSelect"),
+  voiceHint: document.getElementById("voiceHint"),
+  testVoiceBtn: document.getElementById("testVoiceBtn"),
+  exportBackupBtn: document.getElementById("exportBackupBtn"),
+  importBackupBtn: document.getElementById("importBackupBtn"),
+  importBackupFile: document.getElementById("importBackupFile"),
+  aiBaseUrlInput: document.getElementById("aiBaseUrlInput"),
+  aiApiKeyInput: document.getElementById("aiApiKeyInput"),
+  aiModelInput: document.getElementById("aiModelInput"),
+  aiTypeSelect: document.getElementById("aiTypeSelect"),
+  aiCustomTopicInput: document.getElementById("aiCustomTopicInput"),
+  aiCountInput: document.getElementById("aiCountInput"),
+  aiGenerateBtn: document.getElementById("aiGenerateBtn"),
+  aiStatus: document.getElementById("aiStatus"),
+  aiPreviewModal: document.getElementById("aiPreviewModal"),
+  aiPreviewBackdrop: document.getElementById("aiPreviewBackdrop"),
+  closeAiPreviewBtn: document.getElementById("closeAiPreviewBtn"),
+  aiPreviewMeta: document.getElementById("aiPreviewMeta"),
+  aiPreviewList: document.getElementById("aiPreviewList"),
+  aiConfirmBtn: document.getElementById("aiConfirmBtn"),
 }
 
 const appState = {
@@ -226,6 +281,60 @@ const appState = {
   rounds: [],
   currentRoundId: "",
   pendingReviewRoundId: "",
+  immersiveMode: false,
+  themeMode: "auto",
+  systemPrefersDark: false,
+  unknownTerms: [],
+  reviewQueue: [],
+  reviewIndex: 0,
+  roundCap: DEFAULT_ROUND_CAP,
+  dailyGoalRounds: 3,
+  dailyGoalWords: 0,
+  pronunciationEnabled: true,
+  pronunciationAccent: "auto",
+  pronunciationLang: "auto",
+  voiceMode: "auto",
+  voiceURI: "",
+  aiConfig: { baseUrl: "", apiKey: "", model: "" },
+}
+
+function updateImmersiveToggle() {
+  dom.toggleImmersiveBtn.textContent = `沉浸模式：${appState.immersiveMode ? "开" : "关"}`
+  if (appState.immersiveMode) document.body.classList.add("immersive")
+  else document.body.classList.remove("immersive")
+}
+
+function getResolvedDarkMode() {
+  const mode = appState.themeMode
+  if (mode === "dark") return true
+  if (mode === "light") return false
+  return !!appState.systemPrefersDark
+}
+
+function formatThemeModeLabel(mode) {
+  if (mode === "light") return "浅色"
+  if (mode === "dark") return "深色"
+  return "自动"
+}
+
+function applyTheme() {
+  const dark = getResolvedDarkMode()
+  if (dark) document.body.classList.add("theme-dark")
+  else document.body.classList.remove("theme-dark")
+}
+
+const themeMedia = window.matchMedia ? window.matchMedia("(prefers-color-scheme: dark)") : null
+if (themeMedia && typeof themeMedia.matches === "boolean") appState.systemPrefersDark = themeMedia.matches
+if (themeMedia && typeof themeMedia.addEventListener === "function") {
+  themeMedia.addEventListener("change", (e) => {
+    appState.systemPrefersDark = !!e.matches
+    if (appState.themeMode === "auto") applyTheme()
+  })
+} else if (themeMedia && typeof themeMedia.addListener === "function") {
+  themeMedia.addListener((e) => {
+    appState.systemPrefersDark = !!e.matches
+    if (appState.themeMode === "auto") applyTheme()
+  })
 }
 
 function getAllWordbooks() {
@@ -257,6 +366,21 @@ function renderCustomWordbooksManage() {
     meta.className = "import-manage-meta"
     meta.textContent = `${b.name}（${Array.isArray(b.words) ? b.words.length : 0}）`
 
+    const actions = document.createElement("div")
+    actions.className = "import-manage-actions"
+
+    const exp = document.createElement("button")
+    exp.className = "ghost"
+    exp.type = "button"
+    exp.textContent = "导出"
+    exp.addEventListener("click", () => {
+      const name = sanitizeFilename(b.name || "wordbook")
+      downloadJsonFile({
+        filename: `a4-memory-wordbook-${name}-${Date.now()}.json`,
+        data: { name: b.name || "词书", words: Array.isArray(b.words) ? b.words : [] },
+      })
+    })
+
     const del = document.createElement("button")
     del.className = "ghost"
     del.type = "button"
@@ -268,7 +392,9 @@ function renderCustomWordbooksManage() {
     })
 
     row.appendChild(meta)
-    row.appendChild(del)
+    actions.appendChild(exp)
+    actions.appendChild(del)
+    row.appendChild(actions)
     listEl.appendChild(row)
   }
 }
@@ -489,6 +615,7 @@ function ensureCurrentRound() {
     startedAt: new Date().toISOString(),
     finishedAt: "",
     items: [],
+    roundCap: normalizeRoundCap(appState.roundCap),
   }
   appState.rounds = [round]
   appState.currentRoundId = round.id
@@ -500,7 +627,21 @@ function finalizeCurrentRound() {
   if (!round.finishedAt) round.finishedAt = new Date().toISOString()
 }
 
+function normalizeRoundCap(value) {
+  const n = Number(value)
+  if (!Number.isFinite(n)) return DEFAULT_ROUND_CAP
+  return clamp(Math.round(n), 20, 30)
+}
+
+function getCurrentRoundCap() {
+  const round = getCurrentRound()
+  const cap = Number(round?.roundCap)
+  if (Number.isFinite(cap)) return normalizeRoundCap(cap)
+  return normalizeRoundCap(appState.roundCap)
+}
+
 function persist() {
+  const darkMode = getResolvedDarkMode()
   saveState({
     version: 2,
     showMeaning: appState.showMeaning,
@@ -511,6 +652,19 @@ function persist() {
     currentRoundId: appState.currentRoundId,
     pendingReviewRoundId: appState.pendingReviewRoundId,
     currentCount: appState.placed.length,
+    immersiveMode: appState.immersiveMode,
+    darkMode,
+    themeMode: appState.themeMode,
+    unknownTerms: appState.unknownTerms,
+    roundCap: appState.roundCap,
+    dailyGoalRounds: appState.dailyGoalRounds,
+    dailyGoalWords: appState.dailyGoalWords,
+    pronunciationEnabled: appState.pronunciationEnabled,
+    pronunciationAccent: appState.pronunciationAccent,
+    pronunciationLang: appState.pronunciationLang,
+    voiceMode: appState.voiceMode,
+    voiceURI: appState.voiceURI,
+    aiConfig: appState.aiConfig,
   })
 }
 
@@ -557,6 +711,7 @@ function startNextRound({ clearAll = false } = {}) {
     startedAt: new Date().toISOString(),
     finishedAt: "",
     items: [],
+    roundCap: normalizeRoundCap(appState.roundCap),
   }
   appState.rounds.push(round)
   appState.currentRoundId = round.id
@@ -568,18 +723,70 @@ function startNextRound({ clearAll = false } = {}) {
   clearPaper()
   updateBadge()
   updateHint()
+  renderStats()
   persist()
 }
 
 function updateBadge() {
   ensureCurrentRound()
   const roundNo = getCurrentRoundIndex() + 1
-  dom.roundBadge.textContent = `第${roundNo}轮 ${appState.placed.length}/${ROUND_CAP}`
+  const cap = getCurrentRoundCap()
+  dom.roundBadge.textContent = `第${roundNo}轮 ${appState.placed.length}/${cap}`
+  if (dom.roundProgress) dom.roundProgress.style.width = `${(appState.placed.length / cap) * 100}%`
+  renderStats()
 }
 
 function updateHint() {
   dom.paperHint.style.display = appState.placed.length === 0 ? "block" : "none"
 }
+
+function toLocalDateKey(value) {
+  const d = value instanceof Date ? value : new Date(value)
+  if (Number.isNaN(d.getTime())) return ""
+  const pad = (n) => String(n).padStart(2, "0")
+  return `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}`
+}
+
+function computeStudyStats() {
+  const rounds = Array.isArray(appState.rounds) ? appState.rounds : []
+  const todayKey = toLocalDateKey(new Date())
+  const daySet = new Set()
+  let totalWords = 0
+  let todayWords = 0
+  let completedRounds = 0
+  let todayCompletedRounds = 0
+
+  for (const r of rounds) {
+    const items = Array.isArray(r?.items) ? r.items : []
+    totalWords += items.length
+
+    const finishedKey = r?.finishedAt ? toLocalDateKey(r.finishedAt) : ""
+    if (r?.finishedAt) completedRounds += 1
+    if (finishedKey && finishedKey === todayKey) todayCompletedRounds += 1
+
+    for (const it of items) {
+      const key = toLocalDateKey(it?.createdAt || r?.startedAt)
+      if (!key) continue
+      daySet.add(key)
+      if (key === todayKey) todayWords += 1
+    }
+  }
+
+  let streak = 0
+  if (daySet.has(todayKey)) {
+    let cursor = new Date()
+    while (true) {
+      const key = toLocalDateKey(cursor)
+      if (!daySet.has(key)) break
+      streak += 1
+      cursor.setDate(cursor.getDate() - 1)
+    }
+  }
+
+  return { totalWords, todayWords, completedRounds, todayCompletedRounds, streak }
+}
+
+function renderStats() {}
 
 function updateMeaningToggle() {
   dom.toggleMeaningBtn.textContent = `显示释义：${appState.showMeaning ? "开" : "关"}`
@@ -590,30 +797,96 @@ function updateMeaningToggle() {
   }
 }
 
+function getWordbookLanguageForSpeech() {
+  const book = getSelectedWordbook()
+  const lang = String(book?.language || "").trim()
+  if (lang) return lang
+  if (book?.id === "sp4") return "es"
+  if (book?.id === "cet4" || book?.id === "cet6") return "en"
+  return "en"
+}
+
+function speakTerm(term) {
+  if (!appState.pronunciationEnabled) return
+  const text = String(term || "").trim()
+  if (!text) return
+
+  const speech = window.A4Settings?.speech
+  if (!speech) return
+
+  const wordbookLanguage = getWordbookLanguageForSpeech()
+  const resolved = speech.resolveVoice({
+    pronunciationEnabled: !!appState.pronunciationEnabled,
+    pronunciationLang: appState.pronunciationLang,
+    wordbookLanguage,
+    accent: appState.pronunciationAccent,
+    voiceMode: appState.voiceMode,
+    voiceURI: appState.voiceURI,
+  })
+  if (resolved.ok && resolved.reason === "manual_missing") {
+    appState.voiceMode = "auto"
+    appState.voiceURI = ""
+    persist()
+    if (settingsController) settingsController.render()
+  }
+
+  speech.speak({
+    text,
+    pronunciationEnabled: !!appState.pronunciationEnabled,
+    pronunciationLang: appState.pronunciationLang,
+    wordbookLanguage,
+    accent: appState.pronunciationAccent,
+    voiceMode: appState.voiceMode,
+    voiceURI: appState.voiceURI,
+  })
+
+  if (settingsController) settingsController.updateVoiceUi()
+}
+
 function refreshReviewList() {
   const words = appState.reviewShuffled
     ? shuffle(appState.placed.map((p) => p.word))
     : appState.placed.map((p) => p.word)
+  appState.reviewQueue = words
+  appState.reviewIndex = 0
+  renderReviewCard()
+}
 
-  dom.reviewMeta.textContent = `本轮已写 ${appState.placed.length}/${ROUND_CAP} 个单词（每新增一个都要完整复习一遍）`
-  dom.reviewList.innerHTML = ""
+function setUnknown(term, unknown) {
+  const t = String(term || "").trim()
+  if (!t) return
+  const set = new Set(appState.unknownTerms)
+  if (unknown) set.add(t)
+  else set.delete(t)
+  appState.unknownTerms = Array.from(set)
+  persist()
+}
 
-  for (const w of words) {
-    const item = document.createElement("div")
-    item.className = "review-item"
+function renderReviewCard() {
+  const total = appState.reviewQueue.length
+  const idx = clamp(appState.reviewIndex, 0, Math.max(0, total - 1))
+  appState.reviewIndex = idx
 
-    const t = document.createElement("div")
-    t.className = "t"
-    t.textContent = w.term
+  const cap = getCurrentRoundCap()
+  dom.reviewMeta.textContent = `本轮已写 ${appState.placed.length}/${cap} 个单词（每新增一个都要完整复习一遍）`
 
-    const m = document.createElement("div")
-    m.className = "m"
-    m.textContent = w.meaning ? `${w.pos ? `${w.pos} ` : ""}${w.meaning}` : ""
-
-    item.appendChild(t)
-    if (w.meaning) item.appendChild(m)
-    dom.reviewList.appendChild(item)
+  if (!total) {
+    dom.reviewCardProgress.textContent = ""
+    dom.reviewCardTerm.textContent = ""
+    dom.reviewCardMeaning.textContent = ""
+    dom.reviewCardHint.textContent = ""
+    dom.reviewKnownBtn.disabled = true
+    dom.reviewUnknownBtn.disabled = true
+    return
   }
+
+  const w = appState.reviewQueue[idx]
+  dom.reviewCardProgress.textContent = `${idx + 1} / ${total}`
+  dom.reviewCardTerm.textContent = w?.term || ""
+  dom.reviewCardMeaning.textContent = w?.meaning ? `${w.pos ? `${w.pos} ` : ""}${w.meaning}` : ""
+  dom.reviewCardHint.textContent = "点击单词可发音；左右滑动可标记"
+  dom.reviewKnownBtn.disabled = false
+  dom.reviewUnknownBtn.disabled = false
 }
 
 function openReviewModal() {
@@ -628,7 +901,8 @@ function closeReviewModal() {
 function openRoundFullModal() {
   ensureCurrentRound()
   const roundNo = getCurrentRoundIndex() + 1
-  dom.roundFullMeta.textContent = `第${roundNo}轮已写满 ${ROUND_CAP} 个单词（开始于 ${formatDateTime(
+  const cap = getCurrentRoundCap()
+  dom.roundFullMeta.textContent = `第${roundNo}轮已写满 ${cap} 个单词（开始于 ${formatDateTime(
     getCurrentRound()?.startedAt
   )}）。`
   setModalVisible(dom.roundFullModal, true)
@@ -640,7 +914,10 @@ function closeRoundFullModal() {
 
 function ensurePool() {
   if (appState.pool.length > 0 && appState.poolIndex < appState.pool.length) return
-  appState.pool = shuffle(appState.sourceWords)
+  const unknownSet = new Set(appState.unknownTerms)
+  const unknown = appState.sourceWords.filter((w) => unknownSet.has(w?.term))
+  const rest = appState.sourceWords.filter((w) => !unknownSet.has(w?.term))
+  appState.pool = [...shuffle(unknown), ...shuffle(rest)]
   appState.poolIndex = 0
 }
 
@@ -731,6 +1008,8 @@ function restore() {
     appState.selectedWordbookId = getAllWordbooks()[0]?.id || "empty"
     renderWordbookSelect()
     ensureCurrentRound()
+    updateImmersiveToggle()
+    applyTheme()
     persist()
     try {
       const seen = localStorage.getItem(INTRO_SEEN_KEY)
@@ -742,12 +1021,54 @@ function restore() {
   else appState.showMeaning = !!saved.showMeaning
   updateMeaningToggle()
 
+  appState.immersiveMode = !!saved.immersiveMode
+  updateImmersiveToggle()
+  if (typeof saved.themeMode === "string") appState.themeMode = normalizeThemeMode(saved.themeMode)
+  else if (typeof saved.darkMode === "boolean") appState.themeMode = saved.darkMode ? "dark" : "light"
+  else appState.themeMode = "auto"
+
+  appState.unknownTerms = Array.isArray(saved.unknownTerms)
+    ? saved.unknownTerms.map((s) => String(s || "").trim()).filter(Boolean)
+    : []
+
+  const rawRoundCap = Number(saved.roundCap)
+  appState.roundCap = Number.isFinite(rawRoundCap) ? clamp(Math.round(rawRoundCap), 20, 30) : DEFAULT_ROUND_CAP
+  const rawGoalRounds = Number(saved.dailyGoalRounds)
+  appState.dailyGoalRounds = Number.isFinite(rawGoalRounds)
+    ? clamp(Math.round(rawGoalRounds), 0, 20)
+    : appState.dailyGoalRounds
+  const rawGoalWords = Number(saved.dailyGoalWords)
+  appState.dailyGoalWords = Number.isFinite(rawGoalWords) ? clamp(Math.round(rawGoalWords), 0, 500) : 0
+
+  appState.pronunciationEnabled =
+    typeof saved.pronunciationEnabled === "boolean" ? saved.pronunciationEnabled : true
+  appState.pronunciationAccent = normalizeAccent(saved.pronunciationAccent)
+  appState.pronunciationLang = normalizePronunciationLang(saved.pronunciationLang)
+  appState.voiceMode = normalizeVoiceMode(saved.voiceMode)
+  appState.voiceURI = typeof saved.voiceURI === "string" ? saved.voiceURI : ""
+  appState.aiConfig =
+    saved.aiConfig && typeof saved.aiConfig === "object"
+      ? {
+          baseUrl: String(saved.aiConfig.baseUrl || "").trim(),
+          apiKey: String(saved.aiConfig.apiKey || "").trim(),
+          model: String(saved.aiConfig.model || "").trim(),
+        }
+      : { baseUrl: "", apiKey: "", model: "" }
+
+  applyTheme()
+
   appState.customWordbooks = Array.isArray(saved.customWordbooks)
     ? saved.customWordbooks.map(normalizeWordbookObject).filter(Boolean)
     : []
   appState.selectedWordbookId = typeof saved.selectedWordbookId === "string" ? saved.selectedWordbookId : ""
   appState.pendingReviewRoundId =
     typeof saved.pendingReviewRoundId === "string" ? saved.pendingReviewRoundId : ""
+  const pendingOpenSettings = !!saved.pendingOpenSettings
+  if (pendingOpenSettings) {
+    try {
+      saveState({ ...saved, pendingOpenSettings: false })
+    } catch (e) {}
+  }
   renderWordbookSelect()
 
   if (saved.version === 2 && Array.isArray(saved.rounds) && typeof saved.currentRoundId === "string") {
@@ -762,6 +1083,7 @@ function restore() {
       persist()
       openReviewModal()
     }
+    if (pendingOpenSettings) openSettingsModal()
     try {
       const seen = localStorage.getItem(INTRO_SEEN_KEY)
       if (!seen) requestAnimationFrame(() => openIntroModal())
@@ -776,6 +1098,7 @@ function restore() {
     startedAt: new Date().toISOString(),
     finishedAt: "",
     items: [],
+    roundCap: normalizeRoundCap(appState.roundCap),
   }
 
   for (const p of legacyPlaced) {
@@ -787,7 +1110,7 @@ function restore() {
       createdAt: new Date().toISOString(),
     })
   }
-  if (round.items.length >= ROUND_CAP) round.finishedAt = new Date().toISOString()
+  if (round.items.length >= normalizeRoundCap(round.roundCap)) round.finishedAt = new Date().toISOString()
 
   appState.rounds = [round]
   appState.currentRoundId = round.id
@@ -800,7 +1123,7 @@ function restore() {
 
 function addNextWord() {
   ensureCurrentRound()
-  if (appState.placed.length >= ROUND_CAP) {
+  if (appState.placed.length >= getCurrentRoundCap()) {
     openRoundFullModal()
     return
   }
@@ -826,7 +1149,7 @@ function addNextWord() {
       fontSize,
       createdAt: new Date().toISOString(),
     })
-    if (round.items.length >= ROUND_CAP) finalizeCurrentRound()
+    if (round.items.length >= getCurrentRoundCap()) finalizeCurrentRound()
   }
 
   updateBadge()
@@ -846,6 +1169,27 @@ dom.reviewBtn.addEventListener("click", () => {
 dom.newRoundBtn.addEventListener("click", () => {
   newRound()
 })
+
+if (window.A4Settings && typeof window.A4Settings.createSettingsModalController === "function") {
+  settingsController = window.A4Settings.createSettingsModalController({
+    getState: () => appState,
+    setState: (patch) => Object.assign(appState, patch),
+    persist,
+    applyTheme,
+    onAfterChange: ({ key } = {}) => {
+      if (key === "dailyGoalRounds" || key === "dailyGoalWords") renderStats()
+      if (key === "roundCap") {
+        const round = getCurrentRound()
+        if (round && (!Array.isArray(round.items) || round.items.length === 0)) round.roundCap = appState.roundCap
+        updateBadge()
+      }
+      if (key === "customWordbooks") renderWordbookSelect()
+    },
+    getWordbookLanguage: () => getWordbookLanguageForSpeech(),
+  })
+}
+
+dom.settingsBtn.addEventListener("click", () => openSettingsModal())
 
 dom.wordbookSelect.addEventListener("change", () => {
   appState.selectedWordbookId = dom.wordbookSelect.value
@@ -908,14 +1252,145 @@ dom.toggleMeaningBtn.addEventListener("click", () => {
   persist()
 })
 
+dom.paperInner.addEventListener("click", (e) => {
+  const target = e.target instanceof Element ? e.target : null
+  if (!target) return
+
+  const termEl = target.closest(".word-term")
+  if (termEl) {
+    speakTerm(termEl.textContent)
+    e.stopPropagation()
+    return
+  }
+
+  const itemEl = target.closest(".word-item")
+  if (!itemEl) return
+  if (appState.showMeaning) itemEl.classList.toggle("hide-meaning")
+  else itemEl.classList.toggle("reveal")
+})
+
+dom.toggleImmersiveBtn.addEventListener("click", () => {
+  appState.immersiveMode = !appState.immersiveMode
+  updateImmersiveToggle()
+  persist()
+})
+
 dom.reviewBackdrop.addEventListener("click", () => closeReviewModal())
 dom.closeReviewBtn.addEventListener("click", () => closeReviewModal())
 dom.doneReviewBtn.addEventListener("click", () => closeReviewModal())
+
+function advanceReview({ markUnknown } = {}) {
+  const idx = appState.reviewIndex
+  const w = appState.reviewQueue[idx]
+  if (w?.term) setUnknown(w.term, !!markUnknown)
+  const next = idx + 1
+  if (next >= appState.reviewQueue.length) {
+    dom.reviewCardProgress.textContent = `${appState.reviewQueue.length} / ${appState.reviewQueue.length}`
+    dom.reviewCardHint.textContent = "已到最后：可关闭或点击「我已完整复习」"
+    dom.reviewKnownBtn.disabled = true
+    dom.reviewUnknownBtn.disabled = true
+    return
+  }
+  appState.reviewIndex = next
+  renderReviewCard()
+}
+
+dom.reviewKnownBtn.addEventListener("click", () => {
+  advanceReview({ markUnknown: false })
+})
+
+dom.reviewUnknownBtn.addEventListener("click", () => {
+  advanceReview({ markUnknown: true })
+})
+
+dom.reviewCardTerm.addEventListener("click", () => {
+  speakTerm(dom.reviewCardTerm.textContent)
+})
+
+let reviewTouchStartX = 0
+let reviewTouchStartY = 0
+
+dom.reviewCard.addEventListener("touchstart", (e) => {
+  const t = e.touches && e.touches[0]
+  if (!t) return
+  reviewTouchStartX = t.clientX
+  reviewTouchStartY = t.clientY
+})
+
+dom.reviewCard.addEventListener("touchend", (e) => {
+  const t = e.changedTouches && e.changedTouches[0]
+  if (!t) return
+  const dx = t.clientX - reviewTouchStartX
+  const dy = t.clientY - reviewTouchStartY
+  if (Math.abs(dx) < 60) return
+  if (Math.abs(dx) < Math.abs(dy) * 1.2) return
+  if (dx > 0) advanceReview({ markUnknown: false })
+  else advanceReview({ markUnknown: true })
+})
 
 dom.shuffleBtn.addEventListener("click", () => {
   appState.reviewShuffled = !appState.reviewShuffled
   dom.shuffleBtn.textContent = appState.reviewShuffled ? "恢复顺序" : "打乱顺序"
   refreshReviewList()
+})
+
+function isModalOpen(modalEl) {
+  return !!modalEl && !modalEl.classList.contains("hidden")
+}
+
+function isAnyModalOpen() {
+  return (
+    isModalOpen(dom.reviewModal) ||
+    isModalOpen(dom.roundFullModal) ||
+    isModalOpen(dom.importModal) ||
+    isModalOpen(dom.introModal)
+  )
+}
+
+function isEditingTarget(target) {
+  if (!(target instanceof Element)) return false
+  const tag = target.tagName ? target.tagName.toLowerCase() : ""
+  if (tag === "input" || tag === "textarea" || tag === "select") return true
+  return target.isContentEditable
+}
+
+window.addEventListener("keydown", (e) => {
+  if (e.defaultPrevented) return
+  if (e.metaKey || e.ctrlKey || e.altKey) return
+  if (isAnyModalOpen()) return
+  if (isEditingTarget(e.target)) return
+
+  const key = String(e.key || "")
+  const k = key.length === 1 ? key.toLowerCase() : key
+
+  if (key === " " || key === "Spacebar") {
+    e.preventDefault()
+    addNextWord()
+    return
+  }
+
+  if (k === "r") {
+    openReviewModal()
+    return
+  }
+
+  if (k === "n") {
+    newRound()
+    return
+  }
+
+  if (k === "m") {
+    appState.showMeaning = !appState.showMeaning
+    updateMeaningToggle()
+    persist()
+    return
+  }
+
+  if (k === "d") {
+    appState.themeMode = appState.themeMode === "dark" ? "light" : "dark"
+    applyTheme()
+    persist()
+  }
 })
 
 window.addEventListener("resize", () => {
@@ -924,6 +1399,8 @@ window.addEventListener("resize", () => {
 })
 
 updateMeaningToggle()
+updateImmersiveToggle()
+applyTheme()
 restore()
 
 updateBadge()
