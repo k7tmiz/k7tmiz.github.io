@@ -603,14 +603,30 @@
 
     let pendingAiBook = null
 
+    function getStateSafe() {
+      return typeof getState === "function" ? getState() : {}
+    }
+
+    function setStateSafe(patch) {
+      if (typeof setState === "function") setState(patch)
+    }
+
+    function persistSafe() {
+      if (typeof persist === "function") persist()
+    }
+
+    function afterChange(key) {
+      if (typeof onAfterChange === "function") onAfterChange({ key })
+    }
+
     function getWordbookLang() {
       if (typeof getWordbookLanguage === "function") return getWordbookLanguage()
-      const state = getState ? getState() : null
+      const state = getStateSafe()
       return String(state?.wordbookLanguage || "")
     }
 
     function getResolvedVoice() {
-      const state = getState ? getState() : {}
+      const state = getStateSafe()
       return window.A4Speech?.resolveVoice?.({
         pronunciationEnabled: !!state?.pronunciationEnabled,
         pronunciationLang: state?.pronunciationLang,
@@ -625,7 +641,7 @@
       const select = dom.voiceSelect
       if (!select) return
       const voices = window.A4Speech?.getVoicesSorted?.() || []
-      const state = getState ? getState() : {}
+      const state = getStateSafe()
       const selected = String(state?.voiceURI || "")
       select.innerHTML = ""
       for (const v of voices) {
@@ -638,7 +654,7 @@
     }
 
     function renderVoiceModeUi() {
-      const state = getState ? getState() : {}
+      const state = getStateSafe()
       let mode = normalizeVoiceMode(state?.voiceMode)
       const voices = window.A4Speech?.getVoicesSorted?.() || []
       if (
@@ -647,8 +663,8 @@
         !voices.some((v) => String(v?.voiceURI || "") === String(state.voiceURI || ""))
       ) {
         mode = "auto"
-        if (typeof setState === "function") setState({ voiceMode: "auto", voiceURI: "" })
-        if (typeof persist === "function") persist()
+        setStateSafe({ voiceMode: "auto", voiceURI: "" })
+        persistSafe()
       }
       if (dom.voiceModeSelect) dom.voiceModeSelect.value = mode
       if (dom.voiceManualRow) {
@@ -658,7 +674,7 @@
     }
 
     function updateVoiceUi() {
-      const state = getState ? getState() : {}
+      const state = getStateSafe()
       const resolved = getResolvedVoice()
       if (dom.currentVoiceText) dom.currentVoiceText.textContent = window.A4Speech?.getCurrentVoiceLabel?.(resolved) || "—"
       if (dom.voiceHint)
@@ -666,7 +682,7 @@
     }
 
     function render() {
-      const state = getState ? getState() : {}
+      const state = getStateSafe()
       if (dom.themeModeSelect) dom.themeModeSelect.value = normalizeThemeMode(state?.themeMode)
       if (dom.dailyGoalRoundsInput) dom.dailyGoalRoundsInput.value = String(clamp(state?.dailyGoalRounds || 0, 0, 20))
       if (dom.dailyGoalWordsInput) dom.dailyGoalWordsInput.value = String(clamp(state?.dailyGoalWords || 0, 0, 500))
@@ -746,7 +762,7 @@
     }
 
     function patchAiConfig(patch, { syncInputs } = {}) {
-      const state = getState ? getState() : {}
+      const state = getStateSafe()
       const prev = getAiConfigFromState(state)
       const next = {
         provider: patch.provider != null ? normalizeAiProviderLocal(patch.provider) : prev.provider,
@@ -754,14 +770,14 @@
         apiKey: patch.apiKey != null ? String(patch.apiKey || "").trim() : prev.apiKey,
         model: patch.model != null ? String(patch.model || "").trim() : prev.model,
       }
-      if (typeof setState === "function") setState({ aiConfig: next })
+      setStateSafe({ aiConfig: next })
       if (syncInputs) {
         if (dom.aiBaseUrlInput) dom.aiBaseUrlInput.value = next.baseUrl
         if (dom.aiApiKeyInput) dom.aiApiKeyInput.value = next.apiKey
         if (dom.aiModelInput) dom.aiModelInput.value = next.model
       }
-      if (typeof persist === "function") persist()
-      if (typeof onAfterChange === "function") onAfterChange({ key: "aiConfig" })
+      persistSafe()
+      afterChange("aiConfig")
     }
 
     function computeAiConfigOnProviderChange({ prevConfig, nextProvider }) {
@@ -781,7 +797,7 @@
     }
 
     function renderAiProviderUi() {
-      const state = getState ? getState() : {}
+      const state = getStateSafe()
       const cfg = getAiConfigFromState(state)
       const preset = getAiPreset(cfg.provider)
       if (dom.aiProviderSelect) dom.aiProviderSelect.value = cfg.provider
@@ -841,58 +857,58 @@
 
     dom.themeModeSelect?.addEventListener("change", () => {
       const themeMode = normalizeThemeMode(dom.themeModeSelect.value)
-      if (typeof setState === "function") setState({ themeMode })
+      setStateSafe({ themeMode })
       if (typeof applyTheme === "function") applyTheme()
-      if (typeof persist === "function") persist()
-      if (typeof onAfterChange === "function") onAfterChange({ key: "themeMode" })
+      persistSafe()
+      afterChange("themeMode")
     })
 
     dom.dailyGoalRoundsInput?.addEventListener("change", () => {
       const n = Number(dom.dailyGoalRoundsInput.value)
       const dailyGoalRounds = Number.isFinite(n) ? clamp(Math.round(n), 0, 20) : 0
-      if (typeof setState === "function") setState({ dailyGoalRounds })
-      if (typeof persist === "function") persist()
-      if (typeof onAfterChange === "function") onAfterChange({ key: "dailyGoalRounds" })
+      setStateSafe({ dailyGoalRounds })
+      persistSafe()
+      afterChange("dailyGoalRounds")
     })
 
     dom.dailyGoalWordsInput?.addEventListener("change", () => {
       const n = Number(dom.dailyGoalWordsInput.value)
       const dailyGoalWords = Number.isFinite(n) ? clamp(Math.round(n), 0, 500) : 0
-      if (typeof setState === "function") setState({ dailyGoalWords })
-      if (typeof persist === "function") persist()
-      if (typeof onAfterChange === "function") onAfterChange({ key: "dailyGoalWords" })
+      setStateSafe({ dailyGoalWords })
+      persistSafe()
+      afterChange("dailyGoalWords")
     })
 
     dom.roundCapInput?.addEventListener("change", () => {
       const roundCap = normalizeRoundCap(dom.roundCapInput.value)
-      if (typeof setState === "function") setState({ roundCap })
-      if (typeof persist === "function") persist()
-      if (typeof onAfterChange === "function") onAfterChange({ key: "roundCap" })
+      setStateSafe({ roundCap })
+      persistSafe()
+      afterChange("roundCap")
     })
 
     dom.reviewSystemToggleBtn?.addEventListener("click", () => {
-      const state = getState ? getState() : {}
+      const state = getStateSafe()
       const reviewSystemEnabled = !(typeof state?.reviewSystemEnabled === "boolean" ? state.reviewSystemEnabled : true)
-      if (typeof setState === "function") setState({ reviewSystemEnabled, reviewIntervals: normalizeReviewIntervals(state?.reviewIntervals) })
+      setStateSafe({ reviewSystemEnabled, reviewIntervals: normalizeReviewIntervals(state?.reviewIntervals) })
       if (dom.reviewSystemToggleBtn) dom.reviewSystemToggleBtn.textContent = `复习：${reviewSystemEnabled ? "开" : "关"}`
       if (dom.reviewIntervalsPanel) {
         if (reviewSystemEnabled) dom.reviewIntervalsPanel.classList.remove("hidden")
         else dom.reviewIntervalsPanel.classList.add("hidden")
       }
-      if (typeof persist === "function") persist()
-      if (typeof onAfterChange === "function") onAfterChange({ key: "reviewSystemEnabled" })
+      persistSafe()
+      afterChange("reviewSystemEnabled")
     })
 
     const onReviewIntervalsChange = () => {
-      const state = getState ? getState() : {}
+      const state = getStateSafe()
       const reviewIntervals = normalizeReviewIntervals({
         unknownDays: dom.reviewUnknownDaysInput?.value,
         learningDays: dom.reviewLearningDaysInput?.value,
         masteredDays: dom.reviewMasteredDaysInput?.value,
       })
-      if (typeof setState === "function") setState({ reviewIntervals })
-      if (typeof persist === "function") persist()
-      if (typeof onAfterChange === "function") onAfterChange({ key: "reviewIntervals" })
+      setStateSafe({ reviewIntervals })
+      persistSafe()
+      afterChange("reviewIntervals")
       if (dom.reviewUnknownDaysInput) dom.reviewUnknownDaysInput.value = String(reviewIntervals.unknownDays)
       if (dom.reviewLearningDaysInput) dom.reviewLearningDaysInput.value = String(reviewIntervals.learningDays)
       if (dom.reviewMasteredDaysInput) dom.reviewMasteredDaysInput.value = String(reviewIntervals.masteredDays)
@@ -905,33 +921,33 @@
     dom.reviewMasteredDaysInput?.addEventListener("change", onReviewIntervalsChange)
 
     dom.pronounceToggleBtn?.addEventListener("click", () => {
-      const state = getState ? getState() : {}
+      const state = getStateSafe()
       const pronunciationEnabled = !state?.pronunciationEnabled
-      if (typeof setState === "function") setState({ pronunciationEnabled })
+      setStateSafe({ pronunciationEnabled })
       if (dom.pronounceToggleBtn) dom.pronounceToggleBtn.textContent = `发音：${pronunciationEnabled ? "开" : "关"}`
-      if (typeof persist === "function") persist()
+      persistSafe()
       updateVoiceUi()
-      if (typeof onAfterChange === "function") onAfterChange({ key: "pronunciationEnabled" })
+      afterChange("pronunciationEnabled")
     })
 
     dom.accentSelect?.addEventListener("change", () => {
       const pronunciationAccent = normalizeAccent(dom.accentSelect.value)
-      if (typeof setState === "function") setState({ pronunciationAccent })
-      if (typeof persist === "function") persist()
+      setStateSafe({ pronunciationAccent })
+      persistSafe()
       updateVoiceUi()
-      if (typeof onAfterChange === "function") onAfterChange({ key: "pronunciationAccent" })
+      afterChange("pronunciationAccent")
     })
 
     dom.pronunciationLangSelect?.addEventListener("change", () => {
       const pronunciationLang = normalizePronunciationLang(dom.pronunciationLangSelect.value)
-      if (typeof setState === "function") setState({ pronunciationLang })
-      if (typeof persist === "function") persist()
+      setStateSafe({ pronunciationLang })
+      persistSafe()
       updateVoiceUi()
-      if (typeof onAfterChange === "function") onAfterChange({ key: "pronunciationLang" })
+      afterChange("pronunciationLang")
     })
 
     dom.voiceModeSelect?.addEventListener("change", () => {
-      const state = getState ? getState() : {}
+      const state = getStateSafe()
       const next = normalizeVoiceMode(dom.voiceModeSelect.value)
       const voices = window.A4Speech?.getVoicesSorted?.() || []
       if (next === "manual") {
@@ -945,15 +961,15 @@
           voiceURI: "",
         }) || { ok: false, voice: null }
         const chosen = resolved.voice || window.A4Speech?.getSystemDefaultVoice?.(voices) || voices[0] || null
-        if (typeof setState === "function") setState({ voiceMode: "manual", voiceURI: chosen ? String(chosen.voiceURI || "") : "" })
+        setStateSafe({ voiceMode: "manual", voiceURI: chosen ? String(chosen.voiceURI || "") : "" })
       } else {
-        if (typeof setState === "function") setState({ voiceMode: "auto", voiceURI: "" })
+        setStateSafe({ voiceMode: "auto", voiceURI: "" })
       }
       renderVoiceSelect()
       renderVoiceModeUi()
-      if (typeof persist === "function") persist()
+      persistSafe()
       updateVoiceUi()
-      if (typeof onAfterChange === "function") onAfterChange({ key: "voiceMode" })
+      afterChange("voiceMode")
     })
 
     dom.voiceSelect?.addEventListener("change", () => {
@@ -961,19 +977,19 @@
       const voices = window.A4Speech?.getVoicesSorted?.() || []
       const v = window.A4Speech?.findVoiceByURI?.(id, voices)
       if (!v) {
-        if (typeof setState === "function") setState({ voiceMode: "auto", voiceURI: "" })
+        setStateSafe({ voiceMode: "auto", voiceURI: "" })
       } else {
-        if (typeof setState === "function") setState({ voiceMode: "manual", voiceURI: id })
+        setStateSafe({ voiceMode: "manual", voiceURI: id })
       }
       renderVoiceSelect()
       renderVoiceModeUi()
-      if (typeof persist === "function") persist()
+      persistSafe()
       updateVoiceUi()
-      if (typeof onAfterChange === "function") onAfterChange({ key: "voiceURI" })
+      afterChange("voiceURI")
     })
 
     dom.testVoiceBtn?.addEventListener("click", () => {
-      const state = getState ? getState() : {}
+      const state = getStateSafe()
       const base =
         window.A4Speech?.getCurrentLanguageBase?.({
           pronunciationLang: state?.pronunciationLang,
@@ -1019,7 +1035,7 @@
     })
 
     dom.aiProviderSelect?.addEventListener("change", () => {
-      const state = getState ? getState() : {}
+      const state = getStateSafe()
       const prev = getAiConfigFromState(state)
       const next = computeAiConfigOnProviderChange({ prevConfig: prev, nextProvider: dom.aiProviderSelect.value })
       patchAiConfig(next, { syncInputs: true })
@@ -1054,7 +1070,7 @@
 
     dom.aiGenerateBtn?.addEventListener("click", async () => {
       setAiStatus("")
-      const state = getState ? getState() : {}
+      const state = getStateSafe()
       const cfg = getAiConfigFromState(state)
       const endpoint = buildChatCompletionsUrl(cfg.baseUrl)
 
@@ -1128,12 +1144,12 @@
         words: pendingAiBook.words,
       }
 
-      const state = getState ? getState() : {}
+      const state = getStateSafe()
       const nextBooks = Array.isArray(state?.customWordbooks) ? [...state.customWordbooks] : []
       nextBooks.push(wordbook)
-      if (typeof setState === "function") setState({ customWordbooks: nextBooks })
-      if (typeof persist === "function") persist()
-      if (typeof onAfterChange === "function") onAfterChange({ key: "customWordbooks" })
+      setStateSafe({ customWordbooks: nextBooks })
+      persistSafe()
+      afterChange("customWordbooks")
 
       pendingAiBook = null
       closeAiPreviewModal()
@@ -1142,7 +1158,7 @@
     })
 
     dom.exportBackupBtn?.addEventListener("click", () => {
-      if (typeof persist === "function") persist()
+      persistSafe()
       const state = window.A4Storage?.readStateRaw?.()
       if (!state) {
         window.alert("导出失败：没有可用数据。")

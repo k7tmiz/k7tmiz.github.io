@@ -49,12 +49,7 @@ A4-Memory
 ## 4) 模块职责边界（真实实现）
 
 - `js/core/common.js`
-  - 跨页面共享的轻量常量与纯工具函数
-  - 不负责页面 DOM 事件绑定
-  - 不负责页面主流程
-  - 不负责 storage 主流程
-  - 不承担 records 或 app 的页面专属业务逻辑
-  - 含：状态常量与归一化、轮次类型常量与 label、时间格式化、ISO 时间解析、多页分页工具、学习统计（computeStudyStats）、AI provider 归一化
+  - 跨页面共享的轻量常量与纯工具函数（状态/轮次/时间/分页/学习统计/AI provider 归一化）
 - `js/utils.js`
   - 下载工具与文件名清洗：`downloadTextFile/downloadJsonFile/downloadBlob/sanitizeFilename`
 - `js/storage.js`
@@ -75,12 +70,11 @@ A4-Memory
 ## 5) 页面与脚本加载关系（真实实现）
 
 - `index.html`（首页）
-  - 主要 UI：控制区、A4 纸、复习弹窗、导入词书弹窗、用法介绍弹窗
-  - 多页翻页 UI：`#pageNav`（仅多页时显示）
+  - 主要 UI：控制区、A4 纸、复习弹窗、导入词书弹窗、用法介绍弹窗、多页翻页 `#pageNav`
   - 脚本顺序：`data/words.js` → `js/core/common.js` → `utils/storage/speech/settings/app`
 - `records.html`（学习记录页）
   - 视图切换：轮次视图 / 状态视图
-  - 顶部入口：返回背单词右侧为设置；导出区：导出 CSV、导出 PDF、清空记录（同一行）
+  - 顶部操作：返回、设置、导出与清空
   - 脚本顺序：`utils/storage/speech/core/common/settings/records`
 
 ## 6) 核心业务规则（真实实现）

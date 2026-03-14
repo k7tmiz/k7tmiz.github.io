@@ -52,6 +52,11 @@ Open: http://localhost:8080/
   - Round view: A4 preview + per-round CSV/PDF export + jump back to review
   - Status view: group by status/due and generate a review round
   - Top actions: Settings is next to “Back to Home”; “Clear records” is aligned with “Export PDF”
+- Mobile: Home controls are compact and grouped so the full A4 area remains visible while all actions stay reachable
+- Consistency: Settings stays right-aligned on both Home and Records
+- Visual consistency: Controls keep matched sizing/proportions across Home and Records on the same viewport
+- Mobile/tablet: Per-round action buttons in Records scale down to match the rest of the UI
+- Maintenance: reduce duplication and improve readability without changing behavior or localStorage schema
 - Settings: theme, pronunciation, round cap, lightweight review, backup, AI generator
 
 ## Project structure (brief)

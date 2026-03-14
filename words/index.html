@@ -24,6 +24,7 @@
       <div class="status">
         <div class="status-top">
           <div class="badge" id="roundBadge">本轮 0/—</div>
+          <button class="ghost" id="settingsBtn" type="button">设置</button>
         </div>
         <div class="status-meta" id="roundStatusCounts"></div>
         <div class="status-progress" aria-hidden="true">
@@ -33,21 +34,29 @@
     </header>
 
     <main class="app">
-      <section class="controls" aria-label="控制区">
-        <button class="primary" id="nextBtn" type="button">下一个单词</button>
-        <button id="reviewBtn" type="button">复习本轮</button>
-        <button id="newRoundBtn" type="button">新建一轮</button>
-        <button id="settingsBtn" type="button">设置</button>
-        <a class="button-link immersive-hide" href="./records.html">学习记录</a>
-        <button class="ghost immersive-hide" id="introBtn" type="button">用法介绍</button>
-        <div class="select-wrap immersive-hide">
-          <select id="wordbookSelect" aria-label="选择词书"></select>
+      <section class="controls home-controls" aria-label="控制区">
+        <div class="controls-row controls-row-top">
+          <div class="controls-row-main">
+            <button class="primary" id="nextBtn" type="button">下一个单词</button>
+            <button id="reviewBtn" type="button">复习本轮</button>
+          </div>
+          <div class="controls-row-secondary immersive-hide">
+            <button id="newRoundBtn" type="button">新建一轮</button>
+            <button class="ghost" id="introBtn" type="button">用法介绍</button>
+            <a class="button-link" href="./records.html">学习记录</a>
+          </div>
         </div>
-        <button class="immersive-hide" id="importWordbookBtn" type="button">导入词书</button>
-        <input id="importFile" type="file" accept=".csv,.txt,.json" hidden />
-        <div class="spacer"></div>
-        <button class="ghost" id="toggleMeaningBtn" type="button">显示释义：关</button>
-        <button class="ghost" id="toggleImmersiveBtn" type="button">沉浸模式：关</button>
+        <div class="controls-row controls-row-wordbook immersive-hide">
+          <div class="select-wrap">
+            <select id="wordbookSelect" aria-label="选择词书"></select>
+          </div>
+          <button id="importWordbookBtn" type="button">导入词书</button>
+          <input id="importFile" type="file" accept=".csv,.txt,.json" hidden />
+        </div>
+        <div class="controls-row controls-row-toggles">
+          <button class="ghost" id="toggleMeaningBtn" type="button">显示释义：关</button>
+          <button class="ghost" id="toggleImmersiveBtn" type="button">沉浸模式：关</button>
+        </div>
       </section>
 
       <section class="page-nav hidden" id="pageNav" aria-label="A4 翻页">

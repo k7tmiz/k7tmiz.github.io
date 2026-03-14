@@ -104,8 +104,9 @@ body {
 .status-top {
   display: flex;
   align-items: center;
-  justify-content: flex-end;
+  justify-content: space-between;
   gap: 10px;
+  width: 100%;
 }
 
 .status-entry {
@@ -155,13 +156,104 @@ body {
   border-radius: 12px;
 }
 
+.home-controls {
+  display: block;
+}
+
+.home-controls .controls-row {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  flex-wrap: wrap;
+  width: 100%;
+}
+
+.home-controls .controls-row + .controls-row {
+  margin-top: 10px;
+}
+
+.home-controls .controls-row-top {
+  align-items: flex-start;
+}
+
+.home-controls .controls-row-main {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  flex-wrap: wrap;
+  flex: 1 1 auto;
+}
+
+.home-controls .controls-row-secondary {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  flex-wrap: wrap;
+  margin-left: auto;
+}
+
+.home-controls .controls-row-toggles {
+  justify-content: flex-end;
+}
+
+.home-controls .controls-row-wordbook .select-wrap {
+  flex: 1 1 260px;
+  min-width: 220px;
+}
+
+.immersive .home-controls {
+  display: block;
+}
+
+.immersive .home-controls .controls-row + .controls-row {
+  margin-top: 10px;
+}
+
 .records-controls-actions {
   display: flex;
   gap: 10px;
   align-items: center;
   flex-wrap: wrap;
   justify-content: flex-end;
+}
+
+.records-controls-top .records-controls-actions {
   margin-left: auto;
+}
+
+.records-controls-top .view-tabs button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+@media (min-width: 680px) {
+  .home-controls {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    grid-template-areas:
+      "top top"
+      "wordbook toggles";
+    gap: 10px;
+    align-items: center;
+  }
+
+  .home-controls .controls-row + .controls-row {
+    margin-top: 0;
+  }
+
+  .home-controls .controls-row-top {
+    grid-area: top;
+  }
+
+  .home-controls .controls-row-wordbook {
+    grid-area: wordbook;
+  }
+
+  .home-controls .controls-row-toggles {
+    grid-area: toggles;
+    justify-content: flex-end;
+  }
 }
 
 .spacer {
@@ -279,8 +371,113 @@ select:hover {
   }
 
   .status-top {
-    justify-content: flex-start;
+    justify-content: space-between;
     flex-wrap: wrap;
+  }
+
+  .home-controls {
+    padding: 8px;
+  }
+
+  .home-controls .controls-row {
+    gap: 8px;
+  }
+
+  .home-controls .controls-row + .controls-row {
+    margin-top: 8px;
+  }
+
+  .home-controls button,
+  .home-controls .button-link,
+  .home-controls select {
+    padding: 8px 10px;
+    font-size: 13px;
+  }
+
+  .status-top #settingsBtn {
+    padding: 6px 10px;
+    font-size: 13px;
+  }
+
+  .records-page .status-top #openSettingsBtn,
+  .records-page .status-top .button-link {
+    padding: 6px 10px;
+    font-size: 13px;
+  }
+
+  .home-controls .controls-row-top {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .home-controls .controls-row-secondary {
+    width: 100%;
+    justify-content: space-between;
+  }
+
+  .home-controls .controls-row-main button {
+    flex: 1 1 calc(50% - 8px);
+  }
+
+  .home-controls .controls-row-wordbook .select-wrap {
+    flex: 7 1 0;
+    min-width: 0;
+  }
+
+  .home-controls .controls-row-wordbook #importWordbookBtn {
+    flex: 3 0 0;
+    min-width: 0;
+  }
+
+  .home-controls .controls-row-wordbook {
+    flex-wrap: nowrap;
+  }
+
+  .home-controls .controls-row-secondary > * {
+    flex: 1 1 0;
+  }
+
+  .home-controls .controls-row-toggles {
+    justify-content: space-between;
+  }
+
+  .home-controls .controls-row-toggles button {
+    flex: 1 1 calc(50% - 10px);
+  }
+
+  .records-controls-top {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .records-controls-top .view-tabs {
+    width: 100%;
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 8px;
+    align-items: stretch;
+  }
+
+  .records-controls-top .view-tabs button {
+    width: 100%;
+  }
+
+  .records-controls-top .records-controls-actions {
+    width: 100%;
+    display: grid;
+    grid-template-columns: 1.2fr 1.2fr 1fr;
+    gap: 8px;
+    justify-content: initial;
+    margin-left: 0;
+  }
+
+  .records-controls-top #clearBtn {
+    justify-self: stretch;
+  }
+
+  .records-controls-top button {
+    padding: 8px 10px;
+    font-size: 13px;
   }
 }
 
@@ -1037,6 +1234,19 @@ select:hover {
 
   #statusView .word-row {
     grid-template-columns: 1fr;
+  }
+
+  .records-page .round-actions button {
+    padding: 8px 10px;
+    font-size: 13px;
+    flex: 1 1 calc(50% - 8px);
+  }
+}
+
+@media (max-width: 920px) {
+  .records-page .round-actions button {
+    padding: 8px 10px;
+    font-size: 13px;
   }
 }
 
