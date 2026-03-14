@@ -10,6 +10,7 @@ A pure front-end vocabulary tool based on the “A4 paper memory method”. Word
 
 - A4 random layout with collision avoidance
 - Forced review after each new word (shuffled by default, can restore order)
+- Per-round de-dup: within a round, it avoids adding the same “term + meaning” entry twice
 - Configurable round cap (20–30), start next round or restart
 - Meaning toggle, immersive mode, theme modes (Auto/Light/Dark)
 - Learning status: mark each word as Mastered / Learning / Unknown during review
@@ -24,8 +25,10 @@ A pure front-end vocabulary tool based on the “A4 paper memory method”. Word
 - Export:
   - CSV: global/per-round (includes round type + review timestamps)
   - PDF: exported from Records via browser print (Save as PDF); 1 round = 1 PDF, each A4 = 1 page
-- Wordbooks: built-in samples + local import (TXT/CSV/JSON) + online import (CET4/CET6)
+- Wordbooks: built-in samples + local import (TXT/CSV/JSON) + online import (English / Spanish, lists JSON files in the repo and lets you pick one to import)
+  - Language: JSON import can optionally include `language` (e.g. `en`/`ja`/`ko`/`fr` etc., mainly used for pronunciation voice auto-pick); TXT/CSV uses a weak heuristic and falls back to default; you can always override it in Settings → Pronunciation language
 - Pronunciation: SpeechSynthesis (en/es/ja/ko/pt/fr/de/it/eo), Auto/Manual voice selection
+  - Spanish: when a term uses a suffix shorthand like `antiguo,gua` / `bonito,ta`, it auto-expands to `antiguo, antigua` / `bonito, bonita` before speaking
 - Backup: import/export full local data (records + settings)
 - AI wordbook generator: configure API → generate → live preview → save (optional topic, also for non-English)
 - AI API presets: OpenAI / Gemini / DeepSeek / SiliconCloud / Custom

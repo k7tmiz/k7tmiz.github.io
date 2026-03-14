@@ -53,6 +53,8 @@ function getWordbooksFromGlobal() {
       .map((b) => {
         const id = String(b?.id || "").trim()
         const name = String(b?.name || "").trim()
+        const description = String(b?.description || "").trim()
+        const language = String(b?.language || "").trim()
         const wordsRaw = Array.isArray(b?.words) ? b.words : []
         if (!id || !name) return null
         const words = wordsRaw
@@ -66,7 +68,7 @@ function getWordbooksFromGlobal() {
             return { term, pos, meaning }
           })
           .filter(Boolean)
-        return { id, name, words }
+        return { id, name, description, language, words }
       })
       .filter(Boolean)
   }
@@ -161,6 +163,14 @@ function closeImportModal() {
   setModalVisible(dom.importModal, false)
 }
 
+function openRemoteImportModal() {
+  setModalVisible(dom.remoteImportModal, true)
+}
+
+function closeRemoteImportModal() {
+  setModalVisible(dom.remoteImportModal, false)
+}
+
 function openIntroModal() {
   setModalVisible(dom.introModal, true)
 }
@@ -215,6 +225,14 @@ const dom = {
   importLocalBtn: document.getElementById("importLocalBtn"),
   importCet4Btn: document.getElementById("importCet4Btn"),
   importCet6Btn: document.getElementById("importCet6Btn"),
+  remoteImportModal: document.getElementById("remoteImportModal"),
+  remoteImportBackdrop: document.getElementById("remoteImportBackdrop"),
+  closeRemoteImportBtn: document.getElementById("closeRemoteImportBtn"),
+  remoteImportMeta: document.getElementById("remoteImportMeta"),
+  remoteImportFilterInput: document.getElementById("remoteImportFilterInput"),
+  remoteImportSelect: document.getElementById("remoteImportSelect"),
+  confirmRemoteImportBtn: document.getElementById("confirmRemoteImportBtn"),
+  remoteImportHint: document.getElementById("remoteImportHint"),
   customWordbooksList: document.getElementById("customWordbooksList"),
   customWordbooksEmpty: document.getElementById("customWordbooksEmpty"),
   introBtn: document.getElementById("introBtn"),
@@ -425,7 +443,12 @@ function renderCustomWordbooksManage() {
       const name = sanitizeFilename(b.name || "wordbook")
       downloadJsonFile({
         filename: `a4-memory-wordbook-${name}-${Date.now()}.json`,
-        data: { name: b.name || "词书", words: Array.isArray(b.words) ? b.words : [] },
+        data: {
+          name: b.name || "词书",
+          description: String(b.description || "").trim(),
+          language: String(b.language || "").trim(),
+          words: Array.isArray(b.words) ? b.words : [],
+        },
       })
     })
 
@@ -593,9 +616,55 @@ function parseWordsFromText({ text, filename }) {
   return words.filter(Boolean)
 }
 
+function normalizeWordbookLanguage(value) {
+  const v = String(value || "").trim().replaceAll("_", "-")
+  return v
+}
+
+function inferWordbookLanguage({ rawLanguage, name, filename, words }) {
+  const explicit = normalizeWordbookLanguage(rawLanguage)
+  if (explicit) return explicit
+
+  const hint = `${String(name || "").trim()} ${String(filename || "").trim()}`
+  const hintLower = hint.toLowerCase()
+
+  const keywordRules = [
+    { lang: "ja", keys: ["日语", "日本語", "日本语", "japanese"] },
+    { lang: "ko", keys: ["韩语", "朝鲜语", "korean"] },
+    { lang: "fr", keys: ["法语", "french"] },
+    { lang: "de", keys: ["德语", "german"] },
+    { lang: "es", keys: ["西班牙语", "西班牙", "spanish"] },
+    { lang: "it", keys: ["意大利语", "意大利", "italian"] },
+    { lang: "pt", keys: ["葡萄牙语", "葡语", "portuguese"] },
+    { lang: "eo", keys: ["世界语", "esperanto"] },
+    { lang: "ru", keys: ["俄语", "russian"] },
+    { lang: "en", keys: ["英语", "english", "cet4", "cet6", "四级", "六级"] },
+  ]
+
+  for (const rule of keywordRules) {
+    for (const k of rule.keys) {
+      const key = String(k || "")
+      if (!key) continue
+      if (hint.includes(key) || hintLower.includes(key.toLowerCase())) return rule.lang
+    }
+  }
+
+  const sample = (Array.isArray(words) ? words : [])
+    .slice(0, 200)
+    .map((w) => String(w?.term || ""))
+    .join(" ")
+
+  if (/[\u3040-\u30ff]/.test(sample)) return "ja"
+  if (/[\uac00-\ud7af]/.test(sample)) return "ko"
+  if (/[\u0400-\u04ff]/.test(sample)) return "ru"
+  return ""
+}
+
 async function importWordbookFile(file) {
   const text = await file.text()
   let name = stripFileExtension(file.name)
+  let description = ""
+  let language = ""
   let words = []
 
   if (String(file.name || "").toLowerCase().endsWith(".json")) {
@@ -603,17 +672,26 @@ async function importWordbookFile(file) {
     if (parsed && typeof parsed === "object" && !Array.isArray(parsed)) {
       const n = String(parsed.name || "").trim()
       if (n) name = n
+      description = String(parsed.description || "").trim()
+      language = inferWordbookLanguage({
+        rawLanguage: parsed.language,
+        name,
+        filename: file.name,
+        words: Array.isArray(parsed.words) ? parsed.words : [],
+      })
       const wordsRaw = Array.isArray(parsed.words) ? parsed.words : []
       words = wordsRaw.map(normalizeWordObject).filter(Boolean)
     } else {
       words = parseWordsFromText({ text, filename: file.name })
+      language = inferWordbookLanguage({ rawLanguage: "", name, filename: file.name, words })
     }
   } else {
     words = parseWordsFromText({ text, filename: file.name })
+    language = inferWordbookLanguage({ rawLanguage: "", name, filename: file.name, words })
   }
 
   const id = `import-${makeId()}`
-  const book = normalizeWordbookObject({ id, name: name || "导入词书", words })
+  const book = normalizeWordbookObject({ id, name: name || "导入词书", description, language, words })
   if (!book || !book.words.length) return null
 
   appState.customWordbooks = [...appState.customWordbooks, book]
@@ -624,14 +702,87 @@ async function importWordbookFile(file) {
   return book
 }
 
-async function importWordbookFromUrl({ url, name }) {
+function normalizePosType(value) {
+  const raw = String(value || "").trim()
+  if (!raw) return ""
+  const s = raw.endsWith(".") ? raw : `${raw}.`
+  return s
+}
+
+function normalizeRemoteWordEntry(raw) {
+  if (!raw) return null
+  if (typeof raw === "string") return normalizeWordObject(raw)
+
+  if (raw?.term) return normalizeWordObject(raw)
+
+  const word = String(raw?.word || "").trim()
+  if (word) {
+    const t0 = Array.isArray(raw?.translations) ? raw.translations[0] : null
+    const meaning = String(t0?.translation || "").trim()
+    const pos = normalizePosType(t0?.type)
+    const example = String(raw?.example || "").trim()
+    return normalizeWordObject({ term: word, pos, meaning, example })
+  }
+  return null
+}
+
+function extractWordbookFromRemoteJson(parsed) {
+  if (!parsed) return null
+  if (Array.isArray(parsed)) {
+    const words = parsed.map(normalizeRemoteWordEntry).filter(Boolean)
+    return { name: "", description: "", language: "", words }
+  }
+
+  if (typeof parsed !== "object") return null
+  const name = String(parsed?.name || "").trim()
+  const description = String(parsed?.description || "").trim()
+  const language = String(parsed?.language || "").trim()
+  const list =
+    (Array.isArray(parsed?.words) && parsed.words) ||
+    (Array.isArray(parsed?.items) && parsed.items) ||
+    (Array.isArray(parsed?.data) && parsed.data) ||
+    (Array.isArray(parsed?.list) && parsed.list) ||
+    []
+  const words = list.map(normalizeRemoteWordEntry).filter(Boolean)
+  return { name, description, language, words }
+}
+
+async function importWordbookFromUrl({ url, name, language, description } = {}) {
   const res = await fetch(url, { cache: "no-store" })
   if (!res.ok) return null
+  const ct = String(res.headers?.get?.("content-type") || "").toLowerCase()
   const text = await res.text()
-  const words = parseWordsFromText({ text, filename: name || "remote.txt" })
 
-  const id = `kylebing-${makeId()}`
-  const book = normalizeWordbookObject({ id, name: name || "在线词书", words })
+  let words = []
+  let parsedMeta = { name: "", description: "", language: "" }
+  const filename = name || url || "remote"
+  const looksJson = ct.includes("application/json") || String(filename).toLowerCase().endsWith(".json") || String(url || "").toLowerCase().endsWith(".json")
+
+  if (looksJson) {
+    let parsed = null
+    try {
+      parsed = JSON.parse(String(text || ""))
+    } catch (e) {
+      return null
+    }
+    const extracted = extractWordbookFromRemoteJson(parsed)
+    if (!extracted) return null
+    parsedMeta = extracted
+    words = extracted.words
+  } else {
+    words = parseWordsFromText({ text, filename })
+  }
+
+  const id = `remote-${makeId()}`
+  const finalName = String(name || parsedMeta?.name || "").trim() || "在线词书"
+  const finalDesc = String(description || parsedMeta?.description || "").trim()
+  const inferredLang = inferWordbookLanguage({
+    rawLanguage: language || parsedMeta?.language,
+    name: finalName,
+    filename: filename || url,
+    words,
+  })
+  const book = normalizeWordbookObject({ id, name: finalName, description: finalDesc, language: inferredLang, words })
   if (!book || !book.words.length) return null
 
   appState.customWordbooks = [...appState.customWordbooks, book]
@@ -640,6 +791,186 @@ async function importWordbookFromUrl({ url, name }) {
   startNextRound()
   persist()
   return book
+}
+
+async function fetchGithubTree({ owner, repo, branch }) {
+  const res = await fetch(`https://api.github.com/repos/${owner}/${repo}/git/trees/${branch}?recursive=1`, {
+    cache: "no-store",
+    headers: { Accept: "application/vnd.github+json" },
+  })
+  if (!res.ok) return null
+  return (await res.json()) || null
+}
+
+function formatFileSize(size) {
+  const n = Number(size) || 0
+  if (n <= 0) return ""
+  const units = ["B", "KB", "MB", "GB"]
+  let v = n
+  let i = 0
+  while (v >= 1024 && i < units.length - 1) {
+    v /= 1024
+    i++
+  }
+  const fixed = i === 0 ? String(Math.round(v)) : v >= 10 ? String(v.toFixed(1)) : String(v.toFixed(2))
+  return `${fixed} ${units[i]}`
+}
+
+function scoreGithubJsonPath(path, size) {
+  const p = String(path || "")
+  const s = Number(size) || 0
+  const lower = p.toLowerCase()
+
+  let score = 0
+  if (lower.endsWith(".json")) score += 20
+  if (lower.includes("json-simple") || lower.includes("json_simple") || lower.includes("simple")) score += 60
+  if (lower.includes("sentence")) score += 18
+  if (lower.includes("full")) score -= 10
+  if (lower.includes("sample") || lower.includes("readme") || lower.includes("test")) score -= 120
+
+  if (s > 0) {
+    if (s < 10_000) score -= 40
+    else if (s > 15_000_000) score -= 80
+    else if (s >= 120_000 && s <= 7_000_000) score += 30
+  }
+  return score
+}
+
+async function listGithubJsonFiles({ owner, repo }) {
+  const branches = ["main", "master"]
+  for (const branch of branches) {
+    const tree = await fetchGithubTree({ owner, repo, branch })
+    const items = Array.isArray(tree?.tree) ? tree.tree : []
+    if (!items.length) continue
+    const list = items
+      .filter((it) => it && it.type === "blob" && String(it.path || "").toLowerCase().endsWith(".json"))
+      .map((it) => {
+        const path = String(it.path || "")
+        const size = Number(it.size) || 0
+        const score = scoreGithubJsonPath(path, size)
+        return { owner, repo, branch, path, size, score }
+      })
+      .filter((it) => it.path)
+      .sort((a, b) => {
+        if (b.score !== a.score) return b.score - a.score
+        if (b.size !== a.size) return b.size - a.size
+        return String(a.path || "").localeCompare(String(b.path || ""))
+      })
+    return { owner, repo, branch, list }
+  }
+  return { owner, repo, branch: "", list: [] }
+}
+
+let remoteImportCtx = null
+let remoteImportAll = []
+let remoteImportView = []
+
+function setRemoteImportHint(text) {
+  if (!dom.remoteImportHint) return
+  dom.remoteImportHint.textContent = String(text || "")
+}
+
+function setRemoteImportMeta(text) {
+  if (!dom.remoteImportMeta) return
+  dom.remoteImportMeta.textContent = String(text || "")
+}
+
+function setRemoteImportBusy(busy) {
+  if (dom.confirmRemoteImportBtn) dom.confirmRemoteImportBtn.disabled = !!busy
+  if (dom.remoteImportSelect) dom.remoteImportSelect.disabled = !!busy
+  if (dom.remoteImportFilterInput) dom.remoteImportFilterInput.disabled = !!busy
+}
+
+function buildRemoteOptionLabel(item) {
+  const path = String(item?.path || "")
+  const sizeText = formatFileSize(item?.size)
+  const tag = item?.score >= 60 ? "推荐" : item?.score >= 30 ? "可用" : ""
+  const suffix = [tag, sizeText].filter(Boolean).join(" · ")
+  return `${path}${suffix ? `（${suffix}）` : ""}`
+}
+
+function renderRemoteImportOptions({ keyword } = {}) {
+  const q = String(keyword || "").trim().toLowerCase()
+  remoteImportView = remoteImportAll.filter((it) => {
+    if (!q) return true
+    const path = String(it?.path || "").toLowerCase()
+    return path.includes(q)
+  })
+
+  const sel = dom.remoteImportSelect
+  if (!sel) return
+  sel.innerHTML = ""
+  for (const it of remoteImportView) {
+    const opt = document.createElement("option")
+    opt.value = `${it.branch}:${it.path}`
+    opt.textContent = buildRemoteOptionLabel(it)
+    sel.appendChild(opt)
+  }
+
+  if (remoteImportView.length) sel.value = `${remoteImportView[0].branch}:${remoteImportView[0].path}`
+  setRemoteImportHint(remoteImportView.length ? "已加载：请选择一个 JSON 文件后导入。" : "没有找到匹配的 JSON。")
+}
+
+function getSelectedRemoteImportItem() {
+  const sel = dom.remoteImportSelect
+  const value = String(sel?.value || "")
+  if (!value) return null
+  const idx = value.indexOf(":")
+  if (idx < 0) return null
+  const branch = value.slice(0, idx)
+  const path = value.slice(idx + 1)
+  return remoteImportAll.find((it) => it.branch === branch && it.path === path) || null
+}
+
+async function openRemoteImportPicker({ owner, repo, language, name } = {}) {
+  remoteImportCtx = { owner, repo, language, name }
+  setRemoteImportBusy(true)
+  setRemoteImportHint("")
+  if (dom.remoteImportFilterInput) dom.remoteImportFilterInput.value = ""
+  if (dom.remoteImportSelect) dom.remoteImportSelect.innerHTML = ""
+  openRemoteImportModal()
+  setRemoteImportMeta(`加载中… · ${owner}/${repo}`)
+
+  let result = null
+  try {
+    result = await listGithubJsonFiles({ owner, repo })
+  } catch (e) {
+    result = { owner, repo, branch: "", list: [] }
+  }
+
+  remoteImportAll = Array.isArray(result?.list) ? result.list : []
+  const branch = String(result?.branch || "")
+  setRemoteImportMeta(`${owner}/${repo}${branch ? `（${branch}）` : ""} · 共 ${remoteImportAll.length} 个 JSON`)
+  renderRemoteImportOptions({ keyword: "" })
+  setRemoteImportBusy(false)
+}
+
+async function importWordbookFromGithubRepoAuto({ owner, repo, name, language }) {
+  const branches = ["main", "master"]
+  for (const branch of branches) {
+    const tree = await fetchGithubTree({ owner, repo, branch })
+    const items = Array.isArray(tree?.tree) ? tree.tree : []
+    if (!items.length) continue
+
+    const candidates = items
+      .filter((it) => it && it.type === "blob" && String(it.path || "").toLowerCase().endsWith(".json"))
+      .map((it) => ({
+        path: String(it.path || ""),
+        size: Number(it.size) || 0,
+        score: scoreGithubJsonPath(it.path, it.size),
+      }))
+      .filter((it) => it.path && it.score > -200)
+      .sort((a, b) => b.score - a.score)
+      .slice(0, 18)
+
+    for (const c of candidates) {
+      const rawUrl = `https://raw.githubusercontent.com/${owner}/${repo}/${branch}/${c.path}`
+      const desc = `${owner}/${repo}@${branch}:${c.path}`
+      const book = await importWordbookFromUrl({ url: rawUrl, name, language, description: desc })
+      if (book) return book
+    }
+  }
+  return null
 }
 
 function getPaperInnerSize() {
@@ -879,6 +1210,47 @@ function getWordbookLanguageForSpeech() {
   return "en"
 }
 
+function normalizeSpanishGenderSuffixPart(value) {
+  return String(value || "")
+    .trim()
+    .replaceAll(/^[-–—]\s*/g, "")
+}
+
+function expandSpanishGenderShortForm(text) {
+  const raw = String(text || "").trim()
+  if (!raw || !raw.includes(",")) return raw
+  const parts = raw
+    .split(",")
+    .map((s) => String(s || "").trim())
+    .filter(Boolean)
+  if (parts.length !== 2) return raw
+
+  const first = parts[0]
+  const suffixRaw = normalizeSpanishGenderSuffixPart(parts[1])
+  if (!first || !suffixRaw) return raw
+  if (/\s/.test(suffixRaw)) return raw
+
+  const isWord = (s) => /^[a-záéíóúüñ]+$/i.test(String(s || "").trim())
+  if (!isWord(first) || !isWord(suffixRaw)) return raw
+  if (suffixRaw.length >= Math.max(1, first.length - 1)) return `${first}, ${suffixRaw}`
+  if (suffixRaw.toLowerCase().startsWith(first.toLowerCase())) return `${first}, ${suffixRaw}`
+
+  const vowels = "aeiouáéíóúü"
+  const last = first.slice(-1).toLowerCase()
+  let second = ""
+
+  if (suffixRaw.length === 1) {
+    if (vowels.includes(last)) second = first.slice(0, -1) + suffixRaw
+    else second = first + suffixRaw
+  } else {
+    if (first.length > suffixRaw.length) second = first.slice(0, -suffixRaw.length) + suffixRaw
+    else second = suffixRaw
+  }
+
+  if (!second || second.toLowerCase() === first.toLowerCase()) return raw
+  return `${first}, ${second}`
+}
+
 function speakTerm(term) {
   if (!appState.pronunciationEnabled) return
   const text = String(term || "").trim()
@@ -903,8 +1275,18 @@ function speakTerm(term) {
     if (settingsController) settingsController.render()
   }
 
+  const targetBase = String(
+    resolved?.targetBase ||
+      speech.getCurrentLanguageBase?.({
+        pronunciationLang: appState.pronunciationLang,
+        wordbookLanguage,
+      }) ||
+      ""
+  ).toLowerCase()
+  const speakText = targetBase === "es" ? expandSpanishGenderShortForm(text) : text
+
   speech.speak({
-    text,
+    text: speakText,
     pronunciationEnabled: !!appState.pronunciationEnabled,
     pronunciationLang: appState.pronunciationLang,
     wordbookLanguage,
@@ -1072,20 +1454,60 @@ function generateStatusRound(kind) {
   openReviewModal()
 }
 
+function normalizeMeaningKey(value) {
+  return String(value || "")
+    .trim()
+    .replaceAll(/\s+/g, " ")
+}
+
+function getWordMeaningKey(word) {
+  const term = String(word?.term || "").trim().toLowerCase()
+  const meaning = normalizeMeaningKey(word?.meaning)
+  if (!term) return ""
+  if (!meaning) return term
+  return `${term}||${meaning}`
+}
+
+function buildCurrentRoundWordKeySet() {
+  const round = getCurrentRound()
+  const items = Array.isArray(round?.items) ? round.items : []
+  const set = new Set()
+  for (const it of items) {
+    const key = getWordMeaningKey(it?.word)
+    if (key) set.add(key)
+  }
+  return set
+}
+
 function ensurePool() {
   if (appState.pool.length > 0 && appState.poolIndex < appState.pool.length) return
   const unknownSet = new Set(appState.unknownTerms)
   const unknown = appState.sourceWords.filter((w) => unknownSet.has(w?.term))
   const rest = appState.sourceWords.filter((w) => !unknownSet.has(w?.term))
-  appState.pool = [...shuffle(unknown), ...shuffle(rest)]
+  const merged = [...shuffle(unknown), ...shuffle(rest)]
+  const seen = new Set()
+  appState.pool = merged.filter((w) => {
+    const key = getWordMeaningKey(w)
+    if (!key) return false
+    if (seen.has(key)) return false
+    seen.add(key)
+    return true
+  })
   appState.poolIndex = 0
 }
 
 function pickNextWord() {
   ensurePool()
-  const word = appState.pool[appState.poolIndex]
-  appState.poolIndex = clamp(appState.poolIndex + 1, 0, appState.pool.length)
-  return word || null
+  const currentKeys = buildCurrentRoundWordKeySet()
+  while (appState.poolIndex < appState.pool.length) {
+    const word = appState.pool[appState.poolIndex]
+    appState.poolIndex = clamp(appState.poolIndex + 1, 0, appState.pool.length)
+    const key = getWordMeaningKey(word)
+    if (!key) continue
+    if (currentKeys.has(key)) continue
+    return word || null
+  }
+  return null
 }
 
 function measureElementInPaper(el) {
@@ -1327,7 +1749,10 @@ function addNextWord() {
   }
 
   const word = pickNextWord()
-  if (!word) return
+  if (!word) {
+    window.alert("当前词书没有更多可用词条（已自动去重本轮同词同义）。")
+    return
+  }
 
   const placed = placeWordElement(word)
   const fontSize = placed.el.style.fontSize || ""
@@ -1411,12 +1836,50 @@ dom.importLocalBtn.addEventListener("click", () => {
   dom.importFile.click()
 })
 
+dom.remoteImportBackdrop?.addEventListener("click", () => closeRemoteImportModal())
+dom.closeRemoteImportBtn?.addEventListener("click", () => closeRemoteImportModal())
+dom.remoteImportFilterInput?.addEventListener("input", () => {
+  renderRemoteImportOptions({ keyword: dom.remoteImportFilterInput.value })
+})
+dom.remoteImportSelect?.addEventListener("change", () => {
+  const it = getSelectedRemoteImportItem()
+  if (!it) return
+  const sizeText = formatFileSize(it.size)
+  setRemoteImportHint(`${it.branch}:${it.path}${sizeText ? ` · ${sizeText}` : ""}`)
+})
+dom.confirmRemoteImportBtn?.addEventListener("click", async () => {
+  const it = getSelectedRemoteImportItem()
+  if (!it) return
+  const ctx = remoteImportCtx || {}
+  const rawUrl = `https://raw.githubusercontent.com/${it.owner}/${it.repo}/${it.branch}/${it.path}`
+  const desc = `${it.owner}/${it.repo}@${it.branch}:${it.path}`
+  setRemoteImportBusy(true)
+  setRemoteImportHint("导入中…")
+  try {
+    const book = await importWordbookFromUrl({
+      url: rawUrl,
+      name: ctx.name,
+      language: ctx.language,
+      description: desc,
+    })
+    if (!book) {
+      setRemoteImportHint("导入失败：该 JSON 结构不符合要求，请选择其它文件。")
+      return
+    }
+    closeRemoteImportModal()
+  } finally {
+    setRemoteImportBusy(false)
+  }
+})
+
 dom.importCet4Btn.addEventListener("click", async () => {
   try {
     closeImportModal()
-    await importWordbookFromUrl({
-      url: "https://raw.githubusercontent.com/KyleBing/english-vocabulary/master/3%20%E5%9B%9B%E7%BA%A7-%E4%B9%B1%E5%BA%8F.txt",
-      name: "中国大学生英语四级必备词汇（KyleBing 完整版）.txt",
+    await openRemoteImportPicker({
+      owner: "k7tmiz",
+      repo: "english-vocabulary",
+      name: "英语词库（k7tmiz）",
+      language: "en",
     })
   } catch (e) {}
 })
@@ -1424,9 +1887,11 @@ dom.importCet4Btn.addEventListener("click", async () => {
 dom.importCet6Btn.addEventListener("click", async () => {
   try {
     closeImportModal()
-    await importWordbookFromUrl({
-      url: "https://raw.githubusercontent.com/KyleBing/english-vocabulary/master/4%20%E5%85%AD%E7%BA%A7-%E4%B9%B1%E5%BA%8F.txt",
-      name: "中国大学生英语六级必备词汇（KyleBing 完整版）.txt",
+    await openRemoteImportPicker({
+      owner: "k7tmiz",
+      repo: "spanish-vocabulary",
+      name: "西班牙语词库（k7tmiz）",
+      language: "es",
     })
   } catch (e) {}
 })

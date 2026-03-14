@@ -274,6 +274,21 @@
     window.alert(`未找到「${targetBase}」语音，已使用「${chosenBase || "默认"}」语音：${v.name}（${v.lang}）`)
   }
 
+  function splitSpeakText(text) {
+    const raw = String(text || "").trim()
+    if (!raw) return []
+    const parts = raw
+      .split(/[，,]/)
+      .map((s) => String(s || "").trim())
+      .filter(Boolean)
+    if (parts.length === 2) {
+      const a = parts[0]
+      const b = parts[1]
+      if (!/\s/.test(a) && !/\s/.test(b) && a.length <= 40 && b.length <= 40) return [a, b]
+    }
+    return [raw]
+  }
+
   function waitForVoices({ timeoutMs } = {}) {
     const timeout = clamp(Number(timeoutMs) || 800, 50, 3000)
     return new Promise((resolve) => {
@@ -347,17 +362,47 @@
     const synth = window.speechSynthesis
     try {
       synth.cancel()
-      const u = new SpeechSynthesisUtterance(t)
       const v = resolved.voice
-      if (v) {
-        u.voice = v
-        u.lang = String(v.lang || "")
-        speechState.lastVoiceURI = String(v.voiceURI || "")
-      } else {
-        u.lang = String(resolved.candidates?.[0] || "en-US")
+      const parts = splitSpeakText(t)
+      if (!parts.length) return false
+      const makeUtterance = (seg) => {
+        const u = new SpeechSynthesisUtterance(String(seg || "").trim())
+        if (v) {
+          u.voice = v
+          u.lang = String(v.lang || "")
+          speechState.lastVoiceURI = String(v.voiceURI || "")
+        } else {
+          u.lang = String(resolved.candidates?.[0] || "en-US")
+        }
+        return u
       }
-      synth.speak(u)
-      return true
+
+      if (parts.length === 1) {
+        synth.speak(makeUtterance(parts[0]))
+        return true
+      }
+
+      return await new Promise((resolve) => {
+        let idx = 0
+        const speakNext = () => {
+          if (idx >= parts.length) return resolve(true)
+          const u = makeUtterance(parts[idx])
+          let finished = false
+          u.onend = () => {
+            if (finished) return
+            finished = true
+            idx += 1
+            setTimeout(speakNext, 140)
+          }
+          u.onerror = () => {
+            if (finished) return
+            finished = true
+            resolve(false)
+          }
+          synth.speak(u)
+        }
+        speakNext()
+      })
     } catch (e) {
       window.alert("发音失败：当前设备语音引擎不可用。")
       return false

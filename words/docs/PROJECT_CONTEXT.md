@@ -65,6 +65,9 @@ A4-Memory
   - 依赖 `A4Storage/A4Utils/A4Speech`，不重复实现通用能力
 - `js/app.js`
   - 首页学习流程：取词、A4 排版、复习弹窗、轮次推进、词书导入管理、状态恢复/保存
+  - 词书语言：JSON 词书可携带 `language/description` 并写入 `customWordbooks`；TXT/CSV 会做弱推断（文件名关键字/字符集），未识别则为空；发音在 `pronunciationLang=auto` 时优先使用词书 `language`
+  - 线上导入：从指定 GitHub 词库仓库拉取 `.json` 列表并展示给用户选择，再按所选 JSON 导入（英语/西班牙语）
+  - 西语词形补全：当发音语言为西班牙语且词条为“逗号后缀简写”（如 `antiguo,gua`），会在发音前扩展为完整两种形式（`antiguo, antigua`）
   - 复习弹窗：每次打开默认打乱顺序（可手动恢复顺序）
   - 多页 A4 翻页：只渲染当前页（`pageIndex === currentPageIndex`）
 - `js/records.js`
@@ -86,6 +89,7 @@ A4-Memory
 - 普通学习轮
   - 一轮对应一张 A4（`items[].pageIndex` 恒为 `0`）
   - 每新增 1 个单词会打开“复习本轮”弹窗
+  - 本轮去重：同一轮 A4 内不重复出现“同词同义”的词条
   - 轮次写满后会弹出“本轮已满”弹窗：可继续下一轮（保留记录）或清空重开
 - 状态生成轮
   - 从记录页状态视图点击“生成一轮”触发
@@ -156,6 +160,7 @@ A4-Memory
   - 轻量复习：`reviewSystemEnabled`, `reviewIntervals`
   - 发音：`pronunciationEnabled`, `pronunciationAccent`, `pronunciationLang`, `voiceMode`, `voiceURI`
   - 词书：`selectedWordbookId`, `customWordbooks`
+    - 每个词书：`{ id, name, description, language, words }`；其中 `language` 用于发音自动选语音（当 `pronunciationLang=auto`）
   - AI：`aiConfig`（provider/baseUrl/apiKey/model）
 - 轮次字段（存于 `rounds[]`）
   - `type`: `normal | review_mastered | review_learning | review_unknown | review_due`
