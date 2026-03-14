@@ -834,9 +834,13 @@ function getRoundStatusCounts(round) {
 function getLatestTermMap() {
   const map = new Map()
   const rounds = Array.isArray(appState.rounds) ? appState.rounds : []
-  for (const r of rounds) {
+  let seq = 0
+  for (let ri = 0; ri < rounds.length; ri++) {
+    const r = rounds[ri]
     const items = Array.isArray(r?.items) ? r.items : []
-    for (const it of items) {
+    for (let ii = 0; ii < items.length; ii++) {
+      const it = items[ii]
+      seq += 1
       const term = String(it?.word?.term || "").trim()
       if (!term) continue
       const key = term.toLowerCase()
@@ -844,11 +848,20 @@ function getLatestTermMap() {
       const createdAt = parseIsoTime(it?.createdAt)
       const fallbackAt = parseIsoTime(r?.finishedAt) || parseIsoTime(r?.startedAt)
       const ts = reviewedAt ?? createdAt ?? fallbackAt ?? 0
+      const rank = reviewedAt != null ? 3 : createdAt != null ? 2 : fallbackAt != null ? 1 : 0
       const prev = map.get(key)
-      if (prev && ts <= prev.ts) continue
+      if (prev) {
+        if (ts < prev.ts) continue
+        if (ts === prev.ts) {
+          if ((rank || 0) < (prev.rank || 0)) continue
+          if ((rank || 0) === (prev.rank || 0) && seq <= (prev.seq || 0)) continue
+        }
+      }
       map.set(key, {
         key,
         ts,
+        rank,
+        seq,
         term,
         word: it?.word || { term },
         status: normalizeStatus(it?.status),

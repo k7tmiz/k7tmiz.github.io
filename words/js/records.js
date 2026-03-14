@@ -209,9 +209,14 @@ function buildPaperPreview(items) {
 
 function buildLatestTermMap(rounds) {
   const map = new Map()
-  for (const r of Array.isArray(rounds) ? rounds : []) {
+  const rs = Array.isArray(rounds) ? rounds : []
+  let seq = 0
+  for (let ri = 0; ri < rs.length; ri++) {
+    const r = rs[ri]
     const items = Array.isArray(r?.items) ? r.items : []
-    for (const it of items) {
+    for (let ii = 0; ii < items.length; ii++) {
+      const it = items[ii]
+      seq += 1
       const term = String(it?.word?.term || "").trim()
       if (!term) continue
       const key = term.toLowerCase()
@@ -219,10 +224,19 @@ function buildLatestTermMap(rounds) {
       const createdAt = parseIsoTime(it?.createdAt)
       const fallbackAt = parseIsoTime(r?.finishedAt) || parseIsoTime(r?.startedAt)
       const ts = reviewedAt ?? createdAt ?? fallbackAt ?? 0
+      const rank = reviewedAt != null ? 3 : createdAt != null ? 2 : fallbackAt != null ? 1 : 0
       const prev = map.get(key)
-      if (prev && ts <= prev.ts) continue
+      if (prev) {
+        if (ts < prev.ts) continue
+        if (ts === prev.ts) {
+          if ((rank || 0) < (prev.rank || 0)) continue
+          if ((rank || 0) === (prev.rank || 0) && seq <= (prev.seq || 0)) continue
+        }
+      }
       map.set(key, {
         ts,
+        rank,
+        seq,
         term,
         status: normalizeStatus(it?.status),
         lastReviewedAt: String(it?.lastReviewedAt || "").trim(),

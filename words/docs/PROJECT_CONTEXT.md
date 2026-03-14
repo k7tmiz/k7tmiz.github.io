@@ -13,6 +13,7 @@
   - `window.A4Utils`：下载/文件名清洗工具
   - `window.A4Storage`：读写主状态
   - `window.A4Speech`：SpeechSynthesis 发音能力
+- 跨浏览器 UI：对常见控件样式做基础归一，尽量减少 Chromium/Safari 的默认渲染差异
 - 打印/导出 PDF：记录页打开打印窗口并调用 `window.print()`；由浏览器“另存为 PDF”
 - AI：兼容 OpenAI 风格 `chat/completions`；配置项含 `provider/baseUrl/apiKey/model`（仅本地保存）
 
@@ -103,6 +104,7 @@ A4-Memory
 - 全局最新状态映射
   - 遍历 `rounds[].items[]`，按 term（忽略大小写）构建“最新记录”
   - 最新判定优先级：`lastReviewedAt` > `createdAt` > round 的 `finishedAt/startedAt`
+  - 当时间相等或字段缺失时：使用稳定的 tie-break 规则（后出现的记录优先），避免旧记录覆盖新记录导致“状态卡住”
 - 首次出现轮次映射：用于展示来源轮次（第 N 轮）
 - 待复习集合
   - 当 `reviewSystemEnabled=true` 且 `nextReviewAt <= now` 时归入待复习分组
