@@ -224,6 +224,29 @@ function buildPaperPreview(items) {
   return paper
 }
 
+const STATUS_MASTERED = "mastered"
+const STATUS_LEARNING = "learning"
+const STATUS_UNKNOWN = "unknown"
+
+function normalizeStatus(value) {
+  const v = String(value || "").trim().toLowerCase()
+  if (v === STATUS_MASTERED || v === STATUS_LEARNING || v === STATUS_UNKNOWN) return v
+  return STATUS_UNKNOWN
+}
+
+function computeStatusCounts(items) {
+  let mastered = 0
+  let learning = 0
+  let unknown = 0
+  for (const it of Array.isArray(items) ? items : []) {
+    const s = normalizeStatus(it?.status)
+    if (s === STATUS_MASTERED) mastered += 1
+    else if (s === STATUS_LEARNING) learning += 1
+    else unknown += 1
+  }
+  return { mastered, learning, unknown }
+}
+
 function renderRounds(rounds, { onDeleteRound, onReviewRound, getRoundCap } = {}) {
   const roundsEl = document.getElementById("rounds")
   const emptyEl = document.getElementById("emptyState")
@@ -252,8 +275,15 @@ function renderRounds(rounds, { onDeleteRound, onReviewRound, getRoundCap } = {}
         Array.isArray(r.items) ? r.items.length : 0
       }/${cap}`
     )
+    const statusCounts = computeStatusCounts(Array.isArray(r.items) ? r.items : [])
+    const statusMeta = el(
+      "div",
+      "round-meta",
+      `已掌握：${statusCounts.mastered} · 学习中：${statusCounts.learning} · 不会：${statusCounts.unknown}`
+    )
     head.appendChild(title)
     head.appendChild(meta)
+    head.appendChild(statusMeta)
 
     const actions = el("div", "round-actions no-print")
     const exportBtn = el("button", "", "导出本轮 CSV")

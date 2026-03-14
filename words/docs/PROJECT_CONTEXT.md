@@ -55,6 +55,7 @@ A4-Memory
 
 - `index.html`（首页）
   - 负责学习主流程与复习弹窗
+  - 顶部“学习状态”入口：展示状态汇总/待复习数量，并支持按状态生成 A4
   - “学习记录”跳转到 `records.html`
 - `records.html`（学习记录页）
   - 展示历史轮次与统计、导出/打印
@@ -67,6 +68,7 @@ A4-Memory
 - 设置项覆盖：
   - 外观：主题模式（auto/light/dark）
   - 学习：每日目标、每轮上限
+  - 复习：轻量复习系统开关、复习间隔（不会/学习中/已掌握）
   - 发音：开关、语言/口音、语音模式（自动/手动）与当前语音展示
   - 数据：导入/导出完整备份（学习记录 + 设置）
   - AI：配置与生成词书
@@ -96,9 +98,15 @@ A4-Memory
   - 轮次：`rounds`, `currentRoundId`
   - 复习跳转：`pendingReviewRoundId`
   - 学习偏好：`themeMode`, `immersiveMode`, `roundCap`, `dailyGoalRounds`, `dailyGoalWords`, `meaningVisible/showMeaning`
+  - 轻量复习：`reviewSystemEnabled`, `reviewIntervals`（unknownDays/learningDays/masteredDays）
   - 发音：`pronunciationEnabled`, `pronunciationAccent`, `pronunciationLang`, `voiceMode`, `voiceURI`
   - 词书：`selectedWordbookId`, `customWordbooks`
   - AI 配置：`aiConfig`（仅本地保存）
+
+- 单词学习状态字段（存于 `rounds[].items[]`）
+  - `status`: `mastered | learning | unknown`（默认 unknown，旧数据缺省视为 unknown）
+  - `lastReviewedAt`: ISO string（本轮复习标记后写入）
+  - `nextReviewAt`: ISO string（启用轻量复习时按状态计算，用于“待复习”判断）
 
 ## 9) AI 词书生成
 
@@ -116,3 +124,4 @@ A4-Memory
 - 向后兼容优先：`localStorage` schema 变更需做兼容/归一化，避免数据丢失
 - 单一来源：设置弹窗与核心规则尽量集中，避免跨页重复实现
 - 低风险演进：优先小步重构与清晰拆分，避免“为模块化而模块化”
+- 移动端优先：避免顶部区域固定宽度导致 iPhone Safari 溢出，使用可换行布局

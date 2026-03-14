@@ -12,6 +12,9 @@ A pure front-end vocabulary tool based on the “A4 paper memory method”. Word
 - Forced review after each new word (optional shuffle)
 - Configurable round cap (20–30), start next round or restart
 - Meaning toggle, immersive mode, theme modes (Auto/Light/Dark)
+- Learning status: mark each word as Mastered / Learning / Unknown during review
+- Lightweight review: auto schedules next review time and counts “Due”
+- Status review: view status summary and generate an A4 by status / due
 - Records page: per-round view, delete, jump back to review
 - Export: CSV (Excel), A4 print/PDF, A4 image (PNG)
 - Wordbooks: built-in samples + local import (TXT/CSV/JSON) + online import (CET4/CET6)
@@ -37,9 +40,10 @@ Open: http://localhost:8080/
 ### 3) Basic flow
 
 - Home: “Next word” → add a word → review the round
-- Home: “Review this round” anytime
+- Home: “Review this round” anytime, and mark learning status
 - Records: export CSV / print-PDF / export PNG
-- Settings: theme, pronunciation, round cap, backup, AI generator
+- “Learning status” (top): status summary and generate an A4 by status / due
+- Settings: theme, pronunciation, round cap, lightweight review, backup, AI generator
 
 ## Project structure (brief)
 

@@ -101,6 +101,21 @@ body {
   min-width: 220px;
 }
 
+.status-top {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 10px;
+}
+
+.status-entry {
+  padding: 6px 10px;
+  border-radius: 999px;
+  font-size: 13px;
+  line-height: 1;
+  white-space: nowrap;
+}
+
 .status-meta {
   font-size: 12px;
   color: var(--muted);
@@ -536,12 +551,22 @@ select:hover {
   color: var(--accentText);
 }
 
+.review-btn-learning {
+  background: transparent;
+}
+
 .review-btn-known:hover {
   background: var(--accentHover);
 }
 
 .review-btn-unknown {
   background: transparent;
+}
+
+@media (min-width: 420px) {
+  .review-card-actions {
+    grid-template-columns: 1fr 1fr 1fr;
+  }
 }
 
 .intro {
@@ -827,9 +852,20 @@ select:hover {
 }
 
 @media (max-width: 560px) {
+  .app-header {
+    flex-wrap: wrap;
+    align-items: flex-start;
+  }
+
+  .title {
+    min-width: 0;
+    flex: 1 1 100%;
+  }
+
   .status {
     min-width: 0;
     align-items: flex-start;
+    width: 100%;
   }
 
   .status-meta {
@@ -837,7 +873,8 @@ select:hover {
   }
 
   .status-progress {
-    width: 160px;
+    width: 100%;
+    max-width: 220px;
   }
 
   .select-wrap {

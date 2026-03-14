@@ -1,5 +1,9 @@
 const DEFAULT_ROUND_CAP = 30
 const INTRO_SEEN_KEY = "a4-memory:intro-seen:v1"
+const STATUS_MASTERED = "mastered"
+const STATUS_LEARNING = "learning"
+const STATUS_UNKNOWN = "unknown"
+const DEFAULT_REVIEW_INTERVALS = { unknownDays: 1, learningDays: 3, masteredDays: 7 }
 
 const { normalizeThemeMode, normalizeAccent, normalizeVoiceMode, normalizePronunciationLang } = window.A4Settings
 const { sanitizeFilename, downloadJsonFile } = window.A4Utils
@@ -191,6 +195,8 @@ function loadState() {
 const dom = {
   roundBadge: document.getElementById("roundBadge"),
   roundProgress: document.getElementById("roundProgress"),
+  roundStatusCounts: document.getElementById("roundStatusCounts"),
+  statusPanelBtn: document.getElementById("statusPanelBtn"),
   settingsBtn: document.getElementById("settingsBtn"),
   nextBtn: document.getElementById("nextBtn"),
   reviewBtn: document.getElementById("reviewBtn"),
@@ -224,6 +230,7 @@ const dom = {
   reviewCardMeaning: document.getElementById("reviewCardMeaning"),
   reviewCardHint: document.getElementById("reviewCardHint"),
   reviewKnownBtn: document.getElementById("reviewKnownBtn"),
+  reviewLearningBtn: document.getElementById("reviewLearningBtn"),
   reviewUnknownBtn: document.getElementById("reviewUnknownBtn"),
   closeReviewBtn: document.getElementById("closeReviewBtn"),
   doneReviewBtn: document.getElementById("doneReviewBtn"),
@@ -266,6 +273,22 @@ const dom = {
   aiPreviewMeta: document.getElementById("aiPreviewMeta"),
   aiPreviewList: document.getElementById("aiPreviewList"),
   aiConfirmBtn: document.getElementById("aiConfirmBtn"),
+  statusModal: document.getElementById("statusModal"),
+  statusBackdrop: document.getElementById("statusBackdrop"),
+  closeStatusBtn: document.getElementById("closeStatusBtn"),
+  statusSummary: document.getElementById("statusSummary"),
+  genDueA4Btn: document.getElementById("genDueA4Btn"),
+  genUnknownA4Btn: document.getElementById("genUnknownA4Btn"),
+  genLearningA4Btn: document.getElementById("genLearningA4Btn"),
+  genMasteredA4Btn: document.getElementById("genMasteredA4Btn"),
+  statusA4Modal: document.getElementById("statusA4Modal"),
+  statusA4Backdrop: document.getElementById("statusA4Backdrop"),
+  closeStatusA4Btn: document.getElementById("closeStatusA4Btn"),
+  printStatusA4Btn: document.getElementById("printStatusA4Btn"),
+  statusA4Title: document.getElementById("statusA4Title"),
+  statusA4Meta: document.getElementById("statusA4Meta"),
+  statusA4Paper: document.getElementById("statusA4Paper"),
+  statusA4PaperInner: document.getElementById("statusA4PaperInner"),
 }
 
 const appState = {
@@ -290,6 +313,8 @@ const appState = {
   roundCap: DEFAULT_ROUND_CAP,
   dailyGoalRounds: 3,
   dailyGoalWords: 0,
+  reviewSystemEnabled: true,
+  reviewIntervals: { ...DEFAULT_REVIEW_INTERVALS },
   pronunciationEnabled: true,
   pronunciationAccent: "auto",
   pronunciationLang: "auto",
@@ -659,6 +684,8 @@ function persist() {
     roundCap: appState.roundCap,
     dailyGoalRounds: appState.dailyGoalRounds,
     dailyGoalWords: appState.dailyGoalWords,
+    reviewSystemEnabled: !!appState.reviewSystemEnabled,
+    reviewIntervals: normalizeReviewIntervals(appState.reviewIntervals),
     pronunciationEnabled: appState.pronunciationEnabled,
     pronunciationAccent: appState.pronunciationAccent,
     pronunciationLang: appState.pronunciationLang,
@@ -688,6 +715,7 @@ function renderCurrentRound() {
     const rect = el.getBoundingClientRect()
     appState.placed.push({
       word: item.word,
+      roundItem: item,
       box: { x, y, w: rect.width, h: rect.height },
       el,
       fontSize: item.fontSize || "",
@@ -786,7 +814,107 @@ function computeStudyStats() {
   return { totalWords, todayWords, completedRounds, todayCompletedRounds, streak }
 }
 
-function renderStats() {}
+function normalizeStatus(value) {
+  const v = String(value || "").trim().toLowerCase()
+  if (v === STATUS_MASTERED || v === STATUS_LEARNING || v === STATUS_UNKNOWN) return v
+  return STATUS_UNKNOWN
+}
+
+function parseIsoTime(value) {
+  const raw = String(value || "").trim()
+  if (!raw) return null
+  const t = Date.parse(raw)
+  if (!Number.isFinite(t)) return null
+  return t
+}
+
+function normalizeReviewIntervals(raw) {
+  const base = raw && typeof raw === "object" ? raw : {}
+  const unknownDays = clamp(Math.round(Number(base.unknownDays) || DEFAULT_REVIEW_INTERVALS.unknownDays), 1, 60)
+  const learningDays = clamp(Math.round(Number(base.learningDays) || DEFAULT_REVIEW_INTERVALS.learningDays), 1, 60)
+  const masteredDays = clamp(Math.round(Number(base.masteredDays) || DEFAULT_REVIEW_INTERVALS.masteredDays), 1, 365)
+  return { unknownDays, learningDays, masteredDays }
+}
+
+function getNextReviewAtIso(status, nowMs) {
+  const intervals = normalizeReviewIntervals(appState.reviewIntervals)
+  const s = normalizeStatus(status)
+  const days =
+    s === STATUS_MASTERED ? intervals.masteredDays : s === STATUS_LEARNING ? intervals.learningDays : intervals.unknownDays
+  return new Date(nowMs + days * 24 * 60 * 60 * 1000).toISOString()
+}
+
+function getRoundStatusCounts(round) {
+  const items = Array.isArray(round?.items) ? round.items : []
+  let mastered = 0
+  let learning = 0
+  let unknown = 0
+  for (const it of items) {
+    const s = normalizeStatus(it?.status)
+    if (s === STATUS_MASTERED) mastered += 1
+    else if (s === STATUS_LEARNING) learning += 1
+    else unknown += 1
+  }
+  return { mastered, learning, unknown, total: items.length }
+}
+
+function getLatestTermMap() {
+  const map = new Map()
+  const rounds = Array.isArray(appState.rounds) ? appState.rounds : []
+  for (const r of rounds) {
+    const items = Array.isArray(r?.items) ? r.items : []
+    for (const it of items) {
+      const term = String(it?.word?.term || "").trim()
+      if (!term) continue
+      const key = term.toLowerCase()
+      const reviewedAt = parseIsoTime(it?.lastReviewedAt)
+      const createdAt = parseIsoTime(it?.createdAt)
+      const fallbackAt = parseIsoTime(r?.finishedAt) || parseIsoTime(r?.startedAt)
+      const ts = reviewedAt ?? createdAt ?? fallbackAt ?? 0
+      const prev = map.get(key)
+      if (prev && ts <= prev.ts) continue
+      map.set(key, {
+        key,
+        ts,
+        term,
+        word: it?.word || { term },
+        status: normalizeStatus(it?.status),
+        lastReviewedAt: reviewedAt ? new Date(reviewedAt).toISOString() : "",
+        nextReviewAt: String(it?.nextReviewAt || "").trim(),
+      })
+    }
+  }
+  return map
+}
+
+function getDueTerms(nowMs) {
+  if (!appState.reviewSystemEnabled) return []
+  const map = getLatestTermMap()
+  const due = []
+  for (const entry of map.values()) {
+    const t = parseIsoTime(entry.nextReviewAt)
+    if (t !== null && t <= nowMs) due.push(entry)
+  }
+  due.sort((a, b) => (parseIsoTime(a.nextReviewAt) || 0) - (parseIsoTime(b.nextReviewAt) || 0))
+  return due
+}
+
+function renderStats() {
+  const nowMs = Date.now()
+  const round = getCurrentRound()
+  const counts = getRoundStatusCounts(round)
+  const dueCount = getDueTerms(nowMs).length
+
+  if (dom.roundStatusCounts) {
+    const parts = [
+      `已掌握 ${counts.mastered}`,
+      `学习中 ${counts.learning}`,
+      `不会 ${counts.unknown}`,
+      `待复习 ${dueCount}`,
+    ]
+    dom.roundStatusCounts.textContent = parts.join(" · ")
+  }
+}
 
 function updateMeaningToggle() {
   dom.toggleMeaningBtn.textContent = `显示释义：${appState.showMeaning ? "开" : "关"}`
@@ -844,22 +972,19 @@ function speakTerm(term) {
 }
 
 function refreshReviewList() {
-  const words = appState.reviewShuffled
-    ? shuffle(appState.placed.map((p) => p.word))
-    : appState.placed.map((p) => p.word)
-  appState.reviewQueue = words
+  const list = appState.reviewShuffled ? shuffle(appState.placed.slice()) : appState.placed.slice()
+  appState.reviewQueue = list
   appState.reviewIndex = 0
   renderReviewCard()
 }
 
-function setUnknown(term, unknown) {
+function setTermUnknownFlag(term, unknown) {
   const t = String(term || "").trim()
   if (!t) return
   const set = new Set(appState.unknownTerms)
   if (unknown) set.add(t)
   else set.delete(t)
   appState.unknownTerms = Array.from(set)
-  persist()
 }
 
 function renderReviewCard() {
@@ -876,16 +1001,19 @@ function renderReviewCard() {
     dom.reviewCardMeaning.textContent = ""
     dom.reviewCardHint.textContent = ""
     dom.reviewKnownBtn.disabled = true
+    dom.reviewLearningBtn.disabled = true
     dom.reviewUnknownBtn.disabled = true
     return
   }
 
-  const w = appState.reviewQueue[idx]
+  const entry = appState.reviewQueue[idx]
+  const w = entry?.word
   dom.reviewCardProgress.textContent = `${idx + 1} / ${total}`
   dom.reviewCardTerm.textContent = w?.term || ""
   dom.reviewCardMeaning.textContent = w?.meaning ? `${w.pos ? `${w.pos} ` : ""}${w.meaning}` : ""
-  dom.reviewCardHint.textContent = "点击单词可发音；左右滑动可标记"
+  dom.reviewCardHint.textContent = "点击单词可发音；左右滑动可快速标记（已掌握/不会）"
   dom.reviewKnownBtn.disabled = false
+  dom.reviewLearningBtn.disabled = false
   dom.reviewUnknownBtn.disabled = false
 }
 
@@ -910,6 +1038,225 @@ function openRoundFullModal() {
 
 function closeRoundFullModal() {
   setModalVisible(dom.roundFullModal, false)
+}
+
+let lastGeneratedA4 = null
+
+function openStatusModal() {
+  renderStatusModal()
+  setModalVisible(dom.statusModal, true)
+}
+
+function closeStatusModal() {
+  setModalVisible(dom.statusModal, false)
+}
+
+function closeStatusA4Modal() {
+  setModalVisible(dom.statusA4Modal, false)
+}
+
+function renderStatusModal() {
+  const cap = normalizeRoundCap(appState.roundCap)
+  const nowMs = Date.now()
+  const map = getLatestTermMap()
+  let mastered = 0
+  let learning = 0
+  let unknown = 0
+  for (const entry of map.values()) {
+    const s = normalizeStatus(entry.status)
+    if (s === STATUS_MASTERED) mastered += 1
+    else if (s === STATUS_LEARNING) learning += 1
+    else unknown += 1
+  }
+  const dueList = getDueTerms(nowMs)
+  const due = dueList.length
+
+  if (dom.statusSummary) {
+    const enabledLabel = appState.reviewSystemEnabled ? "开" : "关"
+    dom.statusSummary.textContent = `已掌握：${mastered} · 学习中：${learning} · 不会：${unknown} · 待复习：${due}\n复习系统：${enabledLabel} · 每页：${cap}`
+  }
+
+  if (dom.genMasteredA4Btn) dom.genMasteredA4Btn.disabled = mastered <= 0
+  if (dom.genLearningA4Btn) dom.genLearningA4Btn.disabled = learning <= 0
+  if (dom.genUnknownA4Btn) dom.genUnknownA4Btn.disabled = unknown <= 0
+  if (dom.genDueA4Btn) dom.genDueA4Btn.disabled = due <= 0 || !appState.reviewSystemEnabled
+}
+
+function openStatusA4Modal({ title, meta }) {
+  if (dom.statusA4Title) dom.statusA4Title.textContent = title || "生成 A4"
+  if (dom.statusA4Meta) dom.statusA4Meta.textContent = meta || ""
+  setModalVisible(dom.statusA4Modal, true)
+}
+
+function renderStatusA4Words(words) {
+  if (!dom.statusA4PaperInner || !dom.statusA4Paper) return { items: [] }
+  dom.statusA4PaperInner.innerHTML = ""
+  const placed = []
+  const items = []
+
+  const measure = (el) => {
+    dom.statusA4PaperInner.appendChild(el)
+    el.style.left = "0px"
+    el.style.top = "0px"
+    const paperRect = dom.statusA4PaperInner.getBoundingClientRect()
+    const rect = el.getBoundingClientRect()
+    return {
+      w: rect.width,
+      h: rect.height,
+      paperW: paperRect.width,
+      paperH: paperRect.height,
+    }
+  }
+
+  const placeOne = (word) => {
+    const el = buildWordElement(word)
+    el.style.fontSize = "16px"
+    el.style.lineHeight = "1.2"
+
+    const padding = 10
+    const margin = 6
+    const sizeSteps = [18, 16, 14, 12]
+
+    for (const size of sizeSteps) {
+      el.style.fontSize = `${size}px`
+      const m = measure(el)
+      const maxX = Math.max(0, m.paperW - m.w)
+      const maxY = Math.max(0, m.paperH - m.h)
+
+      let attempts = 0
+      while (attempts < 240) {
+        attempts++
+        const x = Math.random() * maxX
+        const y = Math.random() * maxY
+        const candidate = { x: x + margin, y: y + margin, w: m.w, h: m.h }
+        let ok = true
+        for (const p of placed) {
+          if (intersects(candidate, p.box, padding)) {
+            ok = false
+            break
+          }
+        }
+        if (!ok) continue
+        el.style.left = `${candidate.x}px`
+        el.style.top = `${candidate.y}px`
+        const pos = { x: clamp(candidate.x / m.paperW, 0, 1), y: clamp(candidate.y / m.paperH, 0, 1) }
+        return { el, box: candidate, pos, fontSize: `${size}px` }
+      }
+
+      try {
+        dom.statusA4PaperInner.removeChild(el)
+      } catch (e) {}
+    }
+
+    const m = measure(el)
+    const x = Math.random() * Math.max(0, m.paperW - m.w)
+    const y = Math.random() * Math.max(0, m.paperH - m.h)
+    const candidate = { x, y, w: m.w, h: m.h }
+    el.style.left = `${candidate.x}px`
+    el.style.top = `${candidate.y}px`
+    const pos = { x: clamp(candidate.x / m.paperW, 0, 1), y: clamp(candidate.y / m.paperH, 0, 1) }
+    return { el, box: candidate, pos, fontSize: el.style.fontSize || "" }
+  }
+
+  for (const w of Array.isArray(words) ? words : []) {
+    const term = String(w?.term || "").trim()
+    if (!term) continue
+    const placedOne = placeOne(w)
+    if (!placedOne) continue
+    placed.push({ box: placedOne.box })
+    items.push({ word: w, pos: placedOne.pos, fontSize: placedOne.fontSize, createdAt: new Date().toISOString() })
+  }
+
+  return { items }
+}
+
+function openPrintForGeneratedA4({ title, items }) {
+  const pageMarginMm = 10
+  const innerW = 210 - pageMarginMm * 2
+  const innerH = 297 - pageMarginMm * 2
+  const wordsHtml = (Array.isArray(items) ? items : [])
+    .map((it) => {
+      const pos = it?.pos
+      const term = String(it?.word?.term || "").trim()
+      if (!pos || !term) return ""
+      const x = Math.max(0, Math.min(1, pos.x)) * innerW
+      const y = Math.max(0, Math.min(1, pos.y)) * innerH
+      const basePx = Number.parseFloat(String(it?.fontSize || "").replace("px", "")) || 16
+      const pt = Math.max(9, Math.min(18, basePx * 0.75))
+      return `<div class="w" style="left:${x}mm;top:${y}mm;font-size:${pt}pt;">${term}</div>`
+    })
+    .join("")
+
+  const html = `<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>A4 Print</title>
+    <style>
+      @page { size: A4; margin: ${pageMarginMm}mm; }
+      html, body { padding: 0; margin: 0; }
+      body { font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif; }
+      .page { width: 210mm; height: 297mm; position: relative; }
+      .inner { position: absolute; left:${pageMarginMm}mm; top:${pageMarginMm}mm; width:${innerW}mm; height:${innerH}mm; border: 0.6mm solid #cfd6e6; box-sizing: border-box; }
+      .w { position: absolute; font-weight: 700; color: #0b1220; }
+      .footer { position: absolute; left: 3mm; bottom: 2mm; font-size: 9pt; color: #5b6477; }
+    </style>
+  </head>
+  <body>
+    <section class="page">
+      <div class="inner">
+        ${wordsHtml}
+        <div class="footer">${String(title || "").replaceAll("<", "&lt;").replaceAll(">", "&gt;")} · ${formatDateTime(
+    new Date()
+  )}</div>
+      </div>
+    </section>
+    <script>window.onload = () => setTimeout(() => window.print(), 80)</script>
+  </body>
+</html>`
+
+  const win = window.open("", "_blank", "noopener,noreferrer")
+  if (!win) {
+    window.alert("无法打开打印窗口：请检查浏览器是否拦截了弹窗。")
+    return
+  }
+  win.document.open()
+  win.document.write(html)
+  win.document.close()
+}
+
+function generateStatusA4(kind) {
+  const cap = normalizeRoundCap(appState.roundCap)
+  const nowMs = Date.now()
+  const map = getLatestTermMap()
+
+  let list = []
+  let title = "生成 A4"
+  if (kind === "due") {
+    title = "待复习 A4"
+    list = getDueTerms(nowMs)
+  } else {
+    const status = normalizeStatus(kind)
+    title =
+      status === STATUS_MASTERED ? "已掌握 A4" : status === STATUS_LEARNING ? "学习中 A4" : status === STATUS_UNKNOWN ? "不会 A4" : "生成 A4"
+    list = Array.from(map.values()).filter((e) => normalizeStatus(e.status) === status)
+    list = shuffle(list)
+  }
+
+  const picked = list.slice(0, cap)
+  const total = list.length
+  const words = picked.map((e) => e.word)
+
+  openStatusA4Modal({
+    title,
+    meta: total <= cap ? `共 ${total} 个，已按实际数量生成。` : `已生成 ${cap} 个（共 ${total} 个可用）。`,
+  })
+
+  requestAnimationFrame(() => {
+    const rendered = renderStatusA4Words(words)
+    lastGeneratedA4 = { title, items: rendered.items }
+  })
 }
 
 function ensurePool() {
@@ -1040,6 +1387,9 @@ function restore() {
   const rawGoalWords = Number(saved.dailyGoalWords)
   appState.dailyGoalWords = Number.isFinite(rawGoalWords) ? clamp(Math.round(rawGoalWords), 0, 500) : 0
 
+  appState.reviewSystemEnabled = typeof saved.reviewSystemEnabled === "boolean" ? saved.reviewSystemEnabled : true
+  appState.reviewIntervals = normalizeReviewIntervals(saved.reviewIntervals)
+
   appState.pronunciationEnabled =
     typeof saved.pronunciationEnabled === "boolean" ? saved.pronunciationEnabled : true
   appState.pronunciationAccent = normalizeAccent(saved.pronunciationAccent)
@@ -1074,6 +1424,22 @@ function restore() {
   if (saved.version === 2 && Array.isArray(saved.rounds) && typeof saved.currentRoundId === "string") {
     appState.rounds = saved.rounds
     appState.currentRoundId = saved.currentRoundId
+    const normalizedUnknown = new Set()
+    for (const r of appState.rounds) {
+      const items = Array.isArray(r?.items) ? r.items : []
+      for (const it of items) {
+        const term = String(it?.word?.term || "").trim()
+        if (!term) continue
+        if (!it.status) it.status = STATUS_UNKNOWN
+        it.status = normalizeStatus(it.status)
+        if (typeof it.lastReviewedAt !== "string") it.lastReviewedAt = ""
+        if (typeof it.nextReviewAt !== "string") it.nextReviewAt = ""
+      }
+    }
+    for (const entry of getLatestTermMap().values()) {
+      if (normalizeStatus(entry.status) === STATUS_UNKNOWN) normalizedUnknown.add(entry.term)
+    }
+    appState.unknownTerms = Array.from(normalizedUnknown)
     ensureCurrentRound()
     renderCurrentRound()
     updateBadge()
@@ -1108,6 +1474,9 @@ function restore() {
       pos: { x: clamp(p.box.x / paper.w, 0, 1), y: clamp(p.box.y / paper.h, 0, 1) },
       fontSize: p.fontSize || "",
       createdAt: new Date().toISOString(),
+      status: STATUS_UNKNOWN,
+      lastReviewedAt: "",
+      nextReviewAt: "",
     })
   }
   if (round.items.length >= normalizeRoundCap(round.roundCap)) round.finishedAt = new Date().toISOString()
@@ -1133,22 +1502,20 @@ function addNextWord() {
 
   const placed = placeWordElement(word)
   const fontSize = placed.el.style.fontSize || ""
-  appState.placed.push({
+  const roundItem = {
     word,
-    el: placed.el,
-    box: placed.box,
-    fontSize,
     pos: placed.pos,
-  })
+    fontSize,
+    createdAt: new Date().toISOString(),
+    status: STATUS_UNKNOWN,
+    lastReviewedAt: "",
+    nextReviewAt: "",
+  }
+  appState.placed.push({ word, roundItem, el: placed.el, box: placed.box, fontSize, pos: placed.pos })
 
   const round = getCurrentRound()
   if (round) {
-    round.items.push({
-      word,
-      pos: placed.pos,
-      fontSize,
-      createdAt: new Date().toISOString(),
-    })
+    round.items.push(roundItem)
     if (round.items.length >= getCurrentRoundCap()) finalizeCurrentRound()
   }
 
@@ -1178,6 +1545,10 @@ if (window.A4Settings && typeof window.A4Settings.createSettingsModalController 
     applyTheme,
     onAfterChange: ({ key } = {}) => {
       if (key === "dailyGoalRounds" || key === "dailyGoalWords") renderStats()
+      if (key === "reviewSystemEnabled" || key === "reviewIntervals") {
+        renderStats()
+        if (dom.statusModal && !dom.statusModal.classList.contains("hidden")) renderStatusModal()
+      }
       if (key === "roundCap") {
         const round = getCurrentRound()
         if (round && (!Array.isArray(round.items) || round.items.length === 0)) round.roundCap = appState.roundCap
@@ -1190,6 +1561,34 @@ if (window.A4Settings && typeof window.A4Settings.createSettingsModalController 
 }
 
 dom.settingsBtn.addEventListener("click", () => openSettingsModal())
+
+dom.statusPanelBtn?.addEventListener("click", () => openStatusModal())
+dom.statusBackdrop?.addEventListener("click", () => closeStatusModal())
+dom.closeStatusBtn?.addEventListener("click", () => closeStatusModal())
+
+dom.genDueA4Btn?.addEventListener("click", () => {
+  closeStatusModal()
+  generateStatusA4("due")
+})
+dom.genUnknownA4Btn?.addEventListener("click", () => {
+  closeStatusModal()
+  generateStatusA4(STATUS_UNKNOWN)
+})
+dom.genLearningA4Btn?.addEventListener("click", () => {
+  closeStatusModal()
+  generateStatusA4(STATUS_LEARNING)
+})
+dom.genMasteredA4Btn?.addEventListener("click", () => {
+  closeStatusModal()
+  generateStatusA4(STATUS_MASTERED)
+})
+
+dom.statusA4Backdrop?.addEventListener("click", () => closeStatusA4Modal())
+dom.closeStatusA4Btn?.addEventListener("click", () => closeStatusA4Modal())
+dom.printStatusA4Btn?.addEventListener("click", () => {
+  if (!lastGeneratedA4) return
+  openPrintForGeneratedA4(lastGeneratedA4)
+})
 
 dom.wordbookSelect.addEventListener("change", () => {
   appState.selectedWordbookId = dom.wordbookSelect.value
@@ -1279,15 +1678,33 @@ dom.reviewBackdrop.addEventListener("click", () => closeReviewModal())
 dom.closeReviewBtn.addEventListener("click", () => closeReviewModal())
 dom.doneReviewBtn.addEventListener("click", () => closeReviewModal())
 
-function advanceReview({ markUnknown } = {}) {
+function markCurrentReviewStatus(status) {
   const idx = appState.reviewIndex
-  const w = appState.reviewQueue[idx]
-  if (w?.term) setUnknown(w.term, !!markUnknown)
+  const entry = appState.reviewQueue[idx]
+  const w = entry?.word
+  const roundItem = entry?.roundItem
+  const term = String(w?.term || "").trim()
+  if (term && roundItem) {
+    const nextStatus = normalizeStatus(status)
+    roundItem.status = nextStatus
+    const nowMs = Date.now()
+    roundItem.lastReviewedAt = new Date(nowMs).toISOString()
+    roundItem.nextReviewAt = appState.reviewSystemEnabled ? getNextReviewAtIso(nextStatus, nowMs) : ""
+    setTermUnknownFlag(term, nextStatus === STATUS_UNKNOWN)
+    persist()
+    renderStats()
+  }
+}
+
+function advanceReview(status) {
+  const idx = appState.reviewIndex
+  markCurrentReviewStatus(status)
   const next = idx + 1
   if (next >= appState.reviewQueue.length) {
     dom.reviewCardProgress.textContent = `${appState.reviewQueue.length} / ${appState.reviewQueue.length}`
     dom.reviewCardHint.textContent = "已到最后：可关闭或点击「我已完整复习」"
     dom.reviewKnownBtn.disabled = true
+    dom.reviewLearningBtn.disabled = true
     dom.reviewUnknownBtn.disabled = true
     return
   }
@@ -1296,11 +1713,15 @@ function advanceReview({ markUnknown } = {}) {
 }
 
 dom.reviewKnownBtn.addEventListener("click", () => {
-  advanceReview({ markUnknown: false })
+  advanceReview(STATUS_MASTERED)
+})
+
+dom.reviewLearningBtn.addEventListener("click", () => {
+  advanceReview(STATUS_LEARNING)
 })
 
 dom.reviewUnknownBtn.addEventListener("click", () => {
-  advanceReview({ markUnknown: true })
+  advanceReview(STATUS_UNKNOWN)
 })
 
 dom.reviewCardTerm.addEventListener("click", () => {
@@ -1324,8 +1745,8 @@ dom.reviewCard.addEventListener("touchend", (e) => {
   const dy = t.clientY - reviewTouchStartY
   if (Math.abs(dx) < 60) return
   if (Math.abs(dx) < Math.abs(dy) * 1.2) return
-  if (dx > 0) advanceReview({ markUnknown: false })
-  else advanceReview({ markUnknown: true })
+  if (dx > 0) advanceReview(STATUS_MASTERED)
+  else advanceReview(STATUS_UNKNOWN)
 })
 
 dom.shuffleBtn.addEventListener("click", () => {
@@ -1343,7 +1764,9 @@ function isAnyModalOpen() {
     isModalOpen(dom.reviewModal) ||
     isModalOpen(dom.roundFullModal) ||
     isModalOpen(dom.importModal) ||
-    isModalOpen(dom.introModal)
+    isModalOpen(dom.introModal) ||
+    isModalOpen(dom.statusModal) ||
+    isModalOpen(dom.statusA4Modal)
   )
 }
 

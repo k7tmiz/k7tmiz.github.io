@@ -22,7 +22,11 @@
         <p class="subtitle">每新增一个单词，就完整复习一遍本轮 A4 上所有单词</p>
       </div>
       <div class="status">
-        <div class="badge" id="roundBadge">本轮 0/—</div>
+        <div class="status-top">
+          <div class="badge" id="roundBadge">本轮 0/—</div>
+          <button class="ghost status-entry" id="statusPanelBtn" type="button">学习状态</button>
+        </div>
+        <div class="status-meta" id="roundStatusCounts"></div>
         <div class="status-progress" aria-hidden="true">
           <div class="status-progress-bar" id="roundProgress"></div>
         </div>
@@ -75,6 +79,7 @@
           </div>
           <div class="review-card-actions">
             <button class="review-btn review-btn-known" id="reviewKnownBtn" type="button">✓ 已掌握</button>
+            <button class="review-btn review-btn-learning" id="reviewLearningBtn" type="button">学习中</button>
             <button class="review-btn review-btn-unknown" id="reviewUnknownBtn" type="button">✗ 不会</button>
           </div>
           <button class="primary full" id="doneReviewBtn" type="button">我已完整复习</button>
@@ -183,11 +188,12 @@ ability,n.,能力</pre>
                 <li>本轮写满后，再点「下一个单词」：选择继续下一轮或清空重开。</li>
                 <li>点「导入词书」：可本地导入或一键线上导入四级/六级。</li>
                 <li>点「沉浸模式」：隐藏非必要按钮，专注学习。</li>
-                <li>点「设置」：主题模式、发音设置、AI 生成词书。</li>
+                <li>点「设置」：主题、每轮上限、发音、轻量复习系统、AI 生成词书。</li>
+                <li>点顶部「学习状态」：查看已掌握/学习中/不会/待复习数量，并可按状态生成 A4。</li>
                 <li>点击单词：显示/隐藏该词释义；点击单词可发音。</li>
                 <li>在「学习记录」里：按轮查看/删除/复习，导出 CSV，打印 A4 单词纸。</li>
                 <li>在「学习记录」里：导出 A4 图片（PNG），用于分享。</li>
-                <li>在「复习本轮」里：可「标记不会」，下一轮优先出现。</li>
+                <li>在「复习本轮」里：可标记「已掌握 / 学习中 / 不会」，并自动安排下次复习。</li>
                 <li>在「设置」里：可导入/导出完整学习数据（学习记录 + 设置）。</li>
               </ul>
             </div>
@@ -211,6 +217,48 @@ ability,n.,能力</pre>
                 >
                 <a class="button-link full" href="mailto:kcyx01@gmail.com">Email：kcyx01@gmail.com</a>
               </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="modal hidden" id="statusModal" aria-hidden="true">
+      <div class="modal-backdrop" id="statusBackdrop"></div>
+      <div class="modal-panel" role="dialog" aria-modal="true" aria-labelledby="statusTitle">
+        <div class="modal-header">
+          <h2 id="statusTitle">学习状态</h2>
+          <div class="modal-actions">
+            <button class="ghost" id="closeStatusBtn" type="button">关闭</button>
+          </div>
+        </div>
+        <div class="modal-body">
+          <div class="review-meta" id="statusSummary"></div>
+          <div class="stack">
+            <button class="primary full" id="genDueA4Btn" type="button">生成待复习 A4</button>
+            <button class="full" id="genUnknownA4Btn" type="button">生成不会 A4</button>
+            <button class="full" id="genLearningA4Btn" type="button">生成学习中 A4</button>
+            <button class="full" id="genMasteredA4Btn" type="button">生成已掌握 A4</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="modal hidden" id="statusA4Modal" aria-hidden="true">
+      <div class="modal-backdrop" id="statusA4Backdrop"></div>
+      <div class="modal-panel" role="dialog" aria-modal="true" aria-labelledby="statusA4Title">
+        <div class="modal-header">
+          <h2 id="statusA4Title">生成 A4</h2>
+          <div class="modal-actions">
+            <button class="ghost" id="printStatusA4Btn" type="button">打印</button>
+            <button class="ghost" id="closeStatusA4Btn" type="button">关闭</button>
+          </div>
+        </div>
+        <div class="modal-body">
+          <div class="review-meta" id="statusA4Meta"></div>
+          <div class="paper-wrap" aria-label="生成A4区域">
+            <div class="paper paper-modal" id="statusA4Paper">
+              <div class="paper-inner" id="statusA4PaperInner"></div>
             </div>
           </div>
         </div>

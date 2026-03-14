@@ -33,6 +33,24 @@
     return "auto"
   }
 
+  const STATUS_MASTERED = "mastered"
+  const STATUS_LEARNING = "learning"
+  const STATUS_UNKNOWN = "unknown"
+
+  function normalizeStatus(value) {
+    const v = String(value || "").trim().toLowerCase()
+    if (v === STATUS_MASTERED || v === STATUS_LEARNING || v === STATUS_UNKNOWN) return v
+    return STATUS_UNKNOWN
+  }
+
+  function normalizeReviewIntervals(raw) {
+    const base = raw && typeof raw === "object" ? raw : {}
+    const unknownDays = clamp(Math.round(Number(base.unknownDays) || 1), 1, 60)
+    const learningDays = clamp(Math.round(Number(base.learningDays) || 3), 1, 60)
+    const masteredDays = clamp(Math.round(Number(base.masteredDays) || 7), 1, 365)
+    return { unknownDays, learningDays, masteredDays }
+  }
+
   function normalizeLangTag(value) {
     const raw = String(value || "").trim().replaceAll("_", "-")
     if (!raw) return { tag: "", base: "" }
@@ -455,6 +473,8 @@
     next.roundCap = normalizeRoundCap(next.roundCap)
     next.dailyGoalRounds = clamp(Number(next.dailyGoalRounds) || 0, 0, 20)
     next.dailyGoalWords = clamp(Number(next.dailyGoalWords) || 0, 0, 500)
+    next.reviewSystemEnabled = typeof next.reviewSystemEnabled === "boolean" ? next.reviewSystemEnabled : true
+    next.reviewIntervals = normalizeReviewIntervals(next.reviewIntervals)
 
     next.pronunciationEnabled =
       typeof next.pronunciationEnabled === "boolean" ? next.pronunciationEnabled : true
@@ -487,6 +507,9 @@
         pos: { x, y },
         fontSize: String(it?.fontSize || ""),
         createdAt: String(it?.createdAt || ""),
+        status: normalizeStatus(it?.status),
+        lastReviewedAt: String(it?.lastReviewedAt || ""),
+        nextReviewAt: String(it?.nextReviewAt || ""),
       }
     }
 
@@ -672,6 +695,37 @@
               </div>
             </div>
             <div class="form-help">修改后对新一轮生效；已有记录保持兼容。</div>
+          </section>
+
+          <section class="panel">
+            <div class="section-title">复习</div>
+            <div class="form-row">
+              <div class="form-label">启用轻量复习</div>
+              <div class="form-control">
+                <button class="ghost" id="reviewSystemToggleBtn" type="button">复习：开</button>
+              </div>
+            </div>
+            <div id="reviewIntervalsPanel">
+              <div class="form-row">
+                <div class="form-label">不会（天）</div>
+                <div class="form-control">
+                  <input id="reviewUnknownDaysInput" class="text-input" type="number" min="1" max="60" value="1" />
+                </div>
+              </div>
+              <div class="form-row">
+                <div class="form-label">学习中（天）</div>
+                <div class="form-control">
+                  <input id="reviewLearningDaysInput" class="text-input" type="number" min="1" max="60" value="3" />
+                </div>
+              </div>
+              <div class="form-row">
+                <div class="form-label">已掌握（天）</div>
+                <div class="form-control">
+                  <input id="reviewMasteredDaysInput" class="text-input" type="number" min="1" max="365" value="7" />
+                </div>
+              </div>
+            </div>
+            <div class="form-help">到期规则：按状态计算下次复习时间；到期后会显示“待复习”。</div>
           </section>
 
           <section class="panel">
@@ -874,6 +928,11 @@
       dailyGoalRoundsInput: modal.querySelector("#dailyGoalRoundsInput"),
       dailyGoalWordsInput: modal.querySelector("#dailyGoalWordsInput"),
       roundCapInput: modal.querySelector("#roundCapInput"),
+      reviewSystemToggleBtn: modal.querySelector("#reviewSystemToggleBtn"),
+      reviewIntervalsPanel: modal.querySelector("#reviewIntervalsPanel"),
+      reviewUnknownDaysInput: modal.querySelector("#reviewUnknownDaysInput"),
+      reviewLearningDaysInput: modal.querySelector("#reviewLearningDaysInput"),
+      reviewMasteredDaysInput: modal.querySelector("#reviewMasteredDaysInput"),
       pronounceToggleBtn: modal.querySelector("#pronounceToggleBtn"),
       accentSelect: modal.querySelector("#accentSelect"),
       pronunciationLangSelect: modal.querySelector("#pronunciationLangSelect"),
@@ -981,6 +1040,16 @@
       if (dom.dailyGoalRoundsInput) dom.dailyGoalRoundsInput.value = String(clamp(state?.dailyGoalRounds || 0, 0, 20))
       if (dom.dailyGoalWordsInput) dom.dailyGoalWordsInput.value = String(clamp(state?.dailyGoalWords || 0, 0, 500))
       if (dom.roundCapInput) dom.roundCapInput.value = String(normalizeRoundCap(state?.roundCap))
+      const reviewSystemEnabled = typeof state?.reviewSystemEnabled === "boolean" ? state.reviewSystemEnabled : true
+      const reviewIntervals = normalizeReviewIntervals(state?.reviewIntervals)
+      if (dom.reviewSystemToggleBtn) dom.reviewSystemToggleBtn.textContent = `复习：${reviewSystemEnabled ? "开" : "关"}`
+      if (dom.reviewIntervalsPanel) {
+        if (reviewSystemEnabled) dom.reviewIntervalsPanel.classList.remove("hidden")
+        else dom.reviewIntervalsPanel.classList.add("hidden")
+      }
+      if (dom.reviewUnknownDaysInput) dom.reviewUnknownDaysInput.value = String(reviewIntervals.unknownDays)
+      if (dom.reviewLearningDaysInput) dom.reviewLearningDaysInput.value = String(reviewIntervals.learningDays)
+      if (dom.reviewMasteredDaysInput) dom.reviewMasteredDaysInput.value = String(reviewIntervals.masteredDays)
       if (dom.accentSelect) dom.accentSelect.value = normalizeAccent(state?.pronunciationAccent)
       if (dom.pronunciationLangSelect)
         dom.pronunciationLangSelect.value = normalizePronunciationLang(state?.pronunciationLang)
@@ -1038,6 +1107,40 @@
       if (typeof persist === "function") persist()
       if (typeof onAfterChange === "function") onAfterChange({ key: "roundCap" })
     })
+
+    dom.reviewSystemToggleBtn?.addEventListener("click", () => {
+      const state = getState ? getState() : {}
+      const reviewSystemEnabled = !(typeof state?.reviewSystemEnabled === "boolean" ? state.reviewSystemEnabled : true)
+      if (typeof setState === "function") setState({ reviewSystemEnabled, reviewIntervals: normalizeReviewIntervals(state?.reviewIntervals) })
+      if (dom.reviewSystemToggleBtn) dom.reviewSystemToggleBtn.textContent = `复习：${reviewSystemEnabled ? "开" : "关"}`
+      if (dom.reviewIntervalsPanel) {
+        if (reviewSystemEnabled) dom.reviewIntervalsPanel.classList.remove("hidden")
+        else dom.reviewIntervalsPanel.classList.add("hidden")
+      }
+      if (typeof persist === "function") persist()
+      if (typeof onAfterChange === "function") onAfterChange({ key: "reviewSystemEnabled" })
+    })
+
+    const onReviewIntervalsChange = () => {
+      const state = getState ? getState() : {}
+      const reviewIntervals = normalizeReviewIntervals({
+        unknownDays: dom.reviewUnknownDaysInput?.value,
+        learningDays: dom.reviewLearningDaysInput?.value,
+        masteredDays: dom.reviewMasteredDaysInput?.value,
+      })
+      if (typeof setState === "function") setState({ reviewIntervals })
+      if (typeof persist === "function") persist()
+      if (typeof onAfterChange === "function") onAfterChange({ key: "reviewIntervals" })
+      if (dom.reviewUnknownDaysInput) dom.reviewUnknownDaysInput.value = String(reviewIntervals.unknownDays)
+      if (dom.reviewLearningDaysInput) dom.reviewLearningDaysInput.value = String(reviewIntervals.learningDays)
+      if (dom.reviewMasteredDaysInput) dom.reviewMasteredDaysInput.value = String(reviewIntervals.masteredDays)
+      if (dom.reviewSystemToggleBtn)
+        dom.reviewSystemToggleBtn.textContent = `复习：${(typeof state?.reviewSystemEnabled === "boolean" ? state.reviewSystemEnabled : true) ? "开" : "关"}`
+    }
+
+    dom.reviewUnknownDaysInput?.addEventListener("change", onReviewIntervalsChange)
+    dom.reviewLearningDaysInput?.addEventListener("change", onReviewIntervalsChange)
+    dom.reviewMasteredDaysInput?.addEventListener("change", onReviewIntervalsChange)
 
     dom.pronounceToggleBtn?.addEventListener("click", () => {
       const state = getState ? getState() : {}
