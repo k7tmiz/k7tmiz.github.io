@@ -260,7 +260,6 @@ const dom = {
   reviewLearningBtn: document.getElementById("reviewLearningBtn"),
   reviewUnknownBtn: document.getElementById("reviewUnknownBtn"),
   closeReviewBtn: document.getElementById("closeReviewBtn"),
-  doneReviewBtn: document.getElementById("doneReviewBtn"),
   shuffleBtn: document.getElementById("shuffleBtn"),
   roundFullModal: document.getElementById("roundFullModal"),
   roundFullBackdrop: document.getElementById("roundFullBackdrop"),
@@ -328,6 +327,7 @@ const appState = {
   dailyGoalWords: 0,
   reviewSystemEnabled: true,
   reviewIntervals: { ...DEFAULT_REVIEW_INTERVALS },
+  reviewAutoCloseModal: true,
   pronunciationEnabled: true,
   pronunciationAccent: "auto",
   pronunciationLang: "auto",
@@ -726,6 +726,87 @@ function normalizeRemoteWordEntry(raw) {
   return null
 }
 
+function normalizeWordbookName(value) {
+  return String(value || "")
+    .trim()
+    .replaceAll(/\s+/g, " ")
+}
+
+function stripJsonExt(value) {
+  const s = String(value || "").trim()
+  const lower = s.toLowerCase()
+  if (lower.endsWith(".json")) return s.slice(0, -5)
+  return s
+}
+
+function getRemoteWordbookNameCandidates(parsed) {
+  if (!parsed || typeof parsed !== "object" || Array.isArray(parsed)) return []
+  const raw = parsed
+  const keys = ["name", "title", "bookName", "wordbookName", "wordbook", "deckName", "deck", "collectionName", "collection"]
+  const out = []
+  for (const k of keys) {
+    const v = normalizeWordbookName(raw?.[k])
+    if (v) out.push(v)
+  }
+  return out
+}
+
+function inferWordbookNameFromUrl(url) {
+  const raw = String(url || "").trim()
+  if (!raw) return ""
+  try {
+    const u = new URL(raw, window.location.href)
+    const parts = String(u.pathname || "")
+      .split("/")
+      .filter(Boolean)
+    const last = parts.length ? parts[parts.length - 1] : ""
+    const decoded = normalizeWordbookName(decodeURIComponent(last))
+    const base = stripJsonExt(decoded)
+    if (!base) return ""
+    return base.replaceAll(/[-_]+/g, " ").trim()
+  } catch (e) {
+    const parts = raw.split("/").filter(Boolean)
+    const last = parts.length ? parts[parts.length - 1] : raw
+    const base = stripJsonExt(last)
+    return normalizeWordbookName(base).replaceAll(/[-_]+/g, " ").trim()
+  }
+}
+
+function inferWordbookNameFromDescription(description) {
+  const s = normalizeWordbookName(description)
+  if (!s) return ""
+  const idx = s.lastIndexOf(":")
+  if (idx < 0) return ""
+  const path = s.slice(idx + 1).trim()
+  if (!path) return ""
+  const parts = path.split("/").filter(Boolean)
+  const last = parts.length ? parts[parts.length - 1] : path
+  const base = stripJsonExt(last)
+  return normalizeWordbookName(base).replaceAll(/[-_]+/g, " ").trim()
+}
+
+function makeUniqueWordbookName(baseName, existingLowerSet) {
+  const base = normalizeWordbookName(baseName)
+  if (!base) return ""
+  const set = existingLowerSet instanceof Set ? existingLowerSet : new Set()
+  const lower = base.toLowerCase()
+  if (!set.has(lower)) {
+    set.add(lower)
+    return base
+  }
+  for (let i = 2; i < 1000; i++) {
+    const candidate = `${base}（${i}）`
+    const key = candidate.toLowerCase()
+    if (!set.has(key)) {
+      set.add(key)
+      return candidate
+    }
+  }
+  const fallback = `${base}（${Date.now()}）`
+  set.add(fallback.toLowerCase())
+  return fallback
+}
+
 function extractWordbookFromRemoteJson(parsed) {
   if (!parsed) return null
   if (Array.isArray(parsed)) {
@@ -734,7 +815,7 @@ function extractWordbookFromRemoteJson(parsed) {
   }
 
   if (typeof parsed !== "object") return null
-  const name = String(parsed?.name || "").trim()
+  const name = getRemoteWordbookNameCandidates(parsed)[0] || ""
   const description = String(parsed?.description || "").trim()
   const language = String(parsed?.language || "").trim()
   const list =
@@ -755,7 +836,7 @@ async function importWordbookFromUrl({ url, name, language, description } = {}) 
 
   let words = []
   let parsedMeta = { name: "", description: "", language: "" }
-  const filename = name || url || "remote"
+  const filename = url || name || "remote"
   const looksJson = ct.includes("application/json") || String(filename).toLowerCase().endsWith(".json") || String(url || "").toLowerCase().endsWith(".json")
 
   if (looksJson) {
@@ -774,7 +855,12 @@ async function importWordbookFromUrl({ url, name, language, description } = {}) 
   }
 
   const id = `remote-${makeId()}`
-  const finalName = String(name || parsedMeta?.name || "").trim() || "在线词书"
+  const explicitName = normalizeWordbookName(name)
+  const extractedName = normalizeWordbookName(parsedMeta?.name)
+  const derivedName = inferWordbookNameFromDescription(description) || inferWordbookNameFromUrl(url)
+  const finalNameBase = extractedName || derivedName || explicitName || "在线词书"
+  const existingNames = new Set(getAllWordbooks().map((b) => String(b?.name || "").trim().toLowerCase()).filter(Boolean))
+  const finalName = makeUniqueWordbookName(finalNameBase, existingNames) || "在线词书"
   const finalDesc = String(description || parsedMeta?.description || "").trim()
   const inferredLang = inferWordbookLanguage({
     rawLanguage: language || parsedMeta?.language,
@@ -1042,6 +1128,7 @@ function persist() {
     dailyGoalWords: appState.dailyGoalWords,
     reviewSystemEnabled: !!appState.reviewSystemEnabled,
     reviewIntervals: normalizeReviewIntervals(appState.reviewIntervals),
+    reviewAutoCloseModal: !!appState.reviewAutoCloseModal,
     pronunciationEnabled: appState.pronunciationEnabled,
     pronunciationAccent: appState.pronunciationAccent,
     pronunciationLang: appState.pronunciationLang,
@@ -1624,6 +1711,7 @@ function restore() {
 
   appState.reviewSystemEnabled = typeof saved.reviewSystemEnabled === "boolean" ? saved.reviewSystemEnabled : true
   appState.reviewIntervals = normalizeReviewIntervals(saved.reviewIntervals)
+  appState.reviewAutoCloseModal = typeof saved.reviewAutoCloseModal === "boolean" ? saved.reviewAutoCloseModal : true
 
   appState.pronunciationEnabled =
     typeof saved.pronunciationEnabled === "boolean" ? saved.pronunciationEnabled : true
@@ -1646,6 +1734,25 @@ function restore() {
   appState.customWordbooks = Array.isArray(saved.customWordbooks)
     ? saved.customWordbooks.map(normalizeWordbookObject).filter(Boolean)
     : []
+  if (appState.customWordbooks.length) {
+    const used = new Set(appState.builtInWordbooks.map((b) => String(b?.name || "").trim().toLowerCase()).filter(Boolean))
+    const nextBooks = []
+    for (const b of appState.customWordbooks) {
+      let nextName = String(b?.name || "").trim()
+      const desc = String(b?.description || "").trim()
+      const slash = desc.indexOf("/")
+      const owner = slash > 0 ? desc.slice(0, slash).trim() : ""
+      const m = /（([^）]+)）$/.exec(nextName)
+      const suffix = m ? String(m[1] || "").trim() : ""
+      const prefix = m ? nextName.slice(0, m.index).trim() : nextName
+      const derived = inferWordbookNameFromDescription(desc)
+      const generic = owner && suffix && owner === suffix && /词库/.test(prefix) && derived
+      if (generic) nextName = derived
+      nextName = makeUniqueWordbookName(nextName, used) || nextName
+      nextBooks.push({ ...b, name: nextName })
+    }
+    appState.customWordbooks = nextBooks
+  }
   appState.selectedWordbookId = typeof saved.selectedWordbookId === "string" ? saved.selectedWordbookId : ""
   appState.pendingReviewRoundId =
     typeof saved.pendingReviewRoundId === "string" ? saved.pendingReviewRoundId : ""
@@ -1943,7 +2050,6 @@ dom.toggleImmersiveBtn.addEventListener("click", () => {
 
 dom.reviewBackdrop.addEventListener("click", () => closeReviewModal())
 dom.closeReviewBtn.addEventListener("click", () => closeReviewModal())
-dom.doneReviewBtn.addEventListener("click", () => closeReviewModal())
 
 dom.pagePrevBtn?.addEventListener("click", () => {
   const round = getCurrentRound()
@@ -1988,8 +2094,12 @@ function advanceReview(status) {
   markCurrentReviewStatus(status)
   const next = idx + 1
   if (next >= appState.reviewQueue.length) {
+    if (appState.reviewAutoCloseModal) {
+      closeReviewModal()
+      return
+    }
     dom.reviewCardProgress.textContent = `${appState.reviewQueue.length} / ${appState.reviewQueue.length}`
-    dom.reviewCardHint.textContent = "已到最后：可关闭或点击「我已完整复习」"
+    dom.reviewCardHint.textContent = "已到最后：可关闭"
     dom.reviewKnownBtn.disabled = true
     dom.reviewLearningBtn.disabled = true
     dom.reviewUnknownBtn.disabled = true

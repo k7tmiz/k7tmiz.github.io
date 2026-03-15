@@ -83,6 +83,7 @@
     next.dailyGoalWords = clamp(Number(next.dailyGoalWords) || 0, 0, 500)
     next.reviewSystemEnabled = typeof next.reviewSystemEnabled === "boolean" ? next.reviewSystemEnabled : true
     next.reviewIntervals = normalizeReviewIntervals(next.reviewIntervals)
+    next.reviewAutoCloseModal = typeof next.reviewAutoCloseModal === "boolean" ? next.reviewAutoCloseModal : true
 
     next.pronunciationEnabled =
       typeof next.pronunciationEnabled === "boolean" ? next.pronunciationEnabled : true
@@ -344,6 +345,12 @@
                 </div>
               </div>
             </div>
+            <div class="form-row">
+              <div class="form-label">复习完成后自动关闭弹窗</div>
+              <div class="form-control">
+                <button class="ghost" id="reviewAutoCloseModalToggleBtn" type="button">自动关闭：开</button>
+              </div>
+            </div>
             <div class="form-help">到期规则：按状态计算下次复习时间；到期后会显示“待复习”。</div>
           </section>
 
@@ -565,6 +572,7 @@
       reviewUnknownDaysInput: modal.querySelector("#reviewUnknownDaysInput"),
       reviewLearningDaysInput: modal.querySelector("#reviewLearningDaysInput"),
       reviewMasteredDaysInput: modal.querySelector("#reviewMasteredDaysInput"),
+      reviewAutoCloseModalToggleBtn: modal.querySelector("#reviewAutoCloseModalToggleBtn"),
       pronounceToggleBtn: modal.querySelector("#pronounceToggleBtn"),
       accentSelect: modal.querySelector("#accentSelect"),
       pronunciationLangSelect: modal.querySelector("#pronunciationLangSelect"),
@@ -692,6 +700,7 @@
       if (dom.roundCapInput) dom.roundCapInput.value = String(normalizeRoundCap(state?.roundCap))
       const reviewSystemEnabled = typeof state?.reviewSystemEnabled === "boolean" ? state.reviewSystemEnabled : true
       const reviewIntervals = normalizeReviewIntervals(state?.reviewIntervals)
+      const reviewAutoCloseModal = typeof state?.reviewAutoCloseModal === "boolean" ? state.reviewAutoCloseModal : true
       if (dom.reviewSystemToggleBtn) dom.reviewSystemToggleBtn.textContent = `复习：${reviewSystemEnabled ? "开" : "关"}`
       if (dom.reviewIntervalsPanel) {
         if (reviewSystemEnabled) dom.reviewIntervalsPanel.classList.remove("hidden")
@@ -700,6 +709,8 @@
       if (dom.reviewUnknownDaysInput) dom.reviewUnknownDaysInput.value = String(reviewIntervals.unknownDays)
       if (dom.reviewLearningDaysInput) dom.reviewLearningDaysInput.value = String(reviewIntervals.learningDays)
       if (dom.reviewMasteredDaysInput) dom.reviewMasteredDaysInput.value = String(reviewIntervals.masteredDays)
+      if (dom.reviewAutoCloseModalToggleBtn)
+        dom.reviewAutoCloseModalToggleBtn.textContent = `自动关闭：${reviewAutoCloseModal ? "开" : "关"}`
       if (dom.accentSelect) dom.accentSelect.value = normalizeAccent(state?.pronunciationAccent)
       if (dom.pronunciationLangSelect)
         dom.pronunciationLangSelect.value = normalizePronunciationLang(state?.pronunciationLang)
@@ -1056,6 +1067,17 @@
       }
       persistSafe()
       afterChange("reviewSystemEnabled")
+    })
+
+    dom.reviewAutoCloseModalToggleBtn?.addEventListener("click", () => {
+      const state = getStateSafe()
+      const cur = typeof state?.reviewAutoCloseModal === "boolean" ? state.reviewAutoCloseModal : true
+      const reviewAutoCloseModal = !cur
+      setStateSafe({ reviewAutoCloseModal })
+      if (dom.reviewAutoCloseModalToggleBtn)
+        dom.reviewAutoCloseModalToggleBtn.textContent = `自动关闭：${reviewAutoCloseModal ? "开" : "关"}`
+      persistSafe()
+      afterChange("reviewAutoCloseModal")
     })
 
     const onReviewIntervalsChange = () => {

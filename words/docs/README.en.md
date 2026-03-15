@@ -9,7 +9,7 @@ A pure front-end vocabulary tool based on the “A4 paper memory method”. Word
 ## Features
 
 - A4 random layout with collision avoidance
-- Forced review after each new word (shuffled by default, can restore order)
+- Forced review after each new word (shuffled by default, can restore order; auto-closes the review modal on completion by default, configurable in Settings)
 - Per-round de-dup: within a round, it avoids adding the same “term + meaning” entry twice
 - Configurable round cap (20–30), start next round or restart
 - Meaning toggle, immersive mode, theme modes (Auto/Light/Dark)
@@ -26,6 +26,7 @@ A pure front-end vocabulary tool based on the “A4 paper memory method”. Word
   - CSV: global/per-round (includes round type + review timestamps)
   - PDF: exported from Records via browser print (Save as PDF); 1 round = 1 PDF, each A4 = 1 page
 - Wordbooks: built-in samples + local import (TXT/CSV/JSON) + online import (English / Spanish, lists JSON files in the repo and lets you pick one to import)
+  - Naming: online import prefers the wordbook `name/title` in JSON; otherwise falls back to the JSON filename and de-dups automatically
   - Language: JSON import can optionally include `language` (e.g. `en`/`ja`/`ko`/`fr` etc., mainly used for pronunciation voice auto-pick); TXT/CSV uses a weak heuristic and falls back to default; you can always override it in Settings → Pronunciation language
 - Pronunciation: SpeechSynthesis (en/es/ja/ko/pt/fr/de/it/eo), Auto/Manual voice selection
   - Spanish: when a term uses a suffix shorthand like `antiguo,gua` / `bonito,ta`, it auto-expands to `antiguo, antigua` / `bonito, bonita` before speaking
@@ -63,7 +64,7 @@ Open: http://localhost:8080/
 - Mobile/tablet: Per-round action buttons in Records scale down to match the rest of the UI
 - Cross-browser: normalize form/control rendering so Chromium and Safari look closer
 - Maintenance: reduce duplication and improve readability without changing behavior or localStorage schema
-- Settings: theme, pronunciation, round cap, lightweight review, backup, AI generator
+- Settings: theme, pronunciation, round cap, lightweight review, auto-close review modal on completion, backup, AI generator
 
 ## Project structure (brief)
 

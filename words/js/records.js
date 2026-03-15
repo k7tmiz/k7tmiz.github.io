@@ -574,6 +574,7 @@ function normalizeState(raw) {
       roundCap: 30,
       dailyGoalRounds: 0,
       dailyGoalWords: 0,
+      reviewAutoCloseModal: true,
       rounds: [],
       currentRoundId: "",
     }
@@ -586,6 +587,7 @@ function normalizeState(raw) {
       roundCap,
       dailyGoalRounds,
       dailyGoalWords,
+      reviewAutoCloseModal: typeof raw.reviewAutoCloseModal === "boolean" ? raw.reviewAutoCloseModal : true,
       rounds: raw.rounds.map((r) => ({ ...r, type: normalizeRoundType(r?.type) })),
     }
 
@@ -618,6 +620,7 @@ function normalizeState(raw) {
     roundCap,
     dailyGoalRounds,
     dailyGoalWords,
+    reviewAutoCloseModal: true,
     rounds: [round],
     currentRoundId: round.id,
   }
