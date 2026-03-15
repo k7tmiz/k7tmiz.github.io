@@ -230,29 +230,6 @@ html[data-theme="light"] .iconbtn:hover {
   overflow: auto;
 }
 
-.segmented {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 8px;
-}
-
-.segmented__item {
-  display: flex;
-  gap: 8px;
-  align-items: center;
-  padding: 10px 12px;
-  border-radius: 12px;
-  border: 1px solid var(--border);
-  background: var(--panel-2);
-  cursor: pointer;
-  user-select: none;
-  font-size: 13px;
-}
-
-.segmented__item input {
-  margin: 0;
-}
-
 .modecards {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -504,13 +481,6 @@ html[data-theme="light"] .modecard:hover {
   vertical-align: top;
 }
 
-.rowcard {
-  background: var(--panel-2);
-  border: 1px solid var(--border);
-  border-radius: 12px;
-  padding: 10px;
-}
-
 .tinput,
 .tarea {
   width: 100%;
@@ -667,12 +637,6 @@ html[data-theme="light"] .modecard:hover {
 }
 
 @media (max-width: 1199px) {
-  .panel__controls {
-    grid-template-columns: 1fr 1fr;
-  }
-}
-
-@media (max-width: 980px) {
   .panel__controls {
     grid-template-columns: 1fr 1fr;
   }

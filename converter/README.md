@@ -91,7 +91,7 @@ hola	 你好
 这是一个零依赖静态项目：
 
 - 直接双击打开 `index.html` 即可使用
-- 或使用任意静态服务器（可选），例如 `python3 -m http.server` 后访问对应地址
+- 或使用任意静态服务器（可选）后访问对应地址
 
 ## GitHub Pages 部署方法
 
@@ -106,8 +106,9 @@ hola	 你好
 ```
 /
   index.html
+  manifest.webmanifest
+  sw.js
   README.md
-  README.en.md
   /docs
     README.en.md
     PROJECT_CONTEXT.md
@@ -130,6 +131,8 @@ hola	 你好
 
   /assets
     favicon.svg
+    icon-192.png
+    icon-512.png
 ```
 
 模块职责：
@@ -153,4 +156,4 @@ hola	 你好
 
 ---
 
-LexiForge · MIT License · Version 0.2.0
+LexiForge · MIT License · Version 0.2.1

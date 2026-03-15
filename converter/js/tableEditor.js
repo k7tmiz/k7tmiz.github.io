@@ -1,3 +1,8 @@
+/*
+  tableEditor.js
+  - 表格编辑：将 words 渲染为可编辑表格，并通过 onChange 回传最新 words
+  - 关键函数：createTableEditor（创建/绑定）、setWords（渲染数据）、updateField/deleteRow/addRow（编辑操作）
+*/
 (() => {
   const LexiForge = (window.LexiForge = window.LexiForge || {});
   const { normalizeSpaces } = LexiForge.Utils;

@@ -60,6 +60,13 @@ LexiForge is a pure-frontend, offline-first “universal vocabulary TXT → JSON
   - Editable table view after conversion: edit/add/delete entries
   - Emits changes to keep JSON output in sync
 
+## PWA
+
+- `manifest.webmanifest`
+  - App metadata for install (name, icons, theme/background colors)
+- `sw.js`
+  - Minimal service worker for installability (network pass-through)
+
 ## Versioning
 
-- Current target: 0.2.0
+- Current target: 0.2.1

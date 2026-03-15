@@ -2,8 +2,37 @@
   const LexiForge = (window.LexiForge = window.LexiForge || {});
   const { setText, setValue, readRadioValue } = LexiForge.Utils;
 
+  const cache = new Map();
+  let autoLanguageOption = null;
+  let dupHintEl = null;
+  let tableSectionEl = null;
+
   function el(id) {
-    return document.getElementById(id);
+    if (cache.has(id)) return cache.get(id);
+    const node = document.getElementById(id);
+    cache.set(id, node);
+    return node;
+  }
+
+  function getOutputJsonText() {
+    const out = el("outputJson");
+    return out ? out.value : "";
+  }
+
+  function setDupHintText(text) {
+    if (!dupHintEl) dupHintEl = el("dupHint");
+    setText(dupHintEl, text);
+  }
+
+  function setAutoLanguageOptionLabel(text) {
+    if (!autoLanguageOption) autoLanguageOption = document.querySelector('#language option[value="auto"]');
+    setText(autoLanguageOption, text);
+  }
+
+  function setTableSectionVisible(visible) {
+    if (!tableSectionEl) tableSectionEl = el("tableSection");
+    if (!tableSectionEl) return;
+    tableSectionEl.classList.toggle("is-hidden", !visible);
   }
 
   function refreshOutputModeCards() {
@@ -107,8 +136,12 @@
     setState,
     setOutputJson,
     setStats,
+    getOutputJsonText,
     setOutputEmptyVisible,
     setJsonValidity,
+    setDupHintText,
+    setAutoLanguageOptionLabel,
+    setTableSectionVisible,
     bindHandlers,
   };
 })();

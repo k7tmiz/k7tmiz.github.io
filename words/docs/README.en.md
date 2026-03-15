@@ -9,10 +9,9 @@ A pure front-end vocabulary tool based on the “A4 paper memory method”. Word
 ## Features
 
 - A4 random layout with collision avoidance
-- Forced review after each new word (shuffled by default, can restore order; auto-closes the review modal on completion by default, configurable in Settings)
+- “Review this round”: a dedicated entry to review the current A4 (shuffled by default, can restore order; auto-closes the review modal on completion by default, configurable in Settings)
 - Per-round de-dup: within a round, it avoids adding the same “term + meaning” entry twice
-- First word of a new round: when continuing to the next round, the first “Next word” prefers unseen words (falls back when exhausted)
-- Configurable round cap (20–30), start next round or restart
+- Configurable round cap (20–30), start next round or review the current round when full
 - Meaning toggle, immersive mode, theme modes (Auto/Light/Dark)
 - Learning status: mark each word as Mastered / Learning / Unknown during review
 - Lightweight review: auto schedules next review time and counts “Due”
@@ -53,7 +52,7 @@ Open: http://localhost:8080/
 
 ### 3) Basic flow
 
-- Home: “Next word” → add a word → review the round
+- Home: “Next word” → add a word and auto-open the review modal (the new word is pinned to the first position)
 - Home: “Review this round” anytime, and mark learning status
 - Records:
   - Round view: A4 preview + per-round CSV/PDF export + jump back to review

@@ -91,10 +91,11 @@ A4-Memory
 
 - 普通学习轮
   - 一轮对应一张 A4（`items[].pageIndex` 恒为 `0`）
-  - 每新增 1 个单词会打开“复习本轮”弹窗
+  - “下一个单词”：写入新词后会自动打开复习弹窗（新词固定在第一个；旧词部分仍按当前复习顺序规则排列）
+  - “复习本轮”是独立入口：仅在用户主动点击时打开复习弹窗
   - 复习完成后默认自动关闭弹窗（可在设置中关闭该行为）
   - 本轮去重：同一轮 A4 内不重复出现“同词同义”的词条
-  - 轮次写满后会弹出“本轮已满”弹窗：可继续下一轮（保留记录）或清空重开
+  - 轮次写满后会弹出“本轮已满”弹窗：可继续下一轮（保留记录）或复习本轮（不清空记录）
 - 状态生成轮
   - 从记录页状态视图点击“生成一轮”触发
   - 仍生成一个 round，但 round 内部可包含多张 A4
@@ -162,7 +163,6 @@ A4-Memory
   - UI：`showMeaning`, `immersiveMode`, `themeMode`, `darkMode`
   - 统计/目标：`currentCount`, `dailyGoalRounds`, `dailyGoalWords`, `roundCap`
   - 轻量复习：`reviewSystemEnabled`, `reviewIntervals`, `reviewAutoCloseModal`
-  - 学习流程：`flowSeenWordKeys`（“下一个单词”推进过程中已出现过的词条 key）
   - 发音：`pronunciationEnabled`, `pronunciationAccent`, `pronunciationLang`, `voiceMode`, `voiceURI`
   - 词书：`selectedWordbookId`, `customWordbooks`
     - 每个词书：`{ id, name, description, language, words }`；其中 `language` 用于发音自动选语音（当 `pronunciationLang=auto`）

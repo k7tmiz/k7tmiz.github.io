@@ -28,6 +28,42 @@ LexiForge is a production-oriented, offline-first TXT → JSON vocabulary conver
 - Open `index.html` directly in your browser
 - Or deploy as static files (GitHub Pages, Vercel, Netlify, Cloudflare Pages)
 
+## Project Structure
+
+```
+/
+  index.html
+  manifest.webmanifest
+  sw.js
+  README.md
+  /docs
+    README.en.md
+    PROJECT_CONTEXT.md
+  LICENSE
+  .gitignore
+
+  /css
+    style.css
+
+  /js
+    app.js
+    detectLanguage.js
+    fileImport.js
+    i18n.js
+    parser.js
+    tableEditor.js
+    theme.js
+    ui.js
+    utils.js
+
+  /assets
+    favicon.svg
+    icon-192.png
+    icon-512.png
+```
+
 ## License
 
 MIT
+
+Version: 0.2.1

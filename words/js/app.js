@@ -266,7 +266,7 @@ const dom = {
   closeRoundFullBtn: document.getElementById("closeRoundFullBtn"),
   roundFullMeta: document.getElementById("roundFullMeta"),
   continueRoundBtn: document.getElementById("continueRoundBtn"),
-  restartAllBtn: document.getElementById("restartAllBtn"),
+  reviewFromFullBtn: document.getElementById("reviewFromFullBtn"),
   settingsModal: document.getElementById("settingsModal"),
   settingsBackdrop: document.getElementById("settingsBackdrop"),
   closeSettingsBtn: document.getElementById("closeSettingsBtn"),
@@ -310,7 +310,13 @@ const appState = {
   poolIndex: 0,
   placed: [],
   showMeaning: false,
+  // 复习弹窗顺序控制：
+  // - 手动“复习本轮”：每次打开默认打乱（不置顶）
+  // - “下一个单词”后的自动复习：置顶本次新加入的 roundItem，其余旧词按当前复习顺序规则排列
+  // - reviewOrderPreferenceShuffled：用户在弹窗内选择“打乱/恢复”的偏好，仅用于后续自动复习（不写入 localStorage）
   reviewShuffled: false,
+  reviewPinnedRoundItem: null,
+  reviewOrderPreferenceShuffled: null,
   rounds: [],
   currentRoundId: "",
   pendingReviewRoundId: "",
@@ -328,8 +334,6 @@ const appState = {
   reviewSystemEnabled: true,
   reviewIntervals: { ...DEFAULT_REVIEW_INTERVALS },
   reviewAutoCloseModal: true,
-  flowSeenWordKeys: [],
-  preferUnseenFirstWordInNewRound: false,
   pronunciationEnabled: true,
   pronunciationAccent: "auto",
   pronunciationLang: "auto",
@@ -377,12 +381,6 @@ function getResolvedDarkMode() {
   if (mode === "dark") return true
   if (mode === "light") return false
   return !!appState.systemPrefersDark
-}
-
-function formatThemeModeLabel(mode) {
-  if (mode === "light") return "浅色"
-  if (mode === "dark") return "深色"
-  return "自动"
 }
 
 function applyTheme() {
@@ -698,8 +696,6 @@ async function importWordbookFile(file) {
 
   appState.customWordbooks = [...appState.customWordbooks, book]
   appState.selectedWordbookId = book.id
-  appState.flowSeenWordKeys = []
-  appState.preferUnseenFirstWordInNewRound = false
   renderWordbookSelect()
   startNextRound()
   persist()
@@ -877,8 +873,6 @@ async function importWordbookFromUrl({ url, name, language, description } = {}) 
 
   appState.customWordbooks = [...appState.customWordbooks, book]
   appState.selectedWordbookId = book.id
-  appState.flowSeenWordKeys = []
-  appState.preferUnseenFirstWordInNewRound = false
   renderWordbookSelect()
   startNextRound()
   persist()
@@ -1101,7 +1095,6 @@ function persist() {
     darkMode,
     themeMode: appState.themeMode,
     unknownTerms: appState.unknownTerms,
-    flowSeenWordKeys: appState.flowSeenWordKeys,
     roundCap: appState.roundCap,
     dailyGoalRounds: appState.dailyGoalRounds,
     dailyGoalWords: appState.dailyGoalWords,
@@ -1150,17 +1143,11 @@ function renderCurrentRound() {
   }
 }
 
-function startNextRound({ clearAll = false } = {}) {
+// 开启下一轮：保留历史记录，仅结束当前轮并追加一个新轮次。
+function startNextRound() {
   ensureCurrentRound()
-  if (clearAll) {
-    appState.rounds = []
-    appState.currentRoundId = ""
-    appState.flowSeenWordKeys = []
-    appState.preferUnseenFirstWordInNewRound = false
-  } else {
-    const current = getCurrentRound()
-    if (current && current.items.length > 0) finalizeCurrentRound()
-  }
+  const current = getCurrentRound()
+  if (current && current.items.length > 0) finalizeCurrentRound()
 
   const round = {
     id: makeId(),
@@ -1366,14 +1353,19 @@ function speakTerm(term) {
   if (settingsController) settingsController.updateVoiceUi()
 }
 
+// ===== 复习弹窗（手动复习 / 自动复习共用渲染）=====
 function refreshReviewList() {
   const round = getCurrentRound()
   const rawItems = Array.isArray(round?.items) ? round.items : []
   const base = rawItems
     .filter((it) => it && it.word && it.word.term)
     .map((it) => ({ word: it.word, roundItem: it }))
-  const list = appState.reviewShuffled ? shuffle(base) : base
-  appState.reviewQueue = list
+  const pinned = appState.reviewPinnedRoundItem
+  const pinnedIndex = pinned ? base.findIndex((e) => e.roundItem === pinned) : -1
+  const pinnedEntry = pinnedIndex >= 0 ? base[pinnedIndex] : null
+  const rest = pinnedEntry ? [...base.slice(0, pinnedIndex), ...base.slice(pinnedIndex + 1)] : base
+  const orderedRest = appState.reviewShuffled ? shuffle(rest) : rest
+  appState.reviewQueue = pinnedEntry ? [pinnedEntry, ...orderedRest] : orderedRest
   appState.reviewIndex = 0
   renderReviewCard()
 }
@@ -1417,9 +1409,21 @@ function renderReviewCard() {
   dom.reviewUnknownBtn.disabled = false
 }
 
+// 手动入口：默认打乱顺序，不强制新词置顶。
 function openReviewModal() {
+  appState.reviewPinnedRoundItem = null
   appState.reviewShuffled = true
   if (dom.shuffleBtn) dom.shuffleBtn.textContent = "恢复顺序"
+  refreshReviewList()
+  setModalVisible(dom.reviewModal, true)
+}
+
+// 自动入口：用于“下一个单词”后的强制复习，新词置顶；旧词仍按当前复习顺序规则排列。
+function openAutoReviewModal(pinnedRoundItem) {
+  appState.reviewPinnedRoundItem = pinnedRoundItem || null
+  appState.reviewShuffled =
+    typeof appState.reviewOrderPreferenceShuffled === "boolean" ? appState.reviewOrderPreferenceShuffled : true
+  if (dom.shuffleBtn) dom.shuffleBtn.textContent = appState.reviewShuffled ? "恢复顺序" : "打乱顺序"
   refreshReviewList()
   setModalVisible(dom.reviewModal, true)
 }
@@ -1440,6 +1444,14 @@ function openRoundFullModal() {
 
 function closeRoundFullModal() {
   setModalVisible(dom.roundFullModal, false)
+}
+
+// 当用户在“本轮已满”时仍点击了“下一个单词”，用于在继续下一轮后自动补一次“下一个单词”动作。
+let pendingNextWordAfterRoundFull = false
+
+function cancelRoundFullModal() {
+  pendingNextWordAfterRoundFull = false
+  closeRoundFullModal()
 }
 
 function generateStatusRound(kind) {
@@ -1565,25 +1577,8 @@ function ensurePool() {
 }
 
 function pickNextWord() {
-  return pickNextWordWithOptions()
-}
-
-function pickNextWordWithOptions({ preferUnseen } = {}) {
   ensurePool()
   const currentKeys = buildCurrentRoundWordKeySet()
-  const prefer = !!preferUnseen
-  const flowSeen = prefer ? new Set(appState.flowSeenWordKeys) : null
-  if (prefer) {
-    for (let i = appState.poolIndex; i < appState.pool.length; i++) {
-      const word = appState.pool[i]
-      const key = getWordMeaningKey(word)
-      if (!key) continue
-      if (currentKeys.has(key)) continue
-      if (flowSeen && flowSeen.has(key)) continue
-      appState.poolIndex = clamp(i + 1, 0, appState.pool.length)
-      return word || null
-    }
-  }
   while (appState.poolIndex < appState.pool.length) {
     const word = appState.pool[appState.poolIndex]
     appState.poolIndex = clamp(appState.poolIndex + 1, 0, appState.pool.length)
@@ -1673,8 +1668,6 @@ function restore() {
   if (!saved) {
     appState.customWordbooks = []
     appState.selectedWordbookId = getAllWordbooks()[0]?.id || "empty"
-    appState.flowSeenWordKeys = []
-    appState.preferUnseenFirstWordInNewRound = false
     renderWordbookSelect()
     ensureCurrentRound()
     updateImmersiveToggle()
@@ -1699,10 +1692,6 @@ function restore() {
   appState.unknownTerms = Array.isArray(saved.unknownTerms)
     ? saved.unknownTerms.map((s) => String(s || "").trim()).filter(Boolean)
     : []
-  appState.flowSeenWordKeys = Array.isArray(saved.flowSeenWordKeys)
-    ? saved.flowSeenWordKeys.map((s) => String(s || "").trim()).filter(Boolean)
-    : []
-  appState.preferUnseenFirstWordInNewRound = false
 
   const rawRoundCap = Number(saved.roundCap)
   appState.roundCap = Number.isFinite(rawRoundCap) ? clamp(Math.round(rawRoundCap), 20, 30) : DEFAULT_ROUND_CAP
@@ -1852,19 +1841,55 @@ function restore() {
   persist()
 }
 
-function addNextWord() {
-  ensureCurrentRound()
-  if (appState.placed.length >= getCurrentRoundCap()) {
-    openRoundFullModal()
-    return
+function buildAllRoundsWordKeySet({ excludeRoundId } = {}) {
+  const exclude = String(excludeRoundId || "")
+  const set = new Set()
+  for (const r of Array.isArray(appState.rounds) ? appState.rounds : []) {
+    if (exclude && String(r?.id || "") === exclude) continue
+    const items = Array.isArray(r?.items) ? r.items : []
+    for (const it of items) {
+      const key = getWordMeaningKey(it?.word)
+      if (key) set.add(key)
+    }
+  }
+  return set
+}
+
+function pickNextWordPreferUnseenFirst({ globalSeenSet } = {}) {
+  ensurePool()
+  const seen = globalSeenSet instanceof Set ? globalSeenSet : new Set()
+  const currentKeys = buildCurrentRoundWordKeySet()
+
+  const start = clamp(appState.poolIndex, 0, appState.pool.length)
+  let foundIndex = -1
+  for (let i = start; i < appState.pool.length; i++) {
+    const word = appState.pool[i]
+    const key = getWordMeaningKey(word)
+    if (!key) continue
+    if (currentKeys.has(key)) continue
+    if (seen.has(key)) continue
+    foundIndex = i
+    break
   }
 
-  const isFirstWordInRound = appState.placed.length === 0
-  const preferUnseen = isFirstWordInRound && appState.preferUnseenFirstWordInNewRound
-  const word = pickNextWordWithOptions({ preferUnseen })
+  if (foundIndex > start) {
+    const tmp = appState.pool[start]
+    appState.pool[start] = appState.pool[foundIndex]
+    appState.pool[foundIndex] = tmp
+  }
+  return pickNextWord()
+}
+
+function addNextWordToCurrentRound({ preferUnseenFirst } = {}) {
+  ensureCurrentRound()
+  if (appState.placed.length >= getCurrentRoundCap()) return null
+
+  const word = preferUnseenFirst
+    ? pickNextWordPreferUnseenFirst({ globalSeenSet: buildAllRoundsWordKeySet({ excludeRoundId: appState.currentRoundId }) })
+    : pickNextWord()
   if (!word) {
     window.alert("当前词书没有更多可用词条（已自动去重本轮同词同义）。")
-    return
+    return null
   }
 
   const placed = placeWordElement(word)
@@ -1881,14 +1906,6 @@ function addNextWord() {
   }
   appState.placed.push({ word, roundItem, el: placed.el, box: placed.box, fontSize, pos: placed.pos })
 
-  const flowKey = getWordMeaningKey(word)
-  if (flowKey) {
-    const nextSet = new Set(appState.flowSeenWordKeys)
-    nextSet.add(flowKey)
-    appState.flowSeenWordKeys = Array.from(nextSet)
-  }
-  if (preferUnseen) appState.preferUnseenFirstWordInNewRound = false
-
   const round = getCurrentRound()
   if (round) {
     if (!round.type) round.type = ROUND_TYPE_NORMAL
@@ -1899,15 +1916,33 @@ function addNextWord() {
   updateBadge()
   updateHint()
   persist()
+  return roundItem
+}
+
+// 学习推进入口：写入新词后立刻进入“自动复习”（新词置顶）。
+function handleNextWord() {
+  ensureCurrentRound()
+  if (appState.placed.length >= getCurrentRoundCap()) {
+    pendingNextWordAfterRoundFull = true
+    openRoundFullModal()
+    return
+  }
+  const roundItem = addNextWordToCurrentRound()
+  if (!roundItem) return
+  openAutoReviewModal(roundItem)
+}
+
+function openReviewCurrentRound() {
   openReviewModal()
 }
 
+// ===== 事件绑定（首页）=====
 dom.nextBtn.addEventListener("click", () => {
-  addNextWord()
+  handleNextWord()
 })
 
 dom.reviewBtn.addEventListener("click", () => {
-  openReviewModal()
+  openReviewCurrentRound()
 })
 
 dom.newRoundBtn.addEventListener("click", () => {
@@ -1941,8 +1976,6 @@ dom.settingsBtn.addEventListener("click", () => openSettingsModal())
 dom.wordbookSelect.addEventListener("change", () => {
   appState.selectedWordbookId = dom.wordbookSelect.value
   updateSourceWords()
-  appState.flowSeenWordKeys = []
-  appState.preferUnseenFirstWordInNewRound = false
   startNextRound()
   persist()
 })
@@ -2164,6 +2197,7 @@ dom.reviewCard.addEventListener("touchend", (e) => {
 
 dom.shuffleBtn.addEventListener("click", () => {
   appState.reviewShuffled = !appState.reviewShuffled
+  appState.reviewOrderPreferenceShuffled = appState.reviewShuffled
   dom.shuffleBtn.textContent = appState.reviewShuffled ? "恢复顺序" : "打乱顺序"
   refreshReviewList()
 })
@@ -2199,12 +2233,12 @@ window.addEventListener("keydown", (e) => {
 
   if (key === " " || key === "Spacebar") {
     e.preventDefault()
-    addNextWord()
+    handleNextWord()
     return
   }
 
   if (k === "r") {
-    openReviewModal()
+    openReviewCurrentRound()
     return
   }
 
@@ -2240,14 +2274,19 @@ restore()
 updateBadge()
 updateHint()
 
-dom.roundFullBackdrop.addEventListener("click", () => closeRoundFullModal())
-dom.closeRoundFullBtn.addEventListener("click", () => closeRoundFullModal())
+dom.roundFullBackdrop.addEventListener("click", () => cancelRoundFullModal())
+dom.closeRoundFullBtn.addEventListener("click", () => cancelRoundFullModal())
 dom.continueRoundBtn.addEventListener("click", () => {
   closeRoundFullModal()
-  appState.preferUnseenFirstWordInNewRound = true
   startNextRound()
+  if (pendingNextWordAfterRoundFull) {
+    pendingNextWordAfterRoundFull = false
+    const roundItem = addNextWordToCurrentRound({ preferUnseenFirst: true })
+    if (roundItem) openAutoReviewModal(roundItem)
+  }
 })
-dom.restartAllBtn.addEventListener("click", () => {
+dom.reviewFromFullBtn.addEventListener("click", () => {
   closeRoundFullModal()
-  startNextRound({ clearAll: true })
+  pendingNextWordAfterRoundFull = false
+  openReviewCurrentRound()
 })

@@ -1,3 +1,8 @@
+/*
+  fileImport.js
+  - 拖拽导入：读取 .txt/.tsv/.csv/.json 并转换为 text 或 words payload
+  - 关键函数：createFileImport（绑定拖拽与读取）、csvToTabText（CSV 复用现有解析链路）、extractWordsFromJson（JSON 导入兼容）
+*/
 (() => {
   const LexiForge = (window.LexiForge = window.LexiForge || {});
   const { setText, normalizeNewlines } = LexiForge.Utils;

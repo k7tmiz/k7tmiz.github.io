@@ -1,11 +1,16 @@
+/*
+  app.js
+  - 应用流程编排：状态恢复/持久化、转换管线、JSON 校验、复制/下载、去重与表格联动
+  - 关键函数：doConvert（转换主流程）、buildJsonTextFromWords（输出构建）、updateLanguageHint（自动语言提示）
+*/
 (() => {
-  const { safeJsonStringify, debounce, storage, toSafeFilenameBase, downloadTextFile, copyToClipboard, setText } =
-    window.LexiForge.Utils;
+  const { safeJsonStringify, debounce, storage, toSafeFilenameBase, downloadTextFile, copyToClipboard } = window.LexiForge.Utils;
   const { parseText, buildLexiconObject } = window.LexiForge.Parser;
   const UI = window.LexiForge.UI;
 
-  const VERSION = "0.2.0";
+  const VERSION = "0.2.1";
   const STORAGE_KEY = `lexiforge:state:${VERSION}`;
+  const LEGACY_STORAGE_KEYS = ["lexiforge:state:0.2.0"];
 
   let currentWords = [];
   let baseStats = { totalLines: 0, parsedLines: 0, skippedLines: 0 };
@@ -40,19 +45,15 @@
   }
 
   function setDupHint(count) {
-    const el = document.getElementById("dupHint");
-    if (!el) return;
     if (!count || count <= 0) {
-      setText(el, "");
+      UI.setDupHintText("");
       return;
     }
-    setText(el, t("dup.removed").replace("{n}", String(count)));
+    UI.setDupHintText(t("dup.removed").replace("{n}", String(count)));
   }
 
   function setAutoLanguageOptionLabel(text) {
-    const opt = document.querySelector('#language option[value="auto"]');
-    if (!opt) return;
-    setText(opt, text);
+    UI.setAutoLanguageOptionLabel(text);
   }
 
   function updateLanguageHint(state, words, converted) {
@@ -110,10 +111,7 @@
   }
 
   function showWords(words) {
-    const section = document.getElementById("tableSection");
-    if (!section) return;
-    if (words && words.length) section.classList.remove("is-hidden");
-    else section.classList.add("is-hidden");
+    UI.setTableSectionVisible(!!(words && words.length));
   }
 
   function buildFilename(state) {
@@ -151,7 +149,17 @@ hola\t 你好
   }
 
   function restoreState() {
-    const saved = storage.get(STORAGE_KEY, null);
+    let saved = storage.get(STORAGE_KEY, null);
+    if (!saved) {
+      for (const key of LEGACY_STORAGE_KEYS) {
+        const legacy = storage.get(key, null);
+        if (legacy) {
+          saved = legacy;
+          storage.set(STORAGE_KEY, legacy);
+          break;
+        }
+      }
+    }
     if (!saved) return null;
     return {
       name: saved.name != null ? saved.name : "",
@@ -163,6 +171,9 @@ hola\t 你好
   }
 
   async function main() {
+    if ("serviceWorker" in navigator) {
+      navigator.serviceWorker.register("./sw.js").catch(() => {});
+    }
     if (window.LexiForge.I18n && window.LexiForge.I18n.init) window.LexiForge.I18n.init();
     if (window.LexiForge.Theme && window.LexiForge.Theme.init) window.LexiForge.Theme.init();
     const restored = restoreState();
@@ -187,40 +198,39 @@ hola\t 你好
           })
         : null;
 
-    const importer =
-      window.LexiForge.FileImport && window.LexiForge.FileImport.createFileImport
-        ? window.LexiForge.FileImport.createFileImport({
-            dropzoneId: "inputDropzone",
-            hintId: "importHint",
-            onImport(payload) {
-              const state = UI.getState();
-              if (payload.kind === "text") {
-                UI.setState({ ...state, inputText: payload.text });
-                const nextState = UI.getState();
-                doConvert(nextState);
-                persistState(nextState);
-                return;
-              }
-              if (payload.kind === "words") {
-                const deduped = dedupeWords(payload.words);
-                currentWords = deduped.words;
-                dupRemovedCount = deduped.removed;
-                baseStats = { totalLines: currentWords.length, parsedLines: currentWords.length, skippedLines: 0 };
-                hasConverted = true;
-                if (tableEditor) tableEditor.setWords(currentWords);
-                showWords(currentWords);
-                const jsonText = buildJsonTextFromWords(state, currentWords);
-                showOutput({ jsonText, stats: baseStats });
-                updateLanguageHint(state, currentWords, true);
-                setDupHint(dupRemovedCount);
-                persistState(state);
-              }
-            },
-            onError(err) {
-              UI.setJsonValidity(false, err && err.message ? err.message : t("import.failed"));
-            },
-          })
-        : null;
+    if (window.LexiForge.FileImport && window.LexiForge.FileImport.createFileImport) {
+      window.LexiForge.FileImport.createFileImport({
+        dropzoneId: "inputDropzone",
+        hintId: "importHint",
+        onImport(payload) {
+          const state = UI.getState();
+          if (payload.kind === "text") {
+            UI.setState({ ...state, inputText: payload.text });
+            const nextState = UI.getState();
+            doConvert(nextState);
+            persistState(nextState);
+            return;
+          }
+          if (payload.kind === "words") {
+            const deduped = dedupeWords(payload.words);
+            currentWords = deduped.words;
+            dupRemovedCount = deduped.removed;
+            baseStats = { totalLines: currentWords.length, parsedLines: currentWords.length, skippedLines: 0 };
+            hasConverted = true;
+            if (tableEditor) tableEditor.setWords(currentWords);
+            showWords(currentWords);
+            const jsonText = buildJsonTextFromWords(state, currentWords);
+            showOutput({ jsonText, stats: baseStats });
+            updateLanguageHint(state, currentWords, true);
+            setDupHint(dupRemovedCount);
+            persistState(state);
+          }
+        },
+        onError(err) {
+          UI.setJsonValidity(false, err && err.message ? err.message : t("import.failed"));
+        },
+      });
+    }
 
     function refreshAfterUiLangChange() {
       UI.setJsonValidity(lastValidity, lastValidityDetail);
@@ -255,7 +265,7 @@ hola\t 你好
         persistState(state);
       },
       async onCopy() {
-        const out = document.getElementById("outputJson").value;
+        const out = UI.getOutputJsonText();
         if (!String(out || "").trim()) return;
         const res = await copyToClipboard(out);
         if (!res.ok) {
@@ -270,7 +280,7 @@ hola\t 你好
         }
       },
       onDownload(state) {
-        const out = document.getElementById("outputJson").value;
+        const out = UI.getOutputJsonText();
         if (!String(out || "").trim()) return;
         const filename = buildFilename(state);
         downloadTextFile(filename, out, "application/json;charset=utf-8");
@@ -290,6 +300,7 @@ hola\t 你好
         if (tableEditor) tableEditor.setWords([]);
         showWords([]);
         storage.remove(STORAGE_KEY);
+        LEGACY_STORAGE_KEYS.forEach((key) => storage.remove(key));
       },
       onSample() {
         UI.setState({

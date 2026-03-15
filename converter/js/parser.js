@@ -1,3 +1,8 @@
+/*
+  parser.js
+  - 文本清洗与解析：噪音过滤、分隔策略、词性识别、行解析为 {term,pos,meaning}
+  - 关键函数：parseText（解析入口）、parseLine（单行解析）、buildLexiconObject（对象模式输出构建）
+*/
 (() => {
   const LexiForge = (window.LexiForge = window.LexiForge || {});
   const { escapeRegExp, splitLines, isSeparatorLine } = LexiForge.Utils;
