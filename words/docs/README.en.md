@@ -66,6 +66,7 @@ Open: http://localhost:8080/
 - Cross-browser: normalize form/control rendering so Chromium and Safari look closer
 - Maintenance: reduce duplication and improve readability without changing behavior or localStorage schema
 - Settings: theme, pronunciation, round cap, lightweight review, auto-close review modal on completion, backup, AI generator
+- Home “How to use”: text stays aligned with the current implementation
 
 ## Project structure (brief)
 

@@ -80,6 +80,7 @@ A4-Memory
 
 - `index.html`（首页）
   - 主要 UI：控制区、A4 纸、复习弹窗、导入词书弹窗、用法介绍弹窗、多页翻页 `#pageNav`
+  - 用法介绍：展示面向新用户的简要说明（文本随功能迭代保持同步）
   - 脚本顺序：`data/words.js` → `js/core/common.js` → `utils/storage/speech/settings/app`
 - `records.html`（学习记录页）
   - 视图切换：轮次视图 / 状态视图
