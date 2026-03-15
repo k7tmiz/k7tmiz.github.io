@@ -32,6 +32,10 @@ body {
   height: 100%;
 }
 
+html {
+  -webkit-text-size-adjust: 100%;
+}
+
 body {
   margin: 0;
   font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji",
@@ -39,6 +43,11 @@ body {
   color: var(--text);
   background: radial-gradient(1000px 600px at 20% 10%, rgba(106, 167, 255, 0.16), transparent 60%),
     radial-gradient(900px 500px at 80% 0%, rgba(42, 209, 123, 0.1), transparent 60%), var(--bg);
+  overflow-x: hidden;
+}
+
+:where(button, input, select, textarea) {
+  font: inherit;
 }
 
 .container {
@@ -55,6 +64,12 @@ body {
   border-bottom: 1px solid var(--border);
 }
 
+@supports not ((backdrop-filter: blur(10px)) or (-webkit-backdrop-filter: blur(10px))) {
+  .header {
+    backdrop-filter: none;
+  }
+}
+
 html[data-theme="light"] .header {
   background: rgba(245, 247, 251, 0.75);
 }
@@ -65,11 +80,13 @@ html[data-theme="light"] .header {
   align-items: center;
   justify-content: space-between;
   gap: 16px;
+  flex-wrap: wrap;
 }
 
 .brand {
   display: grid;
   gap: 6px;
+  min-width: 0;
 }
 
 .brand__title {
@@ -87,7 +104,10 @@ html[data-theme="light"] .header {
   display: flex;
   align-items: center;
   gap: 12px;
-  flex-wrap: nowrap;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  margin-left: auto;
+  min-width: 0;
 }
 
 .toolgroup {
@@ -101,8 +121,8 @@ html[data-theme="light"] .header {
 }
 
 .iconbtn {
-  height: 34px;
-  min-width: 34px;
+  height: 40px;
+  min-width: 40px;
   border-radius: 999px;
   border: 1px solid transparent;
   background: transparent;
@@ -115,6 +135,7 @@ html[data-theme="light"] .header {
   padding: 0 10px;
   font-size: 13px;
   user-select: none;
+  -webkit-tap-highlight-color: transparent;
 }
 
 .iconbtn:hover {
@@ -179,6 +200,7 @@ html[data-theme="light"] .iconbtn:hover {
   color: var(--text);
   padding: 10px 12px;
   outline: none;
+  min-height: 40px;
 }
 
 .input:focus,
@@ -205,6 +227,7 @@ html[data-theme="light"] .iconbtn:hover {
 
 .textarea--mono {
   font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+  overflow: auto;
 }
 
 .segmented {
@@ -302,6 +325,8 @@ html[data-theme="light"] .modecard:hover {
   padding: 10px 12px;
   cursor: pointer;
   font-size: 13px;
+  min-height: 40px;
+  -webkit-tap-highlight-color: transparent;
 }
 
 .btn:hover {
@@ -345,6 +370,7 @@ html[data-theme="light"] .modecard:hover {
   overflow: hidden;
   display: grid;
   grid-template-rows: auto 1fr;
+  min-width: 0;
 }
 
 .workspace__body {
@@ -363,6 +389,7 @@ html[data-theme="light"] .modecard:hover {
   gap: 12px;
   border-bottom: 1px solid var(--border);
   background: rgba(255, 255, 255, 0.02);
+  min-width: 0;
 }
 
 .workspace__title {
@@ -377,6 +404,7 @@ html[data-theme="light"] .modecard:hover {
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+  min-width: 0;
 }
 
 .workspace .textarea--big {
@@ -453,12 +481,14 @@ html[data-theme="light"] .modecard:hover {
 .tablepanel__body {
   padding: 8px 10px 14px;
   overflow: auto;
+  -webkit-overflow-scrolling: touch;
 }
 
 .table {
   width: 100%;
   border-collapse: separate;
   border-spacing: 0 10px;
+  min-width: 860px;
 }
 
 .table th {
@@ -491,6 +521,7 @@ html[data-theme="light"] .modecard:hover {
   padding: 8px 10px;
   outline: none;
   font-size: 13px;
+  min-height: 40px;
 }
 
 .tarea {
@@ -505,8 +536,8 @@ html[data-theme="light"] .modecard:hover {
 }
 
 .iconbtn--sm {
-  height: 32px;
-  min-width: 32px;
+  height: 40px;
+  min-width: 40px;
   padding: 0 10px;
   font-size: 13px;
 }
@@ -517,6 +548,7 @@ html[data-theme="light"] .modecard:hover {
   gap: 10px;
   min-width: 180px;
   justify-content: flex-end;
+  min-width: 0;
 }
 
 .status__badge {
@@ -634,15 +666,35 @@ html[data-theme="light"] .modecard:hover {
   border-bottom-color: rgba(231, 238, 252, 0.7);
 }
 
+@media (max-width: 1199px) {
+  .panel__controls {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
 @media (max-width: 980px) {
   .panel__controls {
     grid-template-columns: 1fr 1fr;
   }
 }
 
-@media (max-width: 780px) {
+@media (max-width: 767px) {
   .container {
     width: min(1200px, calc(100% - 28px));
+  }
+
+  .input,
+  .select,
+  .textarea,
+  .btn,
+  .iconbtn,
+  .tinput,
+  .tarea {
+    font-size: 16px;
+  }
+
+  .panel__controls {
+    grid-template-columns: 1fr;
   }
 
   .workspace {
@@ -655,5 +707,33 @@ html[data-theme="light"] .modecard:hover {
 
   .workspace__hint {
     display: none;
+  }
+
+  .workspace .textarea--big {
+    min-height: 300px;
+  }
+}
+
+@media (max-width: 520px) {
+  .brand__title {
+    font-size: 20px;
+  }
+
+  .brand__subtitle {
+    font-size: 12px;
+  }
+
+  .header__tools {
+    width: 100%;
+  }
+
+  .input,
+  .select,
+  .textarea,
+  .btn,
+  .iconbtn,
+  .tinput,
+  .tarea {
+    font-size: 16px;
   }
 }

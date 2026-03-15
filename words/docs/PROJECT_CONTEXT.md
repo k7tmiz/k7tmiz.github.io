@@ -162,6 +162,7 @@ A4-Memory
   - UI：`showMeaning`, `immersiveMode`, `themeMode`, `darkMode`
   - 统计/目标：`currentCount`, `dailyGoalRounds`, `dailyGoalWords`, `roundCap`
   - 轻量复习：`reviewSystemEnabled`, `reviewIntervals`, `reviewAutoCloseModal`
+  - 学习流程：`flowSeenWordKeys`（“下一个单词”推进过程中已出现过的词条 key）
   - 发音：`pronunciationEnabled`, `pronunciationAccent`, `pronunciationLang`, `voiceMode`, `voiceURI`
   - 词书：`selectedWordbookId`, `customWordbooks`
     - 每个词书：`{ id, name, description, language, words }`；其中 `language` 用于发音自动选语音（当 `pronunciationLang=auto`）

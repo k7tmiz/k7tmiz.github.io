@@ -11,6 +11,7 @@ A pure front-end vocabulary tool based on the “A4 paper memory method”. Word
 - A4 random layout with collision avoidance
 - Forced review after each new word (shuffled by default, can restore order; auto-closes the review modal on completion by default, configurable in Settings)
 - Per-round de-dup: within a round, it avoids adding the same “term + meaning” entry twice
+- First word of a new round: when continuing to the next round, the first “Next word” prefers unseen words (falls back when exhausted)
 - Configurable round cap (20–30), start next round or restart
 - Meaning toggle, immersive mode, theme modes (Auto/Light/Dark)
 - Learning status: mark each word as Mastered / Learning / Unknown during review
