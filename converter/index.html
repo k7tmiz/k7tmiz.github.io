@@ -1,0 +1,235 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content="Universal Vocabulary TXT → JSON Converter" />
+    <title>LexiForge · Universal Vocabulary TXT → JSON Converter</title>
+    <link rel="icon" href="./assets/favicon.svg" type="image/svg+xml" />
+    <link rel="stylesheet" href="./css/style.css" />
+  </head>
+  <body>
+    <header class="header">
+      <div class="container header__inner">
+        <div class="brand">
+          <div class="brand__title">LexiForge</div>
+          <div class="brand__subtitle" data-i18n="brand.subtitle">Universal Vocabulary TXT → JSON Converter</div>
+        </div>
+
+        <div class="header__tools">
+          <div class="toolgroup" aria-label="Theme" data-i18n-aria-label="aria.theme">
+            <button
+              class="iconbtn"
+              type="button"
+              data-theme-mode="auto"
+              title="Auto"
+              data-i18n-title="theme.auto"
+              aria-pressed="false"
+            >
+              <span aria-hidden="true">🌗</span>
+            </button>
+            <button
+              class="iconbtn"
+              type="button"
+              data-theme-mode="light"
+              title="Light"
+              data-i18n-title="theme.light"
+              aria-pressed="false"
+            >
+              <span aria-hidden="true">☀️</span>
+            </button>
+            <button
+              class="iconbtn"
+              type="button"
+              data-theme-mode="dark"
+              title="Dark"
+              data-i18n-title="theme.dark"
+              aria-pressed="false"
+            >
+              <span aria-hidden="true">🌙</span>
+            </button>
+          </div>
+
+          <div class="toolgroup" aria-label="Language" data-i18n-aria-label="aria.uiLang">
+            <button id="uiLangZh" class="iconbtn" type="button" data-ui-lang="zh" aria-pressed="false">CN</button>
+            <span class="divider" aria-hidden="true">|</span>
+            <button id="uiLangEn" class="iconbtn" type="button" data-ui-lang="en" aria-pressed="false">EN</button>
+          </div>
+
+          <a
+            class="iconbtn"
+            href="https://github.com/k7tmiz/LexiForge"
+            target="_blank"
+            rel="noreferrer"
+            title="GitHub"
+            data-i18n-title="top.github"
+            aria-label="GitHub"
+            data-i18n-aria-label="top.github"
+          >
+            <svg class="ghicon" viewBox="0 0 16 16" aria-hidden="true" fill="currentColor">
+              <path
+                d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0 0 16 8c0-4.42-3.58-8-8-8Z"
+              />
+            </svg>
+          </a>
+        </div>
+      </div>
+    </header>
+
+    <main class="container">
+      <section class="panel">
+        <div class="panel__controls">
+          <div class="field">
+            <label class="label" for="bookName" data-i18n="field.name">词书名称</label>
+            <input
+              id="bookName"
+              class="input"
+              type="text"
+              placeholder="例如：我的词书"
+              data-i18n-placeholder="field.name.ph"
+              autocomplete="off"
+            />
+          </div>
+
+          <div class="field">
+            <label class="label" for="bookDesc" data-i18n="field.desc">词书简介（可选）</label>
+            <textarea
+              id="bookDesc"
+              class="textarea textarea--small"
+              placeholder="可选：描述、来源、适用范围等"
+              data-i18n-placeholder="field.desc.ph"
+            ></textarea>
+          </div>
+
+          <div class="field">
+            <label class="label" for="language" data-i18n="field.lang">语言</label>
+            <select id="language" class="select">
+              <option value="auto" data-i18n="field.lang.auto">auto（自动/未知）</option>
+            </select>
+          </div>
+
+          <div class="field">
+            <div class="label" data-i18n="field.outputMode">输出模式</div>
+            <div class="modecards" role="radiogroup" aria-label="输出模式" data-i18n-aria-label="aria.outputMode">
+              <label class="modecard" data-output-mode="object">
+                <input type="radio" name="outputMode" value="object" checked />
+                <div class="modecard__body">
+                  <div class="modecard__title" data-i18n="mode.wordbook.title">📘 Wordbook JSON</div>
+                  <div class="modecard__desc" data-i18n="mode.wordbook.desc">包含词书信息</div>
+                </div>
+              </label>
+              <label class="modecard" data-output-mode="array">
+                <input type="radio" name="outputMode" value="array" />
+                <div class="modecard__body">
+                  <div class="modecard__title" data-i18n="mode.words.title">📄 Words Array</div>
+                  <div class="modecard__desc" data-i18n="mode.words.desc">仅词条列表</div>
+                </div>
+              </label>
+            </div>
+          </div>
+
+          <div class="actions">
+            <button id="btnConvert" class="btn btn--primary" type="button" data-i18n="btn.convert">转换</button>
+            <button id="btnCopy" class="btn" type="button" data-i18n="btn.copy">复制 JSON</button>
+            <button id="btnDownload" class="btn" type="button" data-i18n="btn.download">下载 JSON</button>
+            <button id="btnClear" class="btn btn--danger" type="button" data-i18n="btn.clear">清空</button>
+            <button id="btnSample" class="btn" type="button" data-i18n="btn.sample">加载示例</button>
+          </div>
+        </div>
+      </section>
+
+      <section class="workspace">
+        <div class="workspace__col">
+          <div class="workspace__header">
+            <div class="workspace__title" data-i18n="workspace.input">TXT 输入</div>
+            <div class="workspace__hint" data-i18n="workspace.input.hint">支持 TAB 或空格分隔；支持词组；自动过滤标题/噪音</div>
+          </div>
+          <div class="workspace__body dropzone" id="inputDropzone">
+            <textarea
+              id="inputText"
+              class="textarea textarea--big"
+              placeholder="把原始词表粘贴在这里…"
+              data-i18n-placeholder="workspace.input.ph"
+            ></textarea>
+            <div id="importHint" class="dropzone__hint"></div>
+          </div>
+        </div>
+
+        <div class="workspace__col">
+          <div class="workspace__header">
+            <div class="workspace__title" data-i18n="workspace.output">JSON 输出</div>
+            <div class="status">
+              <span id="jsonValidity" class="status__badge status__badge--neutral">—</span>
+              <span id="jsonValidityDetail" class="status__detail"></span>
+            </div>
+          </div>
+          <div class="workspace__body workspace__body--relative">
+            <textarea id="outputJson" class="textarea textarea--big textarea--mono" readonly spellcheck="false"></textarea>
+            <div id="outputEmpty" class="empty-overlay" data-i18n="output.empty">Paste your vocabulary list and click Convert.</div>
+          </div>
+        </div>
+      </section>
+
+      <section class="footerbar">
+        <div class="statsbox">
+          <div class="statsbox__title" data-i18n="stats.title">📊 Stats</div>
+          <div class="stats">
+            <div class="stat">
+              <span class="stat__k" data-i18n="stats.total">Total Lines</span><span id="statTotal" class="stat__v">0</span>
+            </div>
+            <div class="stat">
+              <span class="stat__k" data-i18n="stats.parsed">Parsed Entries</span><span id="statParsed" class="stat__v">0</span>
+            </div>
+            <div class="stat">
+              <span class="stat__k" data-i18n="stats.skipped">Skipped Lines</span><span id="statSkipped" class="stat__v">0</span>
+            </div>
+          </div>
+          <div id="dupHint" class="statsbox__hint"></div>
+        </div>
+      </section>
+
+      <section id="tableSection" class="tablepanel is-hidden">
+        <div class="tablepanel__header">
+          <div class="tablepanel__title" data-i18n="table.title">Editable Table View</div>
+          <div class="tablepanel__actions">
+            <button id="btnAddRow" class="btn" type="button" data-i18n="table.add">Add Row</button>
+          </div>
+        </div>
+        <div class="tablepanel__body">
+          <table class="table">
+            <thead>
+              <tr>
+                <th data-i18n="table.term">term</th>
+                <th data-i18n="table.pos">pos</th>
+                <th data-i18n="table.meaning">meaning</th>
+                <th></th>
+              </tr>
+            </thead>
+            <tbody id="wordsTbody"></tbody>
+          </table>
+        </div>
+      </section>
+    </main>
+
+    <footer class="footer">
+      <div class="container footer__inner">
+        <div class="footer__left" data-i18n="footer.info">LexiForge · MIT License · Version 0.2.0</div>
+        <div class="footer__right">
+          <a class="link" href="https://github.com/k7tmiz/LexiForge" target="_blank" rel="noreferrer" data-i18n="footer.star"
+            >⭐ Star on GitHub</a
+          >
+        </div>
+      </div>
+    </footer>
+
+    <script defer src="./js/utils.js"></script>
+    <script defer src="./js/i18n.js"></script>
+    <script defer src="./js/theme.js"></script>
+    <script defer src="./js/parser.js"></script>
+    <script defer src="./js/detectLanguage.js"></script>
+    <script defer src="./js/fileImport.js"></script>
+    <script defer src="./js/tableEditor.js"></script>
+    <script defer src="./js/ui.js"></script>
+    <script defer src="./js/app.js"></script>
+  </body>
+</html>
