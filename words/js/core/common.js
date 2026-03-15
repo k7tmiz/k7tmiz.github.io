@@ -108,6 +108,22 @@
     return { totalWords, todayWords, completedRounds, todayCompletedRounds, streak }
   }
 
+  function normalizeMeaningKey(value) {
+    return String(value || "")
+      .trim()
+      .replaceAll(/\s+/g, " ")
+  }
+
+  function getWordKey(word) {
+    const w = word && typeof word === "object" ? word : {}
+    const term = String(w?.term || "").trim()
+    if (!term) return ""
+    const termKey = term.toLowerCase()
+    const meaning = normalizeMeaningKey(w?.meaning)
+    if (!meaning) return termKey
+    return `${termKey}||${meaning}`
+  }
+
   function buildLatestTermMap(rounds) {
     const map = new Map()
     const rs = Array.isArray(rounds) ? rounds : []
@@ -118,9 +134,10 @@
       for (let ii = 0; ii < items.length; ii++) {
         const it = items[ii]
         seq += 1
-        const term = String(it?.word?.term || "").trim()
-        if (!term) continue
-        const key = term.toLowerCase()
+        const word = it?.word && typeof it.word === "object" ? it.word : {}
+        const term = String(word?.term || "").trim()
+        const key = getWordKey(word)
+        if (!term || !key) continue
         const reviewedAt = parseIsoTime(it?.lastReviewedAt)
         const createdAt = parseIsoTime(it?.createdAt)
         const fallbackAt = parseIsoTime(r?.finishedAt) || parseIsoTime(r?.startedAt)
@@ -140,7 +157,7 @@
           rank,
           seq,
           term,
-          word: it?.word || { term },
+          word,
           status: normalizeStatus(it?.status),
           lastReviewedAt: String(it?.lastReviewedAt || "").trim(),
           nextReviewAt: String(it?.nextReviewAt || "").trim(),
@@ -235,6 +252,8 @@
     formatDateTime,
     toLocalDateKey,
     computeStudyStats,
+    normalizeMeaningKey,
+    getWordKey,
     buildLatestTermMap,
     getRoundPageCount,
     getRoundItemsByPage,

@@ -20,6 +20,7 @@ const {
   parseIsoTime,
   formatDateTime,
   computeStudyStats,
+  getWordKey,
   buildLatestTermMap,
   getRoundPageCount,
   getRoundItemsByPage,
@@ -148,7 +149,7 @@ function buildCsv(rounds) {
     for (const it of items) {
       const w = it?.word || {}
       const term = String(w?.term || "").trim()
-      const key = term ? term.toLowerCase() : ""
+      const key = getWordKey ? getWordKey(w) : term ? term.toLowerCase() : ""
       const cur = key ? latest.get(key) : null
       const status = getStatusLabel(cur?.status ?? it?.status)
       const lastReviewedAt = cur?.lastReviewedAt ? formatDateTimeText(cur.lastReviewedAt) : ""
@@ -216,9 +217,8 @@ function buildFirstSeenRoundMap(rounds) {
     const r = rounds[i]
     const items = Array.isArray(r?.items) ? r.items : []
     for (const it of items) {
-      const term = String(it?.word?.term || "").trim()
-      if (!term) continue
-      const key = term.toLowerCase()
+      const key = getWordKey ? getWordKey(it?.word) : String(it?.word?.term || "").trim().toLowerCase()
+      if (!key) continue
       if (map.has(key)) continue
       map.set(key, { roundIndex: i, roundId: String(r?.id || "") })
     }
@@ -242,8 +242,7 @@ function computeStatusCounts(items, latestStatusMap, dueKeySet) {
   let unknown = 0
   let due = 0
   for (const it of Array.isArray(items) ? items : []) {
-    const term = String(it?.word?.term || "").trim()
-    const key = term ? term.toLowerCase() : ""
+    const key = getWordKey ? getWordKey(it?.word) : String(it?.word?.term || "").trim().toLowerCase()
     const s =
       key && latestStatusMap?.get(key) ? normalizeStatus(latestStatusMap.get(key).status) : normalizeStatus(it?.status)
     if (s === STATUS_MASTERED) mastered += 1
@@ -289,9 +288,8 @@ function buildStatusViewGroups({ rounds, state }) {
   for (const r of Array.isArray(rounds) ? rounds : []) {
     for (const it of Array.isArray(r?.items) ? r.items : []) {
       const w = it?.word || {}
-      const term = String(w?.term || "").trim()
-      if (!term) continue
-      const key = term.toLowerCase()
+      const key = getWordKey ? getWordKey(w) : String(w?.term || "").trim().toLowerCase()
+      if (!key) continue
       if (termToMeaning.has(key)) continue
       termToMeaning.set(key, { pos: String(w?.pos || "").trim(), meaning: String(w?.meaning || "").trim() })
     }
@@ -466,7 +464,7 @@ function renderRounds(rounds, { state, onDeleteRound, onReviewRound, getRoundCap
       const row = el("div", "word-row")
       const w = el("div", "w")
       w.textContent = word?.term || ""
-      const termKey = String(word?.term || "").trim().toLowerCase()
+      const termKey = getWordKey ? getWordKey(word) : String(word?.term || "").trim().toLowerCase()
       const currentStatus =
         termKey && latestStatusMap.get(termKey) ? latestStatusMap.get(termKey).status : it?.status
       const status = el(

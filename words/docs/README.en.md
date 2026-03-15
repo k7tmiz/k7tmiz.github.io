@@ -18,7 +18,7 @@ A pure front-end vocabulary tool based on the “A4 paper memory method”. Word
 - Records:
   - Round view: per-round stats, A4 preview (multi-page preview navigation)
   - Status view: group by Due / Mastered / Learning / Unknown and “Generate a round”
-  - Status aggregation: always reflects the latest user action (deterministic, even when timestamps tie)
+  - Status aggregation: groups by normalized term+meaning key and always reflects the latest user action (deterministic, even when timestamps tie)
 - Round types: Normal / Mastered review / Learning review / Unknown review / Due review
 - Status-generated rounds: one round may contain multiple A4 pages (auto-paged by round cap)
 - Multi-page navigation: when a round has multiple A4 pages, use Previous/Next on Home

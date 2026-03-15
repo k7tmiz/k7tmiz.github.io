@@ -114,7 +114,7 @@ A4-Memory
 ## 8) Records 页：状态视图聚合逻辑（真实实现）
 
 - 全局最新状态映射
-  - 遍历 `rounds[].items[]`，按 term（忽略大小写）构建“最新记录”
+  - 遍历 `rounds[].items[]`，按 term+meaning 构建“最新记录”（term 忽略大小写；meaning 做空白归一；避免同词不同义被误合并）
   - 最新判定优先级：`lastReviewedAt` > `createdAt` > round 的 `finishedAt/startedAt`
   - 当时间相等或字段缺失时：使用稳定的 tie-break 规则（后出现的记录优先），避免旧记录覆盖新记录导致“状态卡住”
   - 当前实现由 `js/core/common.js` 提供公共聚合函数（供首页与记录页复用）
