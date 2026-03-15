@@ -3,7 +3,7 @@
   const { storage } = LexiForge.Utils;
 
   const STORAGE_KEY = "lexiforge:theme";
-  const DEFAULT_MODE = "dark";
+  const DEFAULT_MODE = "auto";
   const MODES = ["auto", "light", "dark"];
 
   let media = null;

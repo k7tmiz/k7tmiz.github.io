@@ -2,6 +2,8 @@
 
 [中文](README.md) | [English](docs/README.en.md)
 
+Demo: https://k7tmiz.com/converter
+
 Universal Vocabulary TXT → JSON Converter
 
 LexiForge 是一个纯前端、离线运行的“通用词书 TXT → JSON 转换工具”。你可以把教材、PDF、网页、笔记里拷贝出来的原始词表文本直接粘贴进来，工具会在浏览器本地完成清洗、过滤与解析，生成标准 JSON 词书数据，可直接用于背单词软件、Flashcard 系统或自建词库。
