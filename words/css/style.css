@@ -831,6 +831,22 @@ select:hover {
   }
 }
 
+@media (max-width: 679px) {
+  .review-card-actions {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  .review-card-actions .review-btn {
+    flex: 0 0 calc(50% - 5px);
+  }
+
+  .review-card-actions .review-btn-unknown {
+    order: 3;
+  }
+}
+
 .intro {
   display: flex;
   flex-direction: column;

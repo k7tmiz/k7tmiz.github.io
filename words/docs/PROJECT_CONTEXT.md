@@ -70,6 +70,7 @@ A4-Memory
     - 命名：优先使用词书 JSON 的 `name/title`；缺失时回退为 JSON 文件名并自动去重
   - 西语词形补全：当发音语言为西班牙语且词条为“逗号后缀简写”（如 `antiguo,gua`），会在发音前扩展为完整两种形式（`antiguo, antigua`）
   - 复习弹窗：每次打开默认打乱顺序（可手动恢复顺序）
+    - 手机端 UI：复习按钮为两行布局（已掌握/学习中一排，不会居中单独一排）
   - 多页 A4 翻页：只渲染当前页（`pageIndex === currentPageIndex`）
 - `js/records.js`
   - 学习记录页：轮次视图 + 状态视图、统计、导出 CSV、导出 PDF（按 `pageIndex` 分页）、删除轮次
