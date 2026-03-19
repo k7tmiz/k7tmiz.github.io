@@ -79,6 +79,15 @@
           }
         : { provider: "custom", baseUrl: "", apiKey: "", model: "" }
 
+    next.lookupOnlineEnabled = typeof next.lookupOnlineEnabled === "boolean" ? next.lookupOnlineEnabled : true
+    next.lookupOnlineSource = String(next.lookupOnlineSource || "").trim().toLowerCase() === "custom" ? "custom" : "builtin"
+    const lm = String(next.lookupLangMode || "").trim().toLowerCase()
+    next.lookupLangMode = lm === "en" ? "en" : lm === "es" ? "es" : "auto"
+    next.lookupSpanishConjugationEnabled =
+      typeof next.lookupSpanishConjugationEnabled === "boolean" ? next.lookupSpanishConjugationEnabled : true
+    next.lookupCacheEnabled = typeof next.lookupCacheEnabled === "boolean" ? next.lookupCacheEnabled : true
+    next.lookupCacheDays = clamp(Math.round(Number(next.lookupCacheDays) || 30), 1, 365)
+
     next.unknownTerms = Array.isArray(next.unknownTerms)
       ? next.unknownTerms.map((s) => String(s || "").trim()).filter(Boolean)
       : []
@@ -388,6 +397,45 @@
           </section>
 
           <section class="panel">
+            <div class="section-title">查词</div>
+            <div class="form-row">
+              <div class="form-label">联网补充</div>
+              <div class="form-control">
+                <button class="ghost" id="lookupOnlineToggleBtn" type="button">联网补充：开</button>
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="form-label">补充来源</div>
+              <div class="form-control">
+                <select id="lookupOnlineSourceSelect" aria-label="查词补充来源">
+                  <option value="builtin">内置在线补充源（默认）</option>
+                  <option value="custom">自定义 API（替换内置）</option>
+                </select>
+              </div>
+            </div>
+            <div class="form-help">选择「自定义 API」后会复用下方「AI 生成词书」的 API 配置（只需配置一次）。</div>
+            <div class="form-row">
+              <div class="form-label">西语动词变位</div>
+              <div class="form-control">
+                <button class="ghost" id="lookupSpanishToggleBtn" type="button">西语变位：开</button>
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="form-label">查词缓存</div>
+              <div class="form-control">
+                <button class="ghost" id="lookupCacheToggleBtn" type="button">缓存：开</button>
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="form-label">缓存时长（天）</div>
+              <div class="form-control">
+                <input id="lookupCacheDaysInput" class="text-input" type="number" min="1" max="365" value="30" />
+              </div>
+            </div>
+            <div class="form-help">本地词书与学习记录优先显示；在线补充会异步补充并缓存。</div>
+          </section>
+
+          <section class="panel">
             <div class="section-title">学习数据</div>
             <div class="stack">
               <button class="ghost full" id="exportBackupBtn" type="button">导出完整学习数据（JSON）</button>
@@ -398,7 +446,7 @@
           </section>
 
           <section class="panel">
-            <div class="section-title">AI 生成词书</div>
+            <div class="section-title">AI（生成词书 / 查词补充）</div>
             <div class="form-row">
               <div class="form-label">API 提供商</div>
               <div class="form-control">
@@ -553,6 +601,11 @@
       currentVoiceText: modal.querySelector("#currentVoiceText"),
       voiceHint: modal.querySelector("#voiceHint"),
       testVoiceBtn: modal.querySelector("#testVoiceBtn"),
+      lookupOnlineToggleBtn: modal.querySelector("#lookupOnlineToggleBtn"),
+      lookupOnlineSourceSelect: modal.querySelector("#lookupOnlineSourceSelect"),
+      lookupSpanishToggleBtn: modal.querySelector("#lookupSpanishToggleBtn"),
+      lookupCacheToggleBtn: modal.querySelector("#lookupCacheToggleBtn"),
+      lookupCacheDaysInput: modal.querySelector("#lookupCacheDaysInput"),
       exportBackupBtn: modal.querySelector("#exportBackupBtn"),
       importBackupBtn: modal.querySelector("#importBackupBtn"),
       importBackupFile: modal.querySelector("#importBackupFile"),
@@ -690,6 +743,22 @@
       renderVoiceModeUi()
       if (dom.pronounceToggleBtn)
         dom.pronounceToggleBtn.textContent = `发音：${state?.pronunciationEnabled ? "开" : "关"}`
+      const lookupOnlineEnabled = typeof state?.lookupOnlineEnabled === "boolean" ? state.lookupOnlineEnabled : true
+      const lookupOnlineSource = String(state?.lookupOnlineSource || "").trim().toLowerCase() === "custom" ? "custom" : "builtin"
+      const lookupSpanishConjugationEnabled =
+        typeof state?.lookupSpanishConjugationEnabled === "boolean" ? state.lookupSpanishConjugationEnabled : true
+      const lookupCacheEnabled = typeof state?.lookupCacheEnabled === "boolean" ? state.lookupCacheEnabled : true
+      const lookupCacheDays = clamp(Math.round(Number(state?.lookupCacheDays) || 30), 1, 365)
+      if (dom.lookupOnlineToggleBtn)
+        dom.lookupOnlineToggleBtn.textContent = `联网补充：${lookupOnlineEnabled ? "开" : "关"}`
+      if (dom.lookupOnlineSourceSelect) dom.lookupOnlineSourceSelect.value = lookupOnlineSource
+      if (dom.lookupSpanishToggleBtn)
+        dom.lookupSpanishToggleBtn.textContent = `西语变位：${lookupSpanishConjugationEnabled ? "开" : "关"}`
+      if (dom.lookupCacheToggleBtn) dom.lookupCacheToggleBtn.textContent = `缓存：${lookupCacheEnabled ? "开" : "关"}`
+      if (dom.lookupCacheDaysInput) {
+        dom.lookupCacheDaysInput.value = String(lookupCacheDays)
+        dom.lookupCacheDaysInput.disabled = !lookupCacheEnabled
+      }
       if (dom.aiBaseUrlInput) dom.aiBaseUrlInput.value = String(state?.aiConfig?.baseUrl || "")
       if (dom.aiApiKeyInput) dom.aiApiKeyInput.value = String(state?.aiConfig?.apiKey || "")
       if (dom.aiModelInput) dom.aiModelInput.value = String(state?.aiConfig?.model || "")
@@ -1176,14 +1245,62 @@
       })
     })
 
+    dom.lookupOnlineToggleBtn?.addEventListener("click", () => {
+      const state = getStateSafe()
+      const prev = typeof state?.lookupOnlineEnabled === "boolean" ? state.lookupOnlineEnabled : true
+      setStateSafe({ lookupOnlineEnabled: !prev })
+      persistSafe()
+      render()
+      afterChange("lookupOnlineEnabled")
+    })
+
+    dom.lookupOnlineSourceSelect?.addEventListener("change", () => {
+      const v = String(dom.lookupOnlineSourceSelect.value || "").trim().toLowerCase()
+      const lookupOnlineSource = v === "custom" ? "custom" : "builtin"
+      setStateSafe({ lookupOnlineSource })
+      persistSafe()
+      render()
+      afterChange("lookupOnlineSource")
+    })
+
+    dom.lookupSpanishToggleBtn?.addEventListener("click", () => {
+      const state = getStateSafe()
+      const prev =
+        typeof state?.lookupSpanishConjugationEnabled === "boolean" ? state.lookupSpanishConjugationEnabled : true
+      setStateSafe({ lookupSpanishConjugationEnabled: !prev })
+      persistSafe()
+      render()
+      afterChange("lookupSpanishConjugationEnabled")
+    })
+
+    dom.lookupCacheToggleBtn?.addEventListener("click", () => {
+      const state = getStateSafe()
+      const prev = typeof state?.lookupCacheEnabled === "boolean" ? state.lookupCacheEnabled : true
+      setStateSafe({ lookupCacheEnabled: !prev })
+      persistSafe()
+      render()
+      afterChange("lookupCacheEnabled")
+    })
+
+    dom.lookupCacheDaysInput?.addEventListener("change", () => {
+      const next = clamp(Math.round(Number(dom.lookupCacheDaysInput.value) || 30), 1, 365)
+      setStateSafe({ lookupCacheDays: next })
+      persistSafe()
+      render()
+      afterChange("lookupCacheDays")
+    })
+
     dom.aiBaseUrlInput?.addEventListener("change", () => {
       patchAiConfig({ baseUrl: dom.aiBaseUrlInput.value })
+      render()
     })
     dom.aiApiKeyInput?.addEventListener("change", () => {
       patchAiConfig({ apiKey: dom.aiApiKeyInput.value })
+      render()
     })
     dom.aiModelInput?.addEventListener("change", () => {
       patchAiConfig({ model: dom.aiModelInput.value })
+      render()
     })
 
     dom.aiProviderSelect?.addEventListener("change", () => {
@@ -1192,6 +1309,7 @@
       const next = computeAiConfigOnProviderChange({ prevConfig: prev, nextProvider: dom.aiProviderSelect.value })
       patchAiConfig(next, { syncInputs: true })
       renderAiProviderUi()
+      render()
     })
 
     let aiAbortController = null

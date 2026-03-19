@@ -1115,6 +1115,17 @@ select:hover {
   gap: 8px;
 }
 
+.toast {
+  margin-top: 10px;
+  padding: 10px 12px;
+  border: 1px solid var(--border2);
+  border-radius: 12px;
+  background: var(--card2);
+  color: var(--text);
+  font-size: 13px;
+  line-height: 1.3;
+}
+
 .word-row {
   display: grid;
   grid-template-columns: 1fr 1.2fr;
@@ -1185,6 +1196,51 @@ select:hover {
   font-size: 12px;
   line-height: 1.3;
   white-space: normal;
+}
+
+.lookup-row .lookup-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.lookup-row .lookup-title {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 8px;
+  flex-wrap: wrap;
+  min-width: 0;
+}
+
+.lookup-row .lookup-add-btn {
+  padding: 8px 10px;
+  border-radius: 10px;
+  font-size: 13px;
+  line-height: 1;
+  white-space: nowrap;
+}
+
+.lookup-meaning-primary {
+  color: var(--text);
+}
+
+.lookup-meaning-secondary {
+  margin-top: 4px;
+  font-size: 12px;
+  color: var(--muted);
+  white-space: normal;
+}
+
+@media (max-width: 520px) {
+  .lookup-row .lookup-head {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .lookup-row .lookup-add-btn {
+    width: 100%;
+  }
 }
 
 .word-status {

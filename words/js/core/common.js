@@ -234,6 +234,99 @@
     return { tag, base }
   }
 
+  function normalizeLookupText(value) {
+    const raw = String(value || "").trim().replaceAll(/\s+/g, " ").slice(0, 120)
+    const lower = raw.toLowerCase()
+    const folded = lower.normalize("NFD").replaceAll(/[\u0300-\u036f]/g, "")
+    return { raw, lower, folded }
+  }
+
+  function scoreLookupMatch({ term, meaning }, query) {
+    const q = query && typeof query === "object" ? query : normalizeLookupText(query)
+    const termText = normalizeLookupText(term)
+    const meaningText = normalizeLookupText(meaning)
+
+    if (!q.lower) return { score: -Infinity, matched: "" }
+
+    const exact = (a, b) => a && b && a === b
+    const starts = (a, b) => a && b && a.startsWith(b)
+    const includes = (a, b) => a && b && a.includes(b)
+
+    const termExact = exact(termText.lower, q.lower) || exact(termText.folded, q.folded)
+    if (termExact) return { score: 1200, matched: "term_exact" }
+
+    const termPrefix = starts(termText.lower, q.lower) || starts(termText.folded, q.folded)
+    if (termPrefix) return { score: 900, matched: "term_prefix" }
+
+    const termIncludes = includes(termText.lower, q.lower) || includes(termText.folded, q.folded)
+    if (termIncludes) return { score: 650, matched: "term_includes" }
+
+    const meaningIncludes = includes(meaningText.lower, q.lower) || includes(meaningText.folded, q.folded)
+    if (meaningIncludes) return { score: 420, matched: "meaning_includes" }
+
+    return { score: -Infinity, matched: "" }
+  }
+
+  function dedupeAndSortLookupResults(list) {
+    const items = Array.isArray(list) ? list : []
+    const map = new Map()
+    let seq = 0
+    for (const it of items) {
+      seq += 1
+      const word = it?.word && typeof it.word === "object" ? it.word : {}
+      const key = String(it?.key || "") || getWordKey(word)
+      if (!key) continue
+      const score = Number(it?.score)
+      const rank = Number.isFinite(score) ? score : -Infinity
+      const prev = map.get(key)
+      if (!prev) {
+        map.set(key, { ...it, key, word, score: rank, _seq: seq })
+        continue
+      }
+      if (rank > (prev.score ?? -Infinity)) map.set(key, { ...it, key, word, score: rank, _seq: seq })
+      else if (rank === (prev.score ?? -Infinity) && seq > (prev._seq || 0)) map.set(key, { ...it, key, word, score: rank, _seq: seq })
+    }
+
+    const out = Array.from(map.values())
+    out.sort((a, b) => {
+      const sa = Number(a?.score)
+      const sb = Number(b?.score)
+      if (sb !== sa) return sb - sa
+      const ta = String(a?.word?.term || "").toLowerCase()
+      const tb = String(b?.word?.term || "").toLowerCase()
+      if (ta !== tb) return ta.localeCompare(tb)
+      return (b._seq || 0) - (a._seq || 0)
+    })
+    return out.map(({ _seq, ...rest }) => rest)
+  }
+
+  function buildFirstSeenRoundMap(rounds) {
+    const map = new Map()
+    const rs = Array.isArray(rounds) ? rounds : []
+    for (let i = 0; i < rs.length; i++) {
+      const r = rs[i]
+      const items = Array.isArray(r?.items) ? r.items : []
+      for (const it of items) {
+        const key = getWordKey(it?.word)
+        if (!key) continue
+        if (map.has(key)) continue
+        map.set(key, { roundIndex: i, roundId: String(r?.id || "") })
+      }
+    }
+    return map
+  }
+
+  function normalizeLookupRecordMeta({ key, latestEntry, firstSeen, reviewSystemEnabled }) {
+    const k = String(key || "")
+    const entry = latestEntry && typeof latestEntry === "object" ? latestEntry : null
+    const source = firstSeen instanceof Map ? firstSeen.get(k) : null
+    const sourceRoundNo = source ? source.roundIndex + 1 : 0
+    const status = normalizeStatus(entry?.status)
+    const lastReviewedAt = String(entry?.lastReviewedAt || "").trim()
+    const nextReviewAt = String(entry?.nextReviewAt || "").trim()
+    return { key: k, status, sourceRoundNo, lastReviewedAt, nextReviewAt, reviewSystemEnabled: !!reviewSystemEnabled }
+  }
+
   window.A4Common = {
     clamp,
     STATUS_MASTERED,
@@ -264,5 +357,10 @@
     normalizeVoiceMode,
     normalizePronunciationLang,
     normalizeLangTag,
+    normalizeLookupText,
+    scoreLookupMatch,
+    dedupeAndSortLookupResults,
+    buildFirstSeenRoundMap,
+    normalizeLookupRecordMeta,
   }
 })()

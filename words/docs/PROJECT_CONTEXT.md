@@ -13,6 +13,7 @@
   - `window.A4Utils`：下载/文件名清洗工具
   - `window.A4Storage`：读写主状态
   - `window.A4Speech`：SpeechSynthesis 发音能力
+  - `window.A4Lookup`：查词弹窗控制器与 provider 调度（含缓存与西语变位）
 - 跨浏览器 UI：对常见控件样式做基础归一，尽量减少 Chromium/Safari 的默认渲染差异
 - 打印/导出 PDF：记录页打开打印窗口并调用 `window.print()`；由浏览器“另存为 PDF”
 - AI：兼容 OpenAI 风格 `chat/completions`；配置项含 `provider/baseUrl/apiKey/model`（仅本地保存）
@@ -40,6 +41,7 @@ A4-Memory
 │   │   └── common.js
 │   ├── app.js
 │   ├── records.js
+│   ├── lookup.js
 │   ├── settings.js
 │   ├── speech.js
 │   ├── storage.js
@@ -59,6 +61,20 @@ A4-Memory
   - `localStorage` 读写封装与 key 管理：`A4Storage.loadState/saveState`
 - `js/speech.js`
   - SpeechSynthesis 语音选择与发音封装（自动/手动 voice、语言推断、降级提示）
+- `js/lookup.js`
+  - 查词弹窗控制器（首页/记录页复用）与 provider 调度
+  - 本地结果：当前/本地词书 + 学习记录聚合（最新状态、首次出现轮次、复习时间）
+  - 联网补充（builtin）
+    - 英文（en）：先用 MyMemory 免费翻译补充中文释义（`https://api.mymemory.translated.net/get?q={word}&langpair=en|zh-CN`），再用 dictionaryapi.dev 获取英文解释；展示顺序为“中文在上 / 英文在下”
+    - 西语（es）：使用 dictionaryapi.dev
+    - 降级：中文翻译失败仍显示英文解释；英文解释失败仍显示中文；不允许两者皆失败导致空内容
+    - 缓存：使用 `localStorage` 的 `a4-memory:lookup-cache:v1`，按 `lookupCacheDays` 控制 TTL；当缓存缺少英文查词的中文字段时会自动重拉补齐
+  - 联网补充（custom）：可切换为自定义 API（复用现有 `aiConfig` 的 provider/baseUrl/apiKey/model，OpenAI 风格 `chat/completions`），失败不阻塞本地结果
+  - 语言选择：查词弹窗支持 `auto/en/es`，用于明确在线补充语言与西语变位触发
+  - 西语动词变位：本地生成主要变位（现在时/过去时/未完成过去时/将来时/条件式）
+    - 触发：语言为 `es` 时强制展示；`auto` 时仅在输入看起来像“西语动词/动词形态”才展示，避免非西语动词误触发
+    - 变位：规则引擎覆盖常见“变干/拼写变化/特殊 yo/不规则词干”，并对少量必须的动词做完整不规则表兜底
+  - 加入当前轮：每条查词结果卡片顶部提供“加入当前轮”主按钮（主操作）；加入后按现有“新增单词”流程自动打开复习弹窗（新词置顶）；若本轮已存在则不重复加入，并在弹窗内给出轻量提示（toast）
 - `js/settings.js`
   - 设置弹窗与 AI 词书生成流程（必要时注入 modal DOM）
   - 负责把设置写回调用方提供的 `persist()`，并提供 `onAfterChange` 通知
@@ -81,11 +97,11 @@ A4-Memory
 - `index.html`（首页）
   - 主要 UI：控制区、A4 纸、复习弹窗、导入词书弹窗、用法介绍弹窗、多页翻页 `#pageNav`
   - 用法介绍：展示面向新用户的简要说明（文本随功能迭代保持同步）
-  - 脚本顺序：`data/words.js` → `js/core/common.js` → `utils/storage/speech/settings/app`
+  - 脚本顺序：`data/words.js` → `js/core/common.js` → `utils/storage/speech/settings/lookup/app`
 - `records.html`（学习记录页）
   - 视图切换：轮次视图 / 状态视图
   - 顶部操作：返回、设置、导出与清空
-  - 脚本顺序：`utils/storage/core/common/speech/settings/records`
+  - 脚本顺序：`data/words.js` → `utils/storage/core/common/speech/settings/lookup/records`
 
 ## 6) 核心业务规则（真实实现）
 
@@ -146,6 +162,8 @@ A4-Memory
   - 学习：每日目标、每轮上限（roundCap）
   - 复习：轻量复习开关、复习间隔（unknown/learning/mastered）、复习完成自动关闭弹窗（reviewAutoCloseModal）
   - 发音：开关、语言、口音、语音模式（auto/manual）与 voice 选择
+  - 查词：联网补充开关、西语变位开关、查词缓存开关与缓存时长
+  - 查词（补充来源）：内置在线补充源（默认） / 自定义 API（替换内置，复用 `aiConfig` 的 provider/baseUrl/apiKey/model；配置只需维护一套）
   - 数据：导入/导出完整备份（学习记录 + 设置）
   - AI：provider/baseUrl/apiKey/model，生成词书并预览保存到本地词书
 - AI provider（真实实现）
@@ -157,6 +175,7 @@ A4-Memory
 - `localStorage` key
   - `a4-memory:v1`：主状态（JSON，含 `version: 2`）
   - `a4-memory:intro-seen:v1`：用法介绍已读标记
+  - `a4-memory:lookup-cache:v1`：查词联网补充缓存（独立于主状态）
 - 主状态（摘要字段）
   - 轮次：`rounds`, `currentRoundId`
   - 跨页触发：`pendingReviewRoundId`, `pendingGenerateStatusKind`
@@ -167,6 +186,7 @@ A4-Memory
   - 词书：`selectedWordbookId`, `customWordbooks`
     - 每个词书：`{ id, name, description, language, words }`；其中 `language` 用于发音自动选语音（当 `pronunciationLang=auto`）
   - AI：`aiConfig`（provider/baseUrl/apiKey/model）
+  - 查词：`lookupOnlineEnabled`, `lookupOnlineSource`, `lookupLangMode`, `lookupSpanishConjugationEnabled`, `lookupCacheEnabled`, `lookupCacheDays`
 - 轮次字段（存于 `rounds[]`）
   - `type`: `normal | review_mastered | review_learning | review_unknown | review_due`
 - 轮次 item 字段（存于 `rounds[].items[]`）

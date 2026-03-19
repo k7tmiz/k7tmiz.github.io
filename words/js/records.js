@@ -710,6 +710,7 @@ function main() {
   const roundsView = document.getElementById("rounds")
   const statusView = document.getElementById("statusView")
   const openSettingsBtn = document.getElementById("openSettingsBtn")
+  const lookupBtn = document.getElementById("lookupBtn")
   const clearBtn = document.getElementById("clearBtn")
 
   let state = normalizeState(loadState())
@@ -757,6 +758,23 @@ function main() {
         const books = Array.isArray(state.customWordbooks) ? state.customWordbooks : []
         const book = books.find((b) => String(b?.id || "") === selected)
         const lang = String(book?.language || "").trim()
+        return lang || "en"
+      },
+    })
+  }
+
+  let lookupController = null
+  if (window.A4Lookup && typeof window.A4Lookup.createLookupModalController === "function") {
+    lookupController = window.A4Lookup.createLookupModalController({
+      getState: () => state,
+      setState: (patch) => Object.assign(state, patch),
+      persist: () => saveState({ ...state, rounds }),
+      getWordbookLanguage: () => {
+        const selected = String(state.selectedWordbookId || "").trim()
+        const builtIn = Array.isArray(window.WORDBOOKS) ? window.WORDBOOKS : []
+        const custom = Array.isArray(state.customWordbooks) ? state.customWordbooks : []
+        const b0 = builtIn.find((b) => String(b?.id || "") === selected) || custom.find((b) => String(b?.id || "") === selected)
+        const lang = String(b0?.language || "").trim()
         return lang || "en"
       },
     })
@@ -849,6 +867,10 @@ function main() {
 
   openSettingsBtn.addEventListener("click", () => {
     if (settingsController) settingsController.open()
+  })
+
+  lookupBtn?.addEventListener("click", () => {
+    if (lookupController) lookupController.open()
   })
 
   clearBtn.addEventListener("click", () => {

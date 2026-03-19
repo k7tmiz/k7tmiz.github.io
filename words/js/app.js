@@ -183,6 +183,8 @@ function closeIntroModal() {
 }
 
 let settingsController = null
+let lookupController = null
+let pendingAddWordAfterRoundFull = null
 
 function openSettingsModal() {
   if (settingsController) {
@@ -198,6 +200,14 @@ function closeSettingsModal() {
     return
   }
   setModalVisible(dom.settingsModal, false)
+}
+
+function openLookupModal({ preset } = {}) {
+  if (lookupController) {
+    lookupController.open({ preset })
+    return
+  }
+  window.alert("查词模块未加载。")
 }
 
 function saveState(state) {
@@ -236,6 +246,7 @@ const dom = {
   customWordbooksList: document.getElementById("customWordbooksList"),
   customWordbooksEmpty: document.getElementById("customWordbooksEmpty"),
   introBtn: document.getElementById("introBtn"),
+  lookupBtn: document.getElementById("lookupBtn"),
   introModal: document.getElementById("introModal"),
   introBackdrop: document.getElementById("introBackdrop"),
   closeIntroBtn: document.getElementById("closeIntroBtn"),
@@ -340,6 +351,12 @@ const appState = {
   voiceMode: "auto",
   voiceURI: "",
   aiConfig: { provider: "custom", baseUrl: "", apiKey: "", model: "" },
+  lookupOnlineEnabled: true,
+  lookupOnlineSource: "builtin",
+  lookupLangMode: "auto",
+  lookupSpanishConjugationEnabled: true,
+  lookupCacheEnabled: true,
+  lookupCacheDays: 30,
 }
 
 function getRoundTypeFromKind(kind) {
@@ -1107,6 +1124,12 @@ function persist() {
     voiceMode: appState.voiceMode,
     voiceURI: appState.voiceURI,
     aiConfig: appState.aiConfig,
+    lookupOnlineEnabled: !!appState.lookupOnlineEnabled,
+    lookupOnlineSource: String(appState.lookupOnlineSource || "").trim().toLowerCase() === "custom" ? "custom" : "builtin",
+    lookupLangMode: String(appState.lookupLangMode || "").trim().toLowerCase() === "es" ? "es" : String(appState.lookupLangMode || "").trim().toLowerCase() === "en" ? "en" : "auto",
+    lookupSpanishConjugationEnabled: !!appState.lookupSpanishConjugationEnabled,
+    lookupCacheEnabled: !!appState.lookupCacheEnabled,
+    lookupCacheDays: Math.max(1, Math.min(365, Math.round(Number(appState.lookupCacheDays) || 30))),
   })
 }
 
@@ -1722,6 +1745,15 @@ function restore() {
         }
       : { provider: "custom", baseUrl: "", apiKey: "", model: "" }
 
+  appState.lookupOnlineEnabled = typeof saved.lookupOnlineEnabled === "boolean" ? saved.lookupOnlineEnabled : true
+  appState.lookupOnlineSource = String(saved.lookupOnlineSource || "").trim().toLowerCase() === "custom" ? "custom" : "builtin"
+  const lm = String(saved.lookupLangMode || "").trim().toLowerCase()
+  appState.lookupLangMode = lm === "en" ? "en" : lm === "es" ? "es" : "auto"
+  appState.lookupSpanishConjugationEnabled =
+    typeof saved.lookupSpanishConjugationEnabled === "boolean" ? saved.lookupSpanishConjugationEnabled : true
+  appState.lookupCacheEnabled = typeof saved.lookupCacheEnabled === "boolean" ? saved.lookupCacheEnabled : true
+  appState.lookupCacheDays = clamp(Math.round(Number(saved.lookupCacheDays) || 30), 1, 365)
+
   applyTheme()
 
   appState.customWordbooks = Array.isArray(saved.customWordbooks)
@@ -1932,6 +1964,56 @@ function handleNextWord() {
   openAutoReviewModal(roundItem)
 }
 
+function addSpecificWordToCurrentRound(wordRaw) {
+  ensureCurrentRound()
+  if (!wordRaw) return null
+  const w = normalizeWordObject(wordRaw)
+  if (!w || !w.term) return null
+  if (appState.placed.length >= getCurrentRoundCap()) return null
+  const currentKeys = buildCurrentRoundWordKeySet()
+  const key = getWordMeaningKey(w)
+  if (!key || currentKeys.has(key)) return null
+  const placed = placeWordElement(w)
+  const fontSize = placed.el.style.fontSize || ""
+  const roundItem = {
+    word: w,
+    pos: placed.pos,
+    fontSize,
+    createdAt: new Date().toISOString(),
+    status: STATUS_UNKNOWN,
+    lastReviewedAt: "",
+    nextReviewAt: "",
+    pageIndex: 0,
+  }
+  appState.placed.push({ word: w, roundItem, el: placed.el, box: placed.box, fontSize, pos: placed.pos })
+  const round = getCurrentRound()
+  if (round) {
+    if (!round.type) round.type = ROUND_TYPE_NORMAL
+    round.items.push(roundItem)
+    if (round.items.length >= getCurrentRoundCap()) finalizeCurrentRound()
+  }
+  updateBadge()
+  updateHint()
+  persist()
+  return roundItem
+}
+
+function addWordToCurrentRoundFromLookup(wordRaw) {
+  ensureCurrentRound()
+  const cap = getCurrentRoundCap()
+  if (appState.placed.length >= cap) {
+    pendingAddWordAfterRoundFull = normalizeWordObject(wordRaw)
+    openRoundFullModal()
+    return
+  }
+  const roundItem = addSpecificWordToCurrentRound(wordRaw)
+  if (!roundItem) {
+    window.alert("未加入：本轮已存在该词条或词条不合法。")
+    return
+  }
+  openAutoReviewModal(roundItem)
+}
+
 function openReviewCurrentRound() {
   openReviewModal()
 }
@@ -1971,7 +2053,17 @@ if (window.A4Settings && typeof window.A4Settings.createSettingsModalController 
   })
 }
 
+if (window.A4Lookup && typeof window.A4Lookup.createLookupModalController === "function") {
+  lookupController = window.A4Lookup.createLookupModalController({
+    getState: () => appState,
+    setState: (patch) => Object.assign(appState, patch),
+    persist,
+    getWordbookLanguage: () => getWordbookLanguageForSpeech(),
+  })
+}
+
 dom.settingsBtn.addEventListener("click", () => openSettingsModal())
+dom.lookupBtn?.addEventListener("click", () => openLookupModal())
 
 dom.wordbookSelect.addEventListener("change", () => {
   appState.selectedWordbookId = dom.wordbookSelect.value
@@ -2284,9 +2376,21 @@ dom.continueRoundBtn.addEventListener("click", () => {
     const roundItem = addNextWordToCurrentRound({ preferUnseenFirst: true })
     if (roundItem) openAutoReviewModal(roundItem)
   }
+  if (pendingAddWordAfterRoundFull) {
+    const w = pendingAddWordAfterRoundFull
+    pendingAddWordAfterRoundFull = null
+    const roundItem = addSpecificWordToCurrentRound(w)
+    if (roundItem) openAutoReviewModal(roundItem)
+  }
 })
 dom.reviewFromFullBtn.addEventListener("click", () => {
   closeRoundFullModal()
   pendingNextWordAfterRoundFull = false
   openReviewCurrentRound()
 })
+
+window.A4AddWordFromLookup = (word) => {
+  try {
+    addWordToCurrentRoundFromLookup(word)
+  } catch (e) {}
+}

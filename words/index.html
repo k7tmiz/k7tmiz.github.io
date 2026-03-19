@@ -43,6 +43,7 @@
           <div class="controls-row-secondary immersive-hide">
             <button id="newRoundBtn" type="button">新建一轮</button>
             <button class="ghost" id="introBtn" type="button">用法介绍</button>
+            <button class="ghost" id="lookupBtn" type="button">查词</button>
             <a class="button-link" href="./records.html">学习记录</a>
           </div>
         </div>
@@ -237,6 +238,7 @@ ability,n.,能力</pre>
                 <li>复习结束：最后一个词标记完成后，弹窗默认自动关闭（可在设置里关闭）；也可随时点右上角「关闭」。</li>
                 <li>释义显示：默认隐藏；可用「显示释义」一键开启/关闭，也可点击某个词条单独显示/隐藏。</li>
                 <li>发音：点击弹窗或 A4 上的“单词本身”可发音（需在设置里开启发音）。</li>
+                <li>查词：首页或学习记录页点「查词」，本地词书与学习记录优先显示；可在弹窗选择语言（自动/en/es）。英文查词会优先显示中文翻译（MyMemory），并保留英文解释（dictionaryapi.dev）作为补充；每条结果卡片顶部提供「加入当前轮」按钮，加入后自动进入复习。</li>
                 <li>本轮写满：再点「下一个单词」会提示“本轮已满”，可继续下一轮（保留记录）或复习本轮。</li>
                 <li>学习记录：进入「学习记录」查看轮次统计与预览 A4，支持导出 CSV / PDF，并可从记录页跳回复习。</li>
                 <li>状态视图：在记录页按「待复习 / 已掌握 / 学习中 / 不会」聚合，并可“生成一轮”进行复习。</li>
@@ -277,6 +279,7 @@ ability,n.,能力</pre>
     <script src="./js/storage.js"></script>
     <script src="./js/speech.js"></script>
     <script src="./js/settings.js"></script>
+    <script src="./js/lookup.js"></script>
     <script src="./js/app.js"></script>
   </body>
 </html>

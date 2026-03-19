@@ -30,6 +30,7 @@ A pure front-end vocabulary tool based on the “A4 paper memory method”. Word
   - Language: JSON import can optionally include `language` (e.g. `en`/`ja`/`ko`/`fr` etc., mainly used for pronunciation voice auto-pick); TXT/CSV uses a weak heuristic and falls back to default; you can always override it in Settings → Pronunciation language
 - Pronunciation: SpeechSynthesis (en/es/ja/ko/pt/fr/de/it/eo), Auto/Manual voice selection
   - Spanish: when a term uses a suffix shorthand like `antiguo,gua` / `bonito,ta`, it auto-expands to `antiguo, antigua` / `bonito, bonita` before speaking
+- Lookup: a shared modal on Home/Records, local-first with non-blocking online supplement; language mode (auto/en/es). For English lookups, it shows Chinese translation first (MyMemory) while keeping English definitions (dictionaryapi.dev) as a supplement; the built-in supplement can also be replaced by AI supplement reusing the same AI API config (`aiConfig`); Spanish verb conjugation (offline lemma inference + key conjugations)
 - Backup: import/export full local data (records + settings)
 - AI wordbook generator: configure API → generate → live preview → save (optional topic, also for non-English)
 - AI API presets: OpenAI / Gemini / DeepSeek / SiliconCloud / Custom
@@ -57,6 +58,8 @@ Open: http://localhost:8080/
 - Records:
   - Round view: A4 preview + per-round CSV/PDF export + jump back to review
   - Status view: group by status/due and generate a review round
+  - Lookup: search local wordbooks + latest learning status, then optional online supplement (English: Chinese-first with English below)
+  - Lookup result → “Add to current round” (a primary button on each result card) with auto review flow (new word pinned first)
   - Top actions: Settings is next to “Back to Home”; “Clear records” is aligned with “Export PDF”
 - Mobile: Home controls are compact and grouped so the full A4 area remains visible while all actions stay reachable
 - Mobile: Review buttons use a two-row layout for easier one-handed use
@@ -82,6 +85,7 @@ A4-Memory
 │   ├── core/common.js
 │   ├── app.js
 │   ├── records.js
+│   ├── lookup.js
 │   ├── settings.js
 │   ├── speech.js
 │   ├── storage.js
@@ -90,6 +94,52 @@ A4-Memory
     ├── README.en.md
     └── PROJECT_CONTEXT.md
 ```
+
+## Implementation notes (for developers)
+
+### Runtime model
+
+- Pure static site (HTML/CSS/Vanilla JS), no build tools, no backend
+- All data is stored in browser `localStorage`
+- Global modules are exposed via `window.A4*` for static script dependencies
+
+### Pages & script loading
+
+- Home: `index.html` → `data/words.js` → `js/core/common.js` → `js/utils.js` → `js/storage.js` → `js/speech.js` → `js/settings.js` → `js/lookup.js` → `js/app.js`
+- Records: `records.html` → `data/words.js` → `js/utils.js` → `js/storage.js` → `js/core/common.js` → `js/speech.js` → `js/settings.js` → `js/lookup.js` → `js/records.js`
+
+### Module boundaries
+
+- `js/core/common.js`: cross-page constants and pure utilities (round/status types, term+meaning aggregation, paging, time/stats, etc.)
+- `js/storage.js`: main state load/save wrapper (`a4-memory:v1`)
+- `js/utils.js`: downloads and filename sanitization
+- `js/speech.js`: SpeechSynthesis capability and voice selection
+- `js/settings.js`: Settings modal controller, AI wordbook generation, backup import/export normalization
+- `js/lookup.js`: Lookup modal controller (local-first + online supplement + Spanish conjugation + “Add to current round”)
+- `js/app.js`: Home learning flow (A4 placement, enforced review modal, round progression)
+- `js/records.js`: Records page (round/status views, export, delete, generate review rounds)
+
+### Storage schema (summary)
+
+- `localStorage` keys
+  - `a4-memory:v1`: main state (`version: 2`)
+  - `a4-memory:intro-seen:v1`: “How to use” seen flag
+  - `a4-memory:lookup-cache:v1`: lookup online supplement cache (separate from main state)
+- Rounds & items
+  - `rounds[]`: each round has `type` and `items[]`
+  - `rounds[].items[]`: `word{term,pos,meaning}` + `status(mastered|learning|unknown)` + `lastReviewedAt/nextReviewAt` + `pageIndex`
+
+### Lookup & online supplement (key behaviors)
+
+- Local-first: show local wordbooks + latest aggregated record status first; online supplement is appended asynchronously
+- Built-in supplement (builtin)
+  - English (en): MyMemory free translation (Chinese-first) + dictionaryapi.dev definitions (English below)
+  - Spanish (es): dictionaryapi.dev
+  - Fallback: if either side fails, the other side must still render (never “all empty”)
+  - Cache: `a4-memory:lookup-cache:v1` with TTL via `lookupCacheDays`; if cached English entries lack Chinese fields, it auto refetches to fill them
+- Custom supplement (custom): can replace builtin with an AI API that reuses `aiConfig` (OpenAI-style `chat/completions`)
+- “Add to current round”: a primary button near the title/meaning; preserves the existing add→auto-review flow; if already exists in the current round, it won’t add twice and shows a lightweight toast
+- Spanish conjugation: forced when language is `es`; in `auto`, shown only when the input looks like a Spanish verb/form to avoid false positives
 
 ## Contact
 
