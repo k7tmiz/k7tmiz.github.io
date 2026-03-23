@@ -43,24 +43,25 @@
           const name = String(b?.name || "").trim()
           const description = String(b?.description || "").trim()
           const language = String(b?.language || "").trim()
+          const base = language ? (normalizeLangTag ? normalizeLangTag(language).base : String(language).toLowerCase().split("-")[0]) : ""
           const wordsRaw = Array.isArray(b?.words) ? b.words : []
           if (!id || !name) return null
           const words = wordsRaw
             .map((w) => {
               if (!w) return null
-              if (typeof w === "string") return { term: w.trim(), pos: "", meaning: "" }
+              if (typeof w === "string") return { term: w.trim(), pos: "", meaning: "", lang: base }
               const term = String(w.term || "").trim()
               const pos = String(w.pos || "").trim()
               const meaning = String(w.meaning || "").trim()
               if (!term) return null
-              return { term, pos, meaning }
+              return { term, pos, meaning, lang: base }
             })
             .filter(Boolean)
           return { id, name, description, language, words }
         })
         .filter(Boolean)
     }
-    return [{ id: "default", name: "默认词库", description: "", language: "", words: getWordsFromGlobal() }]
+    return [{ id: "default", name: "默认词库", description: "", language: "en", words: getWordsFromGlobal().map((w) => ({ ...w, lang: "en" })) }]
   }
 
   function loadCache() {
@@ -1585,7 +1586,11 @@
       const pos = String(raw?.pos || "").trim()
       const meaning = String(raw?.meaning || "").trim()
       if (!term) return
-      const word = { term, pos, meaning }
+      const langBase =
+        typeof window.A4GetActiveLangBase === "function"
+          ? String(window.A4GetActiveLangBase() || "").trim().toLowerCase()
+          : ""
+      const word = { term, pos, meaning, lang: langBase }
 
       if (typeof window.A4AddWordFromLookup !== "function") {
         showToast("请在首页加入当前轮")

@@ -116,12 +116,15 @@
 
   function getWordKey(word) {
     const w = word && typeof word === "object" ? word : {}
+    const langRaw = String(w?.lang || w?.language || "").trim()
+    const base = langRaw ? normalizeLangTag(langRaw).base : ""
     const term = String(w?.term || "").trim()
     if (!term) return ""
     const termKey = term.toLowerCase()
     const meaning = normalizeMeaningKey(w?.meaning)
-    if (!meaning) return termKey
-    return `${termKey}||${meaning}`
+    const basePrefix = base ? `${base}||` : ""
+    if (!meaning) return `${basePrefix}${termKey}`
+    return `${basePrefix}${termKey}||${meaning}`
   }
 
   function buildLatestTermMap(rounds) {

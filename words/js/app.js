@@ -14,6 +14,7 @@ const {
   normalizeRoundType,
   normalizeAiProvider,
   normalizeReviewCardFlipEnabled,
+  normalizeLangTag,
   parseIsoTime,
   formatDateTime,
   buildLatestTermMap,
@@ -74,7 +75,7 @@ function getWordbooksFromGlobal() {
       .filter(Boolean)
   }
 
-  return [{ id: "default", name: "默认词库", words: getWordsFromGlobal() }]
+  return [{ id: "default", name: "默认词库", language: "en", words: getWordsFromGlobal() }]
 }
 
 function normalizeWordObject(w) {
@@ -82,7 +83,7 @@ function normalizeWordObject(w) {
   if (typeof w === "string") {
     const term = w.trim()
     if (!term) return null
-    return { term, pos: "", meaning: "", example: "", tags: [] }
+    return { term, pos: "", meaning: "", example: "", tags: [], lang: "" }
   }
   const term = String(w.term || "").trim()
   const pos = String(w.pos || "").trim()
@@ -90,7 +91,8 @@ function normalizeWordObject(w) {
   if (!term) return null
   const example = String(w.example || "").trim()
   const tags = Array.isArray(w.tags) ? w.tags.map((t) => String(t || "").trim()).filter(Boolean) : []
-  return { term, pos, meaning, example, tags }
+  const lang = String(w.lang || w.language || "").trim()
+  return { term, pos, meaning, example, tags, lang }
 }
 
 function normalizeWordbookObject(b) {
@@ -317,6 +319,7 @@ const appState = {
   builtInWordbooks: getWordbooksFromGlobal(),
   customWordbooks: [],
   selectedWordbookId: "",
+  selectedWordbookIdByLang: {},
   sourceWords: [],
   pool: [],
   poolIndex: 0,
@@ -359,6 +362,47 @@ const appState = {
   lookupSpanishConjugationEnabled: true,
   lookupCacheEnabled: true,
   lookupCacheDays: 30,
+  reviewScope: "round",
+  reviewScopePageIndex: 0,
+}
+
+function getLangBase(value) {
+  const raw = String(value || "").trim()
+  if (!raw) return ""
+  return normalizeLangTag ? normalizeLangTag(raw).base : raw.toLowerCase().split("-")[0]
+}
+
+function getWordbookLangBase(book) {
+  const b = book && typeof book === "object" ? book : {}
+  return getLangBase(b.language) || "en"
+}
+
+function getActiveLangBase() {
+  const override = String(appState.pronunciationLang || "").trim().toLowerCase()
+  if (override && override !== "auto") return override
+  const book = getSelectedWordbook()
+  return getWordbookLangBase(book)
+}
+
+function getLangLabel(base) {
+  const b = String(base || "").toLowerCase()
+  if (b === "en") return "英语"
+  if (b === "es") return "西语"
+  if (b === "ja") return "日语"
+  if (b === "ko") return "韩语"
+  if (b === "fr") return "法语"
+  if (b === "de") return "德语"
+  if (b === "it") return "意大利语"
+  if (b === "pt") return "葡语"
+  if (b === "ru") return "俄语"
+  return b || "其他"
+}
+
+function getUnknownTermKey({ term, langBase }) {
+  const t = String(term || "").trim()
+  if (!t) return ""
+  const base = String(langBase || "").trim().toLowerCase() || "en"
+  return `${base}||${t.toLowerCase()}`
 }
 
 function getRoundTypeFromKind(kind) {
@@ -516,20 +560,57 @@ function getSelectedWordbook() {
 }
 
 function updateSourceWords() {
-  const book = getSelectedWordbook()
+  const all = getAllWordbooks()
+  const restrictBase = appState.pronunciationLang && appState.pronunciationLang !== "auto" ? String(appState.pronunciationLang) : ""
+  const preferredBase = getLangBase(restrictBase)
+
+  let book = getSelectedWordbook()
+  let base = getWordbookLangBase(book)
+  if (preferredBase && base !== preferredBase) {
+    const remembered = String(appState.selectedWordbookIdByLang?.[preferredBase] || "").trim()
+    const byRemembered = remembered ? all.find((b) => b.id === remembered) : null
+    const byFirst = all.find((b) => getWordbookLangBase(b) === preferredBase) || null
+    book = byRemembered || byFirst || book
+    base = getWordbookLangBase(book)
+  }
+
   appState.selectedWordbookId = book.id
-  appState.sourceWords = Array.isArray(book.words) ? book.words : []
+  appState.sourceWords = Array.isArray(book.words) ? book.words.map((w) => ({ ...w, lang: base })) : []
+  appState.selectedWordbookIdByLang = {
+    ...(appState.selectedWordbookIdByLang && typeof appState.selectedWordbookIdByLang === "object"
+      ? appState.selectedWordbookIdByLang
+      : {}),
+    [base]: book.id,
+  }
   dom.wordbookSelect.value = book.id
 }
 
 function renderWordbookSelect() {
-  const all = getAllWordbooks()
+  const all0 = getAllWordbooks()
+  const restrictBase =
+    appState.pronunciationLang && appState.pronunciationLang !== "auto" ? getLangBase(appState.pronunciationLang) : ""
+  const all = restrictBase ? all0.filter((b) => getWordbookLangBase(b) === restrictBase) : all0
+  const list = all.length ? all : all0
   dom.wordbookSelect.innerHTML = ""
-  for (const b of all) {
-    const opt = document.createElement("option")
-    opt.value = b.id
-    opt.textContent = `${b.name}（${Array.isArray(b.words) ? b.words.length : 0}）`
-    dom.wordbookSelect.appendChild(opt)
+  const groups = new Map()
+  for (const b of list) {
+    const base = getWordbookLangBase(b)
+    if (!groups.has(base)) groups.set(base, [])
+    groups.get(base).push(b)
+  }
+  const bases = Array.from(groups.keys()).sort((a, b) => a.localeCompare(b))
+  for (const base of bases) {
+    const label = getLangLabel(base)
+    const og = document.createElement("optgroup")
+    og.label = label
+    const list = groups.get(base) || []
+    for (const b of list) {
+      const opt = document.createElement("option")
+      opt.value = b.id
+      opt.textContent = `${b.name}（${Array.isArray(b.words) ? b.words.length : 0}）`
+      og.appendChild(opt)
+    }
+    dom.wordbookSelect.appendChild(og)
   }
   updateSourceWords()
 }
@@ -1066,6 +1147,7 @@ function getCurrentRoundIndex() {
 
 function ensureCurrentRound() {
   if (getCurrentRound()) return
+  const langBase = getActiveLangBase()
   const round = {
     id: makeId(),
     startedAt: new Date().toISOString(),
@@ -1073,6 +1155,7 @@ function ensureCurrentRound() {
     items: [],
     roundCap: normalizeRoundCap(appState.roundCap),
     type: ROUND_TYPE_NORMAL,
+    language: langBase,
   }
   appState.rounds = [round]
   appState.currentRoundId = round.id
@@ -1082,6 +1165,15 @@ function finalizeCurrentRound() {
   const round = getCurrentRound()
   if (!round) return
   if (!round.finishedAt) round.finishedAt = new Date().toISOString()
+}
+
+function getRoundLastPageIndex(round) {
+  const count = getRoundPageCount(round)
+  return Math.max(0, Math.floor(Number(count) || 1) - 1)
+}
+
+function getRoundItemCountByPage(round, pageIndex) {
+  return getRoundItemsByPage(round, pageIndex).length
 }
 
 function normalizeRoundCap(value) {
@@ -1175,6 +1267,7 @@ function startNextRound() {
   const current = getCurrentRound()
   if (current && current.items.length > 0) finalizeCurrentRound()
 
+  const langBase = getActiveLangBase()
   const round = {
     id: makeId(),
     startedAt: new Date().toISOString(),
@@ -1182,6 +1275,7 @@ function startNextRound() {
     items: [],
     roundCap: normalizeRoundCap(appState.roundCap),
     type: ROUND_TYPE_NORMAL,
+    language: langBase,
   }
   appState.rounds.push(round)
   appState.currentRoundId = round.id
@@ -1390,10 +1484,16 @@ function resetReviewCardFlipState() {
   dom.reviewCard?.classList?.remove?.("is-flipped")
 }
 
-function refreshReviewList() {
+function refreshReviewList({ scope, pageIndex } = {}) {
   const round = getCurrentRound()
   const rawItems = Array.isArray(round?.items) ? round.items : []
+  const t = normalizeRoundType(round?.type || ROUND_TYPE_NORMAL)
+  const mode = String(scope || "round")
+  const idx = clamp(Math.floor(Number(pageIndex ?? appState.currentPageIndex) || 0), 0, 999)
+  const filtered =
+    mode === "page" && t === ROUND_TYPE_NORMAL ? rawItems.filter((it) => Math.floor(Number(it?.pageIndex) || 0) === idx) : rawItems
   const base = rawItems
+    .filter((it) => filtered.includes(it))
     .filter((it) => it && it.word && it.word.term)
     .map((it) => ({ word: it.word, roundItem: it }))
   const pinned = appState.reviewPinnedRoundItem
@@ -1407,12 +1507,15 @@ function refreshReviewList() {
   renderReviewCard()
 }
 
-function setTermUnknownFlag(term, unknown) {
+function setTermUnknownFlag(term, unknown, langBase) {
   const t = String(term || "").trim()
   if (!t) return
+  const base = String(langBase || "").trim().toLowerCase() || getActiveLangBase()
+  const key = getUnknownTermKey({ term: t, langBase: base })
+  if (!key) return
   const set = new Set(appState.unknownTerms)
-  if (unknown) set.add(t)
-  else set.delete(t)
+  if (unknown) set.add(key)
+  else set.delete(key)
   appState.unknownTerms = Array.from(set)
 }
 
@@ -1425,7 +1528,9 @@ function renderReviewCard() {
   dom.reviewCard.classList.toggle("review-card-swipe-enabled", total > 0)
 
   const cap = getCurrentRoundCap()
-  dom.reviewMeta.textContent = `本轮已写 ${appState.placed.length}/${cap} 个单词（每新增一个都要完整复习一遍）`
+  const scope = String(appState.reviewScope || "round")
+  const scopeText = scope === "page" ? "当前页复习" : "整轮复习"
+  dom.reviewMeta.textContent = `本轮当前页 ${appState.placed.length}/${cap} · ${scopeText}`
 
   if (!total) {
     dom.reviewCardProgress.textContent = ""
@@ -1478,7 +1583,9 @@ function openReviewModal() {
   appState.reviewPinnedRoundItem = null
   appState.reviewShuffled = true
   if (dom.shuffleBtn) dom.shuffleBtn.textContent = "恢复顺序"
-  refreshReviewList()
+  appState.reviewScope = "round"
+  appState.reviewScopePageIndex = clamp(Math.floor(Number(appState.currentPageIndex) || 0), 0, 999)
+  refreshReviewList({ scope: "round" })
   setModalVisible(dom.reviewModal, true)
 }
 
@@ -1488,7 +1595,18 @@ function openAutoReviewModal(pinnedRoundItem) {
   appState.reviewShuffled =
     typeof appState.reviewOrderPreferenceShuffled === "boolean" ? appState.reviewOrderPreferenceShuffled : true
   if (dom.shuffleBtn) dom.shuffleBtn.textContent = appState.reviewShuffled ? "恢复顺序" : "打乱顺序"
-  refreshReviewList()
+  const round = getCurrentRound()
+  const type = normalizeRoundType(round?.type || ROUND_TYPE_NORMAL)
+  const pageIndex = clamp(Math.floor(Number(appState.currentPageIndex) || 0), 0, 999)
+  if (type === ROUND_TYPE_NORMAL) {
+    appState.reviewScope = "page"
+    appState.reviewScopePageIndex = pageIndex
+    refreshReviewList({ scope: "page", pageIndex })
+  } else {
+    appState.reviewScope = "round"
+    appState.reviewScopePageIndex = pageIndex
+    refreshReviewList({ scope: "round" })
+  }
   setModalVisible(dom.reviewModal, true)
 }
 
@@ -1511,9 +1629,17 @@ function openRoundFullModal() {
   ensureCurrentRound()
   const roundNo = getCurrentRoundIndex() + 1
   const cap = getCurrentRoundCap()
-  dom.roundFullMeta.textContent = `第${roundNo}轮已写满 ${cap} 个单词（开始于 ${formatDateTime(
-    getCurrentRound()?.startedAt
-  )}）。`
+  const round = getCurrentRound()
+  const type = normalizeRoundType(round?.type || ROUND_TYPE_NORMAL)
+  const lastPageIndex = getRoundLastPageIndex(round)
+  const pageCount = getRoundPageCount(round)
+  const startedAt = formatDateTime(round?.startedAt)
+  const cur = clamp(Math.floor(Number(appState.currentPageIndex) || 0), 0, Math.max(0, lastPageIndex))
+  const pageNo = cur + 1
+  dom.roundFullMeta.textContent =
+    type === ROUND_TYPE_NORMAL
+      ? `第${roundNo}轮 · 第${pageNo}/${pageCount}张 A4 已写满 ${cap} 个单词（开始于 ${startedAt}）。可在本轮新增下一张 A4 继续学习，或复习本轮。`
+      : `第${roundNo}轮已写满（开始于 ${startedAt}）。`
   setModalVisible(dom.roundFullModal, true)
 }
 
@@ -1521,7 +1647,7 @@ function closeRoundFullModal() {
   setModalVisible(dom.roundFullModal, false)
 }
 
-// 当用户在“本轮已满”时仍点击了“下一个单词”，用于在继续下一轮后自动补一次“下一个单词”动作。
+// 当用户在“当前 A4 已满”时仍点击了“下一个单词”，用于在本轮新增一张 A4 后自动补一次“下一个单词”动作。
 let pendingNextWordAfterRoundFull = false
 
 function cancelRoundFullModal() {
@@ -1616,11 +1742,23 @@ function normalizeMeaningKey(value) {
 }
 
 function getWordMeaningKey(word) {
-  const term = String(word?.term || "").trim().toLowerCase()
-  const meaning = normalizeMeaningKey(word?.meaning)
+  const w = word && typeof word === "object" ? word : {}
+  const f = window.A4Common?.getWordKey
+  if (typeof f === "function") return f(w)
+  const term = String(w?.term || "").trim().toLowerCase()
+  const meaning = normalizeMeaningKey(w?.meaning)
   if (!term) return ""
   if (!meaning) return term
   return `${term}||${meaning}`
+}
+
+function getRoundItemKey(roundItem, round) {
+  const it = roundItem && typeof roundItem === "object" ? roundItem : {}
+  const r = round && typeof round === "object" ? round : {}
+  const word = it?.word && typeof it.word === "object" ? it.word : {}
+  const langBase = getLangBase(it?.lang || word?.lang || r?.language || "")
+  if (langBase) return getWordMeaningKey({ ...word, lang: langBase })
+  return getWordMeaningKey(word)
 }
 
 function buildCurrentRoundWordKeySet() {
@@ -1628,7 +1766,7 @@ function buildCurrentRoundWordKeySet() {
   const items = Array.isArray(round?.items) ? round.items : []
   const set = new Set()
   for (const it of items) {
-    const key = getWordMeaningKey(it?.word)
+    const key = getRoundItemKey(it, round)
     if (key) set.add(key)
   }
   return set
@@ -1637,8 +1775,18 @@ function buildCurrentRoundWordKeySet() {
 function ensurePool() {
   if (appState.pool.length > 0 && appState.poolIndex < appState.pool.length) return
   const unknownSet = new Set(appState.unknownTerms)
-  const unknown = appState.sourceWords.filter((w) => unknownSet.has(w?.term))
-  const rest = appState.sourceWords.filter((w) => !unknownSet.has(w?.term))
+  const unknown = appState.sourceWords.filter((w) => {
+    const term = String(w?.term || "").trim()
+    if (!term) return false
+    const k = getUnknownTermKey({ term, langBase: getLangBase(w?.lang || "") || getActiveLangBase() })
+    return unknownSet.has(k) || unknownSet.has(term)
+  })
+  const rest = appState.sourceWords.filter((w) => {
+    const term = String(w?.term || "").trim()
+    if (!term) return false
+    const k = getUnknownTermKey({ term, langBase: getLangBase(w?.lang || "") || getActiveLangBase() })
+    return !(unknownSet.has(k) || unknownSet.has(term))
+  })
   const merged = [...shuffle(unknown), ...shuffle(rest)]
   const seen = new Set()
   appState.pool = merged.filter((w) => {
@@ -1764,9 +1912,17 @@ function restore() {
   else if (typeof saved.darkMode === "boolean") appState.themeMode = saved.darkMode ? "dark" : "light"
   else appState.themeMode = "auto"
 
-  appState.unknownTerms = Array.isArray(saved.unknownTerms)
+  const unknownRaw = Array.isArray(saved.unknownTerms)
     ? saved.unknownTerms.map((s) => String(s || "").trim()).filter(Boolean)
     : []
+  const fallbackLang = getActiveLangBase()
+  appState.unknownTerms = unknownRaw
+    .map((s) => {
+      if (!s) return ""
+      if (s.includes("||")) return s
+      return getUnknownTermKey({ term: s, langBase: fallbackLang })
+    })
+    .filter(Boolean)
 
   const rawRoundCap = Number(saved.roundCap)
   appState.roundCap = Number.isFinite(rawRoundCap) ? clamp(Math.round(rawRoundCap), 20, 30) : DEFAULT_ROUND_CAP
@@ -1859,6 +2015,12 @@ function restore() {
       for (const it of items) {
         const term = String(it?.word?.term || "").trim()
         if (!term) continue
+        const base = getLangBase(it?.lang || it?.word?.lang || r?.language || "")
+        if (base) {
+          it.lang = base
+          if (it.word && typeof it.word === "object") it.word.lang = base
+          if (!r.language) r.language = base
+        }
         if (!it.status) it.status = STATUS_UNKNOWN
         it.status = normalizeStatus(it.status)
         if (typeof it.lastReviewedAt !== "string") it.lastReviewedAt = ""
@@ -1868,9 +2030,13 @@ function restore() {
       }
     }
     for (const entry of buildLatestTermMap(appState.rounds).values()) {
-      if (normalizeStatus(entry.status) === STATUS_UNKNOWN) normalizedUnknown.add(entry.term)
+      if (normalizeStatus(entry.status) === STATUS_UNKNOWN) {
+        const base = getLangBase(entry?.word?.lang || "") || fallbackLang
+        const k = getUnknownTermKey({ term: entry.term, langBase: base })
+        if (k) normalizedUnknown.add(k)
+      }
     }
-    appState.unknownTerms = Array.from(normalizedUnknown)
+    if (appState.unknownTerms.length === 0) appState.unknownTerms = Array.from(normalizedUnknown)
     ensureCurrentRound()
     renderCurrentRound()
     updateBadge()
@@ -1937,7 +2103,7 @@ function buildAllRoundsWordKeySet({ excludeRoundId } = {}) {
     if (exclude && String(r?.id || "") === exclude) continue
     const items = Array.isArray(r?.items) ? r.items : []
     for (const it of items) {
-      const key = getWordMeaningKey(it?.word)
+      const key = getRoundItemKey(it, r)
       if (key) set.add(key)
     }
   }
@@ -1971,7 +2137,25 @@ function pickNextWordPreferUnseenFirst({ globalSeenSet } = {}) {
 
 function addNextWordToCurrentRound({ preferUnseenFirst } = {}) {
   ensureCurrentRound()
-  if (appState.placed.length >= getCurrentRoundCap()) return null
+  const round = getCurrentRound()
+  if (!round) return null
+  const type = normalizeRoundType(round.type || ROUND_TYPE_NORMAL)
+  if (type !== ROUND_TYPE_NORMAL) return null
+
+  const cap = getCurrentRoundCap()
+  const lastPageIndex = getRoundLastPageIndex(round)
+  const cur = clamp(Math.floor(Number(appState.currentPageIndex) || 0), 0, Math.max(0, lastPageIndex))
+  const curCount = getRoundItemCountByPage(round, cur)
+  const targetPageIndex = curCount >= cap ? lastPageIndex + 1 : cur
+
+  if (targetPageIndex > lastPageIndex) {
+    appState.currentPageIndex = targetPageIndex
+    clearPaper()
+    appState.placed = []
+  } else if (appState.currentPageIndex !== targetPageIndex) {
+    appState.currentPageIndex = targetPageIndex
+    renderCurrentRound()
+  }
 
   const word = preferUnseenFirst
     ? pickNextWordPreferUnseenFirst({ globalSeenSet: buildAllRoundsWordKeySet({ excludeRoundId: appState.currentRoundId }) })
@@ -1983,24 +2167,23 @@ function addNextWordToCurrentRound({ preferUnseenFirst } = {}) {
 
   const placed = placeWordElement(word)
   const fontSize = placed.el.style.fontSize || ""
+  const langBase = getLangBase(word?.lang || "") || getActiveLangBase()
+  if (!round.language) round.language = langBase
   const roundItem = {
-    word,
+    word: { ...word, lang: langBase },
     pos: placed.pos,
     fontSize,
     createdAt: new Date().toISOString(),
     status: STATUS_UNKNOWN,
     lastReviewedAt: "",
     nextReviewAt: "",
-    pageIndex: 0,
+    pageIndex: targetPageIndex,
+    lang: langBase,
   }
   appState.placed.push({ word, roundItem, el: placed.el, box: placed.box, fontSize, pos: placed.pos })
 
-  const round = getCurrentRound()
-  if (round) {
-    if (!round.type) round.type = ROUND_TYPE_NORMAL
-    round.items.push(roundItem)
-    if (round.items.length >= getCurrentRoundCap()) finalizeCurrentRound()
-  }
+  round.items.push(roundItem)
+  updatePageNav()
 
   updateBadge()
   updateHint()
@@ -2011,7 +2194,17 @@ function addNextWordToCurrentRound({ preferUnseenFirst } = {}) {
 // 学习推进入口：写入新词后立刻进入“自动复习”（新词置顶）。
 function handleNextWord() {
   ensureCurrentRound()
-  if (appState.placed.length >= getCurrentRoundCap()) {
+  const current = getCurrentRound()
+  const type = normalizeRoundType(current?.type || ROUND_TYPE_NORMAL)
+  if (type !== ROUND_TYPE_NORMAL) startNextRound()
+
+  const round = getCurrentRound()
+  const cap = getCurrentRoundCap()
+  const lastPageIndex = getRoundLastPageIndex(round)
+  const cur = clamp(Math.floor(Number(appState.currentPageIndex) || 0), 0, Math.max(0, lastPageIndex))
+  const curCount = getRoundItemCountByPage(round, cur)
+
+  if (curCount >= cap) {
     pendingNextWordAfterRoundFull = true
     openRoundFullModal()
     return
@@ -2026,29 +2219,47 @@ function addSpecificWordToCurrentRound(wordRaw) {
   if (!wordRaw) return null
   const w = normalizeWordObject(wordRaw)
   if (!w || !w.term) return null
-  if (appState.placed.length >= getCurrentRoundCap()) return null
+  const round = getCurrentRound()
+  if (!round) return null
+  const type = normalizeRoundType(round.type || ROUND_TYPE_NORMAL)
+  if (type !== ROUND_TYPE_NORMAL) return null
+
+  const cap = getCurrentRoundCap()
+  const lastPageIndex = getRoundLastPageIndex(round)
+  const cur = clamp(Math.floor(Number(appState.currentPageIndex) || 0), 0, Math.max(0, lastPageIndex))
+  const curCount = getRoundItemCountByPage(round, cur)
+  const targetPageIndex = curCount >= cap ? lastPageIndex + 1 : cur
+
+  if (targetPageIndex > lastPageIndex) {
+    appState.currentPageIndex = targetPageIndex
+    clearPaper()
+    appState.placed = []
+  } else if (appState.currentPageIndex !== targetPageIndex) {
+    appState.currentPageIndex = targetPageIndex
+    renderCurrentRound()
+  }
+
   const currentKeys = buildCurrentRoundWordKeySet()
-  const key = getWordMeaningKey(w)
+  const langBase = getLangBase(w?.lang || "") || getActiveLangBase()
+  const key = getWordMeaningKey({ ...w, lang: langBase })
   if (!key || currentKeys.has(key)) return null
-  const placed = placeWordElement(w)
+  const placed = placeWordElement({ ...w, lang: langBase })
   const fontSize = placed.el.style.fontSize || ""
+  if (!round.language) round.language = langBase
   const roundItem = {
-    word: w,
+    word: { ...w, lang: langBase },
     pos: placed.pos,
     fontSize,
     createdAt: new Date().toISOString(),
     status: STATUS_UNKNOWN,
     lastReviewedAt: "",
     nextReviewAt: "",
-    pageIndex: 0,
+    pageIndex: targetPageIndex,
+    lang: langBase,
   }
   appState.placed.push({ word: w, roundItem, el: placed.el, box: placed.box, fontSize, pos: placed.pos })
-  const round = getCurrentRound()
-  if (round) {
-    if (!round.type) round.type = ROUND_TYPE_NORMAL
-    round.items.push(roundItem)
-    if (round.items.length >= getCurrentRoundCap()) finalizeCurrentRound()
-  }
+  round.items.push(roundItem)
+  updatePageNav()
   updateBadge()
   updateHint()
   persist()
@@ -2057,8 +2268,16 @@ function addSpecificWordToCurrentRound(wordRaw) {
 
 function addWordToCurrentRoundFromLookup(wordRaw) {
   ensureCurrentRound()
+  const current = getCurrentRound()
+  const type = normalizeRoundType(current?.type || ROUND_TYPE_NORMAL)
+  if (type !== ROUND_TYPE_NORMAL) startNextRound()
+
+  const round = getCurrentRound()
   const cap = getCurrentRoundCap()
-  if (appState.placed.length >= cap) {
+  const lastPageIndex = getRoundLastPageIndex(round)
+  const cur = clamp(Math.floor(Number(appState.currentPageIndex) || 0), 0, Math.max(0, lastPageIndex))
+  const curCount = getRoundItemCountByPage(round, cur)
+  if (curCount >= cap) {
     pendingAddWordAfterRoundFull = normalizeWordObject(wordRaw)
     openRoundFullModal()
     return
@@ -2104,6 +2323,22 @@ if (window.A4Settings && typeof window.A4Settings.createSettingsModalController 
         if (round && (!Array.isArray(round.items) || round.items.length === 0)) round.roundCap = appState.roundCap
         updateBadge()
       }
+      if (key === "pronunciationLang") {
+        const before = getCurrentRound()
+        const beforeType = normalizeRoundType(before?.type || ROUND_TYPE_NORMAL)
+        const beforeLang = getLangBase(before?.language || "")
+        renderWordbookSelect()
+        updateSourceWords()
+        const afterLang = getActiveLangBase()
+        if (beforeType === ROUND_TYPE_NORMAL && Array.isArray(before?.items) && before.items.length > 0 && beforeLang && beforeLang !== afterLang) {
+          startNextRound()
+        } else {
+          appState.pool = []
+          appState.poolIndex = 0
+        }
+        updateBadge()
+        updateHint()
+      }
       if (key === "reviewCardFlipEnabled") {
         if (isModalOpen(dom.reviewModal)) {
           resetReviewCardFlipState()
@@ -2131,7 +2366,16 @@ dom.lookupBtn?.addEventListener("click", () => openLookupModal())
 dom.wordbookSelect.addEventListener("change", () => {
   appState.selectedWordbookId = dom.wordbookSelect.value
   updateSourceWords()
-  startNextRound()
+  const round = getCurrentRound()
+  const roundType = normalizeRoundType(round?.type || ROUND_TYPE_NORMAL)
+  const nextLang = getActiveLangBase()
+  const roundLang = getLangBase(round?.language || "")
+  if (roundType === ROUND_TYPE_NORMAL && Array.isArray(round?.items) && round.items.length > 0 && roundLang && roundLang !== nextLang) {
+    startNextRound()
+  } else {
+    appState.pool = []
+    appState.poolIndex = 0
+  }
   persist()
 })
 
@@ -2287,7 +2531,8 @@ function markCurrentReviewStatus(status) {
     const nowMs = Date.now()
     roundItem.lastReviewedAt = new Date(nowMs).toISOString()
     roundItem.nextReviewAt = appState.reviewSystemEnabled ? getNextReviewAtIso(nextStatus, nowMs) : ""
-    setTermUnknownFlag(term, nextStatus === STATUS_UNKNOWN)
+    const langBase = getLangBase(roundItem?.lang || w?.lang || "")
+    setTermUnknownFlag(term, nextStatus === STATUS_UNKNOWN, langBase)
     persist()
     renderStats()
   }
@@ -2746,7 +2991,6 @@ dom.roundFullBackdrop.addEventListener("click", () => cancelRoundFullModal())
 dom.closeRoundFullBtn.addEventListener("click", () => cancelRoundFullModal())
 dom.continueRoundBtn.addEventListener("click", () => {
   closeRoundFullModal()
-  startNextRound()
   if (pendingNextWordAfterRoundFull) {
     pendingNextWordAfterRoundFull = false
     const roundItem = addNextWordToCurrentRound({ preferUnseenFirst: true })
@@ -2757,6 +3001,7 @@ dom.continueRoundBtn.addEventListener("click", () => {
     pendingAddWordAfterRoundFull = null
     const roundItem = addSpecificWordToCurrentRound(w)
     if (roundItem) openAutoReviewModal(roundItem)
+    else window.alert("未加入：本轮已存在该词条或词条不合法。")
   }
 })
 dom.reviewFromFullBtn.addEventListener("click", () => {
@@ -2769,4 +3014,12 @@ window.A4AddWordFromLookup = (word) => {
   try {
     addWordToCurrentRoundFromLookup(word)
   } catch (e) {}
+}
+
+window.A4GetActiveLangBase = () => {
+  try {
+    return getActiveLangBase()
+  } catch (e) {
+    return "en"
+  }
 }

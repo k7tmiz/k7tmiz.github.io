@@ -2,6 +2,7 @@ window.WORDBOOKS = [
   {
     id: "cet4",
     name: "中国大学生英语四级必备词汇",
+    language: "en",
     words: [
       { term: "abandon", pos: "v.", meaning: "放弃" },
       { term: "ability", pos: "n.", meaning: "能力" },
@@ -73,6 +74,7 @@ window.WORDBOOKS = [
   {
     id: "cet6",
     name: "中国大学生英语六级必备词汇",
+    language: "en",
     words: [
       { term: "alleviate", pos: "v.", meaning: "缓解" },
       { term: "ambiguous", pos: "adj.", meaning: "模棱两可的" },
@@ -128,6 +130,7 @@ window.WORDBOOKS = [
   {
     id: "sp4",
     name: "中国大学生西班牙语专业四级考试必备词汇",
+    language: "es",
     words: [
       { term: "hablar", pos: "v.", meaning: "说话" },
       { term: "comer", pos: "v.", meaning: "吃" },

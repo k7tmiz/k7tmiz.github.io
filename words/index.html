@@ -115,7 +115,7 @@
       <div class="modal-backdrop" id="roundFullBackdrop"></div>
       <div class="modal-panel" role="dialog" aria-modal="true" aria-labelledby="roundFullTitle">
         <div class="modal-header">
-          <h2 id="roundFullTitle">本轮已满</h2>
+          <h2 id="roundFullTitle">当前 A4 已满</h2>
           <div class="modal-actions">
             <button class="ghost" id="closeRoundFullBtn" type="button">关闭</button>
           </div>
@@ -123,7 +123,7 @@
         <div class="modal-body">
           <div class="review-meta" id="roundFullMeta"></div>
           <div class="stack">
-            <button class="primary full" id="continueRoundBtn" type="button">继续再来一轮（保留记录）</button>
+            <button class="primary full" id="continueRoundBtn" type="button">在本轮新增一张 A4 继续学习</button>
             <button class="full" id="reviewFromFullBtn" type="button">复习本轮</button>
             <a class="button-link full" href="./records.html">查看学习记录</a>
           </div>
@@ -234,8 +234,8 @@ ability,n.,能力</pre>
             <div class="intro-block">
               <div class="intro-title">核心规则</div>
               <ul class="intro-list">
-                <li>普通学习：每一轮 = 1 张 A4，最多 20–30 个单词（可在设置里调整）。</li>
-                <li>每新增 1 个单词，会立刻要求你复习本轮全部单词，避免“只会背新词”。</li>
+                <li>普通学习：每一轮默认从 1 张 A4 开始，每张 A4 最多 20–30 个单词（可在设置里调整）；当前 A4 写满后可在同一轮追加下一张 A4 继续学习（整轮去重）。</li>
+                <li>每新增 1 个单词，都会立刻打开复习弹窗：普通学习轮在多页时默认只复习当前页；点「复习本轮」才复习整轮全部页，避免“只会背新词”。</li>
                 <li>单词随机排版在纸面不同位置，尽量留出间距，帮助分散记忆。</li>
               </ul>
             </div>
@@ -243,15 +243,15 @@ ability,n.,能力</pre>
               <div class="intro-title">怎么用这个网页</div>
               <ul class="intro-list">
                 <li>开始学习：点「下一个单词」写入新词，逐步填满本轮 A4。</li>
-                <li>开始复习：每次点「下一个单词」后会自动打开复习弹窗（新词固定在第一位）。</li>
-                <li>手动复习：也可随时点「复习本轮」进入复习弹窗；按按钮标记「已掌握 / 学习中 / 不会」。</li>
+                <li>开始复习：每次点「下一个单词」后会自动打开复习弹窗（新词固定在第一位；普通学习轮多页时默认只复习当前页）。</li>
+                <li>手动复习：随时点「复习本轮」进入复习弹窗；此入口会复习整轮全部页，并按按钮标记「已掌握 / 学习中 / 不会」。</li>
                 <li>滑动标记：复习卡片支持左右滑动/拖拽（手机/平板触摸、电脑鼠标拖拽）；右滑=已掌握，左滑=不会；未达提交条件会自动平滑回中。</li>
                 <li>翻面复习：可在设置里开启「启用复习卡片翻面」。正面点“单词”发音；点非单词区域翻到释义；背面点任意处翻回。</li>
                 <li>复习结束：最后一个词标记完成后，弹窗默认自动关闭（可在设置里关闭）；也可随时点右上角「关闭」。</li>
                 <li>释义显示：默认隐藏；可用「显示释义」一键开启/关闭，也可点击某个词条单独显示/隐藏。</li>
                 <li>发音：普通模式与翻卡模式下，点击复习弹窗正面“单词”都可发音（需在设置里开启发音）。</li>
                 <li>查词：首页或学习记录页点「查词」，本地词书与学习记录优先显示；可在弹窗选择语言（自动/en/es）。英文查词会优先显示中文翻译（MyMemory），并保留英文解释（dictionaryapi.dev）作为补充；每条结果卡片顶部提供「加入当前轮」按钮，加入后自动进入复习。</li>
-                <li>本轮写满：再点「下一个单词」会提示“本轮已满”，可继续下一轮（保留记录）或复习本轮。</li>
+                <li>当前 A4 写满：再点「下一个单词」会提示“当前 A4 已满”，可在本轮新增下一张 A4 继续学习或复习本轮；也可手动点「新建一轮」进入下一轮。</li>
                 <li>学习记录：进入「学习记录」查看轮次统计与预览 A4，支持导出 CSV / PDF，并可从记录页跳回复习。</li>
                 <li>状态视图：在记录页按「待复习 / 已掌握 / 学习中 / 不会」聚合，并可“生成一轮”进行复习。</li>
                 <li>多页 A4：按状态生成的复习轮可能包含多页；可在首页用 Previous/Next 翻页查看。</li>
