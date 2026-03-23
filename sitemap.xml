@@ -2,6 +2,51 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>https://k7tmiz.github.io/test/docs/PROJECT_CONTEXT.html</loc>
+    
+    <lastmod>2026-03-23</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://k7tmiz.github.io/test/docs/README.en.html</loc>
+    
+    <lastmod>2026-03-23</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://k7tmiz.github.io/test/README.html</loc>
+    
+    <lastmod>2026-03-23</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://k7tmiz.github.io/test/index.html</loc>
+    
+    <lastmod>2026-03-23</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://k7tmiz.github.io/test/records.html</loc>
+    
+    <lastmod>2026-03-17</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
     <loc>https://k7tmiz.github.io/about/index.html</loc>
     
     <lastmod>2026-03-13</lastmod>
@@ -302,7 +347,7 @@
   </url>
   
   <url>
-    <loc>https://k7tmiz.github.io/tags/Spanish/</loc>
+    <loc>https://k7tmiz.github.io/tags/Travel/</loc>
     <lastmod>2026-03-23</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
@@ -316,7 +361,7 @@
   </url>
   
   <url>
-    <loc>https://k7tmiz.github.io/tags/Travel/</loc>
+    <loc>https://k7tmiz.github.io/tags/Spanish/</loc>
     <lastmod>2026-03-23</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
@@ -339,6 +384,13 @@
   </url>
   
   <url>
+    <loc>https://k7tmiz.github.io/categories/Travel/</loc>
+    <lastmod>2026-03-23</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
     <loc>https://k7tmiz.github.io/categories/Study/</loc>
     <lastmod>2026-03-23</lastmod>
     <changefreq>weekly</changefreq>
@@ -347,13 +399,6 @@
   
   <url>
     <loc>https://k7tmiz.github.io/categories/Tech/</loc>
-    <lastmod>2026-03-23</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.2</priority>
-  </url>
-  
-  <url>
-    <loc>https://k7tmiz.github.io/categories/Travel/</loc>
     <lastmod>2026-03-23</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
