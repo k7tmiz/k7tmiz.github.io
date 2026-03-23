@@ -1381,7 +1381,7 @@
         const term = String(row.getAttribute("data-lookup-speak") || "").trim()
         if (!term) return
         const state = getStateSafe()
-        const speech = window.A4Settings?.speech
+        const speech = window.A4Speech
         if (!speech) return
         const wordbookLanguage = typeof getWordbookLanguage === "function" ? getWordbookLanguage() : ""
         speech.speak({

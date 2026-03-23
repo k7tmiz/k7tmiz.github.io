@@ -844,6 +844,10 @@ select:hover {
   font-weight: 900;
   letter-spacing: 0.2px;
   line-height: 1.15;
+  display: inline-block;
+  padding: 4px 6px;
+  border-radius: 10px;
+  cursor: pointer;
 }
 
 .review-card-meaning {
@@ -869,7 +873,8 @@ select:hover {
   min-height: clamp(10.5rem, 26vh, 13.5rem);
   display: block;
   transform-style: preserve-3d;
-  transition: transform 220ms cubic-bezier(0.2, 0.9, 0.25, 1);
+  will-change: transform;
+  transition: transform 300ms cubic-bezier(0.22, 1, 0.36, 1);
 }
 
 .review-card.review-card-flip-enabled.is-flipped .review-card-faces {
@@ -887,16 +892,38 @@ select:hover {
   padding: 0.9rem 0.95rem 2.3rem;
   backface-visibility: hidden;
   transform-style: preserve-3d;
+  pointer-events: none;
 }
 
 .review-card.review-card-flip-enabled .review-card-back {
   transform: rotateY(180deg);
 }
 
+.review-card.review-card-flip-enabled:not(.is-flipped) .review-card-front {
+  pointer-events: auto;
+}
+
+.review-card.review-card-flip-enabled.is-flipped .review-card-back {
+  pointer-events: auto;
+}
+
 .review-card.review-card-flip-enabled .review-card-term {
   font-size: var(--card-font-main);
   max-width: min(34ch, 100%);
   overflow-wrap: anywhere;
+  cursor: pointer;
+  padding: 0.2rem 0.3rem;
+  border-radius: 10px;
+}
+
+.review-card.review-card-flip-enabled:not(.is-dragging) .review-card-term:active {
+  transform: scale(0.98);
+}
+
+@media (hover: hover) {
+  .review-card.review-card-flip-enabled .review-card-term:hover {
+    background: var(--surfaceHover);
+  }
 }
 
 .review-card.review-card-flip-enabled .review-card-meaning {
@@ -923,11 +950,11 @@ select:hover {
 }
 
 .review-card.review-card-flip-enabled .review-card-front::after {
-  content: "点击卡片查看释义 / Click to flip";
+  content: "点空白翻面 / Click blank to flip";
 }
 
 .review-card.review-card-flip-enabled .review-card-back::after {
-  content: "点击卡片查看单词 / Click to flip";
+  content: "点任意处翻回 / Click to flip back";
 }
 
 @media (prefers-reduced-motion: reduce) {

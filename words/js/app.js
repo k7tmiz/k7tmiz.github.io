@@ -1337,7 +1337,7 @@ function speakTerm(term) {
   const text = String(term || "").trim()
   if (!text) return
 
-  const speech = window.A4Settings?.speech
+  const speech = window.A4Speech
   if (!speech) return
 
   const wordbookLanguage = getWordbookLanguageForSpeech()
@@ -1466,7 +1466,7 @@ function renderReviewCard() {
   }
   dom.reviewCard.classList.toggle("is-flipped", flipped)
   dom.reviewCardHint.textContent = appState.reviewCardFlipEnabled
-    ? "点击卡片翻面；点击单词可发音；左右滑动/拖拽可快速标记（右滑已掌握/左滑不会）"
+    ? "点单词发音；点空白翻面；背面点任意处翻回；左右滑动/拖拽可快速标记（右滑已掌握/左滑不会）"
     : "点击单词可发音；左右滑动/拖拽可快速标记（右滑已掌握/左滑不会）"
   dom.reviewKnownBtn.disabled = false
   dom.reviewLearningBtn.disabled = false
@@ -2324,8 +2324,15 @@ dom.reviewUnknownBtn.addEventListener("click", () => {
 })
 
 dom.reviewCardTerm.addEventListener("click", (e) => {
+  if (reviewBlockClickUntil && Date.now() < reviewBlockClickUntil) return
+  if (reviewSwipe.dragging || reviewSwipe.animating) return
+  if (appState.reviewCardFlipEnabled) {
+    const entry = appState.reviewQueue[appState.reviewIndex]
+    const flipped = !!reviewCardFlipMap.get(entry?.roundItem)
+    if (flipped) return
+  }
   speakTerm(dom.reviewCardTerm.textContent)
-  if (appState.reviewCardFlipEnabled) e.stopPropagation()
+  e.stopPropagation()
 })
 
 let reviewBlockClickUntil = 0
@@ -2339,6 +2346,21 @@ const reviewSwipe = {
   dy: 0,
   animating: false,
   raf: 0,
+}
+
+function cleanupReviewPointerListeners() {
+  window.removeEventListener("pointermove", onReviewPointerMove)
+  window.removeEventListener("pointerup", onReviewPointerUp)
+  window.removeEventListener("pointercancel", onReviewPointerCancel)
+}
+
+function cancelReviewSwipe() {
+  reviewSwipe.active = false
+  reviewSwipe.dragging = false
+  reviewSwipe.pointerId = null
+  cleanupReviewPointerListeners()
+  dom.reviewCard.classList.remove("is-dragging")
+  document.body.classList.remove("no-select")
 }
 
 function getReviewCardWidth() {
@@ -2384,8 +2406,12 @@ dom.reviewCard.addEventListener("click", (e) => {
   const entry = appState.reviewQueue[appState.reviewIndex]
   const roundItem = entry?.roundItem
   if (!roundItem) return
-  const prev = !!reviewCardFlipMap.get(roundItem)
-  reviewCardFlipMap.set(roundItem, !prev)
+  const flipped = !!reviewCardFlipMap.get(roundItem)
+  if (!flipped) {
+    reviewCardFlipMap.set(roundItem, true)
+  } else {
+    reviewCardFlipMap.set(roundItem, false)
+  }
   renderReviewCard()
 })
 
@@ -2393,6 +2419,7 @@ dom.reviewCard.addEventListener("pointerdown", (e) => {
   if (reviewSwipe.animating) return
   if (e.pointerType === "mouse" && e.button !== 0) return
   if (!isModalOpen(dom.reviewModal)) return
+  if (reviewSwipe.active) cancelReviewSwipe()
   reviewSwipe.active = true
   reviewSwipe.dragging = false
   reviewSwipe.pointerId = e.pointerId
@@ -2400,12 +2427,12 @@ dom.reviewCard.addEventListener("pointerdown", (e) => {
   reviewSwipe.startY = e.clientY
   reviewSwipe.dx = 0
   reviewSwipe.dy = 0
-  try {
-    dom.reviewCard.setPointerCapture(e.pointerId)
-  } catch (err) {}
+  window.addEventListener("pointermove", onReviewPointerMove, { passive: false })
+  window.addEventListener("pointerup", onReviewPointerUp)
+  window.addEventListener("pointercancel", onReviewPointerCancel)
 })
 
-dom.reviewCard.addEventListener("pointermove", (e) => {
+function onReviewPointerMove(e) {
   if (!reviewSwipe.active) return
   if (reviewSwipe.pointerId !== e.pointerId) return
   const dx = e.clientX - reviewSwipe.startX
@@ -2416,11 +2443,7 @@ dom.reviewCard.addEventListener("pointermove", (e) => {
   if (!reviewSwipe.dragging) {
     if (Math.abs(dx) < 10 && Math.abs(dy) < 10) return
     if (Math.abs(dy) > Math.abs(dx) * 1.25) {
-      reviewSwipe.active = false
-      try {
-        if (reviewSwipe.pointerId != null) dom.reviewCard.releasePointerCapture(reviewSwipe.pointerId)
-      } catch (err) {}
-      reviewSwipe.pointerId = null
+      cancelReviewSwipe()
       return
     }
     if (Math.abs(dx) <= Math.abs(dy) * 1.05) return
@@ -2436,13 +2459,10 @@ dom.reviewCard.addEventListener("pointermove", (e) => {
     reviewSwipe.raf = 0
     applyReviewSwipeVisual(reviewSwipe.dx)
   })
-})
+}
 
-function endReviewSwipe(e, { commit } = {}) {
-  if (reviewSwipe.pointerId != null && e && reviewSwipe.pointerId !== e.pointerId) return
-  try {
-    if (reviewSwipe.pointerId != null) dom.reviewCard.releasePointerCapture(reviewSwipe.pointerId)
-  } catch (err) {}
+function endReviewSwipe({ commit } = {}) {
+  cleanupReviewPointerListeners()
 
   if (!reviewSwipe.dragging) {
     reviewSwipe.active = false
@@ -2463,6 +2483,7 @@ function endReviewSwipe(e, { commit } = {}) {
   if (!shouldCommit) {
     resetReviewSwipeVisual()
     reviewSwipe.pointerId = null
+    reviewSwipe.active = false
     return
   }
 
@@ -2483,12 +2504,20 @@ function endReviewSwipe(e, { commit } = {}) {
     resetReviewSwipeVisual({ hard: true })
     reviewSwipe.animating = false
     reviewSwipe.pointerId = null
+    reviewSwipe.active = false
     advanceReview(status)
   }, 240)
 }
 
-dom.reviewCard.addEventListener("pointerup", (e) => endReviewSwipe(e, { commit: true }))
-dom.reviewCard.addEventListener("pointercancel", (e) => endReviewSwipe(e, { commit: false }))
+function onReviewPointerUp(e) {
+  if (reviewSwipe.pointerId != null && reviewSwipe.pointerId !== e.pointerId) return
+  endReviewSwipe({ commit: true })
+}
+
+function onReviewPointerCancel(e) {
+  if (reviewSwipe.pointerId != null && reviewSwipe.pointerId !== e.pointerId) return
+  endReviewSwipe({ commit: false })
+}
 
 dom.shuffleBtn.addEventListener("click", () => {
   appState.reviewShuffled = !appState.reviewShuffled
