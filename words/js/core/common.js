@@ -224,6 +224,10 @@
     return "auto"
   }
 
+  function normalizeReviewCardFlipEnabled(value) {
+    return typeof value === "boolean" ? value : false
+  }
+
   function normalizeLangTag(value) {
     const raw = String(value || "").trim().replaceAll("_", "-")
     if (!raw) return { tag: "", base: "" }
@@ -356,6 +360,7 @@
     normalizeAccent,
     normalizeVoiceMode,
     normalizePronunciationLang,
+    normalizeReviewCardFlipEnabled,
     normalizeLangTag,
     normalizeLookupText,
     scoreLookupMatch,

@@ -13,6 +13,7 @@ const {
   normalizeStatus,
   normalizeRoundType,
   normalizeAiProvider,
+  normalizeReviewCardFlipEnabled,
   parseIsoTime,
   formatDateTime,
   buildLatestTermMap,
@@ -345,6 +346,7 @@ const appState = {
   reviewSystemEnabled: true,
   reviewIntervals: { ...DEFAULT_REVIEW_INTERVALS },
   reviewAutoCloseModal: true,
+  reviewCardFlipEnabled: false,
   pronunciationEnabled: true,
   pronunciationAccent: "auto",
   pronunciationLang: "auto",
@@ -1118,6 +1120,7 @@ function persist() {
     reviewSystemEnabled: !!appState.reviewSystemEnabled,
     reviewIntervals: normalizeReviewIntervals(appState.reviewIntervals),
     reviewAutoCloseModal: !!appState.reviewAutoCloseModal,
+    reviewCardFlipEnabled: !!appState.reviewCardFlipEnabled,
     pronunciationEnabled: appState.pronunciationEnabled,
     pronunciationAccent: appState.pronunciationAccent,
     pronunciationLang: appState.pronunciationLang,
@@ -1377,6 +1380,16 @@ function speakTerm(term) {
 }
 
 // ===== 复习弹窗（手动复习 / 自动复习共用渲染）=====
+let reviewCardFlipMap = new WeakMap()
+
+function resetReviewCardFlipState() {
+  reviewCardFlipMap = new WeakMap()
+  for (const e of Array.isArray(appState.reviewQueue) ? appState.reviewQueue : []) {
+    if (e?.roundItem) reviewCardFlipMap.set(e.roundItem, false)
+  }
+  dom.reviewCard?.classList?.remove?.("is-flipped")
+}
+
 function refreshReviewList() {
   const round = getCurrentRound()
   const rawItems = Array.isArray(round?.items) ? round.items : []
@@ -1390,6 +1403,7 @@ function refreshReviewList() {
   const orderedRest = appState.reviewShuffled ? shuffle(rest) : rest
   appState.reviewQueue = pinnedEntry ? [pinnedEntry, ...orderedRest] : orderedRest
   appState.reviewIndex = 0
+  resetReviewCardFlipState()
   renderReviewCard()
 }
 
@@ -1407,6 +1421,8 @@ function renderReviewCard() {
   const idx = clamp(appState.reviewIndex, 0, Math.max(0, total - 1))
   appState.reviewIndex = idx
 
+  dom.reviewCard.classList.toggle("review-card-flip-enabled", !!appState.reviewCardFlipEnabled)
+
   const cap = getCurrentRoundCap()
   dom.reviewMeta.textContent = `本轮已写 ${appState.placed.length}/${cap} 个单词（每新增一个都要完整复习一遍）`
 
@@ -1415,6 +1431,7 @@ function renderReviewCard() {
     dom.reviewCardTerm.textContent = ""
     dom.reviewCardMeaning.textContent = ""
     dom.reviewCardHint.textContent = ""
+    dom.reviewCard.classList.remove("is-flipped")
     dom.reviewKnownBtn.disabled = true
     dom.reviewLearningBtn.disabled = true
     dom.reviewUnknownBtn.disabled = true
@@ -1423,10 +1440,14 @@ function renderReviewCard() {
 
   const entry = appState.reviewQueue[idx]
   const w = entry?.word
+  const flipped = !!appState.reviewCardFlipEnabled && !!reviewCardFlipMap.get(entry?.roundItem)
   dom.reviewCardProgress.textContent = `${idx + 1} / ${total}`
   dom.reviewCardTerm.textContent = w?.term || ""
   dom.reviewCardMeaning.textContent = w?.meaning ? `${w.pos ? `${w.pos} ` : ""}${w.meaning}` : ""
-  dom.reviewCardHint.textContent = "点击单词可发音；左右滑动可快速标记（已掌握/不会）"
+  dom.reviewCard.classList.toggle("is-flipped", flipped)
+  dom.reviewCardHint.textContent = appState.reviewCardFlipEnabled
+    ? "点击卡片翻面；点击单词可发音；左右滑动可快速标记（已掌握/不会）"
+    : "点击单词可发音；左右滑动可快速标记（已掌握/不会）"
   dom.reviewKnownBtn.disabled = false
   dom.reviewLearningBtn.disabled = false
   dom.reviewUnknownBtn.disabled = false
@@ -1453,6 +1474,7 @@ function openAutoReviewModal(pinnedRoundItem) {
 
 function closeReviewModal() {
   setModalVisible(dom.reviewModal, false)
+  dom.reviewCard.classList.remove("is-flipped")
 }
 
 function openRoundFullModal() {
@@ -1728,6 +1750,11 @@ function restore() {
   appState.reviewSystemEnabled = typeof saved.reviewSystemEnabled === "boolean" ? saved.reviewSystemEnabled : true
   appState.reviewIntervals = normalizeReviewIntervals(saved.reviewIntervals)
   appState.reviewAutoCloseModal = typeof saved.reviewAutoCloseModal === "boolean" ? saved.reviewAutoCloseModal : true
+  appState.reviewCardFlipEnabled = normalizeReviewCardFlipEnabled
+    ? normalizeReviewCardFlipEnabled(saved.reviewCardFlipEnabled)
+    : typeof saved.reviewCardFlipEnabled === "boolean"
+      ? saved.reviewCardFlipEnabled
+      : false
 
   appState.pronunciationEnabled =
     typeof saved.pronunciationEnabled === "boolean" ? saved.pronunciationEnabled : true
@@ -2047,6 +2074,12 @@ if (window.A4Settings && typeof window.A4Settings.createSettingsModalController 
         if (round && (!Array.isArray(round.items) || round.items.length === 0)) round.roundCap = appState.roundCap
         updateBadge()
       }
+      if (key === "reviewCardFlipEnabled") {
+        if (isModalOpen(dom.reviewModal)) {
+          resetReviewCardFlipState()
+          renderReviewCard()
+        }
+      }
       if (key === "customWordbooks") renderWordbookSelect()
     },
     getWordbookLanguage: () => getWordbookLanguageForSpeech(),
@@ -2262,12 +2295,27 @@ dom.reviewUnknownBtn.addEventListener("click", () => {
   advanceReview(STATUS_UNKNOWN)
 })
 
-dom.reviewCardTerm.addEventListener("click", () => {
+dom.reviewCardTerm.addEventListener("click", (e) => {
   speakTerm(dom.reviewCardTerm.textContent)
+  if (appState.reviewCardFlipEnabled) e.stopPropagation()
 })
 
 let reviewTouchStartX = 0
 let reviewTouchStartY = 0
+let reviewSwipeAt = 0
+
+dom.reviewCard.addEventListener("click", (e) => {
+  if (!appState.reviewCardFlipEnabled) return
+  if (reviewSwipeAt && Date.now() - reviewSwipeAt < 700) return
+  const target = e.target instanceof Element ? e.target : null
+  if (target && target.closest(".review-card-term")) return
+  const entry = appState.reviewQueue[appState.reviewIndex]
+  const roundItem = entry?.roundItem
+  if (!roundItem) return
+  const prev = !!reviewCardFlipMap.get(roundItem)
+  reviewCardFlipMap.set(roundItem, !prev)
+  renderReviewCard()
+})
 
 dom.reviewCard.addEventListener("touchstart", (e) => {
   const t = e.touches && e.touches[0]
@@ -2283,6 +2331,7 @@ dom.reviewCard.addEventListener("touchend", (e) => {
   const dy = t.clientY - reviewTouchStartY
   if (Math.abs(dx) < 60) return
   if (Math.abs(dx) < Math.abs(dy) * 1.2) return
+  reviewSwipeAt = Date.now()
   if (dx > 0) advanceReview(STATUS_MASTERED)
   else advanceReview(STATUS_UNKNOWN)
 })

@@ -85,7 +85,7 @@ A4-Memory
   - 线上导入：从指定 GitHub 词库仓库拉取 `.json` 列表并展示给用户选择，再按所选 JSON 导入（英语/西班牙语）
     - 命名：优先使用词书 JSON 的 `name/title`；缺失时回退为 JSON 文件名并自动去重
   - 西语词形补全：当发音语言为西班牙语且词条为“逗号后缀简写”（如 `antiguo,gua`），会在发音前扩展为完整两种形式（`antiguo, antigua`）
-  - 复习弹窗：每次打开默认打乱顺序（可手动恢复顺序）
+  - 复习弹窗：每次打开默认打乱顺序（可手动恢复顺序）；可选开启“点击卡片翻面”（默认关闭，避免影响老用户体验）
     - 手机端 UI：复习按钮为两行布局（已掌握/学习中一排，不会居中单独一排）
   - 多页 A4 翻页：只渲染当前页（`pageIndex === currentPageIndex`）
 - `js/records.js`
@@ -110,6 +110,7 @@ A4-Memory
   - “下一个单词”：写入新词后会自动打开复习弹窗（新词固定在第一个；旧词部分仍按当前复习顺序规则排列）
   - “复习本轮”是独立入口：仅在用户主动点击时打开复习弹窗
   - 复习完成后默认自动关闭弹窗（可在设置中关闭该行为）
+  - 可选翻面：开启 `reviewCardFlipEnabled` 后，点击复习卡片在 term/meaning 间切换；每次打开弹窗会重置为正面朝上
   - 本轮去重：同一轮 A4 内不重复出现“同词同义”的词条
   - 轮次写满后会弹出“本轮已满”弹窗：可继续下一轮（保留记录）或复习本轮（不清空记录）
 - 状态生成轮
@@ -160,7 +161,7 @@ A4-Memory
 - 常用设置项
   - 外观：主题模式（auto/light/dark）
   - 学习：每日目标、每轮上限（roundCap）
-  - 复习：轻量复习开关、复习间隔（unknown/learning/mastered）、复习完成自动关闭弹窗（reviewAutoCloseModal）
+  - 复习：轻量复习开关、复习间隔（unknown/learning/mastered）、复习完成自动关闭弹窗（reviewAutoCloseModal）、复习卡片翻面开关（reviewCardFlipEnabled）
   - 发音：开关、语言、口音、语音模式（auto/manual）与 voice 选择
   - 查词：联网补充开关、西语变位开关、查词缓存开关与缓存时长
   - 查词（补充来源）：内置在线补充源（默认） / 自定义 API（替换内置，复用 `aiConfig` 的 provider/baseUrl/apiKey/model；配置只需维护一套）
@@ -181,7 +182,7 @@ A4-Memory
   - 跨页触发：`pendingReviewRoundId`, `pendingGenerateStatusKind`
   - UI：`showMeaning`, `immersiveMode`, `themeMode`, `darkMode`
   - 统计/目标：`currentCount`, `dailyGoalRounds`, `dailyGoalWords`, `roundCap`
-  - 轻量复习：`reviewSystemEnabled`, `reviewIntervals`, `reviewAutoCloseModal`
+  - 轻量复习：`reviewSystemEnabled`, `reviewIntervals`, `reviewAutoCloseModal`, `reviewCardFlipEnabled`
   - 发音：`pronunciationEnabled`, `pronunciationAccent`, `pronunciationLang`, `voiceMode`, `voiceURI`
   - 词书：`selectedWordbookId`, `customWordbooks`
     - 每个词书：`{ id, name, description, language, words }`；其中 `language` 用于发音自动选语音（当 `pronunciationLang=auto`）

@@ -61,6 +61,7 @@
     next.reviewSystemEnabled = typeof next.reviewSystemEnabled === "boolean" ? next.reviewSystemEnabled : true
     next.reviewIntervals = normalizeReviewIntervals(next.reviewIntervals)
     next.reviewAutoCloseModal = typeof next.reviewAutoCloseModal === "boolean" ? next.reviewAutoCloseModal : true
+    next.reviewCardFlipEnabled = typeof next.reviewCardFlipEnabled === "boolean" ? next.reviewCardFlipEnabled : false
 
     next.pronunciationEnabled =
       typeof next.pronunciationEnabled === "boolean" ? next.pronunciationEnabled : true
@@ -331,6 +332,12 @@
                 <button class="ghost" id="reviewAutoCloseModalToggleBtn" type="button">自动关闭：开</button>
               </div>
             </div>
+            <div class="form-row">
+              <div class="form-label">启用复习卡片翻面</div>
+              <div class="form-control">
+                <button class="ghost" id="reviewCardFlipToggleBtn" type="button">翻面：关</button>
+              </div>
+            </div>
             <div class="form-help">到期规则：按状态计算下次复习时间；到期后会显示“待复习”。</div>
           </section>
 
@@ -592,6 +599,7 @@
       reviewLearningDaysInput: modal.querySelector("#reviewLearningDaysInput"),
       reviewMasteredDaysInput: modal.querySelector("#reviewMasteredDaysInput"),
       reviewAutoCloseModalToggleBtn: modal.querySelector("#reviewAutoCloseModalToggleBtn"),
+      reviewCardFlipToggleBtn: modal.querySelector("#reviewCardFlipToggleBtn"),
       pronounceToggleBtn: modal.querySelector("#pronounceToggleBtn"),
       accentSelect: modal.querySelector("#accentSelect"),
       pronunciationLangSelect: modal.querySelector("#pronunciationLangSelect"),
@@ -725,6 +733,7 @@
       const reviewSystemEnabled = typeof state?.reviewSystemEnabled === "boolean" ? state.reviewSystemEnabled : true
       const reviewIntervals = normalizeReviewIntervals(state?.reviewIntervals)
       const reviewAutoCloseModal = typeof state?.reviewAutoCloseModal === "boolean" ? state.reviewAutoCloseModal : true
+      const reviewCardFlipEnabled = typeof state?.reviewCardFlipEnabled === "boolean" ? state.reviewCardFlipEnabled : false
       if (dom.reviewSystemToggleBtn) dom.reviewSystemToggleBtn.textContent = `复习：${reviewSystemEnabled ? "开" : "关"}`
       if (dom.reviewIntervalsPanel) {
         if (reviewSystemEnabled) dom.reviewIntervalsPanel.classList.remove("hidden")
@@ -735,6 +744,8 @@
       if (dom.reviewMasteredDaysInput) dom.reviewMasteredDaysInput.value = String(reviewIntervals.masteredDays)
       if (dom.reviewAutoCloseModalToggleBtn)
         dom.reviewAutoCloseModalToggleBtn.textContent = `自动关闭：${reviewAutoCloseModal ? "开" : "关"}`
+      if (dom.reviewCardFlipToggleBtn)
+        dom.reviewCardFlipToggleBtn.textContent = `翻面：${reviewCardFlipEnabled ? "开" : "关"}`
       if (dom.accentSelect) dom.accentSelect.value = normalizeAccent(state?.pronunciationAccent)
       if (dom.pronunciationLangSelect)
         dom.pronunciationLangSelect.value = normalizePronunciationLang(state?.pronunciationLang)
@@ -1118,6 +1129,16 @@
         dom.reviewAutoCloseModalToggleBtn.textContent = `自动关闭：${reviewAutoCloseModal ? "开" : "关"}`
       persistSafe()
       afterChange("reviewAutoCloseModal")
+    })
+
+    dom.reviewCardFlipToggleBtn?.addEventListener("click", () => {
+      const state = getStateSafe()
+      const cur = typeof state?.reviewCardFlipEnabled === "boolean" ? state.reviewCardFlipEnabled : false
+      const reviewCardFlipEnabled = !cur
+      setStateSafe({ reviewCardFlipEnabled })
+      if (dom.reviewCardFlipToggleBtn) dom.reviewCardFlipToggleBtn.textContent = `翻面：${reviewCardFlipEnabled ? "开" : "关"}`
+      persistSafe()
+      afterChange("reviewCardFlipEnabled")
     })
 
     const onReviewIntervalsChange = () => {

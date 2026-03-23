@@ -789,6 +789,70 @@ select:hover {
   line-height: 1.35;
 }
 
+.review-card-faces {
+  display: grid;
+  gap: 8px;
+}
+
+.review-card.review-card-flip-enabled {
+  cursor: pointer;
+  perspective: 900px;
+}
+
+.review-card.review-card-flip-enabled .review-card-faces {
+  position: relative;
+  min-height: 160px;
+  display: block;
+  transform-style: preserve-3d;
+  transition: transform 220ms cubic-bezier(0.2, 0.9, 0.25, 1);
+}
+
+.review-card.review-card-flip-enabled.is-flipped .review-card-faces {
+  transform: rotateY(180deg);
+}
+
+.review-card.review-card-flip-enabled .review-card-face {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  backface-visibility: hidden;
+  transform-style: preserve-3d;
+}
+
+.review-card.review-card-flip-enabled .review-card-back {
+  transform: rotateY(180deg);
+}
+
+.review-card.review-card-flip-enabled .review-card-face::after {
+  position: absolute;
+  left: 10px;
+  right: 10px;
+  bottom: 10px;
+  font-size: 12px;
+  color: var(--muted);
+  opacity: 0.85;
+  letter-spacing: 0.1px;
+  content: "";
+}
+
+.review-card.review-card-flip-enabled .review-card-front::after {
+  content: "点击卡片查看释义 / Click to flip";
+}
+
+.review-card.review-card-flip-enabled .review-card-back::after {
+  content: "点击卡片查看单词 / Click to flip";
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .review-card.review-card-flip-enabled .review-card-faces {
+    transition: none;
+  }
+}
+
 .review-card-hint {
   font-size: 12px;
   color: var(--muted);

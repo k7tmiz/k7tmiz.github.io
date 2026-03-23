@@ -9,7 +9,7 @@ A pure front-end vocabulary tool based on the “A4 paper memory method”. Word
 ## Features
 
 - A4 random layout with collision avoidance
-- “Review this round”: a dedicated entry to review the current A4 (shuffled by default, can restore order; auto-closes the review modal on completion by default, configurable in Settings)
+- “Review this round”: a dedicated entry to review the current A4 (shuffled by default, can restore order; auto-closes the review modal on completion by default, configurable in Settings; optional “click card to flip” mode)
 - Per-round de-dup: within a round, it avoids adding the same “term + meaning” entry twice
 - Configurable round cap (20–30), start next round or review the current round when full
 - Meaning toggle, immersive mode, theme modes (Auto/Light/Dark)
@@ -68,7 +68,7 @@ Open: http://localhost:8080/
 - Mobile/tablet: Per-round action buttons in Records scale down to match the rest of the UI
 - Cross-browser: normalize form/control rendering so Chromium and Safari look closer
 - Maintenance: reduce duplication and improve readability without changing behavior or localStorage schema
-- Settings: theme, pronunciation, round cap, lightweight review, auto-close review modal on completion, backup, AI generator
+- Settings: theme, pronunciation, round cap, lightweight review, auto-close review modal on completion, review card flip, backup, AI generator
 - Home “How to use”: text stays aligned with the current implementation
 
 ## Project structure (brief)
