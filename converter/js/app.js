@@ -244,7 +244,9 @@ hola\t 你好
     });
 
     function doConvert(state) {
-      const parsed = parseText(state.inputText);
+      const parser = window.LexiForge.Parser || {};
+      const useMarkdown = parser.isLikelyMarkdown && parser.parseMarkdownText && parser.isLikelyMarkdown(state.inputText);
+      const parsed = useMarkdown ? parser.parseMarkdownText(state.inputText) : parseText(state.inputText);
       const deduped = dedupeWords(parsed.words);
       currentWords = deduped.words;
       dupRemovedCount = deduped.removed;

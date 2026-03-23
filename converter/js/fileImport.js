@@ -139,7 +139,7 @@
         if (!dt || !dt.files || !dt.files.length) return;
         const file = dt.files[0];
         const ext = extOf(file.name);
-        if (!["txt", "csv", "tsv", "json"].includes(ext)) {
+        if (!["txt", "csv", "tsv", "json", "md", "markdown"].includes(ext)) {
           onError(new Error("Unsupported file type"));
           return;
         }

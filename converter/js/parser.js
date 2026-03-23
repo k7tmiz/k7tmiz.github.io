@@ -168,6 +168,174 @@
     };
   }
 
+  function stripInlineMarkdown(text) {
+    let s = String(text == null ? "" : text);
+    s = s.replace(/\\\|/g, "|");
+    s = s.replace(/!\[([^\]]*)\]\(([^)]+)\)/g, "$1");
+    s = s.replace(/\[([^\]]+)\]\(([^)]+)\)/g, "$1");
+    s = s.replace(/`([^`]+)`/g, "$1");
+    s = s.replace(/\*\*([^*]+)\*\*/g, "$1");
+    s = s.replace(/__([^_]+)__/g, "$1");
+    s = s.replace(/\*([^*]+)\*/g, "$1");
+    s = s.replace(/_([^_]+)_/g, "$1");
+    s = s.replace(/~~([^~]+)~~/g, "$1");
+    return s;
+  }
+
+  function isMarkdownHeadingLine(line) {
+    return /^\s*#{1,6}\s+/.test(String(line || ""));
+  }
+
+  function isMarkdownTableSeparatorLine(line) {
+    const s = String(line || "").trim();
+    if (!s) return false;
+    return /^\|?\s*:?-{3,}:?\s*(\|\s*:?-{3,}:?\s*)+\|?\s*$/.test(s);
+  }
+
+  function countChar(str, ch) {
+    const s = String(str || "");
+    let n = 0;
+    for (let i = 0; i < s.length; i += 1) {
+      if (s[i] === ch) n += 1;
+    }
+    return n;
+  }
+
+  function isMarkdownTableRowCandidate(line) {
+    const s = String(line || "");
+    if (!s.includes("|")) return false;
+    return countChar(s, "|") >= 2;
+  }
+
+  function splitMarkdownCells(line) {
+    let s = String(line || "").trim();
+    if (!s) return [];
+    if (s.startsWith("|")) s = s.slice(1);
+    if (s.endsWith("|")) s = s.slice(0, -1);
+
+    const cells = [];
+    let cur = "";
+    for (let i = 0; i < s.length; i += 1) {
+      const ch = s[i];
+      const prev = i > 0 ? s[i - 1] : "";
+      if (ch === "|" && prev !== "\\") {
+        cells.push(cur);
+        cur = "";
+        continue;
+      }
+      cur += ch;
+    }
+    cells.push(cur);
+
+    return cells
+      .map((c) => stripInlineMarkdown(c).replace(/\\\|/g, "|"))
+      .map((c) => String(c || "").replace(/\s+/g, " ").trim());
+  }
+
+  function isMarkdownTableHeaderRow(cells) {
+    const list = Array.isArray(cells) ? cells : [];
+    if (!list.length) return false;
+    const joined = list.join(" ").toLowerCase();
+    if (joined.includes("词性") || joined.includes("pos")) {
+      if (joined.includes("释义") || joined.includes("meaning")) return true;
+    }
+    return false;
+  }
+
+  function parseMarkdownListItemLine(line) {
+    const raw = String(line || "");
+    const m = raw.match(/^\s*[-*+]\s+(.+)$/);
+    if (!m) return null;
+    const content = cleanRawLine(m[1]);
+    if (!content) return null;
+
+    if (content.includes("|") && countChar(content, "|") >= 2) {
+      const cells = splitMarkdownCells(content);
+      if (cells.length < 3) return null;
+      const term = normalizeTerm(cells[0]);
+      const pos = normalizeTerm(cells[1]);
+      const meaning = normalizeMeaning(cells[2]);
+      if (!term || !meaning) return null;
+      return { term, pos, meaning };
+    }
+
+    const m2 = content.match(/^(.+?)\s*[:：]\s*(.+)$/);
+    if (m2) {
+      const term = normalizeTerm(stripInlineMarkdown(m2[1]));
+      const meaning = normalizeMeaning(stripInlineMarkdown(m2[2]));
+      if (!term || !meaning) return null;
+      return { term, pos: "", meaning };
+    }
+
+    return null;
+  }
+
+  function parseMarkdownText(inputText) {
+    const rawLines = splitLines(String(inputText || ""));
+    const words = [];
+
+    for (let i = 0; i < rawLines.length; i += 1) {
+      const s = cleanRawLine(rawLines[i]);
+      if (!s) continue;
+      if (isMarkdownHeadingLine(s)) continue;
+      if (isMarkdownTableSeparatorLine(s)) continue;
+
+      const listItemWord = parseMarkdownListItemLine(s);
+      if (listItemWord) {
+        words.push(listItemWord);
+        continue;
+      }
+
+      if (!isMarkdownTableRowCandidate(s)) continue;
+
+      const next = i + 1 < rawLines.length ? cleanRawLine(rawLines[i + 1]) : "";
+      if (next && isMarkdownTableSeparatorLine(next)) {
+        i += 1;
+        continue;
+      }
+
+      const cells = splitMarkdownCells(s);
+      if (cells.length < 3) continue;
+      if (isMarkdownTableHeaderRow(cells)) continue;
+
+      const term = normalizeTerm(cells[0]);
+      const pos = normalizeTerm(cells[1]);
+      const meaning = normalizeMeaning(cells[2]);
+      if (!term || !meaning) continue;
+
+      words.push({ term, pos, meaning });
+    }
+
+    return {
+      words,
+      stats: {
+        totalLines: rawLines.length,
+        parsedLines: words.length,
+        skippedLines: Math.max(0, rawLines.length - words.length),
+      },
+    };
+  }
+
+  function isLikelyMarkdown(inputText) {
+    const rawLines = splitLines(String(inputText || ""));
+    let pipeRowCount = 0;
+    let hasLeadingPipeRow = false;
+
+    for (const line of rawLines) {
+      const s = String(line || "");
+      if (!s.trim()) continue;
+      if (isMarkdownTableSeparatorLine(s)) return true;
+      if (/^\s*[-*+]\s+.+\|.+\|.+/.test(s)) return true;
+      if (isMarkdownTableRowCandidate(s)) {
+        pipeRowCount += 1;
+        if (/^\s*\|/.test(s)) hasLeadingPipeRow = true;
+      }
+      if (pipeRowCount >= 2 && hasLeadingPipeRow) return true;
+    }
+
+    return false;
+  }
+
   function buildLexiconObject(meta, words) {
     const name = String(meta && meta.name != null ? meta.name : "").trim();
     const description = String(meta && meta.description != null ? meta.description : "").trim();
@@ -186,6 +354,8 @@
   LexiForge.Parser = {
     POS_TOKENS,
     parseText,
+    parseMarkdownText,
+    isLikelyMarkdown,
     buildLexiconObject,
   };
 })();
