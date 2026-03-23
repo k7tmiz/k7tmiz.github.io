@@ -773,6 +773,7 @@ select:hover {
   gap: 10px;
   text-align: center;
   user-select: none;
+  -webkit-user-select: none;
   touch-action: pan-y;
   position: relative;
   -webkit-user-drag: none;
@@ -786,6 +787,11 @@ select:hover {
   transition:
     transform 220ms cubic-bezier(0.2, 0.9, 0.25, 1),
     opacity 220ms cubic-bezier(0.2, 0.9, 0.25, 1);
+}
+
+.review-card,
+.review-card * {
+  -webkit-user-drag: none;
 }
 
 .review-card.is-dragging {

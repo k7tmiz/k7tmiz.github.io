@@ -9,7 +9,7 @@ A pure front-end vocabulary tool based on the “A4 paper memory method”. Word
 ## Features
 
 - A4 random layout with collision avoidance
-- “Review this round”: a dedicated entry to review the current A4 (shuffled by default, can restore order; swipe to mark: right = Mastered, left = Unknown, supports touch and desktop mouse drag; clicking the term speaks in both normal and flip modes; optional “click card to flip” mode — front: click the term to speak, click non-term area to flip; back: click anywhere to flip back; auto-closes the review modal on completion by default, configurable in Settings)
+- “Review this round”: a dedicated entry to review the current A4 (shuffled by default, can restore order; swipe/drag to mark: right = Mastered, left = Unknown, supports touch + desktop mouse drag; if not committed, the card smoothly snaps back to center with all transient states cleared; supports quick flick commits; clicking the term speaks in both normal and flip modes; optional “click card to flip” mode — front: click the term to speak, click non-term area to flip; back: click anywhere to flip back; auto-closes the review modal on completion by default, configurable in Settings)
 - Per-round de-dup: within a round, it avoids adding the same “term + meaning” entry twice
 - Configurable round cap (20–30), start next round or review the current round when full
 - Meaning toggle, immersive mode, theme modes (Auto/Light/Dark)
@@ -54,7 +54,7 @@ Open: http://localhost:8080/
 ### 3) Basic flow
 
 - Home: “Next word” → add a word and auto-open the review modal (the new word is pinned to the first position)
-- Home: “Review this round” anytime, and mark learning status (swipe right = Mastered, swipe left = Unknown; touch + mouse drag)
+- Home: “Review this round” anytime, and mark learning status (swipe/drag right = Mastered, left = Unknown; if not committed it snaps back to center; touch + mouse drag)
 - Records:
   - Round view: A4 preview + per-round CSV/PDF export + jump back to review
   - Status view: group by status/due and generate a review round

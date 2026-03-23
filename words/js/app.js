@@ -1493,6 +1493,7 @@ function openAutoReviewModal(pinnedRoundItem) {
 }
 
 function closeReviewModal() {
+  resetReviewToCenter({ hard: true })
   setModalVisible(dom.reviewModal, false)
   dom.reviewCard.classList.remove("is-flipped")
   dom.reviewCard.classList.remove("is-dragging")
@@ -1502,6 +1503,7 @@ function closeReviewModal() {
   dom.reviewCard.style.removeProperty("--swipe-opacity")
   dom.reviewCard.style.removeProperty("--swipe-right-alpha")
   dom.reviewCard.style.removeProperty("--swipe-left-alpha")
+  dom.reviewCard.style.removeProperty("transition")
   document.body.classList.remove("no-select")
 }
 
@@ -2337,30 +2339,44 @@ dom.reviewCardTerm.addEventListener("click", (e) => {
 
 let reviewBlockClickUntil = 0
 const reviewSwipe = {
+  state: "idle",
   active: false,
   dragging: false,
+  animating: false,
   pointerId: null,
+  pointerType: "",
   startX: 0,
   startY: 0,
   dx: 0,
   dy: 0,
-  animating: false,
+  lastMoveX: 0,
+  lastMoveT: 0,
+  vx: 0,
   raf: 0,
+  settleTimer: 0,
 }
 
 function cleanupReviewPointerListeners() {
-  window.removeEventListener("pointermove", onReviewPointerMove)
-  window.removeEventListener("pointerup", onReviewPointerUp)
-  window.removeEventListener("pointercancel", onReviewPointerCancel)
+  window.removeEventListener("pointermove", onReviewPointerMove, true)
+  window.removeEventListener("pointerup", onReviewPointerUp, true)
+  window.removeEventListener("pointercancel", onReviewPointerCancel, true)
 }
 
-function cancelReviewSwipe() {
-  reviewSwipe.active = false
-  reviewSwipe.dragging = false
-  reviewSwipe.pointerId = null
-  cleanupReviewPointerListeners()
-  dom.reviewCard.classList.remove("is-dragging")
-  document.body.classList.remove("no-select")
+function clearReviewSwipeRaf() {
+  if (reviewSwipe.raf) cancelAnimationFrame(reviewSwipe.raf)
+  reviewSwipe.raf = 0
+}
+
+function clearReviewSwipeSettleTimer() {
+  if (reviewSwipe.settleTimer) window.clearTimeout(reviewSwipe.settleTimer)
+  reviewSwipe.settleTimer = 0
+}
+
+function setReviewSwipeState(next) {
+  reviewSwipe.state = String(next || "idle")
+  reviewSwipe.active = reviewSwipe.state !== "idle"
+  reviewSwipe.dragging = reviewSwipe.state === "dragging"
+  reviewSwipe.animating = reviewSwipe.state === "resetting-center" || reviewSwipe.state === "animating-out"
 }
 
 function getReviewCardWidth() {
@@ -2368,24 +2384,59 @@ function getReviewCardWidth() {
   return Math.max(1, rect.width || 1)
 }
 
-function applyReviewSwipeVisual(dx) {
+function getReviewSwipeConfig(pointerType) {
+  const isMouse = String(pointerType || "") === "mouse"
+  return {
+    isMouse,
+    startDistancePx: isMouse ? 4 : 7,
+    directionLockRatio: isMouse ? 1.1 : 1.3,
+    directionCancelRatio: isMouse ? 1.45 : 1.65,
+    commitRatio: isMouse ? 0.18 : 0.26,
+    commitMinPx: isMouse ? 44 : 60,
+    velocityCommitPxPerMs: isMouse ? 0.85 : 0.6,
+    maxRotDeg: isMouse ? 13 : 12,
+    rubberBandResistance: isMouse ? 0.58 : 0.48,
+  }
+}
+
+function rubberBandClamp(dx, maxAbs, resistance) {
+  const max = Math.max(0, Number(maxAbs) || 0)
+  const r = Math.max(0, Math.min(1, Number(resistance) || 0))
+  const x = Number(dx) || 0
+  const ax = Math.abs(x)
+  if (ax <= max) return x
+  const extra = ax - max
+  return Math.sign(x) * (max + extra * r)
+}
+
+function applyReviewSwipeVisual({ dx, pointerType }) {
   const w = getReviewCardWidth()
-  const maxRot = 12
-  const threshold = Math.max(60, w * 0.26)
-  const prog = clamp(Math.abs(dx) / threshold, 0, 1)
-  const rot = clamp((dx / w) * maxRot, -maxRot, maxRot)
-  const opacity = 1 - prog * 0.15
-  dom.reviewCard.style.setProperty("--swipe-x", `${dx.toFixed(1)}px`)
+  const cfg = getReviewSwipeConfig(pointerType)
+  const commitDist = Math.max(cfg.commitMinPx, w * cfg.commitRatio)
+  const maxPreview = Math.max(40, w * 0.95)
+  const x = rubberBandClamp(dx, maxPreview, cfg.rubberBandResistance)
+  const prog = clamp(Math.abs(x) / commitDist, 0, 1)
+  const rot = clamp((x / w) * cfg.maxRotDeg, -cfg.maxRotDeg, cfg.maxRotDeg)
+  const opacity = 1 - prog * 0.18
+  dom.reviewCard.style.setProperty("--swipe-x", `${x.toFixed(1)}px`)
   dom.reviewCard.style.setProperty("--swipe-rot", `${rot.toFixed(2)}deg`)
   dom.reviewCard.style.setProperty("--swipe-opacity", String(opacity.toFixed(3)))
-  dom.reviewCard.style.setProperty("--swipe-right-alpha", dx > 0 ? String(prog.toFixed(3)) : "0")
-  dom.reviewCard.style.setProperty("--swipe-left-alpha", dx < 0 ? String(prog.toFixed(3)) : "0")
+  dom.reviewCard.style.setProperty("--swipe-right-alpha", x > 0 ? String(prog.toFixed(3)) : "0")
+  dom.reviewCard.style.setProperty("--swipe-left-alpha", x < 0 ? String(prog.toFixed(3)) : "0")
+}
+
+function setReviewSwipeTransition({ durationMs } = {}) {
+  const d = clamp(Math.round(Number(durationMs) || 0), 80, 420)
+  const easing = "cubic-bezier(0.2, 0.9, 0.25, 1)"
+  dom.reviewCard.style.transition = `transform ${d}ms ${easing}, opacity ${d}ms ${easing}`
+}
+
+function clearReviewSwipeTransition() {
+  dom.reviewCard.style.transition = ""
 }
 
 function resetReviewSwipeVisual({ hard } = {}) {
-  if (hard) {
-    dom.reviewCard.style.transition = "none"
-  }
+  if (hard) dom.reviewCard.style.transition = "none"
   dom.reviewCard.style.setProperty("--swipe-x", "0px")
   dom.reviewCard.style.setProperty("--swipe-rot", "0deg")
   dom.reviewCard.style.setProperty("--swipe-opacity", "1")
@@ -2393,8 +2444,78 @@ function resetReviewSwipeVisual({ hard } = {}) {
   dom.reviewCard.style.setProperty("--swipe-left-alpha", "0")
   if (hard) {
     void dom.reviewCard.offsetHeight
-    dom.reviewCard.style.transition = ""
+    clearReviewSwipeTransition()
   }
+}
+
+function cleanupReviewSwipeCore() {
+  cleanupReviewPointerListeners()
+  clearReviewSwipeRaf()
+  clearReviewSwipeSettleTimer()
+  reviewSwipe.pointerId = null
+  reviewSwipe.pointerType = ""
+  reviewSwipe.startX = 0
+  reviewSwipe.startY = 0
+  reviewSwipe.dx = 0
+  reviewSwipe.dy = 0
+  reviewSwipe.lastMoveX = 0
+  reviewSwipe.lastMoveT = 0
+  reviewSwipe.vx = 0
+  dom.reviewCard.classList.remove("is-dragging")
+  document.body.classList.remove("no-select")
+}
+
+function resetReviewToCenter({ hard } = {}) {
+  cleanupReviewPointerListeners()
+  clearReviewSwipeRaf()
+  clearReviewSwipeSettleTimer()
+  dom.reviewCard.classList.remove("is-dragging")
+  document.body.classList.remove("no-select")
+  setReviewSwipeState("resetting-center")
+  if (hard) {
+    resetReviewSwipeVisual({ hard: true })
+    cleanupReviewSwipeCore()
+    setReviewSwipeState("idle")
+    return
+  }
+  setReviewSwipeTransition({ durationMs: 200 })
+  resetReviewSwipeVisual()
+  reviewBlockClickUntil = Date.now() + 260
+  reviewSwipe.settleTimer = window.setTimeout(() => {
+    clearReviewSwipeTransition()
+    cleanupReviewSwipeCore()
+    setReviewSwipeState("idle")
+  }, 240)
+}
+
+function commitReviewSwipe(dir, { fromPointerType } = {}) {
+  const d = dir >= 0 ? 1 : -1
+  cleanupReviewPointerListeners()
+  clearReviewSwipeRaf()
+  clearReviewSwipeSettleTimer()
+  dom.reviewCard.classList.remove("is-dragging")
+  document.body.classList.remove("no-select")
+  setReviewSwipeState("animating-out")
+  reviewBlockClickUntil = Date.now() + 420
+
+  const w = getReviewCardWidth()
+  const outX = d * (w * 1.35 + 90)
+  const outRot = d * (String(fromPointerType || "") === "mouse" ? 18 : 16)
+  setReviewSwipeTransition({ durationMs: 220 })
+  dom.reviewCard.style.setProperty("--swipe-right-alpha", d > 0 ? "1" : "0")
+  dom.reviewCard.style.setProperty("--swipe-left-alpha", d < 0 ? "1" : "0")
+  dom.reviewCard.style.setProperty("--swipe-x", `${outX.toFixed(0)}px`)
+  dom.reviewCard.style.setProperty("--swipe-rot", `${outRot.toFixed(0)}deg`)
+  dom.reviewCard.style.setProperty("--swipe-opacity", "0")
+
+  const status = d > 0 ? STATUS_MASTERED : STATUS_UNKNOWN
+  reviewSwipe.settleTimer = window.setTimeout(() => {
+    resetReviewSwipeVisual({ hard: true })
+    clearReviewSwipeTransition()
+    cleanupReviewSwipeCore()
+    setReviewSwipeState("idle")
+    advanceReview(status)
+  }, 260)
 }
 
 dom.reviewCard.addEventListener("click", (e) => {
@@ -2415,108 +2536,131 @@ dom.reviewCard.addEventListener("click", (e) => {
   renderReviewCard()
 })
 
+dom.reviewCard.addEventListener("dragstart", (e) => {
+  e.preventDefault()
+})
+
 dom.reviewCard.addEventListener("pointerdown", (e) => {
   if (reviewSwipe.animating) return
   if (e.pointerType === "mouse" && e.button !== 0) return
   if (!isModalOpen(dom.reviewModal)) return
-  if (reviewSwipe.active) cancelReviewSwipe()
-  reviewSwipe.active = true
-  reviewSwipe.dragging = false
+  if (reviewSwipe.active) resetReviewToCenter({ hard: true })
   reviewSwipe.pointerId = e.pointerId
+  reviewSwipe.pointerType = String(e.pointerType || "")
   reviewSwipe.startX = e.clientX
   reviewSwipe.startY = e.clientY
   reviewSwipe.dx = 0
   reviewSwipe.dy = 0
-  window.addEventListener("pointermove", onReviewPointerMove, { passive: false })
-  window.addEventListener("pointerup", onReviewPointerUp)
-  window.addEventListener("pointercancel", onReviewPointerCancel)
+  reviewSwipe.lastMoveX = e.clientX
+  reviewSwipe.lastMoveT = performance.now ? performance.now() : Date.now()
+  reviewSwipe.vx = 0
+  setReviewSwipeState("pointer-down")
+  try {
+    dom.reviewCard.setPointerCapture?.(e.pointerId)
+  } catch (err) {}
+  window.addEventListener("pointermove", onReviewPointerMove, { passive: false, capture: true })
+  window.addEventListener("pointerup", onReviewPointerUp, { capture: true })
+  window.addEventListener("pointercancel", onReviewPointerCancel, { capture: true })
 })
 
 function onReviewPointerMove(e) {
   if (!reviewSwipe.active) return
   if (reviewSwipe.pointerId !== e.pointerId) return
-  const dx = e.clientX - reviewSwipe.startX
-  const dy = e.clientY - reviewSwipe.startY
+  if (reviewSwipe.animating) return
+
+  const x = e.clientX
+  const y = e.clientY
+  const dx = x - reviewSwipe.startX
+  const dy = y - reviewSwipe.startY
   reviewSwipe.dx = dx
   reviewSwipe.dy = dy
 
-  if (!reviewSwipe.dragging) {
-    if (Math.abs(dx) < 10 && Math.abs(dy) < 10) return
-    if (Math.abs(dy) > Math.abs(dx) * 1.25) {
-      cancelReviewSwipe()
+  const nowT = performance.now ? performance.now() : Date.now()
+  const dt = Math.max(1, nowT - (reviewSwipe.lastMoveT || nowT))
+  const instVx = (x - (reviewSwipe.lastMoveX || x)) / dt
+  reviewSwipe.vx = Number.isFinite(instVx) ? reviewSwipe.vx * 0.78 + instVx * 0.22 : reviewSwipe.vx
+  reviewSwipe.lastMoveX = x
+  reviewSwipe.lastMoveT = nowT
+
+  const cfg = getReviewSwipeConfig(reviewSwipe.pointerType)
+  const absX = Math.abs(dx)
+  const absY = Math.abs(dy)
+
+  if (reviewSwipe.state === "pointer-down" || reviewSwipe.state === "maybe-drag") {
+    if (absX < cfg.startDistancePx && absY < cfg.startDistancePx) return
+    setReviewSwipeState("maybe-drag")
+
+    if (absY > absX * cfg.directionCancelRatio && absY > cfg.startDistancePx * 1.2) {
+      resetReviewToCenter({ hard: true })
+      setReviewSwipeState("idle")
       return
     }
-    if (Math.abs(dx) <= Math.abs(dy) * 1.05) return
-    reviewSwipe.dragging = true
-    reviewBlockClickUntil = Date.now() + 900
-    document.body.classList.add("no-select")
-    dom.reviewCard.classList.add("is-dragging")
+
+    if (absX >= absY * cfg.directionLockRatio) {
+      setReviewSwipeState("dragging")
+      reviewBlockClickUntil = Date.now() + (cfg.isMouse ? 480 : 360)
+      document.body.classList.add("no-select")
+      dom.reviewCard.classList.add("is-dragging")
+    } else {
+      return
+    }
   }
 
+  if (reviewSwipe.state !== "dragging") return
   e.preventDefault()
+
   if (reviewSwipe.raf) return
   reviewSwipe.raf = requestAnimationFrame(() => {
     reviewSwipe.raf = 0
-    applyReviewSwipeVisual(reviewSwipe.dx)
+    applyReviewSwipeVisual({ dx: reviewSwipe.dx, pointerType: reviewSwipe.pointerType })
   })
 }
 
-function endReviewSwipe({ commit } = {}) {
+function finishReviewSwipe({ commit } = {}) {
+  if (reviewSwipe.animating) return
   cleanupReviewPointerListeners()
+  clearReviewSwipeRaf()
+  clearReviewSwipeSettleTimer()
 
-  if (!reviewSwipe.dragging) {
-    reviewSwipe.active = false
-    reviewSwipe.pointerId = null
+  if (reviewSwipe.state !== "dragging") {
+    cleanupReviewSwipeCore()
+    setReviewSwipeState("idle")
     return
   }
 
-  reviewSwipe.active = false
-  reviewSwipe.dragging = false
   dom.reviewCard.classList.remove("is-dragging")
   document.body.classList.remove("no-select")
 
-  const dx = reviewSwipe.dx
+  const cfg = getReviewSwipeConfig(reviewSwipe.pointerType)
   const w = getReviewCardWidth()
-  const threshold = Math.max(60, w * 0.26)
-  const shouldCommit = !!commit && Math.abs(dx) >= threshold
+  const commitDist = Math.max(cfg.commitMinPx, w * cfg.commitRatio)
+  const dx = Number(reviewSwipe.dx) || 0
+  const vx = Number(reviewSwipe.vx) || 0
+  const dir = dx === 0 ? (vx >= 0 ? 1 : -1) : dx >= 0 ? 1 : -1
 
+  const absDx = Math.abs(dx)
+  const absVx = Math.abs(vx)
+  const fastEnough = absVx >= cfg.velocityCommitPxPerMs && absDx >= Math.max(cfg.startDistancePx * 2, commitDist * 0.35)
+  const farEnough = absDx >= commitDist
+
+  const shouldCommit = !!commit && (farEnough || fastEnough)
   if (!shouldCommit) {
-    resetReviewSwipeVisual()
-    reviewSwipe.pointerId = null
-    reviewSwipe.active = false
+    setReviewSwipeState("resetting-center")
+    resetReviewToCenter()
     return
   }
 
-  const dir = dx >= 0 ? 1 : -1
-  const status = dir > 0 ? STATUS_MASTERED : STATUS_UNKNOWN
-  reviewSwipe.animating = true
-  reviewBlockClickUntil = Date.now() + 1200
-  dom.reviewCard.style.setProperty("--swipe-right-alpha", dir > 0 ? "1" : "0")
-  dom.reviewCard.style.setProperty("--swipe-left-alpha", dir < 0 ? "1" : "0")
-
-  const outX = dir * (w * 1.2 + 80)
-  const outRot = dir * 16
-  dom.reviewCard.style.setProperty("--swipe-x", `${outX.toFixed(0)}px`)
-  dom.reviewCard.style.setProperty("--swipe-rot", `${outRot.toFixed(0)}deg`)
-  dom.reviewCard.style.setProperty("--swipe-opacity", "0")
-
-  window.setTimeout(() => {
-    resetReviewSwipeVisual({ hard: true })
-    reviewSwipe.animating = false
-    reviewSwipe.pointerId = null
-    reviewSwipe.active = false
-    advanceReview(status)
-  }, 240)
+  commitReviewSwipe(dir, { fromPointerType: reviewSwipe.pointerType })
 }
 
 function onReviewPointerUp(e) {
   if (reviewSwipe.pointerId != null && reviewSwipe.pointerId !== e.pointerId) return
-  endReviewSwipe({ commit: true })
+  finishReviewSwipe({ commit: true })
 }
 
 function onReviewPointerCancel(e) {
   if (reviewSwipe.pointerId != null && reviewSwipe.pointerId !== e.pointerId) return
-  endReviewSwipe({ commit: false })
+  finishReviewSwipe({ commit: false })
 }
 
 dom.shuffleBtn.addEventListener("click", () => {
