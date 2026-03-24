@@ -692,6 +692,7 @@ select:hover {
   margin-top: 10px;
   display: grid;
   gap: 10px;
+  min-width: 0;
 }
 
 .import-help-card {
@@ -699,6 +700,7 @@ select:hover {
   background: var(--card2);
   border-radius: 12px;
   padding: 10px;
+  min-width: 0;
 }
 
 .import-help-card-title {
@@ -722,6 +724,8 @@ select:hover {
   line-height: 1.35;
   overflow: auto;
   white-space: pre;
+  max-width: 100%;
+  box-sizing: border-box;
 }
 
 .paper-wrap {
@@ -832,6 +836,7 @@ select:hover {
   display: grid;
   place-items: center;
   padding: 18px;
+  padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
 }
 
 .modal-backdrop {
@@ -843,6 +848,7 @@ select:hover {
 .modal-panel {
   position: relative;
   width: min(92vw, 560px);
+  max-width: calc(100vw - 36px);
   max-height: min(80vh, 680px);
   background: var(--card);
   border-radius: 14px;
@@ -878,6 +884,7 @@ select:hover {
   display: flex;
   flex-direction: column;
   gap: 12px;
+  min-width: 0;
 }
 
 .review-meta {
