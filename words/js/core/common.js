@@ -334,6 +334,101 @@
     return { key: k, status, sourceRoundNo, lastReviewedAt, nextReviewAt, reviewSystemEnabled: !!reviewSystemEnabled }
   }
 
+  // ── Defaults ────────────────────────────────────────────────────────────────
+
+  const DEFAULTS = {
+    reviewSystemEnabled: true,
+    reviewAutoCloseModal: true,
+    reviewCardFlipEnabled: false,
+    reviewIntervals: { unknownDays: 1, learningDays: 3, masteredDays: 7 },
+    pronunciationEnabled: true,
+    pronunciationAccent: "auto",
+    pronunciationLang: "auto",
+    voiceMode: "auto",
+    lookupOnlineEnabled: true,
+    lookupOnlineSource: "builtin",
+    lookupLangMode: "auto",
+    lookupSpanishConjugationEnabled: true,
+    lookupCacheEnabled: true,
+    lookupCacheDays: 30,
+    roundCap: 30,
+    dailyGoalRounds: 0,
+    dailyGoalWords: 0,
+  }
+
+  // ── Modal utility ────────────────────────────────────────────────────────────
+
+  function setModalVisible(modal, visible) {
+    if (!modal) return
+    if (visible) {
+      modal.classList.remove("hidden")
+      modal.setAttribute("aria-hidden", "false")
+    } else {
+      modal.classList.add("hidden")
+      modal.setAttribute("aria-hidden", "true")
+    }
+  }
+
+  // ── Word formatting ──────────────────────────────────────────────────────────
+
+  function formatMeaning(word) {
+    const pos = String(word?.pos || "").trim()
+    const meaning = String(word?.meaning || "").trim()
+    if (!meaning) return ""
+    if (!pos) return meaning
+    return `${pos} ${meaning}`
+  }
+
+  // ── Round / page helpers ────────────────────────────────────────────────────
+
+  function getRoundLastPageIndex(round) {
+    const items = Array.isArray(round?.items) ? round.items : []
+    let max = 0
+    for (const it of items) {
+      const pi = Number(it?.pageIndex)
+      if (Number.isFinite(pi) && pi > max) max = pi
+    }
+    return max
+  }
+
+  function getRoundItemCountOnPage(round, pageIndex) {
+    const idx = Math.max(0, Math.floor(Number(pageIndex) || 0))
+    const items = Array.isArray(round?.items) ? round.items : []
+    return items.filter((it) => {
+      const pi = Number(it?.pageIndex)
+      if (!Number.isFinite(pi)) return idx === 0
+      return Math.floor(pi) === idx
+    }).length
+  }
+
+  function isPageFull(round, pageIndex, cap) {
+    return getRoundItemCountOnPage(round, pageIndex) >= (cap || 30)
+  }
+
+  function getNextPageIndex(round) {
+    return getRoundLastPageIndex(round) + 1
+  }
+
+  // ── Dedup ───────────────────────────────────────────────────────────────────
+
+  function isDuplicateInRound(round, word, options) {
+    const opts = options || {}
+    const checkWholeRound = !!opts.checkWholeRound
+    const key = getWordKey(word)
+    if (!key) return false
+    const items = Array.isArray(round?.items) ? round.items : []
+    if (checkWholeRound) {
+      return items.some((it) => getWordKey(it?.word) === key)
+    }
+    const lastPage = getRoundLastPageIndex(round)
+    return items.some((it) => {
+      const itKey = getWordKey(it?.word)
+      if (itKey !== key) return false
+      const pi = Number(it?.pageIndex)
+      return !Number.isFinite(pi) ? lastPage === 0 : pi === lastPage
+    })
+  }
+
   window.A4Common = {
     clamp,
     STATUS_MASTERED,
@@ -370,5 +465,13 @@
     dedupeAndSortLookupResults,
     buildFirstSeenRoundMap,
     normalizeLookupRecordMeta,
+    DEFAULTS,
+    setModalVisible,
+    formatMeaning,
+    getRoundLastPageIndex,
+    getRoundItemCountOnPage,
+    isPageFull,
+    getNextPageIndex,
+    isDuplicateInRound,
   }
 })()

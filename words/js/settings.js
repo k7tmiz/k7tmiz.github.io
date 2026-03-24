@@ -1,5 +1,5 @@
 ;(function () {
-  const clamp = (n, min, max) => Math.max(min, Math.min(max, n))
+  const clamp = window.A4Common?.clamp
 
   const normalizeThemeMode = window.A4Common?.normalizeThemeMode
   const normalizeRoundCap = window.A4Common?.normalizeRoundCap
@@ -7,16 +7,7 @@
   const normalizeVoiceMode = window.A4Common?.normalizeVoiceMode
   const normalizePronunciationLang = window.A4Common?.normalizePronunciationLang
   const normalizeAiProvider = window.A4Common?.normalizeAiProvider
-
-  const STATUS_MASTERED = "mastered"
-  const STATUS_LEARNING = "learning"
-  const STATUS_UNKNOWN = "unknown"
-
-  function normalizeStatus(value) {
-    const v = String(value || "").trim().toLowerCase()
-    if (v === STATUS_MASTERED || v === STATUS_LEARNING || v === STATUS_UNKNOWN) return v
-    return STATUS_UNKNOWN
-  }
+  const normalizeStatus = window.A4Common?.normalizeStatus
 
   function normalizeReviewIntervals(raw) {
     const base = raw && typeof raw === "object" ? raw : {}

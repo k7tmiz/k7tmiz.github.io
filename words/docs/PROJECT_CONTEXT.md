@@ -54,7 +54,15 @@ A4-Memory
 ## 4) 模块职责边界（真实实现）
 
 - `js/core/common.js`
-  - 跨页面共享的轻量常量与纯工具函数（状态/轮次/时间/分页/学习统计、若干设置归一化、AI provider 归一化、全局最新状态聚合）
+  - 跨页共享的纯逻辑模块（无 DOM），是唯一业务逻辑源。包含：
+    - 状态/轮次类型归一化与常量（`normalizeStatus`/`normalizeRoundType` 等）
+    - 全局最新状态聚合（`buildLatestTermMap`/`buildFirstSeenRoundMap`）
+    - round/page 去重与分页：`isDuplicateInRound`/`isPageFull`/`getRoundLastPageIndex`/`getNextPageIndex`/`getRoundItemCountOnPage` 等
+    - 查词评分与排序（`scoreLookupMatch`/`dedupeAndSortLookupResults`）
+    - 时间/日期格式化（`formatDateTime`/`toLocalDateKey`/`parseIsoTime`）
+    - 公共工具（`clamp`/`setModalVisible`/`formatMeaning`）
+    - 设置项默认值（`DEFAULTS` 常量）
+    - 若干 normalize 归一化函数（theme/accent/voice/pronunciationLang/AI provider 等）
 - `js/utils.js`
   - 下载工具与文件名清洗：`downloadTextFile/downloadJsonFile/downloadBlob/sanitizeFilename`
 - `js/storage.js`
@@ -65,32 +73,31 @@ A4-Memory
   - 查词弹窗控制器（首页/记录页复用）与 provider 调度
   - 本地结果：当前/本地词书 + 学习记录聚合（最新状态、首次出现轮次、复习时间）
   - 联网补充（builtin）
-    - 英文（en）：先用 MyMemory 免费翻译补充中文释义（`https://api.mymemory.translated.net/get?q={word}&langpair=en|zh-CN`），再用 dictionaryapi.dev 获取英文解释；展示顺序为“中文在上 / 英文在下”
+    - 英文（en）：先用 MyMemory 免费翻译补充中文释义，再用 dictionaryapi.dev 获取英文解释；展示顺序为”中文在上 / 英文在下”
     - 西语（es）：使用 dictionaryapi.dev
     - 降级：中文翻译失败仍显示英文解释；英文解释失败仍显示中文；不允许两者皆失败导致空内容
-    - 缓存：使用 `localStorage` 的 `a4-memory:lookup-cache:v1`，按 `lookupCacheDays` 控制 TTL；当缓存缺少英文查词的中文字段时会自动重拉补齐
-  - 联网补充（custom）：可切换为自定义 API（复用现有 `aiConfig` 的 provider/baseUrl/apiKey/model，OpenAI 风格 `chat/completions`），失败不阻塞本地结果
-  - 语言选择：查词弹窗支持 `auto/en/es`，用于明确在线补充语言与西语变位触发
+    - 缓存：使用 `localStorage` 的 `a4-memory:lookup-cache:v1`，按 `lookupCacheDays` 控制 TTL
+  - 联网补充（custom）：可切换为自定义 API（复用现有 `aiConfig` 的 provider/baseUrl/apiKey/model），失败不阻塞本地结果
+  - 语言选择：查词弹窗支持 `auto/en/es`
   - 西语动词变位：本地生成主要变位（现在时/过去时/未完成过去时/将来时/条件式）
-    - 触发：语言为 `es` 时强制展示；`auto` 时仅在输入看起来像“西语动词/动词形态”才展示，避免非西语动词误触发
-    - 变位：规则引擎覆盖常见“变干/拼写变化/特殊 yo/不规则词干”，并对少量必须的动词做完整不规则表兜底
-  - 加入当前轮：每条查词结果卡片顶部提供“加入当前轮”主按钮（主操作）；加入后按现有“新增单词”流程自动打开复习弹窗（新词置顶）；若本轮已存在则不重复加入，并在弹窗内给出轻量提示（toast）
+  - 加入当前轮：每条查词结果卡片顶部提供主按钮；加入后按”新增单词”流程自动打开复习弹窗（新词置顶）；若已存在则不重复加入并给出轻量提示
 - `js/settings.js`
   - 设置弹窗与 AI 词书生成流程（必要时注入 modal DOM）
   - 负责把设置写回调用方提供的 `persist()`，并提供 `onAfterChange` 通知
-  - 依赖 `A4Storage/A4Utils/A4Speech`，不重复实现通用能力
+  - 依赖 `A4Common/A4Storage/A4Utils/A4Speech`，不重复实现通用能力
 - `js/app.js`
-  - 首页学习流程：取词、A4 排版、复习弹窗、轮次推进、词书导入管理、状态恢复/保存
-- 词书语言：词书按 `language` 维度组织；当 `pronunciationLang != auto` 时，首页词书下拉会优先显示该语言下的词书并用于抽词/查词加入；`pronunciationLang=auto` 时会跟随所选词书 `language`
-  - 线上导入：从指定 GitHub 词库仓库拉取 `.json` 列表并展示给用户选择，再按所选 JSON 导入（英语/西班牙语）
-    - 命名：优先使用词书 JSON 的 `name/title`；缺失时回退为 JSON 文件名并自动去重
-  - 西语词形补全：当发音语言为西班牙语且词条为“逗号后缀简写”（如 `antiguo,gua`），会在发音前扩展为完整两种形式（`antiguo, antigua`）
-  - 复习弹窗：每次打开默认打乱顺序（可手动恢复顺序）；支持左右滑动标记（右滑=已掌握，左滑=不会，触摸/鼠标拖拽均可）；可选开启“点击卡片翻面”（默认关闭，避免影响老用户体验）
-    - 手机端 UI：复习按钮为两行布局（已掌握/学习中一排，不会居中单独一排）
-  - 多页 A4 翻页：只渲染当前页（`pageIndex === currentPageIndex`）
+  - 首页 UI 控制器（仅做 UI 渲染与事件绑定，调用 common.js 实现核心逻辑）
+  - 取词、A4 排版、复习弹窗、轮次推进、词书导入管理、状态恢复/保存
+  - `generateWordbookRound(wordbookId)`：从已导入词书批量创建 normal round（自动按 roundCap 分页、整轮去重，不弹复习弹窗，直接进入首页第一页）
 - `js/records.js`
-  - 学习记录页：轮次视图 + 状态视图、统计、导出 CSV、导出 PDF（按 `pageIndex` 分页）、删除轮次
-  - 状态视图“生成一轮”：写入 `pendingGenerateStatusKind` 并跳转首页生成复习轮
+  - 学习记录页 UI 控制器（仅做 UI 渲染与事件绑定，调用 common.js 实现核心逻辑）
+  - 轮次视图 + 状态视图、统计、导出 CSV、导出 PDF（按 `pageIndex` 分页）、删除轮次
+  - 状态视图”生成一轮”：写入 `pendingGenerateStatusKind` 并跳转首页生成复习轮
+- 词书语言：词书按 `language` 维度组织；当 `pronunciationLang != auto` 时，首页词书下拉会优先显示该语言下的词书
+  - 线上导入：从指定 GitHub 词库仓库拉取 `.json` 列表供选择导入（英语/西班牙语）
+  - 西语词形补全：当发音语言为西班牙语且词条为”逗号后缀简写”（如 `antiguo,gua`），会在发音前扩展为完整两种形式
+  - 复习弹窗：每次打开默认打乱顺序；支持左右滑动标记；可选开启”点击卡片翻面”
+  - 多页 A4 翻页：只渲染当前页（`pageIndex === currentPageIndex`）
 
 ## 5) 页面与脚本加载关系（真实实现）
 
@@ -119,9 +126,16 @@ A4-Memory
   - 本轮去重：同一轮 A4 内不重复出现“同词同义”的词条
   - 当前 A4 写满后会弹出“当前 A4 已满”弹窗：可在本轮新增下一张 A4 继续学习，或复习本轮（不清空记录）
 - 状态生成轮
-  - 从记录页状态视图点击“生成一轮”触发
+  - 从记录页状态视图点击”生成一轮”触发
   - 仍生成一个 round，但 round 内部可包含多张 A4
   - 分页规则：按 `roundCap` 切分，写入 `items[].pageIndex = 0..N-1`
+- 一键生成整轮
+  - 从已导入词书的”开始整本学习”按钮触发（位于导入词书弹窗的词书列表中）
+  - 基于词书全部单词创建 normal round，按 roundCap 自动分页（pageIndex 从 0 递增）
+  - 整轮按 term+meaning 去重（忽略大小写）
+  - round.language 使用词书对应 language，不受当前选中词书影响
+  - 生成完成后直接进入首页第一页，**不自动弹出复习弹窗**
+  - 后续可继续追加单词（在同一 round 内新增 pageIndex）
 
 ## 7) 多页 A4 渲染与翻页（真实实现）
 

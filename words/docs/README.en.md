@@ -25,7 +25,7 @@ A pure front-end vocabulary tool based on the “A4 paper memory method”. Word
 - Export:
   - CSV: global/per-round (includes round type + review timestamps)
   - PDF: exported from Records via browser print (Save as PDF); 1 round = 1 PDF, each A4 = 1 page
-- Wordbooks: language-scoped wordbooks (built-in samples + local import (TXT/CSV/JSON) + online import (English / Spanish, lists JSON files in the repo and lets you pick one to import))
+- Wordbooks: language-scoped wordbooks (built-in samples + local import (TXT/CSV/JSON) + online import (English / Spanish, lists JSON files in the repo and lets you pick one to import)); imported wordbooks support one-click full-wordbook learning round (auto-paginated by A4, deduplicated within round), directly entering the learning interface
   - Naming: online import prefers the wordbook `name/title` in JSON; otherwise falls back to the JSON filename and de-dups automatically
   - Language: JSON import can optionally include `language` (e.g. `en`/`ja`/`ko`/`fr` etc., mainly used for pronunciation voice auto-pick); TXT/CSV uses a weak heuristic and falls back to default; you can always override it in Settings → Pronunciation language
 - Pronunciation: SpeechSynthesis (en/es/ja/ko/pt/fr/de/it/eo), Auto/Manual voice selection
@@ -110,14 +110,14 @@ A4-Memory
 
 ### Module boundaries
 
-- `js/core/common.js`: cross-page constants and pure utilities (round/status types, term+meaning aggregation, paging, time/stats, etc.)
+- `js/core/common.js`: cross-page shared pure logic (no DOM) — the single source of truth for business logic. Includes: status/round-type normalization, term+meaning aggregation, round/page dedup & pagination helpers (`isDuplicateInRound`/`isPageFull`/`getRoundLastPageIndex`/`getNextPageIndex` etc.), time & stats, shared utilities (`clamp`/`setModalVisible`/`formatMeaning` etc.)
 - `js/storage.js`: main state load/save wrapper (`a4-memory:v1`)
 - `js/utils.js`: downloads and filename sanitization
 - `js/speech.js`: SpeechSynthesis capability and voice selection
 - `js/settings.js`: Settings modal controller, AI wordbook generation, backup import/export normalization
 - `js/lookup.js`: Lookup modal controller (local-first + online supplement + Spanish conjugation + “Add to current round”)
-- `js/app.js`: Home learning flow (A4 placement, enforced review modal, round progression)
-- `js/records.js`: Records page (round/status views, export, delete, generate review rounds)
+- `js/app.js`: Home page controller (UI only + delegates to logic; no core business logic directly)
+- `js/records.js`: Records page controller (UI only + delegates to logic; no core business logic directly)
 
 ### Storage schema (summary)
 

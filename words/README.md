@@ -27,9 +27,9 @@ Demo：https://k7tmiz.com/words
 - 导出：
   - CSV：支持全局导出与单轮导出（含轮次类型与复习时间字段）
   - PDF：在学习记录页导出（打开打印窗口后由浏览器“另存为 PDF”）；1 轮 = 1 个 PDF，PDF 内每张 A4 占 1 页
-- 词书：按语言分类的词书（内置示例 + 本地导入（TXT/CSV/JSON）+ 在线导入（英语 / 西班牙语，列出仓库内可用 JSON 供选择导入））
+- 词书：按语言分类的词书（内置示例 + 本地导入（TXT/CSV/JSON）+ 在线导入（英语 / 西班牙语，列出仓库内可用 JSON 供选择导入））；已导入词书支持一键生成整轮学习（自动按 A4 分页、整轮去重），直接进入学习界面
   - 命名：线上导入优先使用词书 JSON 内的 `name/title`；缺失时回退为 JSON 文件名并自动去重
-  - 语言：JSON 导入可选提供 `language`（如 `en`/`ja`/`ko`/`fr` 等，主要用于发音自动选语音）；TXT/CSV 会尝试弱推断，未识别则按默认语言；也可在“设置 → 发音语言”里手动覆盖
+  - 语言：JSON 导入可选提供 `language`（如 `en`/`ja`/`ko`/`fr` 等，主要用于发音自动选语音）；TXT/CSV 会尝试弱推断，未识别则按默认语言；也可在”设置 → 发音语言”里手动覆盖
 - 发音：SpeechSynthesis 多语言（en/es/ja/ko/pt/fr/de/it/eo），支持自动/手动选语音
   - 西语：当词条写成 `antiguo,gua` / `bonito,ta` 这类“逗号后缀简写”时，发音会自动补全为 `antiguo, antigua` / `bonito, bonita` 再朗读
 - 查单词：首页/记录页共用查词弹窗，本地优先、联网补充不阻塞；支持查词语言选择（auto/en/es）。英文查词会优先显示中文翻译（MyMemory），并保留英文解释（dictionaryapi.dev）作为补充；也可切换为 AI 补充（复用同一套 `aiConfig`）替换；支持西班牙语动词变位（本地推断原形并展示主要变位）
@@ -108,14 +108,14 @@ A4-Memory
 
 ### 核心模块边界
 
-- `js/core/common.js`：跨页共享常量与纯函数（状态/轮次类型、term+meaning 聚合、分页、时间与统计等）
+- `js/core/common.js`：跨页共享的纯逻辑（无 DOM），是唯一业务逻辑源。包括：状态/轮次类型归一化、term+meaning 聚合、round/page 去重与分页（`isDuplicateInRound`/`isPageFull`/`getRoundLastPageIndex`/`getNextPageIndex` 等）、时间与统计、`clamp`/`setModalVisible`/`formatMeaning` 等公共工具
 - `js/storage.js`：主状态读写封装（`a4-memory:v1`）
 - `js/utils.js`：下载与文件名清洗
 - `js/speech.js`：SpeechSynthesis 发音能力与 voice 选择
 - `js/settings.js`：设置弹窗控制器、AI 词书生成、备份导入/导出规范化
 - `js/lookup.js`：查词弹窗控制器（本地优先 + 在线补充 + 西语变位 + “加入当前轮”）
-- `js/app.js`：首页学习流程（A4 排版、强制复习弹窗、轮次推进）
-- `js/records.js`：学习记录页（轮次视图/状态视图、导出、删除、生成复习轮）
+- `js/app.js`：首页控制器（仅做 UI 与调用逻辑，不写核心业务逻辑）
+- `js/records.js`：学习记录页控制器（仅做 UI 与调用逻辑，不写核心业务逻辑）
 
 ### 存储结构（摘要）
 

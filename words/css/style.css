@@ -428,6 +428,7 @@ select:hover {
   }
 
   .records-page .status-top #openSettingsBtn,
+  .records-page .status-top #lookupBtn,
   .records-page .status-top .button-link {
     padding: 6px 10px;
     font-size: 13px;

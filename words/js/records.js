@@ -24,6 +24,8 @@ const {
   buildLatestTermMap,
   getRoundPageCount,
   getRoundItemsByPage,
+  buildFirstSeenRoundMap,
+  formatMeaning,
 } = window.A4Common || {}
 
 function formatDateTimeText(value) {
@@ -35,14 +37,6 @@ function escapeCsv(value) {
   const s = String(value ?? "")
   if (/[",\r\n]/.test(s)) return `"${s.replaceAll('"', '""')}"`
   return s
-}
-
-function formatMeaning(word) {
-  const pos = String(word?.pos || "").trim()
-  const meaning = String(word?.meaning || "").trim()
-  if (!meaning) return ""
-  if (!pos) return meaning
-  return `${pos} ${meaning}`
 }
 
 const normalizeRoundCap =
@@ -209,21 +203,6 @@ function buildPaperPreview(items) {
   })
 
   return paper
-}
-
-function buildFirstSeenRoundMap(rounds) {
-  const map = new Map()
-  for (let i = 0; i < (Array.isArray(rounds) ? rounds.length : 0); i++) {
-    const r = rounds[i]
-    const items = Array.isArray(r?.items) ? r.items : []
-    for (const it of items) {
-      const key = getWordKey ? getWordKey(it?.word) : String(it?.word?.term || "").trim().toLowerCase()
-      if (!key) continue
-      if (map.has(key)) continue
-      map.set(key, { roundIndex: i, roundId: String(r?.id || "") })
-    }
-  }
-  return map
 }
 
 function buildDueKeySet(latestMap, { reviewSystemEnabled, nowMs }) {

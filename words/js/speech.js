@@ -1,38 +1,10 @@
 ;(function () {
-  const clamp = window.A4Common?.clamp || ((n, min, max) => Math.max(min, Math.min(max, n)))
-  const normalizeAccent =
-    window.A4Common?.normalizeAccent ||
-    ((value) => {
-      const v = String(value || "").toLowerCase()
-      if (v === "auto" || v === "us" || v === "gb") return v
-      return "auto"
-    })
-  const normalizeVoiceMode =
-    window.A4Common?.normalizeVoiceMode ||
-    ((value) => {
-      const v = String(value || "").toLowerCase()
-      if (v === "auto" || v === "manual") return v
-      return "auto"
-    })
-  const normalizePronunciationLang =
-    window.A4Common?.normalizePronunciationLang ||
-    ((value) => {
-      const v = String(value || "").toLowerCase().replaceAll("_", "-")
-      if (v === "auto" || v === "en" || v === "es" || v === "ja") return v
-      if (v === "ko" || v === "pt" || v === "fr" || v === "de" || v === "it" || v === "eo") return v
-      return "auto"
-    })
-  const normalizeLangTag =
-    window.A4Common?.normalizeLangTag ||
-    ((value) => {
-      const raw = String(value || "").trim().replaceAll("_", "-")
-      if (!raw) return { tag: "", base: "" }
-      const parts = raw.split("-").filter(Boolean)
-      const base = String(parts[0] || "").toLowerCase()
-      const region = parts[1] ? String(parts[1]).toUpperCase() : ""
-      const tag = region ? `${base}-${region}` : base
-      return { tag, base }
-    })
+  // Normalize helpers — delegate to common.js (loaded before speech.js)
+  const clamp = window.A4Common?.clamp
+  const normalizeAccent = window.A4Common?.normalizeAccent
+  const normalizeVoiceMode = window.A4Common?.normalizeVoiceMode
+  const normalizePronunciationLang = window.A4Common?.normalizePronunciationLang
+  const normalizeLangTag = window.A4Common?.normalizeLangTag
 
   const speechState = {
     installed: false,
