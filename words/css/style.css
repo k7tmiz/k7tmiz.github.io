@@ -1681,6 +1681,30 @@ select:hover {
   }
 }
 
+/* ≤ 430px: reduce word label size to fight overlap */
+@media (max-width: 430px) {
+  .word-term {
+    font-size: 12px;
+    line-height: 1.2;
+  }
+
+  .word-item {
+    padding: 2px 4px;
+    box-sizing: border-box;
+  }
+}
+
+/* ≤ 390px: further reduce for very small screens */
+@media (max-width: 390px) {
+  .word-term {
+    font-size: 11px;
+  }
+
+  .word-item {
+    padding: 2px 3px;
+  }
+}
+
 @media print {
   body {
     background: #ffffff;
