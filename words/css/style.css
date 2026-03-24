@@ -510,6 +510,102 @@ select:hover {
   }
 }
 
+/* Import wordbook modal mobile styles — strictly scoped to #importModal */
+@media (max-width: 520px) {
+  #importModal .modal-panel {
+    max-height: 85vh;
+  }
+
+  #importModal .modal-body {
+    padding: 10px;
+    gap: 10px;
+  }
+
+  /* Button area: primary full-width, secondary 2-column */
+  #importModal .import-actions {
+    gap: 8px;
+  }
+
+  #importModal .import-actions button {
+    min-height: 44px;
+    line-height: 1.2;
+    padding: 10px 12px;
+    font-size: 14px;
+    border-radius: 10px;
+  }
+
+  #importModal .import-actions .secondary-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+  }
+
+  #importModal .import-actions .secondary-row button {
+    width: 100%;
+  }
+
+  /* Wordbook list items: two-tier structure on mobile */
+  #importModal .import-manage-row {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    padding: 10px 12px;
+  }
+
+  #importModal .item-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+    min-width: 0;
+  }
+
+  #importModal .import-manage-meta {
+    font-size: 14px;
+    font-weight: 500;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    min-width: 0;
+    flex: 1;
+  }
+
+  #importModal .import-manage-secondary {
+    display: flex;
+    gap: 6px;
+    flex-shrink: 0;
+    align-items: center;
+  }
+
+  #importModal .import-manage-secondary button {
+    min-height: 32px;
+    padding: 4px 10px;
+    font-size: 13px;
+    border-radius: 8px;
+  }
+
+  #importModal .item-primary-action {
+    width: 100%;
+  }
+
+  #importModal .item-primary-action button[data-action="learn"] {
+    width: 100%;
+    min-height: 40px;
+    font-size: 14px;
+    padding: 8px 16px;
+    border-radius: 10px;
+  }
+
+  /* Help section: single column on mobile */
+  #importModal .import-help-grid {
+    grid-template-columns: 1fr;
+  }
+
+  #importModal .import-help-card {
+    padding: 10px;
+  }
+}
+
 .import-manage {
   border-top: 1px solid var(--border2);
   padding-top: 12px;
@@ -523,27 +619,57 @@ select:hover {
 
 .import-manage-row {
   display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 10px;
+  flex-direction: column;
+  gap: 8px;
   border: 1px solid var(--border2);
   background: var(--card);
   border-radius: 12px;
   padding: 10px;
 }
 
-.import-manage-actions {
+.item-header {
   display: flex;
+  align-items: center;
+  justify-content: space-between;
   gap: 8px;
-  flex: 0 0 auto;
+  min-width: 0;
 }
 
 .import-manage-meta {
-  font-size: 13px;
+  font-size: 15px;
+  font-weight: 500;
   color: var(--text);
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+  min-width: 0;
+  flex: 1;
+}
+
+.import-manage-secondary {
+  display: flex;
+  gap: 6px;
+  flex-shrink: 0;
+  align-items: center;
+}
+
+.import-manage-secondary button {
+  padding: 4px 10px;
+  font-size: 13px;
+  min-height: 30px;
+  border-radius: 8px;
+}
+
+.item-primary-action {
+  width: 100%;
+}
+
+.item-primary-action button[data-action="learn"] {
+  width: 100%;
+  padding: 6px 14px;
+  font-size: 13px;
+  min-height: 34px;
+  border-radius: 8px;
 }
 
 .import-help {

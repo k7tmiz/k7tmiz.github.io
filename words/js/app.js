@@ -480,12 +480,16 @@ function renderCustomWordbooksManage() {
     const row = document.createElement("div")
     row.className = "import-manage-row"
 
+    // Header: name + secondary actions
+    const header = document.createElement("div")
+    header.className = "item-header"
+
     const meta = document.createElement("div")
     meta.className = "import-manage-meta"
     meta.textContent = `${b.name}（${Array.isArray(b.words) ? b.words.length : 0}）`
 
-    const actions = document.createElement("div")
-    actions.className = "import-manage-actions"
+    const secondary = document.createElement("div")
+    secondary.className = "import-manage-secondary"
 
     const exp = document.createElement("button")
     exp.className = "ghost"
@@ -514,19 +518,27 @@ function renderCustomWordbooksManage() {
       deleteCustomWordbook(b.id)
     })
 
+    secondary.appendChild(exp)
+    secondary.appendChild(del)
+    header.appendChild(meta)
+    header.appendChild(secondary)
+
+    // Primary action: full width learn button
+    const primaryAction = document.createElement("div")
+    primaryAction.className = "item-primary-action"
+
     const learn = document.createElement("button")
     learn.className = "primary"
     learn.type = "button"
     learn.textContent = `开始整本学习（${Array.isArray(b.words) ? b.words.length : 0}词）`
+    learn.dataset.action = "learn"
     learn.addEventListener("click", () => {
       generateWordbookRound(b.id)
     })
 
-    row.appendChild(meta)
-    actions.appendChild(exp)
-    actions.appendChild(del)
-    actions.appendChild(learn)
-    row.appendChild(actions)
+    primaryAction.appendChild(learn)
+    row.appendChild(header)
+    row.appendChild(primaryAction)
     listEl.appendChild(row)
   }
 }
