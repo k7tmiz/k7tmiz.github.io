@@ -4,7 +4,7 @@
 
 Demo: https://k7tmiz.com/words
 
-A pure front-end vocabulary tool based on the “A4 paper memory method”. Words are randomly placed on A4 pages within a round. Each time you add 1 new word, it auto-opens the review modal: in a multi-page normal round, auto review is scoped to the current page; the “Review this round” button reviews the whole round (all pages). Includes records, wordbook import, export/print, and pronunciation.
+A pure front-end vocabulary tool built around randomly placing words on A4 pages, with the goal of breaking away from list-based memorization. Each time you add 1 new word, it auto-opens the review modal: in a multi-page normal round, auto review is scoped to the current page; the “Review this round” button reviews the whole round (all pages). Includes records, wordbook import, export/print, and pronunciation.
 
 ## Features
 
@@ -30,7 +30,7 @@ A pure front-end vocabulary tool based on the “A4 paper memory method”. Word
   - Language: JSON import can optionally include `language` (e.g. `en`/`ja`/`ko`/`fr` etc., mainly used for pronunciation voice auto-pick); TXT/CSV uses a weak heuristic and falls back to default; you can always override it in Settings → Pronunciation language
 - Pronunciation: SpeechSynthesis (en/es/ja/ko/pt/fr/de/it/eo), Auto/Manual voice selection
   - Spanish: when a term uses a suffix shorthand like `antiguo,gua` / `bonito,ta`, it auto-expands to `antiguo, antigua` / `bonito, bonita` before speaking
-- Lookup: a shared modal on Home/Records, local-first with non-blocking online supplement; language mode (auto/en/es). For English lookups, it shows Chinese translation first (MyMemory) while keeping English definitions (dictionaryapi.dev) as a supplement; the built-in supplement can also be replaced by AI supplement reusing the same AI API config (`aiConfig`); Spanish verb conjugation (offline lemma inference + key conjugations)
+- Lookup: a shared modal on Home/Records, local-first with non-blocking online supplement; language mode (auto/en/es). For English lookups, it shows Chinese translation first (MyMemory) while keeping English definitions (dictionaryapi.dev) as a supplement; the built-in supplement can also be replaced by AI supplement reusing the same AI API config (`aiConfig`), and if the built-in supplement fails it can automatically fall back to AI when configured; Spanish verb conjugation (offline lemma inference + key conjugations)
 - Backup: import/export full local data (records + settings)
 - AI wordbook generator: configure API → generate → live preview → save (optional topic, also for non-English)
 - AI API presets: OpenAI / Gemini / DeepSeek / SiliconCloud / Custom
@@ -138,6 +138,7 @@ A4-Memory
   - Fallback: if either side fails, the other side must still render (never “all empty”)
   - Cache: `a4-memory:lookup-cache:v1` with TTL via `lookupCacheDays`; if cached English entries lack Chinese fields, it auto refetches to fill them
 - Custom supplement (custom): can replace builtin with an AI API that reuses `aiConfig` (OpenAI-style `chat/completions`)
+- Built-in fallback: when builtin online supplement fails and AI lookup is configured, lookup can automatically fall back to the custom AI supplement
 - “Add to current round”: a primary button near the title/meaning; preserves the existing add→auto-review flow; if already exists in the current round, it won’t add twice and shows a lightweight toast
 - Spanish conjugation: forced when language is `es`; in `auto`, shown only when the input looks like a Spanish verb/form to avoid false positives
 

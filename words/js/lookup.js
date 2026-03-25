@@ -7,6 +7,7 @@
   } = window.A4Common || {}
 
   const CACHE_KEY = "a4-memory:lookup-cache:v1"
+  const LOOKUP_DEBUG = false
 
   function getWordsFromGlobal() {
     const list = Array.isArray(window.WORDS) ? window.WORDS : []
@@ -370,6 +371,12 @@
     return { provider, baseUrl, apiKey, model }
   }
 
+  function canUseCustomLookupFallback(state) {
+    const cfg = normalizeAiConfigFromState(state)
+    const url = window.A4Settings?.buildChatCompletionsUrl?.(cfg.baseUrl) || ""
+    return !!(url && cfg.model)
+  }
+
   function normalizeOnlineSupplementList(raw) {
     const list = Array.isArray(raw) ? raw : raw && typeof raw === "object" ? [raw] : []
     const out = []
@@ -465,9 +472,9 @@
       } catch (e) {
         return { ok: false, data: [], error: "bad_json" }
       }
-      if (_DEBUG) console.debug("[lookup] AI custom raw parsed:", JSON.stringify(parsed).slice(0, 300))
+      if (LOOKUP_DEBUG) console.debug("[lookup] AI custom raw parsed:", JSON.stringify(parsed).slice(0, 300))
       const list = normalizeOnlineSupplementList(parsed)
-      if (_DEBUG) console.debug("[lookup] AI custom normalized:", JSON.stringify(list).slice(0, 300))
+      if (LOOKUP_DEBUG) console.debug("[lookup] AI custom normalized:", JSON.stringify(list).slice(0, 300))
       return { ok: true, data: list, error: "" }
     } catch (e) {
       return { ok: false, data: [], error: "network" }
@@ -1259,7 +1266,7 @@
       if (dom.hint) dom.hint.textContent = qRaw ? `已查询：${qRaw}` : ""
     }
 
-    function renderOnlineSection({ status, items, source, base }) {
+    function renderOnlineSection({ status, items, source, base, fallbackFrom }) {
       const root = dom.results
       const panel = root.querySelector('[data-lookup-online="1"]')
       if (!panel) return
@@ -1271,7 +1278,12 @@
         return
       }
       if (status === "loading") {
-        const label = source === "custom" ? "加载中…（AI 补充）" : "加载中…（内置词典）"
+        const label =
+          source === "custom"
+            ? fallbackFrom === "builtin"
+              ? "加载中…（内置源失败，回退到 AI 补充）"
+              : "加载中…（AI 补充）"
+            : "加载中…（内置词典）"
         panel.appendChild(el("div", "form-help", `${label}，本地结果已优先显示。`))
         return
       }
@@ -1300,7 +1312,10 @@
         const secondary = normMeaning && isEn && enLine ? `EN: ${enLine}` : (isEn && zhLine && enLine && !normMeaning ? `EN: ${enLine}` : "")
 
         const metaParts = []
-        if (source === "custom") metaParts.push("来源：AI补充")
+        if (source === "custom") {
+          if (fallbackFrom === "builtin") metaParts.push("来源：AI补充（内置源失败后回退）")
+          else metaParts.push("来源：AI补充")
+        }
         else if (isEn) metaParts.push("来源：MyMemory + dictionaryapi.dev")
         else metaParts.push("来源：dictionaryapi.dev")
         if (it?.phonetic) metaParts.push(`音标：${String(it.phonetic || "").trim()}`)
@@ -1462,6 +1477,22 @@
       if (queryId !== lastQueryId) return
 
       if (!res.ok) {
+        const canFallback = onlineSource === "builtin" && canUseCustomLookupFallback(state)
+        if (canFallback) {
+          renderOnlineSection({ status: "loading", items: [], source: "custom", base, fallbackFrom: "builtin" })
+          const fallbackRes = await fetchOnlineCustomApi({ term, base, state, signal })
+          if (queryId !== lastQueryId) return
+          if (fallbackRes.ok) {
+            renderOnlineSection({
+              status: "done",
+              items: fallbackRes.data,
+              source: "custom",
+              base,
+              fallbackFrom: "builtin",
+            })
+            return
+          }
+        }
         if (res.error === "not_configured") renderOnlineSection({ status: "not_configured", items: [], source: onlineSource, base })
         else renderOnlineSection({ status: "error", items: [], source: onlineSource, base })
         return
@@ -1557,15 +1588,12 @@
       return !!(key && set.has(key))
     }
 
-    // DEBUG: set to true to log add-to-round details; remove before shipping
-    const _DEBUG = false
-
     function tryAddWordToCurrentRound(raw) {
       const term = String(raw?.term || "").trim()
       const pos = String(raw?.pos || "").trim()
       const meaning = String(raw?.meaning || "").trim()
       if (!term) return
-      if (_DEBUG) console.debug("[lookup] tryAddWordToCurrentRound →", { term, pos, meaning })
+      if (LOOKUP_DEBUG) console.debug("[lookup] tryAddWordToCurrentRound →", { term, pos, meaning })
       const langBase =
         typeof window.A4GetActiveLangBase === "function"
           ? String(window.A4GetActiveLangBase() || "").trim().toLowerCase()

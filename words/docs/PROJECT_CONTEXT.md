@@ -2,25 +2,34 @@
 
 ## 1) 项目概览
 
-本项目是一个纯静态背单词网页：以 A4 排版为学习载体。每新增 1 个单词都会自动打开复习弹窗：普通学习轮在多页时默认只复习当前页；用户主动点击“复习本轮”时复习整轮全部页。项目提供学习记录（按轮/按状态）、复习标记（已掌握/学习中/不会）、轻量复习（下次复习时间）、词书导入、导出（CSV / 通过浏览器打印另存 PDF）、发音与设置管理。
+本项目是一个纯静态背单词网页，核心交互是把单词随机排在 A4 纸上进行学习，目标是打破列表式的背书模式。每新增 1 个单词都会自动打开复习弹窗；普通学习轮在多页时默认只复习当前页，只有用户主动点击“复习本轮”时才复习该轮全部页面。项目同时提供学习记录、状态聚合、轻量复习、词书导入、查词、发音、导出和 AI 词书生成。
 
 ## 2) 技术架构（真实实现）
 
-- 运行形态：纯静态（HTML/CSS/Vanilla JS），无构建工具、无服务端
-- 状态存储：全部保存在浏览器 `localStorage`
-- 全局模块暴露方式：通过 `window.A4*` 挂载（便于静态脚本依赖）
-  - `window.A4Common`：跨页面共享常量与纯工具函数
-  - `window.A4Utils`：下载/文件名清洗工具
-  - `window.A4Storage`：读写主状态
-  - `window.A4Speech`：SpeechSynthesis 发音能力
-  - `window.A4Lookup`：查词弹窗控制器与 provider 调度（含缓存与西语变位）
-- 跨浏览器 UI：对常见控件样式做基础归一，尽量减少 Chromium/Safari 的默认渲染差异
-- 打印/导出 PDF：记录页打开打印窗口并调用 `window.print()`；由浏览器“另存为 PDF”
-- AI：兼容 OpenAI 风格 `chat/completions`；配置项含 `provider/baseUrl/apiKey/model`（仅本地保存）
-  - AI 生成词书：生成时支持实时预览（优先使用 `stream` SSE；不支持时自动降级为非流式）
-  - 主题输入：不只自定义类型可用，小语种类型也可填写主题以影响生成
+- 运行形态：
+  - 纯静态 HTML / CSS / Vanilla JS
+  - 无构建工具、无服务端
+- 状态存储：
+  - 全部保存在浏览器 `localStorage`
+- 模块暴露方式：
+  - `window.A4Common`
+  - `window.A4Utils`
+  - `window.A4Storage`
+  - `window.A4Speech`
+  - `window.A4Settings`
+  - `window.A4Lookup`
+- 页面控制器：
+  - 首页：`js/app.js`
+  - 记录页：`js/records.js`
+- 跨页协作钩子：
+  - `window.A4AddWordFromLookup`
+  - `window.A4GetActiveLangBase`
+- AI 接入：
+  - 兼容 OpenAI 风格 `chat/completions`
+  - 配置字段为 `provider / baseUrl / apiKey / model`
+  - 支持流式 SSE 预览；不支持时自动降级为非流式
 
-## 3) 当前项目结构（真实目录）
+## 3) 当前目录结构（真实目录）
 
 ```text
 A4-Memory
@@ -40,8 +49,8 @@ A4-Memory
 │   ├── core/
 │   │   └── common.js
 │   ├── app.js
-│   ├── records.js
 │   ├── lookup.js
+│   ├── records.js
 │   ├── settings.js
 │   ├── speech.js
 │   ├── storage.js
@@ -51,178 +60,351 @@ A4-Memory
     └── PROJECT_CONTEXT.md
 ```
 
-## 4) 模块职责边界（真实实现）
+## 4) 页面与脚本加载关系（真实实现）
+
+- `index.html`
+  - 脚本顺序：
+    `data/words.js` → `js/core/common.js` → `js/utils.js` → `js/storage.js` → `js/speech.js` → `js/settings.js` → `js/lookup.js` → `js/app.js`
+  - 主要 UI：
+    - 控制区
+    - A4 纸区域
+    - 复习弹窗
+    - 当前 A4 已满弹窗
+    - 导入词书弹窗
+    - 在线导入弹窗
+    - 用法介绍弹窗
+    - 多页翻页导航
+- `records.html`
+  - 脚本顺序：
+    `data/words.js` → `js/utils.js` → `js/storage.js` → `js/core/common.js` → `js/speech.js` → `js/settings.js` → `js/lookup.js` → `js/records.js`
+  - 主要 UI：
+    - 轮次视图 / 状态视图切换
+    - 顶部导出与清空
+    - 统计区
+    - 轮次卡片与状态分组
+
+## 5) 模块职责边界（真实实现）
 
 - `js/core/common.js`
-  - 跨页共享的纯逻辑模块（无 DOM），是唯一业务逻辑源。包含：
-    - 状态/轮次类型归一化与常量（`normalizeStatus`/`normalizeRoundType` 等）
-    - 全局最新状态聚合（`buildLatestTermMap`/`buildFirstSeenRoundMap`）
-    - round/page 去重与分页：`isDuplicateInRound`/`isPageFull`/`getRoundLastPageIndex`/`getNextPageIndex`/`getRoundItemCountOnPage` 等
-    - 查词评分与排序（`scoreLookupMatch`/`dedupeAndSortLookupResults`）
-    - 时间/日期格式化（`formatDateTime`/`toLocalDateKey`/`parseIsoTime`）
-    - 公共工具（`clamp`/`setModalVisible`/`formatMeaning`）
-    - 设置项默认值（`DEFAULTS` 常量）
-    - 若干 normalize 归一化函数（theme/accent/voice/pronunciationLang/AI provider 等）
-- `js/utils.js`
-  - 下载工具与文件名清洗：`downloadTextFile/downloadJsonFile/downloadBlob/sanitizeFilename`
+  - 跨页共享的纯逻辑模块，无 DOM 操作
+  - 是主要业务规则源
+  - 负责：
+    - 状态与轮次类型归一化
+    - `term + meaning + language` 级别的 key 计算
+    - 全局最新状态聚合与首次出现轮次聚合
+    - A4 分页、页数、页内计数、整轮去重
+    - 查词匹配评分与去重排序
+    - 时间格式化、日期 key、统计计算
+    - 通用 normalize 与默认设置
 - `js/storage.js`
-  - `localStorage` 读写封装与 key 管理：`A4Storage.loadState/saveState`
+  - `localStorage` 读写封装
+  - 暴露 `loadState / saveState / readStateRaw / writeStateRaw`
+- `js/utils.js`
+  - 文本 / JSON / Blob 下载
+  - 文件名清洗
 - `js/speech.js`
-  - SpeechSynthesis 语音选择与发音封装（自动/手动 voice、语言推断、降级提示）
-- `js/lookup.js`
-  - 查词弹窗控制器（首页/记录页复用）与 provider 调度
-  - 本地结果：当前/本地词书 + 学习记录聚合（最新状态、首次出现轮次、复习时间）
-  - 联网补充（builtin）
-    - 英文（en）：先用 MyMemory 免费翻译补充中文释义，再用 dictionaryapi.dev 获取英文解释；展示顺序为”中文在上 / 英文在下”
-    - 西语（es）：使用 dictionaryapi.dev
-    - 降级：中文翻译失败仍显示英文解释；英文解释失败仍显示中文；不允许两者皆失败导致空内容
-    - 缓存：使用 `localStorage` 的 `a4-memory:lookup-cache:v1`，按 `lookupCacheDays` 控制 TTL
-  - 联网补充（custom）：可切换为自定义 API（复用现有 `aiConfig` 的 provider/baseUrl/apiKey/model），失败不阻塞本地结果
-  - 语言选择：查词弹窗支持 `auto/en/es`
-  - 西语动词变位：本地生成主要变位（现在时/过去时/未完成过去时/将来时/条件式）
-  - 加入当前轮：每条查词结果卡片顶部提供主按钮；加入后按”新增单词”流程自动打开复习弹窗（新词置顶）；若已存在则不重复加入并给出轻量提示
+  - SpeechSynthesis 语音安装、语音列表、自动/手动 voice 选择、发音
+  - 支持按词书语言或设置语言推断目标语音
 - `js/settings.js`
-  - 设置弹窗与 AI 词书生成流程（必要时注入 modal DOM）
-  - 负责把设置写回调用方提供的 `persist()`，并提供 `onAfterChange` 通知
-  - 依赖 `A4Common/A4Storage/A4Utils/A4Speech`，不重复实现通用能力
+  - 设置弹窗控制器
+  - 复习、发音、查词、AI、备份等配置的读写与同步
+  - AI 词书生成、流式预览、确认保存
+  - 备份导入时负责数据规范化
+- `js/lookup.js`
+  - 查词弹窗控制器
+  - 本地词书与学习记录检索
+  - 内置在线补充与自定义 AI 补充
+  - 查词缓存与西语动词变位
+  - 查词结果加入当前轮
 - `js/app.js`
-  - 首页 UI 控制器（仅做 UI 渲染与事件绑定，调用 common.js 实现核心逻辑）
-  - 取词、A4 排版、复习弹窗、轮次推进、词书导入管理、状态恢复/保存
-  - `generateWordbookRound(wordbookId)`：从已导入词书批量创建 normal round（自动按 roundCap 分页、整轮去重，不弹复习弹窗，直接进入首页第一页）
+  - 首页控制器
+  - 负责当前轮恢复、A4 排版、取词、复习弹窗、词书导入、在线导入、轮次推进、状态写回
 - `js/records.js`
-  - 学习记录页 UI 控制器（仅做 UI 渲染与事件绑定，调用 common.js 实现核心逻辑）
-  - 轮次视图 + 状态视图、统计、导出 CSV、导出 PDF（按 `pageIndex` 分页）、删除轮次
-  - 状态视图”生成一轮”：写入 `pendingGenerateStatusKind` 并跳转首页生成复习轮
-- 词书语言：词书按 `language` 维度组织；当 `pronunciationLang != auto` 时，首页词书下拉会优先显示该语言下的词书
-  - 线上导入：从指定 GitHub 词库仓库拉取 `.json` 列表供选择导入（英语/西班牙语）
-  - 西语词形补全：当发音语言为西班牙语且词条为”逗号后缀简写”（如 `antiguo,gua`），会在发音前扩展为完整两种形式
-  - 复习弹窗：每次打开默认打乱顺序；支持左右滑动标记；可选开启”点击卡片翻面”
-  - 多页 A4 翻页：只渲染当前页（`pageIndex === currentPageIndex`）
-
-## 5) 页面与脚本加载关系（真实实现）
-
-- `index.html`（首页）
-  - 主要 UI：控制区、A4 纸、复习弹窗、导入词书弹窗、用法介绍弹窗、多页翻页 `#pageNav`
-  - 用法介绍：展示面向新用户的简要说明（文本随功能迭代保持同步）
-  - 脚本顺序：`data/words.js` → `js/core/common.js` → `utils/storage/speech/settings/lookup/app`
-- `records.html`（学习记录页）
-  - 视图切换：轮次视图 / 状态视图
-  - 顶部操作：返回、设置、导出与清空
-  - 脚本顺序：`data/words.js` → `utils/storage/core/common/speech/settings/lookup/records`
+  - 学习记录页控制器
+  - 负责轮次视图、状态视图、统计、导出、删除轮次、跳转首页触发复习轮生成
 
 ## 6) 核心业务规则（真实实现）
 
-- 普通学习轮
-  - 默认从一张 A4 开始（`pageIndex = 0`）；当当前 A4 写满（达到 `roundCap`）后，可在同一轮内追加下一张 A4（`pageIndex = max + 1`），并对整轮做“同语言 + term+meaning”去重
-  - “下一个单词”：写入新词后会自动打开复习弹窗（新词固定在第一个；普通学习轮在多页时自动复习范围仅为当前页；手动点“复习本轮”才整轮复习）
-  - “复习本轮”是独立入口：仅在用户主动点击时打开复习弹窗
-  - 复习完成后默认自动关闭弹窗（可在设置中关闭该行为）
-  - 滑动标记：复习卡片支持左右滑动/拖拽（右滑=已掌握，左滑=不会；手机/平板触摸与电脑鼠标拖拽均可）；未达提交条件会自动平滑回中并清理所有中间态；支持快速甩动提交；小位移视为点击，不会误触发
-  - 发音：普通模式与翻卡模式下，点击复习弹窗正面单词均可发音（遵循 pronunciationEnabled 等设置）
-  - 可选翻面：开启 `reviewCardFlipEnabled` 后
-    - 正面：点“单词”仅发音不翻面；点非单词区域翻到背面
-    - 背面：点任意处翻回正面（不发音）
-    - 每次打开弹窗会重置为正面朝上
-  - 本轮去重：同一轮 A4 内不重复出现“同词同义”的词条
-  - 当前 A4 写满后会弹出“当前 A4 已满”弹窗：可在本轮新增下一张 A4 继续学习，或复习本轮（不清空记录）
-- 状态生成轮
-  - 从记录页状态视图点击”生成一轮”触发
-  - 仍生成一个 round，但 round 内部可包含多张 A4
-  - 分页规则：按 `roundCap` 切分，写入 `items[].pageIndex = 0..N-1`
-- 一键生成整轮
-  - 从已导入词书的”开始整本学习”按钮触发（位于导入词书弹窗的词书列表中）
-  - 基于词书全部单词创建 normal round，按 roundCap 自动分页（pageIndex 从 0 递增）
-  - 整轮按 term+meaning 去重（忽略大小写）
-  - round.language 使用词书对应 language，不受当前选中词书影响
-  - 生成完成后直接进入首页第一页，**不自动弹出复习弹窗**
-  - 后续可继续追加单词（在同一 round 内新增 pageIndex）
+### 6.1 普通学习轮
 
-## 7) 多页 A4 渲染与翻页（真实实现）
+- 默认从一张 A4 开始，`pageIndex = 0`
+- 当前页达到 `roundCap` 后，可在同一轮追加下一页 A4
+- 同一轮内按“同语言 + term+meaning”去重
+- “下一个单词”：
+  - 写入新词
+  - 自动打开复习弹窗
+  - 新词固定在第一个
+  - 普通学习轮多页时只复习当前页
+- “复习本轮”：
+  - 作为独立入口
+  - 手动打开整轮复习
+  - 覆盖该轮所有页
 
-- 数据结构：`rounds[].items[]` 上的 `pageIndex`
-- 首页渲染（`app.js`）
-  - 仅渲染 `pageIndex === currentPageIndex` 的 items
-  - 当 `pageCount > 1` 时显示 Previous/Next 与页码（例如 `1 / 3`）
-  - `currentPageIndex` 是运行态状态，不写入 `localStorage`（刷新后默认回到第 1 页）
-- 记录页轮次预览（`records.js`）
-  - 轮次视图的 “A4 排版预览” 支持按 `pageIndex` 翻页预览
+### 6.2 复习弹窗
 
-## 8) Records 页：状态视图聚合逻辑（真实实现）
+- 每次打开默认打乱顺序
+- 自动复习时会保留用户上一次“打乱 / 恢复顺序”的偏好
+- 支持三种标记：
+  - `mastered`
+  - `learning`
+  - `unknown`
+- 支持鼠标拖拽与触摸滑动
+- 小位移视为点击，不触发提交
+- 达不到提交阈值时卡片会回中
+- 开启 `reviewCardFlipEnabled` 后：
+  - 正面点单词只发音
+  - 正面点空白翻到背面
+  - 背面点任意处翻回正面
+- 复习完成后默认关闭弹窗，可由 `reviewAutoCloseModal` 控制
 
-- 全局最新状态映射
-  - 遍历 `rounds[].items[]`，按 term+meaning 构建“最新记录”（term 忽略大小写；meaning 做空白归一；避免同词不同义被误合并）
-  - 最新判定优先级：`lastReviewedAt` > `createdAt` > round 的 `finishedAt/startedAt`
-  - 当时间相等或字段缺失时：使用稳定的 tie-break 规则（后出现的记录优先），避免旧记录覆盖新记录导致“状态卡住”
-  - 当前实现由 `js/core/common.js` 提供公共聚合函数（供首页与记录页复用）
-- 首次出现轮次映射：用于展示来源轮次（第 N 轮）
-- 待复习集合
-  - 当 `reviewSystemEnabled=true` 且 `nextReviewAt <= now` 时归入待复习分组
-- 状态视图“生成一轮”
-  - 点击后写入 `pendingGenerateStatusKind` 并跳转首页
-  - 首页 restore 时读取并清空该字段，然后生成对应复习轮
+### 6.3 状态生成轮
 
-## 9) 导出规则（真实实现）
+- 从记录页状态视图点击“生成一轮”触发
+- 通过 `pendingGenerateStatusKind` 跨页传递
+- 首页恢复后生成对应的复习轮：
+  - `review_mastered`
+  - `review_learning`
+  - `review_unknown`
+  - `review_due`
+- 生成的轮次仍可能包含多页 A4，按 `roundCap` 自动分页
 
-- CSV（`records.js`）
-  - 全局导出：导出所有轮次的词条（按轮展开行）
-  - 单轮导出：仅导出该轮数据
-  - 列：轮次编号、轮次类型、单词、词性、释义、当前状态、开始时间、完成时间、上次复习时间、下次复习时间
-  - 时间：统一纯文本 `YYYY-MM-DD HH:mm`
-  - 当前状态/复习时间：以“全局最新状态映射”为准
-- 导出 PDF（`records.js`）
-  - 本质：打开新窗口分页展示 A4 图片并调用 `window.print()`，由浏览器“另存为 PDF”
-  - 单轮：1 轮 = 1 个 PDF；PDF 内每个 `pageIndex` 对应 1 页
-  - 多轮：跨轮次与分页逐页输出（每张 A4 占 1 页）
+### 6.4 词书整轮生成
 
-## 10) 设置系统与 AI（真实实现）
+- 从已导入词书的“开始整本学习”触发
+- 基于整本词书创建一个 `normal` round
+- 自动分页并整轮去重
+- 生成后直接进入首页第一页
+- 不自动弹出复习弹窗
 
-- 设置弹窗：由 `settings.js` 管理（必要时注入 modal DOM），首页与记录页共用
-- 常用设置项
-  - 外观：主题模式（auto/light/dark）
-  - 学习：每日目标、每轮上限（roundCap）
-  - 复习：轻量复习开关、复习间隔（unknown/learning/mastered）、复习完成自动关闭弹窗（reviewAutoCloseModal）、复习卡片翻面开关（reviewCardFlipEnabled）
-  - 发音：开关、语言、口音、语音模式（auto/manual）与 voice 选择
-  - 查词：联网补充开关、西语变位开关、查词缓存开关与缓存时长
-  - 查词（补充来源）：内置在线补充源（默认） / 自定义 API（替换内置，复用 `aiConfig` 的 provider/baseUrl/apiKey/model；配置只需维护一套）
-  - 数据：导入/导出完整备份（学习记录 + 设置）
-  - AI：provider/baseUrl/apiKey/model，生成词书并预览保存到本地词书
-- AI provider（真实实现）
-  - `openai | gemini | deepseek | siliconcloud | custom`
-  - provider 切换时：仅在字段为空或仍为“上一 provider 默认值”时覆盖 baseUrl/model（尽量保留用户手动输入）
+## 7) 查词系统（真实实现）
 
-## 11) 数据存储（真实实现）
+### 7.1 本地结果
 
-- `localStorage` key
-  - `a4-memory:v1`：主状态（JSON，含 `version: 2`）
-  - `a4-memory:intro-seen:v1`：用法介绍已读标记
-  - `a4-memory:lookup-cache:v1`：查词联网补充缓存（独立于主状态）
-- 主状态（摘要字段）
-  - 轮次：`rounds`, `currentRoundId`
-  - 跨页触发：`pendingReviewRoundId`, `pendingGenerateStatusKind`
-  - UI：`showMeaning`, `immersiveMode`, `themeMode`, `darkMode`
-  - 统计/目标：`currentCount`, `dailyGoalRounds`, `dailyGoalWords`, `roundCap`
-  - 轻量复习：`reviewSystemEnabled`, `reviewIntervals`, `reviewAutoCloseModal`, `reviewCardFlipEnabled`
-  - 发音：`pronunciationEnabled`, `pronunciationAccent`, `pronunciationLang`, `voiceMode`, `voiceURI`
-  - 词书：`selectedWordbookId`, `customWordbooks`
-    - 每个词书：`{ id, name, description, language, words }`；其中 `language` 用于发音自动选语音（当 `pronunciationLang=auto`）
-  - AI：`aiConfig`（provider/baseUrl/apiKey/model）
-  - 查词：`lookupOnlineEnabled`, `lookupOnlineSource`, `lookupLangMode`, `lookupSpanishConjugationEnabled`, `lookupCacheEnabled`, `lookupCacheDays`
-- 轮次字段（存于 `rounds[]`）
-  - `type`: `normal | review_mastered | review_learning | review_unknown | review_due`
-- 轮次 item 字段（存于 `rounds[].items[]`）
-  - `word`: `{ term, pos, meaning, ... }`
-  - `pos`: `{ x, y }`（0..1 的相对坐标）
-  - `fontSize`: string（例如 "16px"）
-  - `createdAt`: ISO string
-  - `status`: `mastered | learning | unknown`
-  - `lastReviewedAt`: ISO string
-  - `nextReviewAt`: ISO string
-  - `pageIndex`: number（默认 0；用于同一轮多页 A4）
+- 本地词书与学习记录优先展示
+- 学习记录按全局最新状态聚合
+- 每条结果支持“加入当前轮”
 
-## 12) 兼容性与已知行为（真实实现）
+### 7.2 内置在线补充（builtin）
 
-- 旧数据兼容：旧 items 无 `pageIndex` 视为 `0`；旧 round 无 `type` 视为 `normal`
-- 备份导入（`settings.js` 的 normalizeImportedState）
-  - 导入时会重建 rounds/items 并规范化字段
-  - 当前实现不会保留 `round.type` 与 `item.pageIndex`（导入后这些字段会丢失/回到默认行为）
-- 多标签页：记录页监听 `storage` 事件以实时刷新显示
+- 英文：
+  - 先调用 MyMemory 获取中文翻译
+  - 再调用 dictionaryapi.dev 获取英文解释
+  - 展示顺序为“中文在上 / 英文在下”
+  - 任一失败时允许降级展示另一部分
+- 西语：
+  - 使用 dictionaryapi.dev
+- 缓存：
+  - key 为 `a4-memory:lookup-cache:v1`
+  - TTL 由 `lookupCacheDays` 控制
+  - 英文缓存若缺少中文字段，会自动重新拉取补齐
+
+### 7.3 自定义在线补充（custom）
+
+- 复用 `aiConfig` 的 `provider / baseUrl / apiKey / model`
+- 走 OpenAI 风格 `chat/completions`
+- 只要求返回 JSON 词典结构
+
+### 7.4 当前回退逻辑
+
+- 若用户选择 `custom`，直接走 AI 补充
+- 若用户选择 `builtin`，优先走内置在线补充
+- 当 `builtin` 失败且当前已配置可用 AI 参数时，会自动回退到 AI 补充
+- 联网补充失败不会影响本地查词结果显示
+
+### 7.5 西语变位
+
+- `lookupLangMode = es` 时强制展示
+- `lookupLangMode = auto` 时只在输入看起来像西语动词/词形时展示
+- 当前展示：
+  - 现在时
+  - 过去时
+  - 未完成过去时
+  - 将来时
+  - 条件式
+
+## 8) 词书系统（真实实现）
+
+- 内置词书来自 `data/words.js`
+- 当前内置示例：
+  - `cet4`
+  - `cet6`
+  - `sp4`
+- 本地导入支持：
+  - TXT
+  - CSV
+  - JSON
+- 在线导入支持：
+  - 英语：`k7tmiz/english-vocabulary`
+  - 西班牙语：`k7tmiz/spanish-vocabulary`
+- JSON 导入可显式提供 `language`
+- TXT / CSV 会尝试弱推断语言
+- 词书语言用于：
+  - 自动选发音语言
+  - 首页词书下拉的语言优先级
+
+## 9) 记录页聚合逻辑（真实实现）
+
+- 全局最新状态映射：
+  - 按 term+meaning 构建最新记录
+  - term 忽略大小写
+  - meaning 做空白归一
+- 最新判定优先级：
+  - `lastReviewedAt`
+  - `createdAt`
+  - round 的 `finishedAt / startedAt`
+- 当时间相等时，使用稳定 tie-break，保证后写入记录优先
+- “待复习”分组条件：
+  - `reviewSystemEnabled = true`
+  - `nextReviewAt <= now`
+
+## 10) 导出规则（真实实现）
+
+### 10.1 CSV
+
+- 支持全局导出与单轮导出
+- 列为：
+  - 轮次编号
+  - 轮次类型
+  - 单词
+  - 词性
+  - 释义
+  - 当前状态
+  - 开始时间
+  - 完成时间
+  - 上次复习时间
+  - 下次复习时间
+- 当前状态与复习时间以全局最新状态映射为准
+
+### 10.2 PDF
+
+- 记录页会打开新窗口并生成分页 A4 图像
+- 之后调用 `window.print()`
+- 由浏览器“另存为 PDF”
+- 每个 `pageIndex` 对应 PDF 中的一页
+
+## 11) 设置系统与 AI（真实实现）
+
+### 11.1 设置项
+
+- 外观：
+  - `themeMode`
+- 学习：
+  - `dailyGoalRounds`
+  - `dailyGoalWords`
+  - `roundCap`
+- 复习：
+  - `reviewSystemEnabled`
+  - `reviewIntervals`
+  - `reviewAutoCloseModal`
+  - `reviewCardFlipEnabled`
+- 发音：
+  - `pronunciationEnabled`
+  - `pronunciationAccent`
+  - `pronunciationLang`
+  - `voiceMode`
+  - `voiceURI`
+- 查词：
+  - `lookupOnlineEnabled`
+  - `lookupOnlineSource`
+  - `lookupLangMode`
+  - `lookupSpanishConjugationEnabled`
+  - `lookupCacheEnabled`
+  - `lookupCacheDays`
+- 数据：
+  - 完整备份导入 / 导出
+- AI：
+  - `provider / baseUrl / apiKey / model`
+  - AI 词书生成
+
+### 11.2 AI provider 预设
+
+- `openai`
+- `gemini`
+- `deepseek`
+- `siliconcloud`
+- `custom`
+
+provider 切换时，仅在 `baseUrl / model` 为空，或仍等于上一 provider 默认值时，才会覆盖为新 provider 默认值，以尽量保留用户手动输入。
+
+## 12) 数据存储（真实实现）
+
+### 12.1 `localStorage` keys
+
+- `a4-memory:v1`
+- `a4-memory:intro-seen:v1`
+- `a4-memory:lookup-cache:v1`
+
+### 12.2 主状态摘要
+
+- 轮次相关：
+  - `rounds`
+  - `currentRoundId`
+  - `pendingReviewRoundId`
+  - `pendingGenerateStatusKind`
+- UI：
+  - `showMeaning`
+  - `immersiveMode`
+  - `themeMode`
+  - `darkMode`
+- 统计：
+  - `currentCount`
+  - `dailyGoalRounds`
+  - `dailyGoalWords`
+  - `roundCap`
+- 复习：
+  - `reviewSystemEnabled`
+  - `reviewIntervals`
+  - `reviewAutoCloseModal`
+  - `reviewCardFlipEnabled`
+- 发音：
+  - `pronunciationEnabled`
+  - `pronunciationAccent`
+  - `pronunciationLang`
+  - `voiceMode`
+  - `voiceURI`
+- 词书：
+  - `selectedWordbookId`
+  - `customWordbooks`
+- AI：
+  - `aiConfig`
+- 查词：
+  - `lookupOnlineEnabled`
+  - `lookupOnlineSource`
+  - `lookupLangMode`
+  - `lookupSpanishConjugationEnabled`
+  - `lookupCacheEnabled`
+  - `lookupCacheDays`
+
+### 12.3 round / item 结构
+
+- `rounds[]`
+  - `id`
+  - `startedAt`
+  - `finishedAt`
+  - `items`
+  - `roundCap`
+  - `type`
+  - `language`
+- `rounds[].items[]`
+  - `word`
+  - `pos`
+  - `fontSize`
+  - `createdAt`
+  - `status`
+  - `lastReviewedAt`
+  - `nextReviewAt`
+  - `pageIndex`
+
+## 13) 兼容性与已知行为（真实实现）
+
+- 旧数据兼容：
+  - 旧 items 无 `pageIndex` 时按 `0` 处理
+  - 旧 rounds 无 `type` 时按 `normal` 处理
+- `currentPageIndex` 为运行态状态：
+  - 不写入 `localStorage`
+  - 刷新后默认回到当前轮第 1 页
+- 备份导入（`settings.js` 的 `normalizeImportedState`）当前不会保留：
+  - `round.type`
+  - `round.language`
+  - `item.pageIndex`
+- 记录页监听 `storage` 事件，可在多标签页间同步刷新显示
