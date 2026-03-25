@@ -283,10 +283,24 @@
             <div class="form-row">
               <div class="form-label">每轮上限</div>
               <div class="form-control">
-                <input id="roundCapInput" class="text-input" type="number" min="20" max="30" value="30" />
+                <div class="select-wrap">
+                  <select id="roundCapInput" aria-label="每轮上限">
+                    <option value="20">20</option>
+                    <option value="21">21</option>
+                    <option value="22">22</option>
+                    <option value="23">23</option>
+                    <option value="24">24</option>
+                    <option value="25">25</option>
+                    <option value="26">26</option>
+                    <option value="27">27</option>
+                    <option value="28">28</option>
+                    <option value="29">29</option>
+                    <option value="30">30</option>
+                  </select>
+                </div>
               </div>
             </div>
-            <div class="form-help">修改后对新一轮生效；已有记录保持兼容。</div>
+            <div class="form-help">可选 20–30。修改后对新一轮生效；已经开始的轮次会继续使用原来的上限。</div>
           </section>
 
           <section class="panel">

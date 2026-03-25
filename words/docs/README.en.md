@@ -13,6 +13,9 @@ A pure front-end vocabulary tool built around randomly placing words on A4 pages
 - Per-round de-dup: within a round, it de-dups by “same language + same term + same meaning” (no duplicates across pages)
 - Configurable A4 page cap (20–30). When the current A4 page is full, you can append another A4 page within the same normal round (round-wide de-dup), or review the round / start the next round manually
 - Meaning toggle, immersive mode, theme modes (Auto/Light/Dark)
+- Study settings:
+  - Round cap is selectable from `20–30`
+  - Changes apply to new rounds; rounds already in progress keep their original cap
 - Learning status: mark each word as Mastered / Learning / Unknown during review
 - Lightweight review: auto schedules next review time and counts “Due”
 - Records:
@@ -68,7 +71,7 @@ Open: http://localhost:8080/
 - Mobile/tablet: Per-round action buttons in Records scale down to match the rest of the UI
 - Cross-browser: normalize form/control rendering so Chromium and Safari look closer
 - Maintenance: reduce duplication and improve readability without changing behavior or localStorage schema
-- Settings: theme, pronunciation, round cap, lightweight review, auto-close review modal on completion, review card flip, backup, AI generator
+- Settings: theme, round cap, pronunciation, lightweight review, auto-close review modal on completion, review card flip, backup, AI generator
 - Home “How to use”: text stays aligned with the current implementation
 
 ## Project structure (brief)
