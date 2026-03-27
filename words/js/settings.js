@@ -457,8 +457,62 @@
             <div class="form-help">包含学习记录与设置；导入会覆盖当前浏览器本地数据。</div>
           </section>
 
+          <section class="panel" id="accountPanel">
+            <div class="section-title">账号</div>
+            <div id="accountLoggedOut">
+              <div class="form-row">
+                <div class="form-label">用户名</div>
+                <div class="form-control">
+                  <input id="cloudUsernameInput" class="text-input" type="text" placeholder="用户名" />
+                </div>
+              </div>
+              <div class="form-row">
+                <div class="form-label">密码</div>
+                <div class="form-control">
+                  <input id="cloudPasswordInput" class="text-input" type="password" placeholder="密码" />
+                </div>
+              </div>
+              <div class="stack">
+                <button class="primary full" id="cloudRegisterBtn" type="button">注册</button>
+                <button class="ghost full" id="cloudLoginBtn" type="button">登录</button>
+              </div>
+            </div>
+            <div id="accountLoggedIn" class="hidden">
+              <div class="form-row">
+                <div class="form-label">已登录</div>
+                <div class="form-control">
+                  <div id="cloudUsernameText" class="form-help"></div>
+                </div>
+              </div>
+              <div class="stack">
+                <button class="ghost full" id="cloudLogoutBtn" type="button">退出登录</button>
+              </div>
+            </div>
+            <div class="form-help" id="accountStatus"></div>
+          </section>
+
+          <section class="panel">
+            <div class="section-title">云端备份</div>
+            <div class="stack">
+              <button class="ghost full" id="cloudUploadBtn" type="button">上传到云端</button>
+              <button class="ghost full" id="cloudDownloadBtn" type="button">从云端恢复</button>
+            </div>
+            <div class="form-help" id="cloudSyncStatus"></div>
+          </section>
+
           <section class="panel">
             <div class="section-title">AI（生成词书 / 查词补充）</div>
+            <div class="form-row">
+              <div class="form-label">服务模式</div>
+              <div class="form-control">
+                <select id="aiServiceModeSelect" aria-label="AI 服务模式">
+                  <option value="custom">自定义 API</option>
+                  <option value="official">官方服务</option>
+                </select>
+              </div>
+            </div>
+            <div id="aiOfficialServiceHint" class="form-help hidden">官方服务：使用登录账号的官方额度（暂未开放）</div>
+            <div id="aiCustomConfigPanel">
             <div class="form-row">
               <div class="form-label">API 提供商</div>
               <div class="form-control">
@@ -489,6 +543,7 @@
                 <input id="aiModelInput" class="text-input" type="text" list="aiModelDatalist" placeholder="可直接输入或选常用模型" />
                 <datalist id="aiModelDatalist"></datalist>
               </div>
+            </div>
             </div>
             <div class="form-help">可先选择提供商自动填充建议值；API Key 仅保存在当前浏览器本地。</div>
             <div class="form-row">
@@ -622,6 +677,21 @@
       exportBackupBtn: modal.querySelector("#exportBackupBtn"),
       importBackupBtn: modal.querySelector("#importBackupBtn"),
       importBackupFile: modal.querySelector("#importBackupFile"),
+      cloudUsernameInput: modal.querySelector("#cloudUsernameInput"),
+      cloudPasswordInput: modal.querySelector("#cloudPasswordInput"),
+      cloudRegisterBtn: modal.querySelector("#cloudRegisterBtn"),
+      cloudLoginBtn: modal.querySelector("#cloudLoginBtn"),
+      cloudLogoutBtn: modal.querySelector("#cloudLogoutBtn"),
+      cloudUploadBtn: modal.querySelector("#cloudUploadBtn"),
+      cloudDownloadBtn: modal.querySelector("#cloudDownloadBtn"),
+      accountLoggedOut: modal.querySelector("#accountLoggedOut"),
+      accountLoggedIn: modal.querySelector("#accountLoggedIn"),
+      cloudUsernameText: modal.querySelector("#cloudUsernameText"),
+      accountStatus: modal.querySelector("#accountStatus"),
+      cloudSyncStatus: modal.querySelector("#cloudSyncStatus"),
+      aiServiceModeSelect: modal.querySelector("#aiServiceModeSelect"),
+      aiOfficialServiceHint: modal.querySelector("#aiOfficialServiceHint"),
+      aiCustomConfigPanel: modal.querySelector("#aiCustomConfigPanel"),
       aiProviderSelect: modal.querySelector("#aiProviderSelect"),
       aiBaseUrlInput: modal.querySelector("#aiBaseUrlInput"),
       aiApiKeyInput: modal.querySelector("#aiApiKeyInput"),
@@ -781,6 +851,7 @@
       if (dom.aiStatus) dom.aiStatus.textContent = ""
       updateVoiceUi()
       renderAiProviderUi()
+      updateAccountUi()
     }
 
     const AI_PROVIDER_PRESETS = {
@@ -1573,7 +1644,101 @@
       window.location.reload()
     })
 
-    return { open, close, render, updateVoiceUi, renderVoiceSelect, renderVoiceModeUi }
+    // 账号 & 云端备份
+    function updateAccountUi() {
+      const loggedIn = window.A4Cloud?.isLoggedIn?.() || false
+      if (dom.accountLoggedOut) dom.accountLoggedOut.classList.toggle("hidden", loggedIn)
+      if (dom.accountLoggedIn) dom.accountLoggedIn.classList.toggle("hidden", !loggedIn)
+      if (dom.cloudUsernameText && loggedIn) {
+        dom.cloudUsernameText.textContent = window.A4Cloud?.getUserId?.() || ""
+      }
+    }
+
+    dom.cloudRegisterBtn?.addEventListener("click", async () => {
+      const username = dom.cloudUsernameInput?.value?.trim() || ""
+      const password = dom.cloudPasswordInput?.value || ""
+      if (!username || !password) {
+        if (dom.accountStatus) dom.accountStatus.textContent = "请输入用户名和密码"
+        return
+      }
+      if (dom.accountStatus) dom.accountStatus.textContent = "注册中…"
+      const result = await window.A4Cloud?.register?.(username, password)
+      if (result?.success) {
+        if (dom.accountStatus) dom.accountStatus.textContent = "注册成功，已自动登录"
+        updateAccountUi()
+      } else {
+        if (dom.accountStatus) dom.accountStatus.textContent = "注册失败：" + (result?.error || "未知错误")
+      }
+    })
+
+    dom.cloudLoginBtn?.addEventListener("click", async () => {
+      const username = dom.cloudUsernameInput?.value?.trim() || ""
+      const password = dom.cloudPasswordInput?.value || ""
+      if (!username || !password) {
+        if (dom.accountStatus) dom.accountStatus.textContent = "请输入用户名和密码"
+        return
+      }
+      if (dom.accountStatus) dom.accountStatus.textContent = "登录中…"
+      const result = await window.A4Cloud?.login?.(username, password)
+      if (result?.success) {
+        if (dom.accountStatus) dom.accountStatus.textContent = "登录成功"
+        updateAccountUi()
+      } else {
+        if (dom.accountStatus) dom.accountStatus.textContent = "登录失败：" + (result?.error || "未知错误")
+      }
+    })
+
+    dom.cloudLogoutBtn?.addEventListener("click", () => {
+      window.A4Cloud?.logout?.()
+      if (dom.cloudUsernameInput) dom.cloudUsernameInput.value = ""
+      if (dom.cloudPasswordInput) dom.cloudPasswordInput.value = ""
+      if (dom.accountStatus) dom.accountStatus.textContent = "已退出登录"
+      updateAccountUi()
+    })
+
+    dom.cloudUploadBtn?.addEventListener("click", async () => {
+      if (!window.A4Cloud?.isLoggedIn?.()) {
+        if (dom.cloudSyncStatus) dom.cloudSyncStatus.textContent = "请先登录"
+        return
+      }
+      if (dom.cloudSyncStatus) dom.cloudSyncStatus.textContent = "上传中…"
+      const result = await window.A4Cloud?.uploadState?.()
+      if (result?.success) {
+        if (dom.cloudSyncStatus) dom.cloudSyncStatus.textContent = "上传成功：" + (result.savedAt || "")
+      } else {
+        if (dom.cloudSyncStatus) dom.cloudSyncStatus.textContent = "上传失败：" + (result?.error || "未知错误")
+      }
+    })
+
+    dom.cloudDownloadBtn?.addEventListener("click", async () => {
+      if (!window.A4Cloud?.isLoggedIn?.()) {
+        if (dom.cloudSyncStatus) dom.cloudSyncStatus.textContent = "请先登录"
+        return
+      }
+      if (dom.cloudSyncStatus) dom.cloudSyncStatus.textContent = "下载中…"
+      const result = await window.A4Cloud?.downloadState?.()
+      if (result?.success) {
+        if (dom.cloudSyncStatus) dom.cloudSyncStatus.textContent = "恢复成功：" + (result.savedAt || "")
+        window.location.reload()
+      } else {
+        if (dom.cloudSyncStatus) dom.cloudSyncStatus.textContent = "恢复失败：" + (result?.error || "未知错误")
+      }
+    })
+
+    // AI 服务模式
+    dom.aiServiceModeSelect?.addEventListener("change", () => {
+      const mode = dom.aiServiceModeSelect?.value || "custom"
+      const isOfficial = mode === "official"
+      if (dom.aiOfficialServiceHint) dom.aiOfficialServiceHint.classList.toggle("hidden", !isOfficial)
+      if (dom.aiCustomConfigPanel) dom.aiCustomConfigPanel.classList.toggle("hidden", isOfficial)
+      if (isOfficial && !window.A4Cloud?.isLoggedIn?.()) {
+        if (dom.aiOfficialServiceHint) dom.aiOfficialServiceHint.textContent = "官方服务：使用登录账号的官方额度（请先登录）"
+      } else if (isOfficial) {
+        if (dom.aiOfficialServiceHint) dom.aiOfficialServiceHint.textContent = "官方服务：使用登录账号的官方额度（暂未开放）"
+      }
+    })
+
+    return { open, close, render, updateVoiceUi, renderVoiceSelect, renderVoiceModeUi, updateAccountUi }
   }
 
   if (!document.getElementById("settingsModal")) {
