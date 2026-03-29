@@ -10,6 +10,7 @@
   const normalizeStatus = window.A4Common?.normalizeStatus
   const ACCOUNT_REGISTER_CODE_COOLDOWN_KEY = "a4-memory:register-code-cooldown:v1"
   const ACCOUNT_RESET_CODE_COOLDOWN_KEY = "a4-memory:reset-code-cooldown:v1"
+  const ACCOUNT_SYNC_META_KEY = "a4-memory:cloud-sync-meta:v1"
 
   function normalizeReviewIntervals(raw) {
     const base = raw && typeof raw === "object" ? raw : {}
@@ -131,7 +132,8 @@
     next.dailyGoalWords = clamp(Number(next.dailyGoalWords) || 0, 0, 500)
     next.reviewSystemEnabled = typeof next.reviewSystemEnabled === "boolean" ? next.reviewSystemEnabled : true
     next.reviewIntervals = normalizeReviewIntervals(next.reviewIntervals)
-    next.reviewAutoCloseModal = typeof next.reviewAutoCloseModal === "boolean" ? next.reviewAutoCloseModal : true
+    next.reviewAutoCloseModal = true
+    next.continuousStudyMode = typeof next.continuousStudyMode === "boolean" ? next.continuousStudyMode : false
     next.reviewCardFlipEnabled = typeof next.reviewCardFlipEnabled === "boolean" ? next.reviewCardFlipEnabled : false
 
     next.pronunciationEnabled =
@@ -414,9 +416,16 @@
             <div class="form-row">
               <div class="form-label">复习完成后自动关闭弹窗</div>
               <div class="form-control">
-                <button class="ghost" id="reviewAutoCloseModalToggleBtn" type="button">自动关闭：开</button>
+                <div class="form-help">固定开启</div>
               </div>
             </div>
+            <div class="form-row">
+              <div class="form-label">持续背书模式</div>
+              <div class="form-control">
+                <button class="ghost" id="continuousStudyModeToggleBtn" type="button">持续背书：关</button>
+              </div>
+            </div>
+            <div class="form-help">开启后，普通学习轮的复习结束会自动继续下一词，不需要再点「下一个单词」。</div>
             <div class="form-row">
               <div class="form-label">启用复习卡片翻面</div>
               <div class="form-control">
@@ -537,76 +546,137 @@
             <div class="form-help">包含学习记录与设置；导入会覆盖当前浏览器本地数据。</div>
           </section>
 
-          <section class="panel" id="accountPanel">
+          <section class="panel account-panel" id="accountPanel">
             <div class="section-title">账号</div>
             <div id="accountLoggedOut">
-              <div class="form-help">注册需先验证邮箱；登录仍使用用户名和密码。</div>
-              <div class="form-row">
-                <div class="form-label">注册邮箱</div>
-                <div class="form-control form-control-stack">
-                  <input id="cloudEmailInput" class="text-input" type="email" placeholder="用于接收注册验证码" autocomplete="email" />
-                  <div id="cloudEmailHint" class="form-help field-help hidden"></div>
+              <div class="form-help">先登录后可使用云端备份；没有账号时可切换到注册或重置密码。</div>
+              <div class="view-tabs account-tabs" role="tablist" aria-label="账号操作">
+                <button class="ghost active" id="accountTabLoginBtn" type="button" role="tab" aria-selected="true">登录</button>
+                <button class="ghost" id="accountTabRegisterBtn" type="button" role="tab" aria-selected="false">注册</button>
+                <button class="ghost" id="accountTabResetBtn" type="button" role="tab" aria-selected="false">重置密码</button>
+              </div>
+              <div class="account-section hidden" id="accountRegisterSection">
+                <div class="account-section-title">邮箱验证码注册</div>
+                <div class="form-row">
+                  <div class="form-label">注册邮箱</div>
+                  <div class="form-control form-control-stack">
+                    <input id="cloudEmailInput" class="text-input" type="email" placeholder="用于接收注册验证码" autocomplete="email" />
+                    <div id="cloudEmailHint" class="form-help field-help hidden"></div>
+                  </div>
+                </div>
+                <div class="form-row">
+                  <div class="form-label">注册验证码</div>
+                  <div class="form-control form-control-stack">
+                    <input id="cloudRegisterCodeInput" class="text-input" type="text" inputmode="numeric" maxlength="6" pattern="\\d{6}" placeholder="6 位验证码" autocomplete="one-time-code" />
+                    <div id="cloudRegisterCodeHint" class="form-help field-help hidden"></div>
+                  </div>
+                </div>
+                <div class="account-actions">
+                  <button class="ghost full" id="cloudSendCodeBtn" type="button">发送注册验证码</button>
+                </div>
+                <div class="form-row">
+                  <div class="form-label">用户名</div>
+                  <div class="form-control form-control-stack">
+                    <input id="cloudUsernameInput" class="text-input" type="text" maxlength="32" placeholder="注册用户名" autocomplete="username" />
+                    <div id="cloudUsernameHint" class="form-help field-help hidden"></div>
+                  </div>
+                </div>
+                <div class="form-row">
+                  <div class="form-label">密码</div>
+                  <div class="form-control form-control-stack">
+                    <input id="cloudPasswordInput" class="text-input" type="password" minlength="6" placeholder="注册密码" autocomplete="new-password" />
+                    <div id="cloudPasswordHint" class="form-help field-help hidden"></div>
+                  </div>
+                </div>
+                <div class="account-actions">
+                  <button class="ghost full" id="cloudRegisterBtn" type="button">邮箱验证码注册</button>
                 </div>
               </div>
-              <div class="form-row">
-                <div class="form-label">注册验证码</div>
-                <div class="form-control form-control-stack">
-                  <input id="cloudRegisterCodeInput" class="text-input" type="text" inputmode="numeric" maxlength="6" pattern="\\d{6}" placeholder="6 位验证码" autocomplete="one-time-code" />
-                  <div id="cloudRegisterCodeHint" class="form-help field-help hidden"></div>
+              <div class="account-section" id="accountLoginSection">
+                <div class="account-section-title">账号登录</div>
+                <div class="form-row">
+                  <div class="form-label">用户名</div>
+                  <div class="form-control form-control-stack">
+                    <input id="cloudLoginUsernameInput" class="text-input" type="text" maxlength="32" placeholder="输入用户名" autocomplete="username" />
+                    <div id="cloudLoginUsernameHint" class="form-help field-help hidden"></div>
+                  </div>
+                </div>
+                <div class="form-row">
+                  <div class="form-label">密码</div>
+                  <div class="form-control form-control-stack">
+                    <input id="cloudLoginPasswordInput" class="text-input" type="password" minlength="6" placeholder="输入密码" autocomplete="current-password" />
+                    <div id="cloudLoginPasswordHint" class="form-help field-help hidden"></div>
+                  </div>
+                </div>
+                <div class="account-actions">
+                  <button class="primary full" id="cloudLoginBtn" type="button">登录</button>
                 </div>
               </div>
-              <div class="stack">
-                <button class="ghost full" id="cloudSendCodeBtn" type="button">发送注册验证码</button>
-              </div>
-              <div class="form-row">
-                <div class="form-label">用户名</div>
-                <div class="form-control form-control-stack">
-                  <input id="cloudUsernameInput" class="text-input" type="text" maxlength="32" placeholder="注册和登录都使用用户名" autocomplete="username" />
-                  <div id="cloudUsernameHint" class="form-help field-help hidden"></div>
+              <div class="account-section hidden" id="accountResetSection">
+                <div class="account-section-title">重置密码</div>
+                <div class="form-row">
+                  <div class="form-label">重置邮箱</div>
+                  <div class="form-control form-control-stack">
+                    <input id="cloudResetEmailInput" class="text-input" type="email" placeholder="接收重置验证码的邮箱" autocomplete="email" />
+                    <div id="cloudResetEmailHint" class="form-help field-help hidden"></div>
+                  </div>
                 </div>
-              </div>
-              <div class="form-row">
-                <div class="form-label">密码</div>
-                <div class="form-control form-control-stack">
-                  <input id="cloudPasswordInput" class="text-input" type="password" minlength="6" placeholder="注册和登录都使用密码" autocomplete="current-password" />
-                  <div id="cloudPasswordHint" class="form-help field-help hidden"></div>
+                <div class="form-row">
+                  <div class="form-label">重置验证码</div>
+                  <div class="form-control form-control-stack">
+                    <input id="cloudResetCodeInput" class="text-input" type="text" inputmode="numeric" maxlength="6" pattern="\\d{6}" placeholder="6 位验证码" autocomplete="one-time-code" />
+                    <div id="cloudResetCodeHint" class="form-help field-help hidden"></div>
+                  </div>
                 </div>
-              </div>
-              <div class="stack">
-                <button class="primary full" id="cloudRegisterBtn" type="button">邮箱验证码注册</button>
-                <button class="ghost full" id="cloudLoginBtn" type="button">登录</button>
-              </div>
-              <div class="form-row">
-                <div class="form-label">重置邮箱</div>
-                <div class="form-control form-control-stack">
-                  <input id="cloudResetEmailInput" class="text-input" type="email" placeholder="接收重置验证码的邮箱" autocomplete="email" />
-                  <div id="cloudResetEmailHint" class="form-help field-help hidden"></div>
+                <div class="account-actions">
+                  <button class="ghost full" id="cloudSendResetCodeBtn" type="button">发送重置验证码</button>
                 </div>
-              </div>
-              <div class="form-row">
-                <div class="form-label">重置验证码</div>
-                <div class="form-control form-control-stack">
-                  <input id="cloudResetCodeInput" class="text-input" type="text" inputmode="numeric" maxlength="6" pattern="\\d{6}" placeholder="6 位验证码" autocomplete="one-time-code" />
-                  <div id="cloudResetCodeHint" class="form-help field-help hidden"></div>
+                <div class="form-row">
+                  <div class="form-label">新密码</div>
+                  <div class="form-control form-control-stack">
+                    <input id="cloudResetPasswordInput" class="text-input" type="password" minlength="6" placeholder="至少 6 位" autocomplete="new-password" />
+                    <div id="cloudResetPasswordHint" class="form-help field-help hidden"></div>
+                  </div>
                 </div>
-              </div>
-              <div class="form-row">
-                <div class="form-label">新密码</div>
-                <div class="form-control form-control-stack">
-                  <input id="cloudResetPasswordInput" class="text-input" type="password" minlength="6" placeholder="至少 6 位" autocomplete="new-password" />
-                  <div id="cloudResetPasswordHint" class="form-help field-help hidden"></div>
+                <div class="account-actions">
+                  <button class="ghost full" id="cloudResetPasswordBtn" type="button">重置密码</button>
                 </div>
-              </div>
-              <div class="stack">
-                <button class="ghost full" id="cloudSendResetCodeBtn" type="button">发送重置验证码</button>
-                <button class="ghost full" id="cloudResetPasswordBtn" type="button">重置密码</button>
               </div>
             </div>
             <div id="accountLoggedIn" class="hidden">
-              <div class="form-row">
-                <div class="form-label">用户 ID</div>
-                <div class="form-control">
-                  <div id="cloudUsernameText" class="form-help"></div>
+              <div class="account-summary">
+                <div class="account-summary-head">
+                  <div>
+                    <div class="account-summary-title" id="cloudAccountTitle">已登录</div>
+                    <div class="account-summary-subtitle" id="cloudAccountSubtitle">当前浏览器已启用云端备份</div>
+                  </div>
+                  <div class="account-badge">在线</div>
+                </div>
+                <div class="account-summary-grid">
+                  <div class="account-summary-item">
+                    <span>云备份</span>
+                    <strong id="cloudBackupStateText">已启用</strong>
+                  </div>
+                  <div class="account-summary-item">
+                    <span>最近同步</span>
+                    <strong id="cloudLastSyncText">尚未同步</strong>
+                  </div>
+                  <div class="account-summary-item">
+                    <span>学习轮次</span>
+                    <strong id="cloudRoundsText">0</strong>
+                  </div>
+                  <div class="account-summary-item">
+                    <span>累计单词</span>
+                    <strong id="cloudWordsText">0</strong>
+                  </div>
+                  <div class="account-summary-item">
+                    <span>今日新增</span>
+                    <strong id="cloudTodayWordsText">0</strong>
+                  </div>
+                  <div class="account-summary-item">
+                    <span>当前轮</span>
+                    <strong id="cloudCurrentRoundText">未开始</strong>
+                  </div>
                 </div>
               </div>
               <div class="stack">
@@ -616,10 +686,11 @@
             <div class="form-help account-status hidden" id="accountStatus"></div>
           </section>
 
-          <section class="panel">
+          <section class="panel hidden" id="cloudBackupPanel">
             <div class="section-title">云端备份</div>
+            <div class="form-help">登录后可在当前浏览器上传学习进度到云端，或从云端恢复到本地。</div>
             <div class="stack">
-              <button class="ghost full" id="cloudUploadBtn" type="button">上传到云端</button>
+              <button class="primary full" id="cloudUploadBtn" type="button">上传到云端</button>
               <button class="ghost full" id="cloudDownloadBtn" type="button">从云端恢复</button>
             </div>
             <div class="form-help" id="cloudSyncStatus"></div>
@@ -770,6 +841,16 @@
       document.body.appendChild(modal)
     }
 
+    const modalBody = modal.querySelector(".modal-body")
+    const accountPanel = modal.querySelector("#accountPanel")
+    const cloudBackupPanel = modal.querySelector("#cloudBackupPanel")
+    if (modalBody && accountPanel && modalBody.firstElementChild !== accountPanel) {
+      modalBody.insertBefore(accountPanel, modalBody.firstElementChild)
+    }
+    if (modalBody && accountPanel && cloudBackupPanel && accountPanel.nextElementSibling !== cloudBackupPanel) {
+      modalBody.insertBefore(cloudBackupPanel, accountPanel.nextElementSibling)
+    }
+
     const dom = {
       modal,
       backdrop: modal.querySelector("#settingsBackdrop"),
@@ -783,7 +864,7 @@
       reviewUnknownDaysInput: modal.querySelector("#reviewUnknownDaysInput"),
       reviewLearningDaysInput: modal.querySelector("#reviewLearningDaysInput"),
       reviewMasteredDaysInput: modal.querySelector("#reviewMasteredDaysInput"),
-      reviewAutoCloseModalToggleBtn: modal.querySelector("#reviewAutoCloseModalToggleBtn"),
+      continuousStudyModeToggleBtn: modal.querySelector("#continuousStudyModeToggleBtn"),
       reviewCardFlipToggleBtn: modal.querySelector("#reviewCardFlipToggleBtn"),
       pronounceToggleBtn: modal.querySelector("#pronounceToggleBtn"),
       accentSelect: modal.querySelector("#accentSelect"),
@@ -802,6 +883,13 @@
       exportBackupBtn: modal.querySelector("#exportBackupBtn"),
       importBackupBtn: modal.querySelector("#importBackupBtn"),
       importBackupFile: modal.querySelector("#importBackupFile"),
+      cloudBackupPanel: modal.querySelector("#cloudBackupPanel"),
+      accountTabRegisterBtn: modal.querySelector("#accountTabRegisterBtn"),
+      accountTabLoginBtn: modal.querySelector("#accountTabLoginBtn"),
+      accountTabResetBtn: modal.querySelector("#accountTabResetBtn"),
+      accountRegisterSection: modal.querySelector("#accountRegisterSection"),
+      accountLoginSection: modal.querySelector("#accountLoginSection"),
+      accountResetSection: modal.querySelector("#accountResetSection"),
       cloudEmailInput: modal.querySelector("#cloudEmailInput"),
       cloudEmailHint: modal.querySelector("#cloudEmailHint"),
       cloudRegisterCodeInput: modal.querySelector("#cloudRegisterCodeInput"),
@@ -811,6 +899,10 @@
       cloudUsernameHint: modal.querySelector("#cloudUsernameHint"),
       cloudPasswordInput: modal.querySelector("#cloudPasswordInput"),
       cloudPasswordHint: modal.querySelector("#cloudPasswordHint"),
+      cloudLoginUsernameInput: modal.querySelector("#cloudLoginUsernameInput"),
+      cloudLoginUsernameHint: modal.querySelector("#cloudLoginUsernameHint"),
+      cloudLoginPasswordInput: modal.querySelector("#cloudLoginPasswordInput"),
+      cloudLoginPasswordHint: modal.querySelector("#cloudLoginPasswordHint"),
       cloudRegisterBtn: modal.querySelector("#cloudRegisterBtn"),
       cloudLoginBtn: modal.querySelector("#cloudLoginBtn"),
       cloudResetEmailInput: modal.querySelector("#cloudResetEmailInput"),
@@ -826,7 +918,14 @@
       cloudDownloadBtn: modal.querySelector("#cloudDownloadBtn"),
       accountLoggedOut: modal.querySelector("#accountLoggedOut"),
       accountLoggedIn: modal.querySelector("#accountLoggedIn"),
-      cloudUsernameText: modal.querySelector("#cloudUsernameText"),
+      cloudAccountTitle: modal.querySelector("#cloudAccountTitle"),
+      cloudAccountSubtitle: modal.querySelector("#cloudAccountSubtitle"),
+      cloudBackupStateText: modal.querySelector("#cloudBackupStateText"),
+      cloudLastSyncText: modal.querySelector("#cloudLastSyncText"),
+      cloudRoundsText: modal.querySelector("#cloudRoundsText"),
+      cloudWordsText: modal.querySelector("#cloudWordsText"),
+      cloudTodayWordsText: modal.querySelector("#cloudTodayWordsText"),
+      cloudCurrentRoundText: modal.querySelector("#cloudCurrentRoundText"),
       accountStatus: modal.querySelector("#accountStatus"),
       cloudSyncStatus: modal.querySelector("#cloudSyncStatus"),
       aiServiceModeSelect: modal.querySelector("#aiServiceModeSelect"),
@@ -863,11 +962,14 @@
     let registerCodeCooldownUntil = loadAccountCooldown(ACCOUNT_REGISTER_CODE_COOLDOWN_KEY)
     let resetCodeCooldownUntil = loadAccountCooldown(ACCOUNT_RESET_CODE_COOLDOWN_KEY)
     let accountCooldownTimer = 0
+    let accountMode = "login"
     const accountFieldTouched = {
       registerEmail: false,
       registerCode: false,
       username: false,
       password: false,
+      loginUsername: false,
+      loginPassword: false,
       resetEmail: false,
       resetCode: false,
       resetPassword: false,
@@ -920,6 +1022,18 @@
       return isValidPassword(value) ? "" : "密码至少需要 6 位"
     }
 
+    function getLoginUsernameError(options = {}) {
+      const value = dom.cloudLoginUsernameInput?.value?.trim() || ""
+      if (!value) return options.required ? "请输入用户名" : ""
+      return isValidUsername(value) ? "" : "用户名长度需为 3-32 个字符"
+    }
+
+    function getLoginPasswordError(options = {}) {
+      const value = dom.cloudLoginPasswordInput?.value || ""
+      if (!value) return options.required ? "请输入密码" : ""
+      return isValidPassword(value) ? "" : "密码至少需要 6 位"
+    }
+
     function getResetEmailError(options = {}) {
       const value = dom.cloudResetEmailInput?.value?.trim() || ""
       if (!value) return options.required ? "请输入重置邮箱" : ""
@@ -962,6 +1076,24 @@
       setFieldHint(dom.cloudPasswordInput, dom.cloudPasswordHint, show ? getPasswordError({ required: !!options.required }) : "")
     }
 
+    function updateLoginUsernameHint(options = {}) {
+      const show = options.force || accountFieldTouched.loginUsername
+      setFieldHint(
+        dom.cloudLoginUsernameInput,
+        dom.cloudLoginUsernameHint,
+        show ? getLoginUsernameError({ required: !!options.required }) : ""
+      )
+    }
+
+    function updateLoginPasswordHint(options = {}) {
+      const show = options.force || accountFieldTouched.loginPassword
+      setFieldHint(
+        dom.cloudLoginPasswordInput,
+        dom.cloudLoginPasswordHint,
+        show ? getLoginPasswordError({ required: !!options.required }) : ""
+      )
+    }
+
     function updateResetEmailHint(options = {}) {
       const show = options.force || accountFieldTouched.resetEmail
       setFieldHint(dom.cloudResetEmailInput, dom.cloudResetEmailHint, show ? getResetEmailError({ required: !!options.required }) : "")
@@ -999,12 +1131,12 @@
     }
 
     function validateLoginFields() {
-      accountFieldTouched.username = true
-      accountFieldTouched.password = true
-      const usernameError = getUsernameError({ required: true })
-      const passwordError = getPasswordError({ required: true })
-      updateUsernameHint({ force: true, required: true })
-      updatePasswordHint({ force: true, required: true })
+      accountFieldTouched.loginUsername = true
+      accountFieldTouched.loginPassword = true
+      const usernameError = getLoginUsernameError({ required: true })
+      const passwordError = getLoginPasswordError({ required: true })
+      updateLoginUsernameHint({ force: true, required: true })
+      updateLoginPasswordHint({ force: true, required: true })
       return usernameError || passwordError || ""
     }
 
@@ -1059,7 +1191,7 @@
 
       if (dom.cloudRegisterBtn) {
         dom.cloudRegisterBtn.disabled = accountBusy.register
-        dom.cloudRegisterBtn.textContent = accountBusy.register ? "注册中…" : "邮箱验证码注册"
+        dom.cloudRegisterBtn.textContent = accountBusy.register ? "注册中…" : "注册并登录"
       }
 
       if (dom.cloudLoginBtn) {
@@ -1079,6 +1211,25 @@
       if (dom.cloudResetPasswordBtn) {
         dom.cloudResetPasswordBtn.disabled = accountBusy.resetPassword
         dom.cloudResetPasswordBtn.textContent = accountBusy.resetPassword ? "重置中…" : "重置密码"
+      }
+    }
+
+    function setAccountMode(mode) {
+      accountMode = mode === "login" || mode === "reset" ? mode : "register"
+      if (dom.accountRegisterSection) dom.accountRegisterSection.classList.toggle("hidden", accountMode !== "register")
+      if (dom.accountLoginSection) dom.accountLoginSection.classList.toggle("hidden", accountMode !== "login")
+      if (dom.accountResetSection) dom.accountResetSection.classList.toggle("hidden", accountMode !== "reset")
+      if (dom.accountTabRegisterBtn) {
+        dom.accountTabRegisterBtn.classList.toggle("active", accountMode === "register")
+        dom.accountTabRegisterBtn.setAttribute("aria-selected", accountMode === "register" ? "true" : "false")
+      }
+      if (dom.accountTabLoginBtn) {
+        dom.accountTabLoginBtn.classList.toggle("active", accountMode === "login")
+        dom.accountTabLoginBtn.setAttribute("aria-selected", accountMode === "login" ? "true" : "false")
+      }
+      if (dom.accountTabResetBtn) {
+        dom.accountTabResetBtn.classList.toggle("active", accountMode === "reset")
+        dom.accountTabResetBtn.setAttribute("aria-selected", accountMode === "reset" ? "true" : "false")
       }
     }
 
@@ -1194,7 +1345,7 @@
       if (dom.roundCapInput) dom.roundCapInput.value = String(normalizeRoundCap(state?.roundCap))
       const reviewSystemEnabled = typeof state?.reviewSystemEnabled === "boolean" ? state.reviewSystemEnabled : true
       const reviewIntervals = normalizeReviewIntervals(state?.reviewIntervals)
-      const reviewAutoCloseModal = typeof state?.reviewAutoCloseModal === "boolean" ? state.reviewAutoCloseModal : true
+      const continuousStudyMode = typeof state?.continuousStudyMode === "boolean" ? state.continuousStudyMode : false
       const reviewCardFlipEnabled = typeof state?.reviewCardFlipEnabled === "boolean" ? state.reviewCardFlipEnabled : false
       if (dom.reviewSystemToggleBtn) dom.reviewSystemToggleBtn.textContent = `复习：${reviewSystemEnabled ? "开" : "关"}`
       if (dom.reviewIntervalsPanel) {
@@ -1204,8 +1355,8 @@
       if (dom.reviewUnknownDaysInput) dom.reviewUnknownDaysInput.value = String(reviewIntervals.unknownDays)
       if (dom.reviewLearningDaysInput) dom.reviewLearningDaysInput.value = String(reviewIntervals.learningDays)
       if (dom.reviewMasteredDaysInput) dom.reviewMasteredDaysInput.value = String(reviewIntervals.masteredDays)
-      if (dom.reviewAutoCloseModalToggleBtn)
-        dom.reviewAutoCloseModalToggleBtn.textContent = `自动关闭：${reviewAutoCloseModal ? "开" : "关"}`
+      if (dom.continuousStudyModeToggleBtn)
+        dom.continuousStudyModeToggleBtn.textContent = `持续背书：${continuousStudyMode ? "开" : "关"}`
       if (dom.reviewCardFlipToggleBtn)
         dom.reviewCardFlipToggleBtn.textContent = `翻面：${reviewCardFlipEnabled ? "开" : "关"}`
       if (dom.accentSelect) dom.accentSelect.value = normalizeAccent(state?.pronunciationAccent)
@@ -1238,6 +1389,7 @@
       if (dom.aiStatus) dom.aiStatus.textContent = ""
       updateVoiceUi()
       renderAiProviderUi()
+      setAccountMode(accountMode)
       renderAccountActionButtons()
       if (getCooldownSecondsLeft(registerCodeCooldownUntil) > 0 || getCooldownSecondsLeft(resetCodeCooldownUntil) > 0) {
         ensureAccountCooldownTicker()
@@ -1585,6 +1737,18 @@
     })
     dom.cloudPasswordInput?.addEventListener("input", () => updatePasswordHint())
 
+    dom.cloudLoginUsernameInput?.addEventListener("blur", () => {
+      accountFieldTouched.loginUsername = true
+      updateLoginUsernameHint()
+    })
+    dom.cloudLoginUsernameInput?.addEventListener("input", () => updateLoginUsernameHint())
+
+    dom.cloudLoginPasswordInput?.addEventListener("blur", () => {
+      accountFieldTouched.loginPassword = true
+      updateLoginPasswordHint()
+    })
+    dom.cloudLoginPasswordInput?.addEventListener("input", () => updateLoginPasswordHint())
+
     dom.cloudResetEmailInput?.addEventListener("blur", () => {
       accountFieldTouched.resetEmail = true
       updateResetEmailHint()
@@ -1605,6 +1769,10 @@
       updateResetPasswordHint()
     })
     dom.cloudResetPasswordInput?.addEventListener("input", () => updateResetPasswordHint())
+
+    dom.accountTabRegisterBtn?.addEventListener("click", () => setAccountMode("register"))
+    dom.accountTabLoginBtn?.addEventListener("click", () => setAccountMode("login"))
+    dom.accountTabResetBtn?.addEventListener("click", () => setAccountMode("reset"))
 
     dom.dailyGoalRoundsInput?.addEventListener("change", () => {
       const n = Number(dom.dailyGoalRoundsInput.value)
@@ -1642,15 +1810,15 @@
       afterChange("reviewSystemEnabled")
     })
 
-    dom.reviewAutoCloseModalToggleBtn?.addEventListener("click", () => {
+    dom.continuousStudyModeToggleBtn?.addEventListener("click", () => {
       const state = getStateSafe()
-      const cur = typeof state?.reviewAutoCloseModal === "boolean" ? state.reviewAutoCloseModal : true
-      const reviewAutoCloseModal = !cur
-      setStateSafe({ reviewAutoCloseModal })
-      if (dom.reviewAutoCloseModalToggleBtn)
-        dom.reviewAutoCloseModalToggleBtn.textContent = `自动关闭：${reviewAutoCloseModal ? "开" : "关"}`
+      const cur = typeof state?.continuousStudyMode === "boolean" ? state.continuousStudyMode : false
+      const continuousStudyMode = !cur
+      setStateSafe({ continuousStudyMode, reviewAutoCloseModal: true })
+      if (dom.continuousStudyModeToggleBtn)
+        dom.continuousStudyModeToggleBtn.textContent = `持续背书：${continuousStudyMode ? "开" : "关"}`
       persistSafe()
-      afterChange("reviewAutoCloseModal")
+      afterChange("continuousStudyMode")
     })
 
     dom.reviewCardFlipToggleBtn?.addEventListener("click", () => {
@@ -2104,18 +2272,126 @@
       dom.accountStatus.classList.add(`is-${statusKind}`)
     }
 
+    function formatLoginTime(value) {
+      const time = value ? new Date(value) : null
+      if (!time || Number.isNaN(time.getTime())) return "当前浏览器会话"
+      try {
+        return time.toLocaleString("zh-CN", {
+          month: "2-digit",
+          day: "2-digit",
+          hour: "2-digit",
+          minute: "2-digit",
+        })
+      } catch (e) {
+        return "当前浏览器会话"
+      }
+    }
+
+    function formatSyncTime(value) {
+      const time = value ? new Date(value) : null
+      if (!time || Number.isNaN(time.getTime())) return ""
+      try {
+        return time.toLocaleString("zh-CN", {
+          month: "2-digit",
+          day: "2-digit",
+          hour: "2-digit",
+          minute: "2-digit",
+        })
+      } catch (e) {
+        return ""
+      }
+    }
+
+    function loadAccountSyncMeta() {
+      try {
+        const raw = localStorage.getItem(ACCOUNT_SYNC_META_KEY)
+        const parsed = raw ? JSON.parse(raw) : null
+        return parsed && typeof parsed === "object" ? parsed : null
+      } catch (e) {
+        return null
+      }
+    }
+
+    function saveAccountSyncMeta(meta) {
+      try {
+        if (!meta || typeof meta !== "object") {
+          localStorage.removeItem(ACCOUNT_SYNC_META_KEY)
+          return
+        }
+        localStorage.setItem(ACCOUNT_SYNC_META_KEY, JSON.stringify(meta))
+      } catch (e) {}
+    }
+
+    function buildLearningSummary() {
+      const state = getStateSafe()
+      const rounds = Array.isArray(state?.rounds) ? state.rounds : []
+      const stats = window.A4Common?.computeStudyStats?.(rounds) || {
+        totalWords: 0,
+        todayWords: 0,
+        completedRounds: 0,
+        todayCompletedRounds: 0,
+        streak: 0,
+      }
+      const currentRoundId = String(state?.currentRoundId || "")
+      const currentRound = rounds.find((round) => String(round?.id || "") === currentRoundId) || null
+      const currentItems = Array.isArray(currentRound?.items) ? currentRound.items.length : 0
+      const roundLabel = currentRound ? `${currentItems} 词` : "未开始"
+      return {
+        roundsCount: rounds.length,
+        totalWords: stats.totalWords,
+        todayWords: stats.todayWords,
+        currentRoundLabel: roundLabel,
+      }
+    }
+
     function updateAccountUi() {
       const loggedIn = window.A4Cloud?.isLoggedIn?.() || false
+      const profile = window.A4Cloud?.getProfile?.() || null
+      const syncMeta = loadAccountSyncMeta()
+      const summary = buildLearningSummary()
       if (dom.accountLoggedOut) dom.accountLoggedOut.classList.toggle("hidden", loggedIn)
       if (dom.accountLoggedIn) dom.accountLoggedIn.classList.toggle("hidden", !loggedIn)
-      if (dom.cloudUsernameText && loggedIn) {
-        dom.cloudUsernameText.textContent = window.A4Cloud?.getUserId?.() || ""
+      if (dom.cloudBackupPanel) dom.cloudBackupPanel.classList.toggle("hidden", !loggedIn)
+      if (loggedIn) {
+        const username = String(profile?.username || "").trim() || "未命名用户"
+        if (dom.cloudAccountTitle) dom.cloudAccountTitle.textContent = username
+        if (dom.cloudAccountSubtitle) {
+          dom.cloudAccountSubtitle.textContent = `当前浏览器已登录 · 会话开始于 ${formatLoginTime(profile?.loggedInAt)}`
+        }
+        if (dom.cloudBackupStateText) dom.cloudBackupStateText.textContent = "已启用"
+        if (dom.cloudRoundsText) dom.cloudRoundsText.textContent = String(summary.roundsCount)
+        if (dom.cloudWordsText) dom.cloudWordsText.textContent = String(summary.totalWords)
+        if (dom.cloudTodayWordsText) dom.cloudTodayWordsText.textContent = String(summary.todayWords)
+        if (dom.cloudCurrentRoundText) dom.cloudCurrentRoundText.textContent = summary.currentRoundLabel
+        if (dom.cloudLastSyncText) {
+          const timeText = formatSyncTime(syncMeta?.at)
+          const syncText = syncMeta?.label
+            ? timeText
+              ? `${syncMeta.label} · ${timeText}`
+              : String(syncMeta.label)
+            : "尚未同步"
+          dom.cloudLastSyncText.textContent = syncText
+        }
+        if (dom.cloudSyncStatus && !String(dom.cloudSyncStatus.textContent || "").trim()) {
+          dom.cloudSyncStatus.textContent = "可上传当前学习状态，或从云端恢复到本机。"
+        }
+      } else {
+        if (dom.cloudAccountTitle) dom.cloudAccountTitle.textContent = "已退出登录"
+        if (dom.cloudAccountSubtitle) dom.cloudAccountSubtitle.textContent = "登录后即可启用云端备份"
+        if (dom.cloudBackupStateText) dom.cloudBackupStateText.textContent = "-"
+        if (dom.cloudLastSyncText) dom.cloudLastSyncText.textContent = "-"
+        if (dom.cloudRoundsText) dom.cloudRoundsText.textContent = "-"
+        if (dom.cloudWordsText) dom.cloudWordsText.textContent = "-"
+        if (dom.cloudTodayWordsText) dom.cloudTodayWordsText.textContent = "-"
+        if (dom.cloudCurrentRoundText) dom.cloudCurrentRoundText.textContent = "-"
+        if (dom.cloudSyncStatus) dom.cloudSyncStatus.textContent = ""
       }
       renderAccountActionButtons()
     }
 
     dom.cloudSendCodeBtn?.addEventListener("click", async () => {
       const email = dom.cloudEmailInput?.value?.trim() || ""
+      setAccountMode("register")
       accountFieldTouched.registerEmail = true
       updateRegisterEmailHint({ force: true, required: true })
       if (!isValidEmail(email)) {
@@ -2151,6 +2427,7 @@
       const code = dom.cloudRegisterCodeInput?.value?.trim() || ""
       const username = dom.cloudUsernameInput?.value?.trim() || ""
       const password = dom.cloudPasswordInput?.value || ""
+      setAccountMode("register")
       const validationError = validateRegisterFields({ required: true })
       if (validationError) {
         setAccountStatus(validationError, "error")
@@ -2196,10 +2473,11 @@
     })
 
     dom.cloudLoginBtn?.addEventListener("click", async () => {
-      const username = dom.cloudUsernameInput?.value?.trim() || ""
-      const password = dom.cloudPasswordInput?.value || ""
+      const username = dom.cloudLoginUsernameInput?.value?.trim() || ""
+      const password = dom.cloudLoginPasswordInput?.value || ""
       const validationError = validateLoginFields()
       if (validationError) {
+        setAccountMode("login")
         setAccountStatus(validationError, "error")
         return
       }
@@ -2210,16 +2488,17 @@
         const result = await window.A4Cloud?.login?.(username, password)
         if (isAccountActionSuccess(result)) {
           setAccountStatus("登录成功", "success")
-          setFieldHint(dom.cloudUsernameInput, dom.cloudUsernameHint, "")
-          setFieldHint(dom.cloudPasswordInput, dom.cloudPasswordHint, "")
+          setFieldHint(dom.cloudLoginUsernameInput, dom.cloudLoginUsernameHint, "")
+          setFieldHint(dom.cloudLoginPasswordInput, dom.cloudLoginPasswordHint, "")
           updateAccountUi()
         } else {
           if (/invalid username or password/i.test(String(result?.error || ""))) {
-            accountFieldTouched.username = true
-            accountFieldTouched.password = true
-            setFieldHint(dom.cloudUsernameInput, dom.cloudUsernameHint, "用户名或密码错误")
-            setFieldHint(dom.cloudPasswordInput, dom.cloudPasswordHint, "用户名或密码错误")
+            accountFieldTouched.loginUsername = true
+            accountFieldTouched.loginPassword = true
+            setFieldHint(dom.cloudLoginUsernameInput, dom.cloudLoginUsernameHint, "用户名或密码错误")
+            setFieldHint(dom.cloudLoginPasswordInput, dom.cloudLoginPasswordHint, "用户名或密码错误")
           }
+          setAccountMode("login")
           setAccountStatus("登录失败：" + formatAccountError(result?.error), "error")
         }
       } finally {
@@ -2230,6 +2509,7 @@
 
     dom.cloudSendResetCodeBtn?.addEventListener("click", async () => {
       const email = dom.cloudResetEmailInput?.value?.trim() || ""
+      setAccountMode("reset")
       accountFieldTouched.resetEmail = true
       updateResetEmailHint({ force: true, required: true })
       if (!isValidEmail(email)) {
@@ -2264,6 +2544,7 @@
       const email = dom.cloudResetEmailInput?.value?.trim() || ""
       const code = dom.cloudResetCodeInput?.value?.trim() || ""
       const newPassword = dom.cloudResetPasswordInput?.value || ""
+      setAccountMode("reset")
       const validationError = validateResetFields({ required: true })
       if (validationError) {
         setAccountStatus(validationError, "error")
@@ -2306,6 +2587,8 @@
       if (dom.cloudRegisterCodeInput) dom.cloudRegisterCodeInput.value = ""
       if (dom.cloudUsernameInput) dom.cloudUsernameInput.value = ""
       if (dom.cloudPasswordInput) dom.cloudPasswordInput.value = ""
+      if (dom.cloudLoginUsernameInput) dom.cloudLoginUsernameInput.value = ""
+      if (dom.cloudLoginPasswordInput) dom.cloudLoginPasswordInput.value = ""
       if (dom.cloudResetEmailInput) dom.cloudResetEmailInput.value = ""
       if (dom.cloudResetCodeInput) dom.cloudResetCodeInput.value = ""
       if (dom.cloudResetPasswordInput) dom.cloudResetPasswordInput.value = ""
@@ -2313,9 +2596,12 @@
       setFieldHint(dom.cloudRegisterCodeInput, dom.cloudRegisterCodeHint, "")
       setFieldHint(dom.cloudUsernameInput, dom.cloudUsernameHint, "")
       setFieldHint(dom.cloudPasswordInput, dom.cloudPasswordHint, "")
+      setFieldHint(dom.cloudLoginUsernameInput, dom.cloudLoginUsernameHint, "")
+      setFieldHint(dom.cloudLoginPasswordInput, dom.cloudLoginPasswordHint, "")
       setFieldHint(dom.cloudResetEmailInput, dom.cloudResetEmailHint, "")
       setFieldHint(dom.cloudResetCodeInput, dom.cloudResetCodeHint, "")
       setFieldHint(dom.cloudResetPasswordInput, dom.cloudResetPasswordHint, "")
+      setAccountMode("login")
       setAccountStatus("已退出登录", "info")
       updateAccountUi()
     })
@@ -2328,9 +2614,13 @@
       if (dom.cloudSyncStatus) dom.cloudSyncStatus.textContent = "上传中…"
       const result = await window.A4Cloud?.uploadState?.()
       if (result?.success) {
+        saveAccountSyncMeta({ label: "上传成功", at: result.savedAt || new Date().toISOString() })
         if (dom.cloudSyncStatus) dom.cloudSyncStatus.textContent = "上传成功：" + (result.savedAt || "")
+        updateAccountUi()
       } else {
+        saveAccountSyncMeta({ label: "上传失败", at: new Date().toISOString() })
         if (dom.cloudSyncStatus) dom.cloudSyncStatus.textContent = "上传失败：" + (result?.error || "未知错误")
+        updateAccountUi()
       }
     })
 
@@ -2342,10 +2632,13 @@
       if (dom.cloudSyncStatus) dom.cloudSyncStatus.textContent = "下载中…"
       const result = await window.A4Cloud?.downloadState?.()
       if (result?.success) {
+        saveAccountSyncMeta({ label: "恢复成功", at: result.savedAt || new Date().toISOString() })
         if (dom.cloudSyncStatus) dom.cloudSyncStatus.textContent = "恢复成功：" + (result.savedAt || "")
         window.location.reload()
       } else {
+        saveAccountSyncMeta({ label: "恢复失败", at: new Date().toISOString() })
         if (dom.cloudSyncStatus) dom.cloudSyncStatus.textContent = "恢复失败：" + (result?.error || "未知错误")
+        updateAccountUi()
       }
     })
 

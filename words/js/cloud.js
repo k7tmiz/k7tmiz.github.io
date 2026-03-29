@@ -2,17 +2,43 @@
   const API_BASE = "https://api.k7tmiz.com";
   const TOKEN_KEY = "a4-memory:cloud-token:v1";
   const USER_KEY = "a4-memory:cloud-user:v1";
+  const PROFILE_KEY = "a4-memory:cloud-profile:v1";
 
   function getToken() {
     return localStorage.getItem(TOKEN_KEY);
   }
 
   function getUserId() {
-    return localStorage.getItem(USER_KEY);
+    const profile = getProfile();
+    return String(profile?.userId || localStorage.getItem(USER_KEY) || "");
+  }
+
+  function getProfile() {
+    try {
+      const raw = localStorage.getItem(PROFILE_KEY);
+      if (raw) {
+        const parsed = JSON.parse(raw);
+        if (parsed && typeof parsed === "object") return parsed;
+      }
+    } catch (e) {}
+    const userId = localStorage.getItem(USER_KEY);
+    return userId ? { userId: String(userId) } : null;
   }
 
   function isLoggedIn() {
     return !!getToken();
+  }
+
+  function saveProfile(profile) {
+    const next = profile && typeof profile === "object" ? profile : null;
+    if (!next) return;
+    const normalized = {
+      userId: String(next.userId || ""),
+      username: String(next.username || ""),
+      loggedInAt: String(next.loggedInAt || new Date().toISOString()),
+    };
+    localStorage.setItem(USER_KEY, normalized.userId);
+    localStorage.setItem(PROFILE_KEY, JSON.stringify(normalized));
   }
 
   async function readJsonSafe(res) {
@@ -59,7 +85,7 @@
     const data = normalizeResponse(res, await readJsonSafe(res));
     if (data.success) {
       localStorage.setItem(TOKEN_KEY, data.token);
-      localStorage.setItem(USER_KEY, String(data.userId));
+      saveProfile({ userId: data.userId, username, loggedInAt: new Date().toISOString() });
     }
     return data;
   }
@@ -67,6 +93,7 @@
   function logout() {
     localStorage.removeItem(TOKEN_KEY);
     localStorage.removeItem(USER_KEY);
+    localStorage.removeItem(PROFILE_KEY);
   }
 
   async function uploadState() {
@@ -121,7 +148,7 @@
     const data = normalizeResponse(res, await readJsonSafe(res));
     if (data.success) {
       localStorage.setItem(TOKEN_KEY, data.token);
-      localStorage.setItem(USER_KEY, String(data.userId));
+      saveProfile({ userId: data.userId, username, loggedInAt: new Date().toISOString() });
     }
     return data;
   }
@@ -152,6 +179,7 @@
     logout,
     isLoggedIn,
     getUserId,
+    getProfile,
     uploadState,
     downloadState,
     sendVerificationCode,

@@ -84,13 +84,15 @@ python3 -m http.server 8080
 | `a4-memory:lookup-cache:v1` | 查词在线补充缓存 |
 | `a4-memory:cloud-token:v1` | 【cloud.js】JWT 令牌 |
 | `a4-memory:cloud-user:v1` | 【cloud.js】用户 ID |
+| `a4-memory:cloud-profile:v1` | 【cloud.js】登录资料缓存（userId / username / loggedInAt） |
+| `a4-memory:cloud-sync-meta:v1` | 【settings.js】最近一次上传/恢复结果摘要 |
 
 ### 主状态摘要
 
 - 轮次相关：`rounds`, `currentRoundId`, `pendingReviewRoundId`, `pendingGenerateStatusKind`
 - UI：`showMeaning`, `immersiveMode`, `themeMode`, `darkMode`
 - 学习设置：`roundCap`, `dailyGoalRounds`, `dailyGoalWords`
-- 复习设置：`reviewSystemEnabled`, `reviewIntervals`, `reviewAutoCloseModal`, `reviewCardFlipEnabled`
+- 复习设置：`reviewSystemEnabled`, `reviewIntervals`, `continuousStudyMode`, `reviewCardFlipEnabled`
 - 发音设置：`pronunciationEnabled`, `pronunciationAccent`, `pronunciationLang`, `voiceMode`, `voiceURI`
 - 词书：`selectedWordbookId`, `customWordbooks`
 - AI 配置：`aiConfig = { provider, baseUrl, apiKey, model }`
@@ -99,8 +101,8 @@ python3 -m http.server 8080
 ## 云同步（可选，需私有模块）
 
 云同步功能依赖后端 API 和 `js/cloud.js` 私有模块。启用后支持：
-- 用户注册/登录（账号在服务端独立管理）
-- 学习状态上传/下载（多设备同步）
+- 用户登录与邮箱验证码注册（账号在服务端独立管理）
+- 登录后显示云端备份入口，支持学习状态上传/下载（多设备同步）
 
 如需使用，请联系作者获取 `cloud.js`，放入 `js/` 目录即可。无需修改 HTML，页面会自动加载。
 

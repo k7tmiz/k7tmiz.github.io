@@ -1332,6 +1332,101 @@ select:hover {
   color: #b42318;
 }
 
+.account-tabs {
+  margin-top: 4px;
+}
+
+.account-panel {
+  scroll-margin-top: 12px;
+}
+
+.account-section {
+  margin-top: 12px;
+  padding: 12px;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  background: var(--card2);
+  display: grid;
+  gap: 10px;
+}
+
+.account-section-title {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--text);
+}
+
+.account-actions {
+  display: grid;
+  gap: 8px;
+}
+
+.account-summary {
+  margin-top: 12px;
+  padding: 14px;
+  border-radius: 14px;
+  border: 1px solid var(--border);
+  background: linear-gradient(180deg, var(--card2), var(--card));
+  display: grid;
+  gap: 12px;
+}
+
+.account-summary-head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.account-summary-title {
+  font-size: 18px;
+  font-weight: 800;
+  color: var(--text);
+}
+
+.account-summary-subtitle {
+  margin-top: 4px;
+  font-size: 12px;
+  color: var(--muted);
+  line-height: 1.4;
+}
+
+.account-badge {
+  padding: 6px 10px;
+  border-radius: 999px;
+  background: rgba(15, 107, 68, 0.12);
+  color: #0f6b44;
+  font-size: 12px;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.account-summary-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+}
+
+.account-summary-item {
+  padding: 10px 12px;
+  border-radius: 12px;
+  background: var(--card2);
+  border: 1px solid var(--border2);
+  display: grid;
+  gap: 4px;
+}
+
+.account-summary-item span {
+  font-size: 12px;
+  color: var(--muted);
+}
+
+.account-summary-item strong {
+  font-size: 14px;
+  color: var(--text);
+  word-break: break-word;
+}
+
 .account-status {
   margin-top: 8px;
   padding: 10px 12px;
@@ -1382,11 +1477,22 @@ body.theme-dark .field-help {
   color: #ff9b8f;
 }
 
+body.theme-dark .account-badge {
+  background: rgba(126, 226, 184, 0.16);
+  color: #7ee2b8;
+}
+
 .records-stats {
   font-size: 13px;
   color: var(--muted);
   padding: 0 4px;
   white-space: pre-line;
+}
+
+@media (max-width: 640px) {
+  .account-summary-grid {
+    grid-template-columns: 1fr;
+  }
 }
 
 .empty {

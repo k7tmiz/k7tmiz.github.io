@@ -43,7 +43,7 @@ A4-Memory/
 #### 职责
 
 接入后端 API，为前端提供账号和云同步功能：
-- 用户注册 / 登录（账号在服务端独立管理）
+- 用户登录 / 邮箱验证码注册 / 重置密码（账号在服务端独立管理）
 - 学习状态上传 / 下载（多设备同步）
 
 #### 接入方式
@@ -61,6 +61,7 @@ window.A4Cloud = {
   logout(),
   isLoggedIn(),
   getUserId(),
+  getProfile(),
   uploadState(),   // 调用 A4Storage.loadState() 取当前状态，上传
   downloadState(), // 下载后调用 A4Storage.saveState() 恢复
 }
@@ -72,6 +73,8 @@ window.A4Cloud = {
 |------|------|
 | `a4-memory:cloud-token:v1` | JWT 令牌 |
 | `a4-memory:cloud-user:v1` | 用户 ID（字符串） |
+| `a4-memory:cloud-profile:v1` | 登录资料缓存（userId / username / loggedInAt） |
+| `a4-memory:cloud-sync-meta:v1` | 最近一次上传/恢复结果摘要 |
 
 #### 无 cloud.js 时的行为
 
@@ -85,8 +88,8 @@ window.A4Cloud = {
 
 以下功能依赖 cloud.js，无此模块时按钮会显示错误提示但不崩溃：
 
-- 设置中的"账号"区块（注册 / 登录 / 登出）
-- 设置中的"云备份"区块（上传 / 下载）
+- 设置中的"账号"区块（登录 / 邮箱验证码注册 / 重置密码 / 登出）
+- 设置中的"云备份"区块（仅登录后显示上传 / 下载）
 
 ---
 
@@ -213,15 +216,15 @@ window.A4Lookup = {
 
 ### 设置弹窗分区
 
-1. **外观** — 主题模式（auto / light / dark）
-2. **学习目标** — 每日轮次目标、每日单词目标
-3. **学习设置** — 每轮上限（20–30）
-4. **复习** — 轻量复习开关、复习间隔、自动关闭弹窗、卡片翻面
-5. **发音** — 发音开关、语种/口音/语音模式选择、当前语音显示、测试按钮
-6. **查词** — 在线补充开关、补充来源、西语变位开关、缓存开关与时长
-7. **学习数据** — 完整备份导出/导入（JSON）
-8. **账号** — 注册/登录表单（依赖 cloud.js）、登录状态显示、登出按钮
-9. **云备份** — 上传/下载按钮（依赖 cloud.js）
+1. **账号** — 默认主入口为登录；支持邮箱验证码注册、重置密码、登录状态卡片、登出
+2. **云备份** — 仅在已登录时显示上传/下载按钮与同步状态
+3. **外观** — 主题模式（auto / light / dark）
+4. **学习目标** — 每日轮次目标、每日单词目标
+5. **学习设置** — 每轮上限（20–30）
+6. **复习** — 轻量复习开关、复习间隔、持续背书模式、卡片翻面（复习结束自动关闭固定开启）
+7. **发音** — 发音开关、语种/口音/语音模式选择、当前语音显示、测试按钮
+8. **查词** — 在线补充开关、补充来源、西语变位开关、缓存开关与时长
+9. **学习数据** — 完整备份导出/导入（JSON）
 10. **AI** — 服务商选择、API 配置、模型选择、词书生成
 
 ---
@@ -275,7 +278,8 @@ window.A4Lookup = {
   // 复习设置
   reviewSystemEnabled: boolean,
   reviewIntervals: { unknownDays, learningDays, masteredDays },
-  reviewAutoCloseModal: boolean,
+  reviewAutoCloseModal: true,  // 兼容旧数据，运行时固定开启
+  continuousStudyMode: boolean,
   reviewCardFlipEnabled: boolean,
 
   // 发音设置
@@ -311,6 +315,8 @@ window.A4Lookup = {
 | `a4-memory:lookup-cache:v1` | 查词在线补充缓存（TTL 控制） |
 | `a4-memory:cloud-token:v1` | 【cloud.js】JWT 令牌 |
 | `a4-memory:cloud-user:v1` | 【cloud.js】用户 ID |
+| `a4-memory:cloud-profile:v1` | 【cloud.js】登录资料缓存（userId / username / loggedInAt） |
+| `a4-memory:cloud-sync-meta:v1` | 【settings.js】最近一次上传/恢复结果摘要 |
 
 ---
 

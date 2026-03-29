@@ -339,6 +339,7 @@
   const DEFAULTS = {
     reviewSystemEnabled: true,
     reviewAutoCloseModal: true,
+    continuousStudyMode: false,
     reviewCardFlipEnabled: false,
     reviewIntervals: { unknownDays: 1, learningDays: 3, masteredDays: 7 },
     pronunciationEnabled: true,

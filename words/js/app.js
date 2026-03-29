@@ -332,12 +332,14 @@ const appState = {
   unknownTerms: [],
   reviewQueue: [],
   reviewIndex: 0,
+  reviewContinuousAction: "",
   roundCap: DEFAULT_ROUND_CAP,
   dailyGoalRounds: 3,
   dailyGoalWords: 0,
   reviewSystemEnabled: true,
   reviewIntervals: { ...DEFAULT_REVIEW_INTERVALS },
   reviewAutoCloseModal: true,
+  continuousStudyMode: false,
   reviewCardFlipEnabled: false,
   pronunciationEnabled: true,
   pronunciationAccent: "auto",
@@ -1220,7 +1222,8 @@ function persist() {
     dailyGoalWords: appState.dailyGoalWords,
     reviewSystemEnabled: !!appState.reviewSystemEnabled,
     reviewIntervals: normalizeReviewIntervals(appState.reviewIntervals),
-    reviewAutoCloseModal: !!appState.reviewAutoCloseModal,
+    reviewAutoCloseModal: true,
+    continuousStudyMode: !!appState.continuousStudyMode,
     reviewCardFlipEnabled: !!appState.reviewCardFlipEnabled,
     pronunciationEnabled: appState.pronunciationEnabled,
     pronunciationAccent: appState.pronunciationAccent,
@@ -1590,6 +1593,7 @@ function renderReviewCard() {
 // 手动入口：默认打乱顺序，不强制新词置顶。
 function openReviewModal() {
   appState.reviewPinnedRoundItem = null
+  appState.reviewContinuousAction = "repeat_round"
   appState.reviewShuffled = true
   if (dom.shuffleBtn) dom.shuffleBtn.textContent = "恢复顺序"
   appState.reviewScope = "round"
@@ -1601,6 +1605,7 @@ function openReviewModal() {
 // 自动入口：用于“下一个单词”后的强制复习，新词置顶；旧词仍按当前复习顺序规则排列。
 function openAutoReviewModal(pinnedRoundItem) {
   appState.reviewPinnedRoundItem = pinnedRoundItem || null
+  appState.reviewContinuousAction = "next_word"
   appState.reviewShuffled =
     typeof appState.reviewOrderPreferenceShuffled === "boolean" ? appState.reviewOrderPreferenceShuffled : true
   if (dom.shuffleBtn) dom.shuffleBtn.textContent = appState.reviewShuffled ? "恢复顺序" : "打乱顺序"
@@ -1622,6 +1627,8 @@ function openAutoReviewModal(pinnedRoundItem) {
 function closeReviewModal() {
   resetReviewToCenter({ hard: true })
   setModalVisible(dom.reviewModal, false)
+  appState.reviewPinnedRoundItem = null
+  appState.reviewContinuousAction = ""
   dom.reviewCard.classList.remove("is-flipped")
   dom.reviewCard.classList.remove("is-dragging")
   dom.reviewCard.style.removeProperty("--card-back-scale")
@@ -2033,7 +2040,8 @@ function restore() {
 
   appState.reviewSystemEnabled = typeof saved.reviewSystemEnabled === "boolean" ? saved.reviewSystemEnabled : true
   appState.reviewIntervals = normalizeReviewIntervals(saved.reviewIntervals)
-  appState.reviewAutoCloseModal = typeof saved.reviewAutoCloseModal === "boolean" ? saved.reviewAutoCloseModal : true
+  appState.reviewAutoCloseModal = true
+  appState.continuousStudyMode = typeof saved.continuousStudyMode === "boolean" ? saved.continuousStudyMode : false
   appState.reviewCardFlipEnabled = normalizeReviewCardFlipEnabled
     ? normalizeReviewCardFlipEnabled(saved.reviewCardFlipEnabled)
     : typeof saved.reviewCardFlipEnabled === "boolean"
@@ -2641,15 +2649,17 @@ function advanceReview(status) {
   markCurrentReviewStatus(status)
   const next = idx + 1
   if (next >= appState.reviewQueue.length) {
-    if (appState.reviewAutoCloseModal) {
-      closeReviewModal()
-      return
+    const action = String(appState.reviewContinuousAction || "")
+    closeReviewModal()
+    if (!!appState.continuousStudyMode && action === "next_word") {
+      window.requestAnimationFrame(() => {
+        handleNextWord()
+      })
+    } else if (!!appState.continuousStudyMode && action === "repeat_round") {
+      window.requestAnimationFrame(() => {
+        openReviewModal()
+      })
     }
-    dom.reviewCardProgress.textContent = `${appState.reviewQueue.length} / ${appState.reviewQueue.length}`
-    dom.reviewCardHint.textContent = "已到最后：可关闭"
-    dom.reviewKnownBtn.disabled = true
-    dom.reviewLearningBtn.disabled = true
-    dom.reviewUnknownBtn.disabled = true
     return
   }
   appState.reviewIndex = next

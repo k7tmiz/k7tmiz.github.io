@@ -13,7 +13,7 @@
     <link rel="icon" href="./assets/icon.svg" type="image/svg+xml" />
     <link rel="mask-icon" href="./assets/mask-icon.svg" color="#0b1220" />
     <link rel="apple-touch-icon" href="./assets/icon.svg" />
-    <link rel="stylesheet" href="./css/style.css?v=20260329-1" />
+    <link rel="stylesheet" href="./css/style.css?v=20260329-5" />
   </head>
   <body>
     <header class="app-header">
@@ -234,30 +234,45 @@ ability,n.,能力</pre>
         <div class="modal-body">
           <div class="intro">
             <div class="intro-block">
-              <div class="intro-title">这个网页怎么用</div>
+              <div class="intro-title">先理解这个工具</div>
               <ul class="intro-list">
-                <li>这里不是按列表一行一行背单词，而是把单词随机放在一张 A4 上。这样你每次看到的都更像一整页内容，不容易掉回机械刷列表的节奏。</li>
-                <li>你可以把一轮理解成一次学习过程。一轮默认从 1 张 A4 开始，当前页写满后，可以继续在这一轮里加下一张，不需要清空重来。</li>
+                <li>这里不是按列表一行一行刷单词，而是把单词随机排在 A4 页面上，让你按“整页内容”去记，而不是按序号机械背。</li>
+                <li>你可以把“一轮”理解成一次完整学习过程。一轮默认从 1 张 A4 开始；当前页写满后，可以继续在同一轮里新增下一张。</li>
+                <li>每加入 1 个新词，系统都会立刻拉你复习这一页已有的词，所以节奏不是“先攒很多再复习”，而是“新增即复习”。</li>
               </ul>
             </div>
             <div class="intro-block">
-              <div class="intro-title">开始背单词</div>
+              <div class="intro-title">第一次使用怎么开始</div>
               <ul class="intro-list">
-                <li>点「下一个单词」就可以开始。新词会写到当前 A4 上，然后马上进入复习。</li>
-                <li>每次新增之后，系统默认只带你复习当前这一页。这一段可以理解成“边加边记”的普通学习轮。</li>
-                <li>如果你想把这一轮从头到尾再过一遍，就点「复习本轮」。这个入口会把这一轮里所有页面的词一起拿出来复习。</li>
-                <li>复习时可以直接点按钮，也可以左右滑动卡片：右滑表示已掌握，左滑表示不会，中间按钮是学习中。</li>
-                <li>如果这一轮已经有多页，首页会出现 Previous / Next。翻页后看到的是同一轮里的其他 A4 页面。</li>
-                <li>当前页写满后，再点「下一个单词」会提醒你下一步怎么走：继续在本轮加新的一页，先复习本轮，或者直接新建下一轮。</li>
+                <li>先选择词书，然后点「下一个单词」。新词会被放到当前 A4 页面上，并马上进入自动复习。</li>
+                <li>自动复习默认只针对“当前页”，适合边加边记；如果你想把这一轮所有页面一起过一遍，点「复习本轮」。</li>
+                <li>复习时有三种状态：已掌握、学习中、不会。你可以点按钮，也可以直接左右滑动卡片：右滑已掌握，左滑不会。</li>
+                <li>如果开启了“持续背书模式”，当前这次自动复习结束后，系统会直接开始下一次「下一个单词」，不用手动再点。</li>
               </ul>
             </div>
             <div class="intro-block">
-              <div class="intro-title">几个常用入口</div>
+              <div class="intro-title">页面上几个常用入口</div>
               <ul class="intro-list">
-                <li>「查词」可以在首页和学习记录页使用。你可以先查意思，再把结果直接加入当前这一轮。</li>
-                <li>「导入词书」支持本地文件，也支持在线导入。导入之后，可以直接开始整本学习。</li>
-                <li>「学习记录」里可以回看以前的轮次、看待复习和学习状态，也可以导出 CSV / PDF。</li>
-                <li>「设置」里可以调整主题、每轮上限、复习节奏、发音、查词补充、备份和 AI 生成词书。</li>
+                <li>「导入词书」支持 TXT / CSV / JSON，也支持在线导入。导入后可以直接开始学习整本词书。</li>
+                <li>「查词」可以先查释义、例句或补充结果，再把词直接加入当前轮。</li>
+                <li>「学习记录」里可以回看旧轮次、查看状态聚合、生成待复习轮，还能导出 CSV / PDF。</li>
+                <li>「设置」里可以调整每轮上限、复习节奏、持续背书、发音、查词补充、账号与云端备份、AI 生成词书。</li>
+              </ul>
+            </div>
+            <div class="intro-block">
+              <div class="intro-title">关于复习和翻页</div>
+              <ul class="intro-list">
+                <li>普通学习轮如果已经有多页，首页会出现 Previous / Next。翻页后看到的仍然是同一轮里的其他 A4 页面。</li>
+                <li>轻量复习系统会根据“已掌握 / 学习中 / 不会”计算下次复习时间，记录页会自动聚合待复习内容。</li>
+                <li>复习结束后弹窗会自动关闭；这是固定行为，不需要再手动确认。</li>
+              </ul>
+            </div>
+            <div class="intro-block">
+              <div class="intro-title">账号与云端备份</div>
+              <ul class="intro-list">
+                <li>设置里的账号区默认先显示“登录”。如果还没有账号，可以切到“注册”，通过邮箱验证码完成注册。</li>
+                <li>登录后才会显示云端备份按钮，可以把当前浏览器里的学习数据上传到云端，或从云端恢复回来。</li>
+                <li>如果你只想本地使用，不登录也没关系，绝大多数学习功能都可以正常使用。</li>
               </ul>
             </div>
             <div class="intro-block">
@@ -270,7 +285,7 @@ ability,n.,能力</pre>
                 <li>D：切换深浅色主题</li>
               </ul>
             </div>
-            <div class="intro-foot">提示：如果你想看释义，可以打开「显示释义」；发音、翻卡和复习结束后是否自动关闭，也都能在设置里调整。</div>
+            <div class="intro-foot">建议第一次先直接点「下一个单词」试一轮，再去设置里调整持续背书、发音、查词和账号备份。</div>
             <div class="intro-block">
               <div class="intro-title">联系开发者</div>
               <div class="import-help-text">如果你在使用过程中遇到问题或有功能建议，欢迎联系开发者。</div>
@@ -290,10 +305,10 @@ ability,n.,能力</pre>
     <script src="./js/core/common.js"></script>
     <script src="./js/utils.js"></script>
     <script src="./js/storage.js"></script>
-    <script src="./js/cloud.js?v=20260329-1"></script>
+    <script src="./js/cloud.js?v=20260329-5"></script>
     <script src="./js/speech.js"></script>
-    <script src="./js/settings.js?v=20260329-1"></script>
+    <script src="./js/settings.js?v=20260329-5"></script>
     <script src="./js/lookup.js"></script>
-    <script src="./js/app.js"></script>
+    <script src="./js/app.js?v=20260329-6"></script>
   </body>
 </html>
