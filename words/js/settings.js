@@ -550,7 +550,7 @@
           <section class="panel account-panel" id="accountPanel">
             <div class="section-title">账号</div>
             <div id="accountLoggedOut">
-              <div class="form-help">先登录后可使用云端备份；没有账号时可切换到注册或重置密码。</div>
+              <div class="form-help">登录后可用云端备份；没有账号可注册或重置密码。</div>
               <div class="view-tabs account-tabs" role="tablist" aria-label="账号操作">
                 <button class="ghost active" id="accountTabLoginBtn" type="button" role="tab" aria-selected="true">登录</button>
                 <button class="ghost" id="accountTabRegisterBtn" type="button" role="tab" aria-selected="false">注册</button>
@@ -645,15 +645,15 @@
               </div>
             </div>
             <div id="accountLoggedIn" class="hidden">
-              <div class="account-summary">
+              <div class="account-summary account-summary-compact">
                 <div class="account-summary-head">
-                  <div>
+                  <div class="account-summary-identity">
                     <div class="account-summary-title" id="cloudAccountTitle">已登录</div>
                     <div class="account-summary-subtitle" id="cloudAccountSubtitle">当前浏览器已启用云端备份</div>
                   </div>
                   <div class="account-badge">在线</div>
                 </div>
-                <div class="account-summary-meta-row">
+                <div class="account-summary-meta-row account-summary-meta-row-tight">
                   <div class="account-summary-meta-item">
                     <span>云备份</span>
                     <strong id="cloudBackupStateText">已启用</strong>
@@ -663,13 +663,13 @@
                     <strong id="cloudLastSyncText">尚未同步</strong>
                   </div>
                 </div>
-                <div class="account-summary-grid compact">
+                <div class="account-summary-grid account-summary-grid-dense">
                   <div class="account-summary-item">
-                    <span>累计单词</span>
+                    <span>单词</span>
                     <strong id="cloudWordsText">0</strong>
                   </div>
                   <div class="account-summary-item">
-                    <span>学习轮次</span>
+                    <span>轮次</span>
                     <strong id="cloudRoundsText">0</strong>
                   </div>
                   <div class="account-summary-item">
@@ -677,36 +677,28 @@
                     <strong id="cloudTodayWordsText">0</strong>
                   </div>
                   <div class="account-summary-item">
-                    <span>连续学习</span>
+                    <span>连续</span>
                     <strong id="cloudStreakText">0 天</strong>
                   </div>
-                </div>
-                <div class="account-summary-quicklist">
-                  <div class="account-summary-quickitem">
+                  <div class="account-summary-item">
                     <span>今日完成</span>
                     <strong id="cloudTodayRoundsText">0 轮</strong>
                   </div>
-                  <div class="account-summary-quickitem">
+                  <div class="account-summary-item">
                     <span>当前轮</span>
                     <strong id="cloudCurrentRoundText">未开始</strong>
                   </div>
-                  <div class="account-summary-quickitem">
-                    <span>登录会话</span>
+                  <div class="account-summary-item account-summary-item-wide">
+                    <span>会话</span>
                     <strong id="cloudSessionText">刚刚开始</strong>
                   </div>
                 </div>
-              </div>
-              <div class="account-section">
-                <div class="account-section-title">云端备份</div>
-                <div class="form-help">可把当前浏览器学习进度上传到云端，或从云端恢复到本地。</div>
-                <div class="stack">
-                  <button class="primary full" id="cloudUploadBtn" type="button">上传到云端</button>
-                  <button class="ghost full" id="cloudDownloadBtn" type="button">从云端恢复</button>
+                <div class="account-summary-actions">
+                  <button class="primary" id="cloudUploadBtn" type="button">上传云端</button>
+                  <button class="ghost" id="cloudDownloadBtn" type="button">恢复本机</button>
+                  <button class="ghost" id="cloudLogoutBtn" type="button">退出登录</button>
                 </div>
-                <div class="form-help" id="cloudSyncStatus"></div>
-              </div>
-              <div class="stack">
-                <button class="ghost full" id="cloudLogoutBtn" type="button">退出登录</button>
+                <div class="form-help account-sync-note" id="cloudSyncStatus"></div>
               </div>
             </div>
             <div class="form-help account-status hidden" id="accountStatus"></div>
@@ -2375,8 +2367,8 @@
         const loginTimeText = formatLoginTime(profile?.loggedInAt)
         if (dom.cloudAccountSubtitle) {
           dom.cloudAccountSubtitle.textContent = email
-            ? `已登录邮箱：${email}`
-            : `当前浏览器已登录，可直接上传或恢复学习数据。`
+            ? email
+            : `已登录，可上传或恢复学习数据`
         }
         if (dom.cloudBackupStateText) dom.cloudBackupStateText.textContent = "已启用"
         if (dom.cloudRoundsText) dom.cloudRoundsText.textContent = String(summary.roundsCount)
@@ -2396,7 +2388,7 @@
           dom.cloudLastSyncText.textContent = syncText
         }
         if (dom.cloudSyncStatus && !String(dom.cloudSyncStatus.textContent || "").trim()) {
-          dom.cloudSyncStatus.textContent = "可上传当前学习状态，或从云端恢复到本机。"
+          dom.cloudSyncStatus.textContent = "可上传或恢复学习数据。"
         }
       } else {
         if (dom.cloudAccountTitle) dom.cloudAccountTitle.textContent = "已退出登录"

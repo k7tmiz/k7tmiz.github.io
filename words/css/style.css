@@ -304,6 +304,11 @@ button:disabled {
   cursor: not-allowed;
 }
 
+button,
+.button-link {
+  touch-action: manipulation;
+}
+
 button.primary {
   background: var(--accent);
   color: var(--accentText);
@@ -1435,6 +1440,12 @@ select:hover {
   gap: 12px;
 }
 
+.account-summary-identity {
+  min-width: 0;
+  display: grid;
+  gap: 2px;
+}
+
 .account-summary-title {
   font-size: 16px;
   font-weight: 800;
@@ -1462,6 +1473,10 @@ select:hover {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 8px;
+}
+
+.account-summary-meta-row-tight {
+  gap: 6px;
 }
 
 .account-summary-meta-item {
@@ -1496,6 +1511,11 @@ select:hover {
   gap: 8px;
 }
 
+.account-summary-grid.account-summary-grid-dense {
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 8px;
+}
+
 .account-summary-item {
   padding: 9px 10px;
   border-radius: 12px;
@@ -1514,6 +1534,10 @@ select:hover {
   font-size: 14px;
   color: var(--text);
   word-break: break-word;
+}
+
+.account-summary-item-wide {
+  grid-column: span 2;
 }
 
 .account-summary-quicklist {
@@ -1541,6 +1565,20 @@ select:hover {
   color: var(--text);
   line-height: 1.35;
   word-break: break-word;
+}
+
+.account-summary-actions {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 8px;
+}
+
+.account-summary-actions > * {
+  min-width: 0;
+}
+
+.account-sync-note {
+  margin-top: 0;
 }
 
 .account-status {
@@ -1605,15 +1643,121 @@ body.theme-dark .account-badge {
   white-space: pre-line;
 }
 
-@media (max-width: 640px) {
-  .account-summary-grid {
-    grid-template-columns: 1fr;
+@media (min-width: 431px) and (max-width: 900px) {
+  .account-panel .form-row {
+    grid-template-columns: 92px minmax(0, 1fr);
+    gap: 8px;
+    align-items: start;
   }
 
-  .account-summary-grid.compact,
-  .account-summary-meta-row,
-  .account-summary-quicklist {
+  .account-tabs {
+    gap: 6px;
+  }
+
+  .account-tabs button {
+    flex: 1 1 0;
+  }
+
+  .account-summary-grid.account-summary-grid-dense {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .account-summary-actions {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 430px) {
+  .account-panel .form-row {
     grid-template-columns: 1fr;
+    gap: 6px;
+    align-items: start;
+  }
+
+  .account-panel .form-label {
+    font-size: 12px;
+  }
+
+  .account-tabs {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 6px;
+  }
+
+  .account-tabs button {
+    width: 100%;
+    min-width: 0;
+    padding: 8px 4px;
+    font-size: 13px;
+  }
+
+  .account-section {
+    margin-top: 10px;
+    padding: 10px;
+    gap: 8px;
+  }
+
+  .account-actions {
+    gap: 6px;
+  }
+
+  .account-summary {
+    margin-top: 10px;
+    padding: 10px;
+    gap: 8px;
+  }
+
+  .account-summary-head {
+    gap: 8px;
+  }
+
+  .account-summary-title {
+    font-size: 15px;
+  }
+
+  .account-summary-subtitle {
+    font-size: 11px;
+    line-height: 1.35;
+    word-break: break-word;
+  }
+
+  .account-badge {
+    padding: 4px 8px;
+    font-size: 11px;
+  }
+
+  .account-summary-meta-row,
+  .account-summary-grid.account-summary-grid-dense {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 6px;
+  }
+
+  .account-summary-meta-item,
+  .account-summary-item {
+    padding: 8px;
+  }
+
+  .account-summary-meta-item strong,
+  .account-summary-item strong {
+    font-size: 13px;
+  }
+
+  .account-summary-actions {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 6px;
+  }
+
+  .account-summary-actions #cloudLogoutBtn {
+    grid-column: 1 / -1;
+  }
+
+  .account-summary-actions button {
+    width: 100%;
+  }
+
+  .account-sync-note {
+    font-size: 11px;
+    line-height: 1.4;
   }
 }
 
