@@ -708,6 +708,94 @@ function main() {
     else document.body.classList.remove("theme-dark")
   }
 
+  let announcementModal = null
+  let announcementUnreadIds = []
+
+  const ensureAnnouncementModal = () => {
+    if (announcementModal) return announcementModal
+    announcementModal = document.createElement("div")
+    announcementModal.className = "modal hidden"
+    announcementModal.setAttribute("aria-hidden", "true")
+    announcementModal.innerHTML = `
+      <div class="modal-backdrop" data-announcement-close="1"></div>
+      <div class="modal-panel announcement-modal-panel" role="dialog" aria-modal="true" aria-labelledby="recordsAnnouncementTitle">
+        <div class="modal-header">
+          <h2 id="recordsAnnouncementTitle">系统公告</h2>
+          <div class="modal-actions">
+            <button class="ghost" id="recordsAnnouncementCloseBtn" type="button">关闭</button>
+          </div>
+        </div>
+        <div class="modal-body">
+          <div class="announcement-list" id="recordsAnnouncementList"></div>
+        </div>
+      </div>
+    `
+    announcementModal.addEventListener("click", async (e) => {
+      const target = e.target instanceof Element ? e.target : null
+      if (!target || target.dataset.announcementClose !== "1") return
+      await dismissAnnouncementModal()
+    })
+    announcementModal.querySelector("#recordsAnnouncementCloseBtn")?.addEventListener("click", async () => {
+      await dismissAnnouncementModal()
+    })
+    document.body.appendChild(announcementModal)
+    return announcementModal
+  }
+
+  const renderAnnouncementList = (announcements) => {
+    const modal = ensureAnnouncementModal()
+    const list = modal.querySelector("#recordsAnnouncementList")
+    if (!list) return
+    const items = Array.isArray(announcements) ? announcements : []
+    list.innerHTML = items
+      .map((item, index) => {
+        const title = String(item?.title || "").trim() || `公告 #${item?.id || index + 1}`
+        const content = String(item?.content || "").replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/\n/g, "<br />")
+        return `
+          <article class="announcement-item ${item?.isUnread ? "is-unread" : ""}">
+            <div class="announcement-item-head">
+              <div>
+                <div class="announcement-item-title">${title.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;")}</div>
+                <div class="announcement-item-meta">${String(formatDateTimeText(item?.createdAt || item?.created_at || "") || "")}</div>
+              </div>
+              ${item?.isUnread ? '<span class="announcement-item-badge">新公告</span>' : ""}
+            </div>
+            <div class="announcement-item-content">${content}</div>
+          </article>
+        `
+      })
+      .join("")
+  }
+
+  const dismissAnnouncementModal = async () => {
+    const ids = announcementUnreadIds.slice()
+    announcementUnreadIds = []
+    if (ids.length && window.A4Cloud?.markAnnouncementsRead) {
+      try {
+        await window.A4Cloud.markAnnouncementsRead(ids)
+      } catch (e) {}
+    }
+    const modal = ensureAnnouncementModal()
+    modal.classList.add("hidden")
+    modal.setAttribute("aria-hidden", "true")
+  }
+
+  const checkAnnouncements = async () => {
+    if (!window.A4Cloud?.isLoggedIn?.()) return
+    if (!window.A4Cloud?.fetchAnnouncements) return
+    try {
+      const result = await window.A4Cloud.fetchAnnouncements(10)
+      if (!result?.success) return
+      const unreadIds = Array.isArray(result.unreadIds) ? result.unreadIds.filter((id) => Number.isFinite(Number(id))) : []
+      if (!unreadIds.length) return
+      announcementUnreadIds = unreadIds
+      renderAnnouncementList(result.announcements || [])
+      const modal = ensureAnnouncementModal()
+      modal.classList.remove("hidden")
+      modal.setAttribute("aria-hidden", "false")
+    } catch (e) {}
+  }
+
   applyTheme()
 
   const themeMedia = window.matchMedia ? window.matchMedia("(prefers-color-scheme: dark)") : null
@@ -817,6 +905,7 @@ function main() {
 
   render()
   renderStats()
+  checkAnnouncements()
 
   const STORAGE_KEY = window.A4Storage?.STORAGE_KEY || "a4-memory:v1"
   window.addEventListener("storage", (e) => {
@@ -826,6 +915,10 @@ function main() {
     rounds = Array.isArray(next.rounds) ? next.rounds : []
     render()
     renderStats()
+  })
+
+  window.addEventListener("a4-cloud-auth-changed", () => {
+    checkAnnouncements()
   })
 
   viewRoundsBtn?.addEventListener("click", () => setView("rounds"))

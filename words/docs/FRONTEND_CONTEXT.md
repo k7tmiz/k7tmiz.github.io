@@ -45,6 +45,7 @@ A4-Memory/
 接入后端 API，为前端提供账号和云同步功能：
 - 用户登录 / 邮箱验证码注册 / 重置密码（账号在服务端独立管理）
 - 学习状态上传 / 下载（多设备同步）
+- 用户公告拉取 / 已读回执（无固定入口，仅在存在未读公告时弹窗）
 
 #### 接入方式
 
@@ -64,6 +65,8 @@ window.A4Cloud = {
   getProfile(),
   uploadState(),   // 调用 A4Storage.loadState() 取当前状态，上传
   downloadState(), // 下载后调用 A4Storage.saveState() 恢复
+  fetchAnnouncements(limit),
+  markAnnouncementsRead(announcementIds),
 }
 ```
 
@@ -90,6 +93,7 @@ window.A4Cloud = {
 
 - 设置中的"账号"区块（登录 / 邮箱验证码注册 / 重置密码 / 登出）
 - 设置中的"云备份"区块（仅登录后显示上传 / 下载）
+- 登录后自动接收系统公告弹窗（首页 / 记录页）
 
 ---
 

@@ -887,6 +887,63 @@ select:hover {
   min-width: 0;
 }
 
+.announcement-modal-panel {
+  width: min(760px, 92vw);
+}
+
+.announcement-list {
+  display: grid;
+  gap: 12px;
+}
+
+.announcement-item {
+  border: 1px solid color-mix(in srgb, var(--border2) 88%, transparent);
+  background: var(--card2);
+  border-radius: 16px;
+  padding: 14px 16px;
+  display: grid;
+  gap: 10px;
+}
+
+.announcement-item.is-unread {
+  border-color: color-mix(in srgb, var(--accent) 44%, var(--border2));
+  box-shadow: 0 10px 24px color-mix(in srgb, var(--accent) 10%, transparent);
+}
+
+.announcement-item-head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.announcement-item-title {
+  font-size: 1.05rem;
+  font-weight: 700;
+}
+
+.announcement-item-meta {
+  font-size: 0.82rem;
+  color: var(--muted);
+  margin-top: 4px;
+}
+
+.announcement-item-badge {
+  padding: 5px 10px;
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--accent) 16%, transparent);
+  color: var(--accent-strong);
+  font-size: 0.75rem;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.announcement-item-content {
+  line-height: 1.75;
+  white-space: normal;
+  word-break: break-word;
+}
+
 .review-meta {
   color: var(--muted);
   font-size: 13px;
@@ -1363,12 +1420,12 @@ select:hover {
 
 .account-summary {
   margin-top: 12px;
-  padding: 14px;
+  padding: 12px;
   border-radius: 14px;
   border: 1px solid var(--border);
   background: linear-gradient(180deg, var(--card2), var(--card));
   display: grid;
-  gap: 12px;
+  gap: 10px;
 }
 
 .account-summary-head {
@@ -1379,20 +1436,20 @@ select:hover {
 }
 
 .account-summary-title {
-  font-size: 18px;
+  font-size: 16px;
   font-weight: 800;
   color: var(--text);
 }
 
 .account-summary-subtitle {
-  margin-top: 4px;
+  margin-top: 3px;
   font-size: 12px;
   color: var(--muted);
   line-height: 1.4;
 }
 
 .account-badge {
-  padding: 6px 10px;
+  padding: 5px 9px;
   border-radius: 999px;
   background: rgba(15, 107, 68, 0.12);
   color: #0f6b44;
@@ -1401,19 +1458,51 @@ select:hover {
   white-space: nowrap;
 }
 
+.account-summary-meta-row {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 8px;
+}
+
+.account-summary-meta-item {
+  padding: 8px 10px;
+  border-radius: 12px;
+  background: var(--card2);
+  border: 1px solid var(--border2);
+  display: grid;
+  gap: 2px;
+}
+
+.account-summary-meta-item span {
+  font-size: 11px;
+  color: var(--muted);
+}
+
+.account-summary-meta-item strong {
+  font-size: 13px;
+  color: var(--text);
+  line-height: 1.35;
+  word-break: break-word;
+}
+
 .account-summary-grid {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 10px;
 }
 
+.account-summary-grid.compact {
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 8px;
+}
+
 .account-summary-item {
-  padding: 10px 12px;
+  padding: 9px 10px;
   border-radius: 12px;
   background: var(--card2);
   border: 1px solid var(--border2);
   display: grid;
-  gap: 4px;
+  gap: 3px;
 }
 
 .account-summary-item span {
@@ -1424,6 +1513,33 @@ select:hover {
 .account-summary-item strong {
   font-size: 14px;
   color: var(--text);
+  word-break: break-word;
+}
+
+.account-summary-quicklist {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 8px;
+}
+
+.account-summary-quickitem {
+  padding: 8px 10px;
+  border-radius: 12px;
+  border: 1px dashed var(--border3);
+  background: color-mix(in srgb, var(--card2) 88%, transparent);
+  display: grid;
+  gap: 3px;
+}
+
+.account-summary-quickitem span {
+  font-size: 11px;
+  color: var(--muted);
+}
+
+.account-summary-quickitem strong {
+  font-size: 13px;
+  color: var(--text);
+  line-height: 1.35;
   word-break: break-word;
 }
 
@@ -1491,6 +1607,12 @@ body.theme-dark .account-badge {
 
 @media (max-width: 640px) {
   .account-summary-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .account-summary-grid.compact,
+  .account-summary-meta-row,
+  .account-summary-quicklist {
     grid-template-columns: 1fr;
   }
 }

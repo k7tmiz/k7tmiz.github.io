@@ -4,6 +4,16 @@
   const USER_KEY = "a4-memory:cloud-user:v1";
   const PROFILE_KEY = "a4-memory:cloud-profile:v1";
 
+  function dispatchAuthChanged(loggedIn) {
+    try {
+      window.dispatchEvent(
+        new CustomEvent("a4-cloud-auth-changed", {
+          detail: { loggedIn: !!loggedIn, profile: getProfile() },
+        })
+      );
+    } catch (e) {}
+  }
+
   function getToken() {
     return localStorage.getItem(TOKEN_KEY);
   }
@@ -86,6 +96,7 @@
     if (data.success) {
       localStorage.setItem(TOKEN_KEY, data.token);
       saveProfile({ userId: data.userId, username, loggedInAt: new Date().toISOString() });
+      dispatchAuthChanged(true);
     }
     return data;
   }
@@ -94,6 +105,7 @@
     localStorage.removeItem(TOKEN_KEY);
     localStorage.removeItem(USER_KEY);
     localStorage.removeItem(PROFILE_KEY);
+    dispatchAuthChanged(false);
   }
 
   async function uploadState() {
@@ -149,6 +161,7 @@
     if (data.success) {
       localStorage.setItem(TOKEN_KEY, data.token);
       saveProfile({ userId: data.userId, username, loggedInAt: new Date().toISOString() });
+      dispatchAuthChanged(true);
     }
     return data;
   }
@@ -173,6 +186,26 @@
     return normalizeResponse(res, await readJsonSafe(res));
   }
 
+  async function fetchAnnouncements(limit = 10) {
+    const res = await fetch(API_BASE + "/api/announcements?limit=" + encodeURIComponent(String(limit || 10)), {
+      headers: { Authorization: "Bearer " + getToken() },
+    });
+    return normalizeResponse(res, await readJsonSafe(res));
+  }
+
+  async function markAnnouncementsRead(announcementIds) {
+    const ids = Array.isArray(announcementIds) ? announcementIds : [];
+    const res = await fetch(API_BASE + "/api/announcements/read", {
+      method: "POST",
+      headers: {
+        Authorization: "Bearer " + getToken(),
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ announcementIds: ids }),
+    });
+    return normalizeResponse(res, await readJsonSafe(res));
+  }
+
   window.A4Cloud = {
     register,
     login,
@@ -186,5 +219,7 @@
     registerWithEmail,
     requestPasswordReset,
     resetPassword,
+    fetchAnnouncements,
+    markAnnouncementsRead,
   };
 })();

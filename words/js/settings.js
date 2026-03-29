@@ -652,48 +652,63 @@
                   </div>
                   <div class="account-badge">在线</div>
                 </div>
-                <div class="account-summary-grid">
-                  <div class="account-summary-item">
+                <div class="account-summary-meta-row">
+                  <div class="account-summary-meta-item">
                     <span>云备份</span>
                     <strong id="cloudBackupStateText">已启用</strong>
                   </div>
-                  <div class="account-summary-item">
+                  <div class="account-summary-meta-item">
                     <span>最近同步</span>
                     <strong id="cloudLastSyncText">尚未同步</strong>
+                  </div>
+                </div>
+                <div class="account-summary-grid compact">
+                  <div class="account-summary-item">
+                    <span>累计单词</span>
+                    <strong id="cloudWordsText">0</strong>
                   </div>
                   <div class="account-summary-item">
                     <span>学习轮次</span>
                     <strong id="cloudRoundsText">0</strong>
                   </div>
                   <div class="account-summary-item">
-                    <span>累计单词</span>
-                    <strong id="cloudWordsText">0</strong>
-                  </div>
-                  <div class="account-summary-item">
                     <span>今日新增</span>
                     <strong id="cloudTodayWordsText">0</strong>
                   </div>
                   <div class="account-summary-item">
+                    <span>连续学习</span>
+                    <strong id="cloudStreakText">0 天</strong>
+                  </div>
+                </div>
+                <div class="account-summary-quicklist">
+                  <div class="account-summary-quickitem">
+                    <span>今日完成</span>
+                    <strong id="cloudTodayRoundsText">0 轮</strong>
+                  </div>
+                  <div class="account-summary-quickitem">
                     <span>当前轮</span>
                     <strong id="cloudCurrentRoundText">未开始</strong>
                   </div>
+                  <div class="account-summary-quickitem">
+                    <span>登录会话</span>
+                    <strong id="cloudSessionText">刚刚开始</strong>
+                  </div>
                 </div>
+              </div>
+              <div class="account-section">
+                <div class="account-section-title">云端备份</div>
+                <div class="form-help">可把当前浏览器学习进度上传到云端，或从云端恢复到本地。</div>
+                <div class="stack">
+                  <button class="primary full" id="cloudUploadBtn" type="button">上传到云端</button>
+                  <button class="ghost full" id="cloudDownloadBtn" type="button">从云端恢复</button>
+                </div>
+                <div class="form-help" id="cloudSyncStatus"></div>
               </div>
               <div class="stack">
                 <button class="ghost full" id="cloudLogoutBtn" type="button">退出登录</button>
               </div>
             </div>
             <div class="form-help account-status hidden" id="accountStatus"></div>
-          </section>
-
-          <section class="panel hidden" id="cloudBackupPanel">
-            <div class="section-title">云端备份</div>
-            <div class="form-help">登录后可在当前浏览器上传学习进度到云端，或从云端恢复到本地。</div>
-            <div class="stack">
-              <button class="primary full" id="cloudUploadBtn" type="button">上传到云端</button>
-              <button class="ghost full" id="cloudDownloadBtn" type="button">从云端恢复</button>
-            </div>
-            <div class="form-help" id="cloudSyncStatus"></div>
           </section>
 
           <section class="panel">
@@ -843,12 +858,8 @@
 
     const modalBody = modal.querySelector(".modal-body")
     const accountPanel = modal.querySelector("#accountPanel")
-    const cloudBackupPanel = modal.querySelector("#cloudBackupPanel")
     if (modalBody && accountPanel && modalBody.firstElementChild !== accountPanel) {
       modalBody.insertBefore(accountPanel, modalBody.firstElementChild)
-    }
-    if (modalBody && accountPanel && cloudBackupPanel && accountPanel.nextElementSibling !== cloudBackupPanel) {
-      modalBody.insertBefore(cloudBackupPanel, accountPanel.nextElementSibling)
     }
 
     const dom = {
@@ -883,7 +894,6 @@
       exportBackupBtn: modal.querySelector("#exportBackupBtn"),
       importBackupBtn: modal.querySelector("#importBackupBtn"),
       importBackupFile: modal.querySelector("#importBackupFile"),
-      cloudBackupPanel: modal.querySelector("#cloudBackupPanel"),
       accountTabRegisterBtn: modal.querySelector("#accountTabRegisterBtn"),
       accountTabLoginBtn: modal.querySelector("#accountTabLoginBtn"),
       accountTabResetBtn: modal.querySelector("#accountTabResetBtn"),
@@ -925,6 +935,9 @@
       cloudRoundsText: modal.querySelector("#cloudRoundsText"),
       cloudWordsText: modal.querySelector("#cloudWordsText"),
       cloudTodayWordsText: modal.querySelector("#cloudTodayWordsText"),
+      cloudStreakText: modal.querySelector("#cloudStreakText"),
+      cloudTodayRoundsText: modal.querySelector("#cloudTodayRoundsText"),
+      cloudSessionText: modal.querySelector("#cloudSessionText"),
       cloudCurrentRoundText: modal.querySelector("#cloudCurrentRoundText"),
       accountStatus: modal.querySelector("#accountStatus"),
       cloudSyncStatus: modal.querySelector("#cloudSyncStatus"),
@@ -2340,6 +2353,9 @@
         roundsCount: rounds.length,
         totalWords: stats.totalWords,
         todayWords: stats.todayWords,
+        streak: stats.streak,
+        todayCompletedRounds: stats.todayCompletedRounds,
+        completedRounds: stats.completedRounds,
         currentRoundLabel: roundLabel,
       }
     }
@@ -2351,17 +2367,20 @@
       const summary = buildLearningSummary()
       if (dom.accountLoggedOut) dom.accountLoggedOut.classList.toggle("hidden", loggedIn)
       if (dom.accountLoggedIn) dom.accountLoggedIn.classList.toggle("hidden", !loggedIn)
-      if (dom.cloudBackupPanel) dom.cloudBackupPanel.classList.toggle("hidden", !loggedIn)
       if (loggedIn) {
         const username = String(profile?.username || "").trim() || "未命名用户"
         if (dom.cloudAccountTitle) dom.cloudAccountTitle.textContent = username
+        const loginTimeText = formatLoginTime(profile?.loggedInAt)
         if (dom.cloudAccountSubtitle) {
-          dom.cloudAccountSubtitle.textContent = `当前浏览器已登录 · 会话开始于 ${formatLoginTime(profile?.loggedInAt)}`
+          dom.cloudAccountSubtitle.textContent = `当前浏览器已登录，可直接上传或恢复学习数据。`
         }
         if (dom.cloudBackupStateText) dom.cloudBackupStateText.textContent = "已启用"
         if (dom.cloudRoundsText) dom.cloudRoundsText.textContent = String(summary.roundsCount)
         if (dom.cloudWordsText) dom.cloudWordsText.textContent = String(summary.totalWords)
         if (dom.cloudTodayWordsText) dom.cloudTodayWordsText.textContent = String(summary.todayWords)
+        if (dom.cloudStreakText) dom.cloudStreakText.textContent = `${summary.streak || 0} 天`
+        if (dom.cloudTodayRoundsText) dom.cloudTodayRoundsText.textContent = `${summary.todayCompletedRounds || 0} 轮`
+        if (dom.cloudSessionText) dom.cloudSessionText.textContent = loginTimeText || "刚刚开始"
         if (dom.cloudCurrentRoundText) dom.cloudCurrentRoundText.textContent = summary.currentRoundLabel
         if (dom.cloudLastSyncText) {
           const timeText = formatSyncTime(syncMeta?.at)
@@ -2383,6 +2402,9 @@
         if (dom.cloudRoundsText) dom.cloudRoundsText.textContent = "-"
         if (dom.cloudWordsText) dom.cloudWordsText.textContent = "-"
         if (dom.cloudTodayWordsText) dom.cloudTodayWordsText.textContent = "-"
+        if (dom.cloudStreakText) dom.cloudStreakText.textContent = "-"
+        if (dom.cloudTodayRoundsText) dom.cloudTodayRoundsText.textContent = "-"
+        if (dom.cloudSessionText) dom.cloudSessionText.textContent = "-"
         if (dom.cloudCurrentRoundText) dom.cloudCurrentRoundText.textContent = "-"
         if (dom.cloudSyncStatus) dom.cloudSyncStatus.textContent = ""
       }
