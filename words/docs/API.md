@@ -10,7 +10,7 @@
 
 ## 一、用户接口
 
-由 `js/cloud.js`（私有可选模块）调用，路径前缀 `/api/auth` 和 `/api/state`。
+由 `js/cloud.js`（浏览器端桥接层）调用，路径前缀 `/api/auth`、`/api/state` 和 `/api/email`。
 
 ### 1.1 用户注册
 
@@ -18,37 +18,15 @@
 POST /api/auth/register
 ```
 
-**鉴权**：无（公开）
+**状态**：已禁用
 
-**Rate Limit**：同一 IP 15 分钟内最多 5 次
+**说明**：为避免前端无门槛注册，直接注册入口已关闭。用户注册应改走邮箱验证码流程：
 
-**请求体**：
-```json
-{
-  "username": "testuser",
-  "password": "123456"
-}
-```
-
-| 字段 | 验证规则 |
-|------|----------|
-| `username` | 必填，3-32 字符 |
-| `password` | 必填，最少 6 字符 |
-
-**成功响应**（200）：
-```json
-{
-  "success": true,
-  "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...",
-  "userId": 1
-}
-```
+1. `POST /api/email/send-register-code`
+2. `POST /api/email/register-with-code`
 
 **错误响应**：
-- 400：参数缺失或验证失败
-- 409：用户名已存在
-- 429：请求过于频繁
-- 500：服务器内部错误
+- 403：直接注册已禁用
 
 ---
 
@@ -87,7 +65,152 @@ POST /api/auth/login
 
 ---
 
-### 1.3 下载用户 State
+### 1.3 发送注册验证码
+
+```
+POST /api/email/send-register-code
+```
+
+**鉴权**：无（公开）
+
+**Rate Limit**：同一 IP 1 小时内最多 5 次
+
+**请求体**：
+```json
+{
+  "email": "user@example.com"
+}
+```
+
+**行为**：
+- 邮箱格式必须合法
+- 已注册邮箱会静默返回成功，避免账号探测
+- 同一邮箱 60 秒内不可重复发送
+
+**成功响应**（200）：
+```json
+{
+  "success": true
+}
+```
+
+**错误响应**：
+- 400：邮箱格式不合法
+- 429：发送过于频繁
+- 500：邮件发送失败或服务器内部错误
+
+---
+
+### 1.4 邮箱验证码注册
+
+```
+POST /api/email/register-with-code
+```
+
+**鉴权**：无（公开）
+
+**请求体**：
+```json
+{
+  "email": "user@example.com",
+  "code": "123456",
+  "username": "testuser",
+  "password": "123456"
+}
+```
+
+| 字段 | 验证规则 |
+|------|----------|
+| `email` | 必填，合法邮箱 |
+| `code` | 必填，6 位验证码 |
+| `username` | 必填，3-32 字符 |
+| `password` | 必填，最少 6 字符 |
+
+**成功响应**（200）：
+```json
+{
+  "success": true,
+  "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...",
+  "userId": 1
+}
+```
+
+**错误响应**：
+- 400：参数缺失、邮箱格式错误、验证码无效或已过期
+- 409：邮箱或用户名已存在
+- 429：验证码错误次数过多，已锁定
+- 500：服务器内部错误
+
+---
+
+### 1.5 发送重置密码验证码
+
+```
+POST /api/email/send-reset-code
+```
+
+**鉴权**：无（公开）
+
+**Rate Limit**：同一 IP 1 小时内最多 5 次
+
+**请求体**：
+```json
+{
+  "email": "user@example.com"
+}
+```
+
+**行为**：
+- 邮箱格式必须合法
+- 不存在的邮箱会静默返回成功，避免账号探测
+- 同一邮箱 60 秒内不可重复发送
+
+**成功响应**（200）：
+```json
+{
+  "success": true
+}
+```
+
+**错误响应**：
+- 400：邮箱格式不合法
+- 429：发送过于频繁
+- 500：邮件发送失败或服务器内部错误
+
+---
+
+### 1.6 重置密码
+
+```
+POST /api/email/reset-password
+```
+
+**鉴权**：无（公开）
+
+**请求体**：
+```json
+{
+  "email": "user@example.com",
+  "code": "123456",
+  "newPassword": "newpassword"
+}
+```
+
+**成功响应**（200）：
+```json
+{
+  "success": true
+}
+```
+
+**错误响应**：
+- 400：参数缺失、邮箱格式错误、验证码无效或已过期
+- 429：验证码错误次数过多，已锁定
+- 500：服务器内部错误
+
+---
+
+### 1.7 下载用户 State
 
 ```
 GET /api/state
@@ -121,7 +244,7 @@ Authorization: Bearer <user_jwt_token>
 
 ---
 
-### 1.4 上传用户 State
+### 1.8 上传用户 State
 
 ```
 POST /api/state

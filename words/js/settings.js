@@ -8,6 +8,8 @@
   const normalizePronunciationLang = window.A4Common?.normalizePronunciationLang
   const normalizeAiProvider = window.A4Common?.normalizeAiProvider
   const normalizeStatus = window.A4Common?.normalizeStatus
+  const ACCOUNT_REGISTER_CODE_COOLDOWN_KEY = "a4-memory:register-code-cooldown:v1"
+  const ACCOUNT_RESET_CODE_COOLDOWN_KEY = "a4-memory:reset-code-cooldown:v1"
 
   function normalizeReviewIntervals(raw) {
     const base = raw && typeof raw === "object" ? raw : {}
@@ -28,6 +30,84 @@
       meaning,
       example: String(raw?.example || "").trim(),
       tags: Array.isArray(raw?.tags) ? raw.tags.map((t) => String(t || "").trim()).filter(Boolean) : [],
+    }
+  }
+
+  function isValidEmail(value) {
+    return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(String(value || "").trim())
+  }
+
+  function isValidVerificationCode(value) {
+    return /^\d{6}$/.test(String(value || "").trim())
+  }
+
+  function isValidUsername(value) {
+    const s = String(value || "").trim()
+    return s.length >= 3 && s.length <= 32
+  }
+
+  function isValidPassword(value) {
+    return String(value || "").length >= 6
+  }
+
+  function formatAccountError(error) {
+    const text = String(error || "").trim()
+    if (!text) return "未知错误"
+    if (/invalid or expired code/i.test(text)) return "验证码错误或已过期"
+    if (/too many failed attempts/i.test(text)) return "验证码错误次数过多，请稍后重试"
+    if (/email already registered/i.test(text)) return "该邮箱已注册"
+    if (/username already exists/i.test(text)) return "用户名已存在"
+    if (/please wait 60 seconds/i.test(text)) return "发送过于频繁，请 60 秒后重试"
+    if (/发送验证码过于频繁/i.test(text)) return "发送过于频繁，请稍后再试"
+    if (/failed to send email/i.test(text)) return "邮件发送失败，请稍后重试"
+    if (/valid email required/i.test(text)) return "请输入有效邮箱"
+    if (/password must be at least 6 characters/i.test(text)) return "密码至少需要 6 位"
+    if (/username must be 3-32 characters/i.test(text)) return "用户名长度需为 3-32 个字符"
+    if (/invalid username or password/i.test(text)) return "用户名或密码错误"
+    if (/email not found/i.test(text)) return "该邮箱未注册"
+    if (/direct registration is disabled/i.test(text)) return "已关闭直接注册，请使用邮箱验证码注册"
+    return text
+  }
+
+  function isAccountActionSuccess(result) {
+    if (!result || typeof result !== "object") return false
+    if (result.success === true) return true
+    if (result.ok === true) return true
+    if (result.sent === true) return true
+    return false
+  }
+
+  function getAccountRetrySeconds(result, fallbackSeconds = 60) {
+    const retryAfter = Math.round(Number(result?.retryAfter) || 0)
+    if (retryAfter > 0) return Math.min(retryAfter, 3600)
+
+    const text = String(result?.error || "")
+    const match = text.match(/(\d+)\s*seconds?/i)
+    if (match) {
+      const seconds = Math.round(Number(match[1]) || 0)
+      if (seconds > 0) return Math.min(seconds, 3600)
+    }
+
+    if (Number(result?.status) === 429) return fallbackSeconds
+    return 0
+  }
+
+  function saveAccountCooldown(key, untilMs) {
+    try {
+      if (!key) return
+      const n = Math.max(0, Math.round(Number(untilMs) || 0))
+      if (n > Date.now()) localStorage.setItem(key, String(n))
+      else localStorage.removeItem(key)
+    } catch (e) {}
+  }
+
+  function loadAccountCooldown(key) {
+    try {
+      const raw = localStorage.getItem(key)
+      const n = Math.round(Number(raw) || 0)
+      return n > Date.now() ? n : 0
+    } catch (e) {
+      return 0
     }
   }
 
@@ -460,26 +540,71 @@
           <section class="panel" id="accountPanel">
             <div class="section-title">账号</div>
             <div id="accountLoggedOut">
+              <div class="form-help">注册需先验证邮箱；登录仍使用用户名和密码。</div>
+              <div class="form-row">
+                <div class="form-label">注册邮箱</div>
+                <div class="form-control form-control-stack">
+                  <input id="cloudEmailInput" class="text-input" type="email" placeholder="用于接收注册验证码" autocomplete="email" />
+                  <div id="cloudEmailHint" class="form-help field-help hidden"></div>
+                </div>
+              </div>
+              <div class="form-row">
+                <div class="form-label">注册验证码</div>
+                <div class="form-control form-control-stack">
+                  <input id="cloudRegisterCodeInput" class="text-input" type="text" inputmode="numeric" maxlength="6" pattern="\\d{6}" placeholder="6 位验证码" autocomplete="one-time-code" />
+                  <div id="cloudRegisterCodeHint" class="form-help field-help hidden"></div>
+                </div>
+              </div>
+              <div class="stack">
+                <button class="ghost full" id="cloudSendCodeBtn" type="button">发送注册验证码</button>
+              </div>
               <div class="form-row">
                 <div class="form-label">用户名</div>
-                <div class="form-control">
-                  <input id="cloudUsernameInput" class="text-input" type="text" placeholder="用户名" />
+                <div class="form-control form-control-stack">
+                  <input id="cloudUsernameInput" class="text-input" type="text" maxlength="32" placeholder="注册和登录都使用用户名" autocomplete="username" />
+                  <div id="cloudUsernameHint" class="form-help field-help hidden"></div>
                 </div>
               </div>
               <div class="form-row">
                 <div class="form-label">密码</div>
-                <div class="form-control">
-                  <input id="cloudPasswordInput" class="text-input" type="password" placeholder="密码" />
+                <div class="form-control form-control-stack">
+                  <input id="cloudPasswordInput" class="text-input" type="password" minlength="6" placeholder="注册和登录都使用密码" autocomplete="current-password" />
+                  <div id="cloudPasswordHint" class="form-help field-help hidden"></div>
                 </div>
               </div>
               <div class="stack">
-                <button class="primary full" id="cloudRegisterBtn" type="button">注册</button>
+                <button class="primary full" id="cloudRegisterBtn" type="button">邮箱验证码注册</button>
                 <button class="ghost full" id="cloudLoginBtn" type="button">登录</button>
+              </div>
+              <div class="form-row">
+                <div class="form-label">重置邮箱</div>
+                <div class="form-control form-control-stack">
+                  <input id="cloudResetEmailInput" class="text-input" type="email" placeholder="接收重置验证码的邮箱" autocomplete="email" />
+                  <div id="cloudResetEmailHint" class="form-help field-help hidden"></div>
+                </div>
+              </div>
+              <div class="form-row">
+                <div class="form-label">重置验证码</div>
+                <div class="form-control form-control-stack">
+                  <input id="cloudResetCodeInput" class="text-input" type="text" inputmode="numeric" maxlength="6" pattern="\\d{6}" placeholder="6 位验证码" autocomplete="one-time-code" />
+                  <div id="cloudResetCodeHint" class="form-help field-help hidden"></div>
+                </div>
+              </div>
+              <div class="form-row">
+                <div class="form-label">新密码</div>
+                <div class="form-control form-control-stack">
+                  <input id="cloudResetPasswordInput" class="text-input" type="password" minlength="6" placeholder="至少 6 位" autocomplete="new-password" />
+                  <div id="cloudResetPasswordHint" class="form-help field-help hidden"></div>
+                </div>
+              </div>
+              <div class="stack">
+                <button class="ghost full" id="cloudSendResetCodeBtn" type="button">发送重置验证码</button>
+                <button class="ghost full" id="cloudResetPasswordBtn" type="button">重置密码</button>
               </div>
             </div>
             <div id="accountLoggedIn" class="hidden">
               <div class="form-row">
-                <div class="form-label">已登录</div>
+                <div class="form-label">用户 ID</div>
                 <div class="form-control">
                   <div id="cloudUsernameText" class="form-help"></div>
                 </div>
@@ -488,7 +613,7 @@
                 <button class="ghost full" id="cloudLogoutBtn" type="button">退出登录</button>
               </div>
             </div>
-            <div class="form-help" id="accountStatus"></div>
+            <div class="form-help account-status hidden" id="accountStatus"></div>
           </section>
 
           <section class="panel">
@@ -677,10 +802,25 @@
       exportBackupBtn: modal.querySelector("#exportBackupBtn"),
       importBackupBtn: modal.querySelector("#importBackupBtn"),
       importBackupFile: modal.querySelector("#importBackupFile"),
+      cloudEmailInput: modal.querySelector("#cloudEmailInput"),
+      cloudEmailHint: modal.querySelector("#cloudEmailHint"),
+      cloudRegisterCodeInput: modal.querySelector("#cloudRegisterCodeInput"),
+      cloudRegisterCodeHint: modal.querySelector("#cloudRegisterCodeHint"),
+      cloudSendCodeBtn: modal.querySelector("#cloudSendCodeBtn"),
       cloudUsernameInput: modal.querySelector("#cloudUsernameInput"),
+      cloudUsernameHint: modal.querySelector("#cloudUsernameHint"),
       cloudPasswordInput: modal.querySelector("#cloudPasswordInput"),
+      cloudPasswordHint: modal.querySelector("#cloudPasswordHint"),
       cloudRegisterBtn: modal.querySelector("#cloudRegisterBtn"),
       cloudLoginBtn: modal.querySelector("#cloudLoginBtn"),
+      cloudResetEmailInput: modal.querySelector("#cloudResetEmailInput"),
+      cloudResetEmailHint: modal.querySelector("#cloudResetEmailHint"),
+      cloudResetCodeInput: modal.querySelector("#cloudResetCodeInput"),
+      cloudResetCodeHint: modal.querySelector("#cloudResetCodeHint"),
+      cloudResetPasswordInput: modal.querySelector("#cloudResetPasswordInput"),
+      cloudResetPasswordHint: modal.querySelector("#cloudResetPasswordHint"),
+      cloudSendResetCodeBtn: modal.querySelector("#cloudSendResetCodeBtn"),
+      cloudResetPasswordBtn: modal.querySelector("#cloudResetPasswordBtn"),
       cloudLogoutBtn: modal.querySelector("#cloudLogoutBtn"),
       cloudUploadBtn: modal.querySelector("#cloudUploadBtn"),
       cloudDownloadBtn: modal.querySelector("#cloudDownloadBtn"),
@@ -720,6 +860,25 @@
     }
 
     let pendingAiBook = null
+    let registerCodeCooldownUntil = loadAccountCooldown(ACCOUNT_REGISTER_CODE_COOLDOWN_KEY)
+    let resetCodeCooldownUntil = loadAccountCooldown(ACCOUNT_RESET_CODE_COOLDOWN_KEY)
+    let accountCooldownTimer = 0
+    const accountFieldTouched = {
+      registerEmail: false,
+      registerCode: false,
+      username: false,
+      password: false,
+      resetEmail: false,
+      resetCode: false,
+      resetPassword: false,
+    }
+    const accountBusy = {
+      sendRegisterCode: false,
+      register: false,
+      login: false,
+      sendResetCode: false,
+      resetPassword: false,
+    }
 
     function getStateSafe() {
       return typeof getState === "function" ? getState() : {}
@@ -729,12 +888,240 @@
       if (typeof setState === "function") setState(patch)
     }
 
+    function setFieldHint(input, hint, text) {
+      if (!input || !hint) return
+      const value = String(text || "").trim()
+      input.classList.toggle("is-invalid", !!value)
+      hint.textContent = value
+      hint.classList.toggle("hidden", !value)
+    }
+
+    function getRegisterEmailError(options = {}) {
+      const value = dom.cloudEmailInput?.value?.trim() || ""
+      if (!value) return options.required ? "请输入注册邮箱" : ""
+      return isValidEmail(value) ? "" : "请输入有效邮箱"
+    }
+
+    function getRegisterCodeError(options = {}) {
+      const value = dom.cloudRegisterCodeInput?.value?.trim() || ""
+      if (!value) return options.required ? "请输入注册验证码" : ""
+      return isValidVerificationCode(value) ? "" : "验证码必须是 6 位数字"
+    }
+
+    function getUsernameError(options = {}) {
+      const value = dom.cloudUsernameInput?.value?.trim() || ""
+      if (!value) return options.required ? "请输入用户名" : ""
+      return isValidUsername(value) ? "" : "用户名长度需为 3-32 个字符"
+    }
+
+    function getPasswordError(options = {}) {
+      const value = dom.cloudPasswordInput?.value || ""
+      if (!value) return options.required ? "请输入密码" : ""
+      return isValidPassword(value) ? "" : "密码至少需要 6 位"
+    }
+
+    function getResetEmailError(options = {}) {
+      const value = dom.cloudResetEmailInput?.value?.trim() || ""
+      if (!value) return options.required ? "请输入重置邮箱" : ""
+      return isValidEmail(value) ? "" : "请输入有效邮箱"
+    }
+
+    function getResetCodeError(options = {}) {
+      const value = dom.cloudResetCodeInput?.value?.trim() || ""
+      if (!value) return options.required ? "请输入重置验证码" : ""
+      return isValidVerificationCode(value) ? "" : "验证码必须是 6 位数字"
+    }
+
+    function getResetPasswordError(options = {}) {
+      const value = dom.cloudResetPasswordInput?.value || ""
+      if (!value) return options.required ? "请输入新密码" : ""
+      return isValidPassword(value) ? "" : "新密码至少需要 6 位"
+    }
+
+    function updateRegisterEmailHint(options = {}) {
+      const show = options.force || accountFieldTouched.registerEmail
+      setFieldHint(dom.cloudEmailInput, dom.cloudEmailHint, show ? getRegisterEmailError({ required: !!options.required }) : "")
+    }
+
+    function updateRegisterCodeHint(options = {}) {
+      const show = options.force || accountFieldTouched.registerCode
+      setFieldHint(
+        dom.cloudRegisterCodeInput,
+        dom.cloudRegisterCodeHint,
+        show ? getRegisterCodeError({ required: !!options.required }) : ""
+      )
+    }
+
+    function updateUsernameHint(options = {}) {
+      const show = options.force || accountFieldTouched.username
+      setFieldHint(dom.cloudUsernameInput, dom.cloudUsernameHint, show ? getUsernameError({ required: !!options.required }) : "")
+    }
+
+    function updatePasswordHint(options = {}) {
+      const show = options.force || accountFieldTouched.password
+      setFieldHint(dom.cloudPasswordInput, dom.cloudPasswordHint, show ? getPasswordError({ required: !!options.required }) : "")
+    }
+
+    function updateResetEmailHint(options = {}) {
+      const show = options.force || accountFieldTouched.resetEmail
+      setFieldHint(dom.cloudResetEmailInput, dom.cloudResetEmailHint, show ? getResetEmailError({ required: !!options.required }) : "")
+    }
+
+    function updateResetCodeHint(options = {}) {
+      const show = options.force || accountFieldTouched.resetCode
+      setFieldHint(dom.cloudResetCodeInput, dom.cloudResetCodeHint, show ? getResetCodeError({ required: !!options.required }) : "")
+    }
+
+    function updateResetPasswordHint(options = {}) {
+      const show = options.force || accountFieldTouched.resetPassword
+      setFieldHint(
+        dom.cloudResetPasswordInput,
+        dom.cloudResetPasswordHint,
+        show ? getResetPasswordError({ required: !!options.required }) : ""
+      )
+    }
+
+    function validateRegisterFields(options = {}) {
+      const required = options.required !== false
+      accountFieldTouched.registerEmail = true
+      accountFieldTouched.registerCode = true
+      accountFieldTouched.username = true
+      accountFieldTouched.password = true
+      const emailError = getRegisterEmailError({ required })
+      const codeError = getRegisterCodeError({ required })
+      const usernameError = getUsernameError({ required })
+      const passwordError = getPasswordError({ required })
+      updateRegisterEmailHint({ force: true, required })
+      updateRegisterCodeHint({ force: true, required })
+      updateUsernameHint({ force: true, required })
+      updatePasswordHint({ force: true, required })
+      return emailError || codeError || usernameError || passwordError || ""
+    }
+
+    function validateLoginFields() {
+      accountFieldTouched.username = true
+      accountFieldTouched.password = true
+      const usernameError = getUsernameError({ required: true })
+      const passwordError = getPasswordError({ required: true })
+      updateUsernameHint({ force: true, required: true })
+      updatePasswordHint({ force: true, required: true })
+      return usernameError || passwordError || ""
+    }
+
+    function validateResetFields(options = {}) {
+      const required = options.required !== false
+      accountFieldTouched.resetEmail = true
+      accountFieldTouched.resetCode = true
+      accountFieldTouched.resetPassword = true
+      const emailError = getResetEmailError({ required })
+      const codeError = getResetCodeError({ required })
+      const passwordError = getResetPasswordError({ required })
+      updateResetEmailHint({ force: true, required })
+      updateResetCodeHint({ force: true, required })
+      updateResetPasswordHint({ force: true, required })
+      return emailError || codeError || passwordError || ""
+    }
+
     function persistSafe() {
       if (typeof persist === "function") persist()
     }
 
     function afterChange(key) {
       if (typeof onAfterChange === "function") onAfterChange({ key })
+    }
+
+    function getCooldownSecondsLeft(untilMs) {
+      const diff = Number(untilMs) - Date.now()
+      if (!Number.isFinite(diff) || diff <= 0) return 0
+      return Math.ceil(diff / 1000)
+    }
+
+    function stopAccountCooldownTicker() {
+      if (!accountCooldownTimer) return
+      window.clearInterval(accountCooldownTimer)
+      accountCooldownTimer = 0
+      if (getCooldownSecondsLeft(registerCodeCooldownUntil) <= 0) saveAccountCooldown(ACCOUNT_REGISTER_CODE_COOLDOWN_KEY, 0)
+      if (getCooldownSecondsLeft(resetCodeCooldownUntil) <= 0) saveAccountCooldown(ACCOUNT_RESET_CODE_COOLDOWN_KEY, 0)
+    }
+
+    function renderAccountActionButtons() {
+      const registerCooldown = getCooldownSecondsLeft(registerCodeCooldownUntil)
+      const resetCooldown = getCooldownSecondsLeft(resetCodeCooldownUntil)
+
+      if (dom.cloudSendCodeBtn) {
+        dom.cloudSendCodeBtn.disabled = accountBusy.sendRegisterCode || registerCooldown > 0
+        dom.cloudSendCodeBtn.textContent = accountBusy.sendRegisterCode
+          ? "发送中…"
+          : registerCooldown > 0
+            ? `${registerCooldown}s 后可重发`
+            : "发送注册验证码"
+      }
+
+      if (dom.cloudRegisterBtn) {
+        dom.cloudRegisterBtn.disabled = accountBusy.register
+        dom.cloudRegisterBtn.textContent = accountBusy.register ? "注册中…" : "邮箱验证码注册"
+      }
+
+      if (dom.cloudLoginBtn) {
+        dom.cloudLoginBtn.disabled = accountBusy.login
+        dom.cloudLoginBtn.textContent = accountBusy.login ? "登录中…" : "登录"
+      }
+
+      if (dom.cloudSendResetCodeBtn) {
+        dom.cloudSendResetCodeBtn.disabled = accountBusy.sendResetCode || resetCooldown > 0
+        dom.cloudSendResetCodeBtn.textContent = accountBusy.sendResetCode
+          ? "发送中…"
+          : resetCooldown > 0
+            ? `${resetCooldown}s 后可重发`
+            : "发送重置验证码"
+      }
+
+      if (dom.cloudResetPasswordBtn) {
+        dom.cloudResetPasswordBtn.disabled = accountBusy.resetPassword
+        dom.cloudResetPasswordBtn.textContent = accountBusy.resetPassword ? "重置中…" : "重置密码"
+      }
+    }
+
+    function ensureAccountCooldownTicker() {
+      if (accountCooldownTimer) return
+      accountCooldownTimer = window.setInterval(() => {
+        renderAccountActionButtons()
+        const registerCooldown = getCooldownSecondsLeft(registerCodeCooldownUntil)
+        const resetCooldown = getCooldownSecondsLeft(resetCodeCooldownUntil)
+        if (registerCooldown <= 0 && resetCooldown <= 0) stopAccountCooldownTicker()
+      }, 1000)
+    }
+
+    function startRegisterCodeCooldown(seconds) {
+      const n = Math.max(1, Math.min(600, Math.round(Number(seconds) || 60)))
+      registerCodeCooldownUntil = Date.now() + n * 1000
+      saveAccountCooldown(ACCOUNT_REGISTER_CODE_COOLDOWN_KEY, registerCodeCooldownUntil)
+      renderAccountActionButtons()
+      ensureAccountCooldownTicker()
+    }
+
+    function startResetCodeCooldown(seconds) {
+      const n = Math.max(1, Math.min(600, Math.round(Number(seconds) || 60)))
+      resetCodeCooldownUntil = Date.now() + n * 1000
+      saveAccountCooldown(ACCOUNT_RESET_CODE_COOLDOWN_KEY, resetCodeCooldownUntil)
+      renderAccountActionButtons()
+      ensureAccountCooldownTicker()
+    }
+
+    function tryStartCooldownFromError(kind, errorText) {
+      const text = String(errorText || "")
+      const m = text.match(/(\d+)\s*seconds?/i)
+      if (!m) return
+      const seconds = Number(m[1])
+      if (kind === "register") startRegisterCodeCooldown(seconds)
+      if (kind === "reset") startResetCodeCooldown(seconds)
+    }
+
+    function applyAccountRateLimit(kind, result, fallbackSeconds = 60) {
+      const seconds = getAccountRetrySeconds(result, fallbackSeconds)
+      if (seconds <= 0) return
+      if (kind === "register") startRegisterCodeCooldown(seconds)
+      if (kind === "reset") startResetCodeCooldown(seconds)
     }
 
     function getWordbookLang() {
@@ -851,6 +1238,10 @@
       if (dom.aiStatus) dom.aiStatus.textContent = ""
       updateVoiceUi()
       renderAiProviderUi()
+      renderAccountActionButtons()
+      if (getCooldownSecondsLeft(registerCodeCooldownUntil) > 0 || getCooldownSecondsLeft(resetCodeCooldownUntil) > 0) {
+        ensureAccountCooldownTicker()
+      }
       updateAccountUi()
     }
 
@@ -1159,6 +1550,61 @@
       persistSafe()
       afterChange("themeMode")
     })
+
+    const sanitizeVerificationCodeInput = (input) => {
+      if (!input) return
+      const raw = String(input.value || "")
+      const next = raw.replaceAll(/\D/g, "").slice(0, 6)
+      if (next !== raw) input.value = next
+    }
+
+    dom.cloudEmailInput?.addEventListener("blur", () => {
+      accountFieldTouched.registerEmail = true
+      updateRegisterEmailHint()
+    })
+    dom.cloudEmailInput?.addEventListener("input", () => updateRegisterEmailHint())
+
+    dom.cloudRegisterCodeInput?.addEventListener("blur", () => {
+      accountFieldTouched.registerCode = true
+      updateRegisterCodeHint()
+    })
+    dom.cloudRegisterCodeInput?.addEventListener("input", () => {
+      sanitizeVerificationCodeInput(dom.cloudRegisterCodeInput)
+      updateRegisterCodeHint()
+    })
+
+    dom.cloudUsernameInput?.addEventListener("blur", () => {
+      accountFieldTouched.username = true
+      updateUsernameHint()
+    })
+    dom.cloudUsernameInput?.addEventListener("input", () => updateUsernameHint())
+
+    dom.cloudPasswordInput?.addEventListener("blur", () => {
+      accountFieldTouched.password = true
+      updatePasswordHint()
+    })
+    dom.cloudPasswordInput?.addEventListener("input", () => updatePasswordHint())
+
+    dom.cloudResetEmailInput?.addEventListener("blur", () => {
+      accountFieldTouched.resetEmail = true
+      updateResetEmailHint()
+    })
+    dom.cloudResetEmailInput?.addEventListener("input", () => updateResetEmailHint())
+
+    dom.cloudResetCodeInput?.addEventListener("blur", () => {
+      accountFieldTouched.resetCode = true
+      updateResetCodeHint()
+    })
+    dom.cloudResetCodeInput?.addEventListener("input", () => {
+      sanitizeVerificationCodeInput(dom.cloudResetCodeInput)
+      updateResetCodeHint()
+    })
+
+    dom.cloudResetPasswordInput?.addEventListener("blur", () => {
+      accountFieldTouched.resetPassword = true
+      updateResetPasswordHint()
+    })
+    dom.cloudResetPasswordInput?.addEventListener("input", () => updateResetPasswordHint())
 
     dom.dailyGoalRoundsInput?.addEventListener("change", () => {
       const n = Number(dom.dailyGoalRoundsInput.value)
@@ -1645,6 +2091,19 @@
     })
 
     // 账号 & 云端备份
+    function setAccountStatus(text, kind = "info") {
+      if (!dom.accountStatus) return
+      const value = String(text || "").trim()
+      dom.accountStatus.textContent = value
+      dom.accountStatus.classList.remove("hidden", "is-info", "is-success", "is-error")
+      if (!value) {
+        dom.accountStatus.classList.add("hidden")
+        return
+      }
+      const statusKind = kind === "success" || kind === "error" ? kind : "info"
+      dom.accountStatus.classList.add(`is-${statusKind}`)
+    }
+
     function updateAccountUi() {
       const loggedIn = window.A4Cloud?.isLoggedIn?.() || false
       if (dom.accountLoggedOut) dom.accountLoggedOut.classList.toggle("hidden", loggedIn)
@@ -1652,47 +2111,212 @@
       if (dom.cloudUsernameText && loggedIn) {
         dom.cloudUsernameText.textContent = window.A4Cloud?.getUserId?.() || ""
       }
+      renderAccountActionButtons()
     }
 
-    dom.cloudRegisterBtn?.addEventListener("click", async () => {
-      const username = dom.cloudUsernameInput?.value?.trim() || ""
-      const password = dom.cloudPasswordInput?.value || ""
-      if (!username || !password) {
-        if (dom.accountStatus) dom.accountStatus.textContent = "请输入用户名和密码"
+    dom.cloudSendCodeBtn?.addEventListener("click", async () => {
+      const email = dom.cloudEmailInput?.value?.trim() || ""
+      accountFieldTouched.registerEmail = true
+      updateRegisterEmailHint({ force: true, required: true })
+      if (!isValidEmail(email)) {
+        setAccountStatus(getRegisterEmailError({ required: true }), "error")
         return
       }
-      if (dom.accountStatus) dom.accountStatus.textContent = "注册中…"
-      const result = await window.A4Cloud?.register?.(username, password)
-      if (result?.success) {
-        if (dom.accountStatus) dom.accountStatus.textContent = "注册成功，已自动登录"
-        updateAccountUi()
-      } else {
-        if (dom.accountStatus) dom.accountStatus.textContent = "注册失败：" + (result?.error || "未知错误")
+      accountBusy.sendRegisterCode = true
+      renderAccountActionButtons()
+      setAccountStatus("发送注册验证码中…", "info")
+      try {
+        const result = await window.A4Cloud?.sendVerificationCode?.(email)
+        if (isAccountActionSuccess(result)) {
+          setFieldHint(dom.cloudEmailInput, dom.cloudEmailHint, "")
+          startRegisterCodeCooldown(60)
+          setAccountStatus("验证码已发送，请检查邮箱。60 秒后可重发。", "success")
+        } else {
+          tryStartCooldownFromError("register", result?.error)
+          applyAccountRateLimit("register", result, 60)
+          if (/email already registered/i.test(String(result?.error || ""))) {
+            accountFieldTouched.registerEmail = true
+            setFieldHint(dom.cloudEmailInput, dom.cloudEmailHint, "该邮箱已注册")
+          }
+          setAccountStatus("发送失败：" + formatAccountError(result?.error), "error")
+        }
+      } finally {
+        accountBusy.sendRegisterCode = false
+        renderAccountActionButtons()
+      }
+    })
+
+    dom.cloudRegisterBtn?.addEventListener("click", async () => {
+      const email = dom.cloudEmailInput?.value?.trim() || ""
+      const code = dom.cloudRegisterCodeInput?.value?.trim() || ""
+      const username = dom.cloudUsernameInput?.value?.trim() || ""
+      const password = dom.cloudPasswordInput?.value || ""
+      const validationError = validateRegisterFields({ required: true })
+      if (validationError) {
+        setAccountStatus(validationError, "error")
+        return
+      }
+      accountBusy.register = true
+      renderAccountActionButtons()
+      setAccountStatus("注册中…", "info")
+      try {
+        const result = await window.A4Cloud?.registerWithEmail?.(email, code, username, password)
+        if (isAccountActionSuccess(result)) {
+          if (dom.cloudRegisterCodeInput) dom.cloudRegisterCodeInput.value = ""
+          setFieldHint(dom.cloudEmailInput, dom.cloudEmailHint, "")
+          setFieldHint(dom.cloudRegisterCodeInput, dom.cloudRegisterCodeHint, "")
+          setFieldHint(dom.cloudUsernameInput, dom.cloudUsernameHint, "")
+          setFieldHint(dom.cloudPasswordInput, dom.cloudPasswordHint, "")
+          setAccountStatus("注册成功，已自动登录", "success")
+          updateAccountUi()
+        } else {
+          const errorText = String(result?.error || "")
+          if (/invalid or expired code|too many failed attempts/i.test(errorText)) {
+            accountFieldTouched.registerCode = true
+            setFieldHint(dom.cloudRegisterCodeInput, dom.cloudRegisterCodeHint, formatAccountError(errorText))
+          }
+          if (/email already registered/i.test(errorText)) {
+            accountFieldTouched.registerEmail = true
+            setFieldHint(dom.cloudEmailInput, dom.cloudEmailHint, "该邮箱已注册")
+          }
+          if (/username already exists/i.test(errorText)) {
+            accountFieldTouched.username = true
+            setFieldHint(dom.cloudUsernameInput, dom.cloudUsernameHint, "用户名已存在")
+          }
+          if (/password must be at least 6 characters/i.test(errorText)) {
+            accountFieldTouched.password = true
+            setFieldHint(dom.cloudPasswordInput, dom.cloudPasswordHint, "密码至少需要 6 位")
+          }
+          setAccountStatus("注册失败：" + formatAccountError(result?.error), "error")
+        }
+      } finally {
+        accountBusy.register = false
+        renderAccountActionButtons()
       }
     })
 
     dom.cloudLoginBtn?.addEventListener("click", async () => {
       const username = dom.cloudUsernameInput?.value?.trim() || ""
       const password = dom.cloudPasswordInput?.value || ""
-      if (!username || !password) {
-        if (dom.accountStatus) dom.accountStatus.textContent = "请输入用户名和密码"
+      const validationError = validateLoginFields()
+      if (validationError) {
+        setAccountStatus(validationError, "error")
         return
       }
-      if (dom.accountStatus) dom.accountStatus.textContent = "登录中…"
-      const result = await window.A4Cloud?.login?.(username, password)
-      if (result?.success) {
-        if (dom.accountStatus) dom.accountStatus.textContent = "登录成功"
-        updateAccountUi()
-      } else {
-        if (dom.accountStatus) dom.accountStatus.textContent = "登录失败：" + (result?.error || "未知错误")
+      accountBusy.login = true
+      renderAccountActionButtons()
+      setAccountStatus("登录中…", "info")
+      try {
+        const result = await window.A4Cloud?.login?.(username, password)
+        if (isAccountActionSuccess(result)) {
+          setAccountStatus("登录成功", "success")
+          setFieldHint(dom.cloudUsernameInput, dom.cloudUsernameHint, "")
+          setFieldHint(dom.cloudPasswordInput, dom.cloudPasswordHint, "")
+          updateAccountUi()
+        } else {
+          if (/invalid username or password/i.test(String(result?.error || ""))) {
+            accountFieldTouched.username = true
+            accountFieldTouched.password = true
+            setFieldHint(dom.cloudUsernameInput, dom.cloudUsernameHint, "用户名或密码错误")
+            setFieldHint(dom.cloudPasswordInput, dom.cloudPasswordHint, "用户名或密码错误")
+          }
+          setAccountStatus("登录失败：" + formatAccountError(result?.error), "error")
+        }
+      } finally {
+        accountBusy.login = false
+        renderAccountActionButtons()
+      }
+    })
+
+    dom.cloudSendResetCodeBtn?.addEventListener("click", async () => {
+      const email = dom.cloudResetEmailInput?.value?.trim() || ""
+      accountFieldTouched.resetEmail = true
+      updateResetEmailHint({ force: true, required: true })
+      if (!isValidEmail(email)) {
+        setAccountStatus(getResetEmailError({ required: true }), "error")
+        return
+      }
+      accountBusy.sendResetCode = true
+      renderAccountActionButtons()
+      setAccountStatus("发送重置验证码中…", "info")
+      try {
+        const result = await window.A4Cloud?.requestPasswordReset?.(email)
+        if (isAccountActionSuccess(result)) {
+          setFieldHint(dom.cloudResetEmailInput, dom.cloudResetEmailHint, "")
+          startResetCodeCooldown(60)
+          setAccountStatus("重置验证码已发送，请检查邮箱。60 秒后可重发。", "success")
+        } else {
+          tryStartCooldownFromError("reset", result?.error)
+          applyAccountRateLimit("reset", result, 60)
+          if (/email not found/i.test(String(result?.error || ""))) {
+            accountFieldTouched.resetEmail = true
+            setFieldHint(dom.cloudResetEmailInput, dom.cloudResetEmailHint, "该邮箱未注册")
+          }
+          setAccountStatus("发送失败：" + formatAccountError(result?.error), "error")
+        }
+      } finally {
+        accountBusy.sendResetCode = false
+        renderAccountActionButtons()
+      }
+    })
+
+    dom.cloudResetPasswordBtn?.addEventListener("click", async () => {
+      const email = dom.cloudResetEmailInput?.value?.trim() || ""
+      const code = dom.cloudResetCodeInput?.value?.trim() || ""
+      const newPassword = dom.cloudResetPasswordInput?.value || ""
+      const validationError = validateResetFields({ required: true })
+      if (validationError) {
+        setAccountStatus(validationError, "error")
+        return
+      }
+      accountBusy.resetPassword = true
+      renderAccountActionButtons()
+      setAccountStatus("重置密码中…", "info")
+      try {
+        const result = await window.A4Cloud?.resetPassword?.(email, code, newPassword)
+        if (isAccountActionSuccess(result)) {
+          setFieldHint(dom.cloudResetEmailInput, dom.cloudResetEmailHint, "")
+          setFieldHint(dom.cloudResetCodeInput, dom.cloudResetCodeHint, "")
+          setFieldHint(dom.cloudResetPasswordInput, dom.cloudResetPasswordHint, "")
+          setAccountStatus("密码已重置，请使用新密码登录", "success")
+          if (dom.cloudPasswordInput) dom.cloudPasswordInput.value = ""
+          if (dom.cloudResetPasswordInput) dom.cloudResetPasswordInput.value = ""
+          if (dom.cloudResetCodeInput) dom.cloudResetCodeInput.value = ""
+        } else {
+          const errorText = String(result?.error || "")
+          if (/invalid or expired code|too many failed attempts/i.test(errorText)) {
+            accountFieldTouched.resetCode = true
+            setFieldHint(dom.cloudResetCodeInput, dom.cloudResetCodeHint, formatAccountError(errorText))
+          }
+          if (/password must be at least 6 characters/i.test(errorText)) {
+            accountFieldTouched.resetPassword = true
+            setFieldHint(dom.cloudResetPasswordInput, dom.cloudResetPasswordHint, "新密码至少需要 6 位")
+          }
+          setAccountStatus("重置失败：" + formatAccountError(result?.error), "error")
+        }
+      } finally {
+        accountBusy.resetPassword = false
+        renderAccountActionButtons()
       }
     })
 
     dom.cloudLogoutBtn?.addEventListener("click", () => {
       window.A4Cloud?.logout?.()
+      if (dom.cloudEmailInput) dom.cloudEmailInput.value = ""
+      if (dom.cloudRegisterCodeInput) dom.cloudRegisterCodeInput.value = ""
       if (dom.cloudUsernameInput) dom.cloudUsernameInput.value = ""
       if (dom.cloudPasswordInput) dom.cloudPasswordInput.value = ""
-      if (dom.accountStatus) dom.accountStatus.textContent = "已退出登录"
+      if (dom.cloudResetEmailInput) dom.cloudResetEmailInput.value = ""
+      if (dom.cloudResetCodeInput) dom.cloudResetCodeInput.value = ""
+      if (dom.cloudResetPasswordInput) dom.cloudResetPasswordInput.value = ""
+      setFieldHint(dom.cloudEmailInput, dom.cloudEmailHint, "")
+      setFieldHint(dom.cloudRegisterCodeInput, dom.cloudRegisterCodeHint, "")
+      setFieldHint(dom.cloudUsernameInput, dom.cloudUsernameHint, "")
+      setFieldHint(dom.cloudPasswordInput, dom.cloudPasswordHint, "")
+      setFieldHint(dom.cloudResetEmailInput, dom.cloudResetEmailHint, "")
+      setFieldHint(dom.cloudResetCodeInput, dom.cloudResetCodeHint, "")
+      setFieldHint(dom.cloudResetPasswordInput, dom.cloudResetPasswordHint, "")
+      setAccountStatus("已退出登录", "info")
       updateAccountUi()
     })
 

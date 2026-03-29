@@ -1290,6 +1290,12 @@ select:hover {
   align-items: center;
 }
 
+.form-control-stack {
+  flex-direction: column;
+  align-items: stretch;
+  gap: 6px;
+}
+
 .text-input {
   width: 100%;
   border: 1px solid var(--border3);
@@ -1307,10 +1313,73 @@ select:hover {
   border-color: var(--accent);
 }
 
+.text-input.is-invalid {
+  border-color: rgba(180, 35, 24, 0.5);
+  background: rgba(180, 35, 24, 0.04);
+}
+
+.text-input.is-invalid:focus {
+  border-color: #b42318;
+}
+
 .form-help {
   font-size: 12px;
   color: var(--muted);
   line-height: 1.35;
+}
+
+.field-help {
+  color: #b42318;
+}
+
+.account-status {
+  margin-top: 8px;
+  padding: 10px 12px;
+  border-radius: 10px;
+  border: 1px solid var(--border2);
+  background: var(--card2);
+}
+
+.account-status.is-info {
+  color: var(--text);
+  border-color: var(--border3);
+}
+
+.account-status.is-success {
+  color: #0f6b44;
+  border-color: rgba(15, 107, 68, 0.22);
+  background: rgba(15, 107, 68, 0.08);
+}
+
+.account-status.is-error {
+  color: #b42318;
+  border-color: rgba(180, 35, 24, 0.22);
+  background: rgba(180, 35, 24, 0.08);
+}
+
+body.theme-dark .account-status.is-success {
+  color: #7ee2b8;
+  border-color: rgba(126, 226, 184, 0.24);
+  background: rgba(126, 226, 184, 0.08);
+}
+
+body.theme-dark .account-status.is-error {
+  color: #ff9b8f;
+  border-color: rgba(255, 155, 143, 0.24);
+  background: rgba(255, 155, 143, 0.08);
+}
+
+body.theme-dark .text-input.is-invalid {
+  border-color: rgba(255, 155, 143, 0.55);
+  background: rgba(255, 155, 143, 0.08);
+}
+
+body.theme-dark .text-input.is-invalid:focus {
+  border-color: #ff9b8f;
+}
+
+body.theme-dark .field-help {
+  color: #ff9b8f;
 }
 
 .records-stats {
