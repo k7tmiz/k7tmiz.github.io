@@ -58,7 +58,7 @@ A4-Memory/
 ```javascript
 window.A4Cloud = {
   register(username, password),
-  login(username, password),
+  login(email, password),
   logout(),
   isLoggedIn(),
   getUserId(),

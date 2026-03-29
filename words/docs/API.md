@@ -43,7 +43,7 @@ POST /api/auth/login
 **请求体**：
 ```json
 {
-  "username": "testuser",
+  "email": "user@example.com",
   "password": "123456"
 }
 ```
@@ -53,13 +53,15 @@ POST /api/auth/login
 {
   "success": true,
   "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...",
-  "userId": 1
+  "userId": 1,
+  "username": "testuser",
+  "email": "user@example.com"
 }
 ```
 
 **错误响应**：
 - 400：参数缺失
-- 401：用户名或密码错误
+- 401：邮箱或密码错误
 - 429：请求过于频繁
 - 500：服务器内部错误
 
@@ -131,7 +133,9 @@ POST /api/email/register-with-code
 {
   "success": true,
   "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...",
-  "userId": 1
+  "userId": 1,
+  "username": "testuser",
+  "email": "user@example.com"
 }
 ```
 

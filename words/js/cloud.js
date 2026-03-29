@@ -45,6 +45,7 @@
     const normalized = {
       userId: String(next.userId || ""),
       username: String(next.username || ""),
+      email: String(next.email || ""),
       loggedInAt: String(next.loggedInAt || new Date().toISOString()),
     };
     localStorage.setItem(USER_KEY, normalized.userId);
@@ -86,16 +87,21 @@
     };
   }
 
-  async function login(username, password) {
+  async function login(email, password) {
     const res = await fetch(API_BASE + "/api/auth/login", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ username, password }),
+      body: JSON.stringify({ email, password }),
     });
     const data = normalizeResponse(res, await readJsonSafe(res));
     if (data.success) {
       localStorage.setItem(TOKEN_KEY, data.token);
-      saveProfile({ userId: data.userId, username, loggedInAt: new Date().toISOString() });
+      saveProfile({
+        userId: data.userId,
+        username: data.username || "",
+        email: data.email || email,
+        loggedInAt: new Date().toISOString(),
+      });
       dispatchAuthChanged(true);
     }
     return data;
@@ -160,7 +166,7 @@
     const data = normalizeResponse(res, await readJsonSafe(res));
     if (data.success) {
       localStorage.setItem(TOKEN_KEY, data.token);
-      saveProfile({ userId: data.userId, username, loggedInAt: new Date().toISOString() });
+      saveProfile({ userId: data.userId, username, email: data.email || email, loggedInAt: new Date().toISOString() });
       dispatchAuthChanged(true);
     }
     return data;

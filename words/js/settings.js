@@ -64,7 +64,8 @@
     if (/valid email required/i.test(text)) return "请输入有效邮箱"
     if (/password must be at least 6 characters/i.test(text)) return "密码至少需要 6 位"
     if (/username must be 3-32 characters/i.test(text)) return "用户名长度需为 3-32 个字符"
-    if (/invalid username or password/i.test(text)) return "用户名或密码错误"
+    if (/invalid email or password/i.test(text)) return "邮箱或密码错误"
+    if (/invalid username or password/i.test(text)) return "邮箱或密码错误"
     if (/email not found/i.test(text)) return "该邮箱未注册"
     if (/direct registration is disabled/i.test(text)) return "已关闭直接注册，请使用邮箱验证码注册"
     return text
@@ -595,10 +596,10 @@
               <div class="account-section" id="accountLoginSection">
                 <div class="account-section-title">账号登录</div>
                 <div class="form-row">
-                  <div class="form-label">用户名</div>
+                  <div class="form-label">登录邮箱</div>
                   <div class="form-control form-control-stack">
-                    <input id="cloudLoginUsernameInput" class="text-input" type="text" maxlength="32" placeholder="输入用户名" autocomplete="username" />
-                    <div id="cloudLoginUsernameHint" class="form-help field-help hidden"></div>
+                    <input id="cloudLoginEmailInput" class="text-input" type="email" placeholder="输入注册邮箱" autocomplete="email" />
+                    <div id="cloudLoginEmailHint" class="form-help field-help hidden"></div>
                   </div>
                 </div>
                 <div class="form-row">
@@ -909,8 +910,8 @@
       cloudUsernameHint: modal.querySelector("#cloudUsernameHint"),
       cloudPasswordInput: modal.querySelector("#cloudPasswordInput"),
       cloudPasswordHint: modal.querySelector("#cloudPasswordHint"),
-      cloudLoginUsernameInput: modal.querySelector("#cloudLoginUsernameInput"),
-      cloudLoginUsernameHint: modal.querySelector("#cloudLoginUsernameHint"),
+      cloudLoginEmailInput: modal.querySelector("#cloudLoginEmailInput"),
+      cloudLoginEmailHint: modal.querySelector("#cloudLoginEmailHint"),
       cloudLoginPasswordInput: modal.querySelector("#cloudLoginPasswordInput"),
       cloudLoginPasswordHint: modal.querySelector("#cloudLoginPasswordHint"),
       cloudRegisterBtn: modal.querySelector("#cloudRegisterBtn"),
@@ -981,7 +982,7 @@
       registerCode: false,
       username: false,
       password: false,
-      loginUsername: false,
+      loginEmail: false,
       loginPassword: false,
       resetEmail: false,
       resetCode: false,
@@ -1035,10 +1036,10 @@
       return isValidPassword(value) ? "" : "密码至少需要 6 位"
     }
 
-    function getLoginUsernameError(options = {}) {
-      const value = dom.cloudLoginUsernameInput?.value?.trim() || ""
-      if (!value) return options.required ? "请输入用户名" : ""
-      return isValidUsername(value) ? "" : "用户名长度需为 3-32 个字符"
+    function getLoginEmailError(options = {}) {
+      const value = dom.cloudLoginEmailInput?.value?.trim() || ""
+      if (!value) return options.required ? "请输入登录邮箱" : ""
+      return isValidEmail(value) ? "" : "请输入有效邮箱"
     }
 
     function getLoginPasswordError(options = {}) {
@@ -1089,12 +1090,12 @@
       setFieldHint(dom.cloudPasswordInput, dom.cloudPasswordHint, show ? getPasswordError({ required: !!options.required }) : "")
     }
 
-    function updateLoginUsernameHint(options = {}) {
-      const show = options.force || accountFieldTouched.loginUsername
+    function updateLoginEmailHint(options = {}) {
+      const show = options.force || accountFieldTouched.loginEmail
       setFieldHint(
-        dom.cloudLoginUsernameInput,
-        dom.cloudLoginUsernameHint,
-        show ? getLoginUsernameError({ required: !!options.required }) : ""
+        dom.cloudLoginEmailInput,
+        dom.cloudLoginEmailHint,
+        show ? getLoginEmailError({ required: !!options.required }) : ""
       )
     }
 
@@ -1144,13 +1145,13 @@
     }
 
     function validateLoginFields() {
-      accountFieldTouched.loginUsername = true
+      accountFieldTouched.loginEmail = true
       accountFieldTouched.loginPassword = true
-      const usernameError = getLoginUsernameError({ required: true })
+      const emailError = getLoginEmailError({ required: true })
       const passwordError = getLoginPasswordError({ required: true })
-      updateLoginUsernameHint({ force: true, required: true })
+      updateLoginEmailHint({ force: true, required: true })
       updateLoginPasswordHint({ force: true, required: true })
-      return usernameError || passwordError || ""
+      return emailError || passwordError || ""
     }
 
     function validateResetFields(options = {}) {
@@ -1750,11 +1751,11 @@
     })
     dom.cloudPasswordInput?.addEventListener("input", () => updatePasswordHint())
 
-    dom.cloudLoginUsernameInput?.addEventListener("blur", () => {
-      accountFieldTouched.loginUsername = true
-      updateLoginUsernameHint()
+    dom.cloudLoginEmailInput?.addEventListener("blur", () => {
+      accountFieldTouched.loginEmail = true
+      updateLoginEmailHint()
     })
-    dom.cloudLoginUsernameInput?.addEventListener("input", () => updateLoginUsernameHint())
+    dom.cloudLoginEmailInput?.addEventListener("input", () => updateLoginEmailHint())
 
     dom.cloudLoginPasswordInput?.addEventListener("blur", () => {
       accountFieldTouched.loginPassword = true
@@ -2369,10 +2370,13 @@
       if (dom.accountLoggedIn) dom.accountLoggedIn.classList.toggle("hidden", !loggedIn)
       if (loggedIn) {
         const username = String(profile?.username || "").trim() || "未命名用户"
+        const email = String(profile?.email || "").trim()
         if (dom.cloudAccountTitle) dom.cloudAccountTitle.textContent = username
         const loginTimeText = formatLoginTime(profile?.loggedInAt)
         if (dom.cloudAccountSubtitle) {
-          dom.cloudAccountSubtitle.textContent = `当前浏览器已登录，可直接上传或恢复学习数据。`
+          dom.cloudAccountSubtitle.textContent = email
+            ? `已登录邮箱：${email}`
+            : `当前浏览器已登录，可直接上传或恢复学习数据。`
         }
         if (dom.cloudBackupStateText) dom.cloudBackupStateText.textContent = "已启用"
         if (dom.cloudRoundsText) dom.cloudRoundsText.textContent = String(summary.roundsCount)
@@ -2495,7 +2499,7 @@
     })
 
     dom.cloudLoginBtn?.addEventListener("click", async () => {
-      const username = dom.cloudLoginUsernameInput?.value?.trim() || ""
+      const email = dom.cloudLoginEmailInput?.value?.trim() || ""
       const password = dom.cloudLoginPasswordInput?.value || ""
       const validationError = validateLoginFields()
       if (validationError) {
@@ -2507,18 +2511,18 @@
       renderAccountActionButtons()
       setAccountStatus("登录中…", "info")
       try {
-        const result = await window.A4Cloud?.login?.(username, password)
+        const result = await window.A4Cloud?.login?.(email, password)
         if (isAccountActionSuccess(result)) {
           setAccountStatus("登录成功", "success")
-          setFieldHint(dom.cloudLoginUsernameInput, dom.cloudLoginUsernameHint, "")
+          setFieldHint(dom.cloudLoginEmailInput, dom.cloudLoginEmailHint, "")
           setFieldHint(dom.cloudLoginPasswordInput, dom.cloudLoginPasswordHint, "")
           updateAccountUi()
         } else {
-          if (/invalid username or password/i.test(String(result?.error || ""))) {
-            accountFieldTouched.loginUsername = true
+          if (/invalid (email|username) or password/i.test(String(result?.error || ""))) {
+            accountFieldTouched.loginEmail = true
             accountFieldTouched.loginPassword = true
-            setFieldHint(dom.cloudLoginUsernameInput, dom.cloudLoginUsernameHint, "用户名或密码错误")
-            setFieldHint(dom.cloudLoginPasswordInput, dom.cloudLoginPasswordHint, "用户名或密码错误")
+            setFieldHint(dom.cloudLoginEmailInput, dom.cloudLoginEmailHint, "邮箱或密码错误")
+            setFieldHint(dom.cloudLoginPasswordInput, dom.cloudLoginPasswordHint, "邮箱或密码错误")
           }
           setAccountMode("login")
           setAccountStatus("登录失败：" + formatAccountError(result?.error), "error")
@@ -2609,7 +2613,7 @@
       if (dom.cloudRegisterCodeInput) dom.cloudRegisterCodeInput.value = ""
       if (dom.cloudUsernameInput) dom.cloudUsernameInput.value = ""
       if (dom.cloudPasswordInput) dom.cloudPasswordInput.value = ""
-      if (dom.cloudLoginUsernameInput) dom.cloudLoginUsernameInput.value = ""
+      if (dom.cloudLoginEmailInput) dom.cloudLoginEmailInput.value = ""
       if (dom.cloudLoginPasswordInput) dom.cloudLoginPasswordInput.value = ""
       if (dom.cloudResetEmailInput) dom.cloudResetEmailInput.value = ""
       if (dom.cloudResetCodeInput) dom.cloudResetCodeInput.value = ""
@@ -2618,7 +2622,7 @@
       setFieldHint(dom.cloudRegisterCodeInput, dom.cloudRegisterCodeHint, "")
       setFieldHint(dom.cloudUsernameInput, dom.cloudUsernameHint, "")
       setFieldHint(dom.cloudPasswordInput, dom.cloudPasswordHint, "")
-      setFieldHint(dom.cloudLoginUsernameInput, dom.cloudLoginUsernameHint, "")
+      setFieldHint(dom.cloudLoginEmailInput, dom.cloudLoginEmailHint, "")
       setFieldHint(dom.cloudLoginPasswordInput, dom.cloudLoginPasswordHint, "")
       setFieldHint(dom.cloudResetEmailInput, dom.cloudResetEmailHint, "")
       setFieldHint(dom.cloudResetCodeInput, dom.cloudResetCodeHint, "")
