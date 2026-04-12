@@ -6,7 +6,7 @@
   <link href="https://k7tmiz.github.io/atom.xml" rel="self"/>
   
   <link href="https://k7tmiz.github.io/"/>
-  <updated>2026-03-13T06:30:33.603Z</updated>
+  <updated>2026-04-12T14:56:49.900Z</updated>
   <id>https://k7tmiz.github.io/</id>
   
   <author>
@@ -17,16 +17,40 @@
   <generator uri="https://hexo.io/">Hexo</generator>
   
   <entry>
+    <title>谈谈我和“荣格”对话之后，对MBTI的一些新认识</title>
+    <link href="https://k7tmiz.github.io/posts/e850298b.html"/>
+    <id>https://k7tmiz.github.io/posts/e850298b.html</id>
+    <published>2026-04-12T14:02:48.000Z</published>
+    <updated>2026-04-12T14:56:49.900Z</updated>
+    
+    
+    <summary type="html">&lt;p&gt;整理了一下我和“荣格”关于 MBTI、SBTI、八功能、INTP、INFP、Ti、Fi 的对话。&lt;/p&gt;
+&lt;p&gt;感觉有些东西还是值得记录，所以写下来，分享一下感受&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;&lt;strong&gt;不过这里要先交代一下&lt;/strong&gt;&lt;br&gt;这当然不是真的在和荣格本人对话。更准确地说，是我用了最近很火的女娲 skill，把荣格这个人物蒸馏出来，然后和这个被蒸馏出来的“荣格”在对话。&lt;/p&gt;
+&lt;p&gt;我理解它更像一种基于人物材料、思维方式和表达习惯做出来的人格模拟。至于为什么我还是把它记成“和荣格的对话”，主要是为了阅读上更顺一点，但这个边界还是得先说清楚。&lt;/p&gt;
+&lt;/blockquote&gt;</summary>
+    
+    
+    
+    <category term="Article" scheme="https://k7tmiz.github.io/categories/Article/"/>
+    
+    
+    <category term="Article" scheme="https://k7tmiz.github.io/tags/Article/"/>
+    
+  </entry>
+  
+  <entry>
     <title>谈谈我为什么开始拥抱苹果</title>
     <link href="https://k7tmiz.github.io/posts/fbd23e1d.html"/>
     <id>https://k7tmiz.github.io/posts/fbd23e1d.html</id>
     <published>2026-03-06T14:32:45.000Z</published>
-    <updated>2026-03-13T06:30:33.603Z</updated>
+    <updated>2026-04-12T15:05:49.081Z</updated>
     
     
-    <summary type="html">&lt;p&gt;如标题所见，我放弃了所谓“开放”的安卓阵营，也逐渐离开了那个我无比熟悉、软件生态丰富的 Windows 世界。同时，我还买了一副 &lt;strong&gt;AirPods Pro 3&lt;/strong&gt;。&lt;/p&gt;
-&lt;p&gt;甚至一度认真考虑过买 &lt;strong&gt;Apple Watch&lt;/strong&gt;。&lt;/p&gt;
-&lt;p&gt;听到这里，你大概率会觉得：&lt;/p&gt;</summary>
+    <summary type="html">&lt;p&gt;如标题所见，我放弃了所谓“开放”的安卓阵营，也逐渐离开了那个我非常熟悉的 Windows 世界。与此同时，我还买了 &lt;strong&gt;AirPods Pro 3&lt;/strong&gt;，甚至一度认真考虑过 &lt;strong&gt;Apple Watch&lt;/strong&gt;。&lt;/p&gt;
+&lt;p&gt;听到这里，很多人第一反应大概都是：这人是不是疯了&lt;/p&gt;
+&lt;p&gt;毕竟在不少人的理解里，苹果生态就是一套“消费陷阱”，一旦进去就很难出来。&lt;/p&gt;</summary>
     
     
     
@@ -430,9 +454,9 @@
     <category term="Study" scheme="https://k7tmiz.github.io/categories/Study/"/>
     
     
-    <category term="Study" scheme="https://k7tmiz.github.io/tags/Study/"/>
-    
     <category term="Spanish" scheme="https://k7tmiz.github.io/tags/Spanish/"/>
+    
+    <category term="Study" scheme="https://k7tmiz.github.io/tags/Study/"/>
     
   </entry>
   
@@ -452,9 +476,9 @@
     <category term="Study" scheme="https://k7tmiz.github.io/categories/Study/"/>
     
     
-    <category term="Study" scheme="https://k7tmiz.github.io/tags/Study/"/>
-    
     <category term="Spanish" scheme="https://k7tmiz.github.io/tags/Spanish/"/>
+    
+    <category term="Study" scheme="https://k7tmiz.github.io/tags/Study/"/>
     
   </entry>
   
