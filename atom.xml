@@ -454,9 +454,9 @@
     <category term="Study" scheme="https://k7tmiz.github.io/categories/Study/"/>
     
     
-    <category term="Spanish" scheme="https://k7tmiz.github.io/tags/Spanish/"/>
-    
     <category term="Study" scheme="https://k7tmiz.github.io/tags/Study/"/>
+    
+    <category term="Spanish" scheme="https://k7tmiz.github.io/tags/Spanish/"/>
     
   </entry>
   
@@ -476,9 +476,9 @@
     <category term="Study" scheme="https://k7tmiz.github.io/categories/Study/"/>
     
     
-    <category term="Spanish" scheme="https://k7tmiz.github.io/tags/Spanish/"/>
-    
     <category term="Study" scheme="https://k7tmiz.github.io/tags/Study/"/>
+    
+    <category term="Spanish" scheme="https://k7tmiz.github.io/tags/Spanish/"/>
     
   </entry>
   
@@ -521,6 +521,25 @@
   </entry>
   
   <entry>
+    <title>Archlinux安装指南</title>
+    <link href="https://k7tmiz.github.io/posts/a907d758.html"/>
+    <id>https://k7tmiz.github.io/posts/a907d758.html</id>
+    <published>2025-04-19T14:28:32.000Z</published>
+    <updated>2026-03-06T14:15:22.304Z</updated>
+    
+    
+    <summary type="html">&lt;h2 id=&quot;初步配置&quot;&gt;&lt;a href=&quot;#初步配置&quot; class=&quot;headerlink&quot; title=&quot;初步配置&quot;&gt;&lt;/a&gt;初步配置&lt;/h2&gt;&lt;h4 id=&quot;联网&quot;&gt;&lt;a href=&quot;#联网&quot; class=&quot;headerlink&quot; title=&quot;联网&quot;&gt;&lt;/a&gt;联网&lt;/h4&gt; &lt;figure class=&quot;highlight plaintext&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;dhcpcd/iwctl&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;</summary>
+    
+    
+    
+    <category term="Linux" scheme="https://k7tmiz.github.io/categories/Linux/"/>
+    
+    
+    <category term="Linux" scheme="https://k7tmiz.github.io/tags/Linux/"/>
+    
+  </entry>
+  
+  <entry>
     <title>Switch-SteamLibrary</title>
     <link href="https://k7tmiz.github.io/posts/2a1b98b0.html"/>
     <id>https://k7tmiz.github.io/posts/2a1b98b0.html</id>
@@ -541,25 +560,6 @@
     <category term="Linux" scheme="https://k7tmiz.github.io/tags/Linux/"/>
     
     <category term="Tech" scheme="https://k7tmiz.github.io/tags/Tech/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>Archlinux安装指南</title>
-    <link href="https://k7tmiz.github.io/posts/a907d758.html"/>
-    <id>https://k7tmiz.github.io/posts/a907d758.html</id>
-    <published>2025-04-19T14:28:32.000Z</published>
-    <updated>2026-03-06T14:15:22.304Z</updated>
-    
-    
-    <summary type="html">&lt;h2 id=&quot;初步配置&quot;&gt;&lt;a href=&quot;#初步配置&quot; class=&quot;headerlink&quot; title=&quot;初步配置&quot;&gt;&lt;/a&gt;初步配置&lt;/h2&gt;&lt;h4 id=&quot;联网&quot;&gt;&lt;a href=&quot;#联网&quot; class=&quot;headerlink&quot; title=&quot;联网&quot;&gt;&lt;/a&gt;联网&lt;/h4&gt; &lt;figure class=&quot;highlight plaintext&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;dhcpcd/iwctl&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;</summary>
-    
-    
-    
-    <category term="Linux" scheme="https://k7tmiz.github.io/categories/Linux/"/>
-    
-    
-    <category term="Linux" scheme="https://k7tmiz.github.io/tags/Linux/"/>
     
   </entry>
   
