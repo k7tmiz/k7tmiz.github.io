@@ -521,25 +521,6 @@
   </entry>
   
   <entry>
-    <title>Archlinux安装指南</title>
-    <link href="https://k7tmiz.github.io/posts/a907d758.html"/>
-    <id>https://k7tmiz.github.io/posts/a907d758.html</id>
-    <published>2025-04-19T14:28:32.000Z</published>
-    <updated>2026-03-06T14:15:22.304Z</updated>
-    
-    
-    <summary type="html">&lt;h2 id=&quot;初步配置&quot;&gt;&lt;a href=&quot;#初步配置&quot; class=&quot;headerlink&quot; title=&quot;初步配置&quot;&gt;&lt;/a&gt;初步配置&lt;/h2&gt;&lt;h4 id=&quot;联网&quot;&gt;&lt;a href=&quot;#联网&quot; class=&quot;headerlink&quot; title=&quot;联网&quot;&gt;&lt;/a&gt;联网&lt;/h4&gt; &lt;figure class=&quot;highlight plaintext&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;dhcpcd/iwctl&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;</summary>
-    
-    
-    
-    <category term="Linux" scheme="https://k7tmiz.github.io/categories/Linux/"/>
-    
-    
-    <category term="Linux" scheme="https://k7tmiz.github.io/tags/Linux/"/>
-    
-  </entry>
-  
-  <entry>
     <title>Switch-SteamLibrary</title>
     <link href="https://k7tmiz.github.io/posts/2a1b98b0.html"/>
     <id>https://k7tmiz.github.io/posts/2a1b98b0.html</id>
@@ -564,6 +545,44 @@
   </entry>
   
   <entry>
+    <title>Archlinux安装指南</title>
+    <link href="https://k7tmiz.github.io/posts/a907d758.html"/>
+    <id>https://k7tmiz.github.io/posts/a907d758.html</id>
+    <published>2025-04-19T14:28:32.000Z</published>
+    <updated>2026-03-06T14:15:22.304Z</updated>
+    
+    
+    <summary type="html">&lt;h2 id=&quot;初步配置&quot;&gt;&lt;a href=&quot;#初步配置&quot; class=&quot;headerlink&quot; title=&quot;初步配置&quot;&gt;&lt;/a&gt;初步配置&lt;/h2&gt;&lt;h4 id=&quot;联网&quot;&gt;&lt;a href=&quot;#联网&quot; class=&quot;headerlink&quot; title=&quot;联网&quot;&gt;&lt;/a&gt;联网&lt;/h4&gt; &lt;figure class=&quot;highlight plaintext&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;dhcpcd/iwctl&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;</summary>
+    
+    
+    
+    <category term="Linux" scheme="https://k7tmiz.github.io/categories/Linux/"/>
+    
+    
+    <category term="Linux" scheme="https://k7tmiz.github.io/tags/Linux/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>Nativefier 使用教程</title>
+    <link href="https://k7tmiz.github.io/posts/b56059f9.html"/>
+    <id>https://k7tmiz.github.io/posts/b56059f9.html</id>
+    <published>2025-04-19T14:28:32.000Z</published>
+    <updated>2026-03-06T14:15:22.306Z</updated>
+    
+    
+    <summary type="html">&lt;h1 id=&quot;Nativefier-使用教程&quot;&gt;&lt;a href=&quot;#Nativefier-使用教程&quot; class=&quot;headerlink&quot; title=&quot;Nativefier 使用教程&quot;&gt;&lt;/a&gt;Nativefier 使用教程&lt;/h1&gt;&lt;h4 id=&quot;基于electron的打包软件&quot;&gt;&lt;a href=&quot;#基于electron的打包软件&quot; class=&quot;headerlink&quot; title=&quot;基于electron的打包软件&quot;&gt;&lt;/a&gt;基于electron的打包软件&lt;/h4&gt;&lt;h5 id=&quot;nativefier-n-p-—-arch-—-weight-—-height&quot;&gt;&lt;a href=&quot;#nativefier-n-p-—-arch-—-weight-—-height&quot; class=&quot;headerlink&quot; title=&quot;nativefier -n &amp;lt;打包后的应用名称&amp;gt; -p &amp;lt;程序兼容的平台&amp;gt; —-arch &amp;lt;架构&amp;gt; —- weight &amp;lt;窗口宽度&amp;gt; —-height &amp;lt;窗口高度&amp;gt; &amp;lt;网页URL&amp;gt;&quot;&gt;&lt;/a&gt;nativefier -n &amp;lt;打包后的应用名称&amp;gt; -p &amp;lt;程序兼容的平台&amp;gt; —-arch &amp;lt;架构&amp;gt; —- weight &amp;lt;窗口宽度&amp;gt; —-height &amp;lt;窗口高度&amp;gt; &amp;lt;网页URL&amp;gt;&lt;/h5&gt;</summary>
+    
+    
+    
+    <category term="Tech" scheme="https://k7tmiz.github.io/categories/Tech/"/>
+    
+    
+    <category term="Tech" scheme="https://k7tmiz.github.io/tags/Tech/"/>
+    
+  </entry>
+  
+  <entry>
     <title>MSI-PERKEYRGB</title>
     <link href="https://k7tmiz.github.io/posts/5a88bde.html"/>
     <id>https://k7tmiz.github.io/posts/5a88bde.html</id>
@@ -582,25 +601,6 @@
     
     
     <category term="Linux" scheme="https://k7tmiz.github.io/tags/Linux/"/>
-    
-    <category term="Tech" scheme="https://k7tmiz.github.io/tags/Tech/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>Nativefier 使用教程</title>
-    <link href="https://k7tmiz.github.io/posts/b56059f9.html"/>
-    <id>https://k7tmiz.github.io/posts/b56059f9.html</id>
-    <published>2025-04-19T14:28:32.000Z</published>
-    <updated>2026-03-06T14:15:22.306Z</updated>
-    
-    
-    <summary type="html">&lt;h1 id=&quot;Nativefier-使用教程&quot;&gt;&lt;a href=&quot;#Nativefier-使用教程&quot; class=&quot;headerlink&quot; title=&quot;Nativefier 使用教程&quot;&gt;&lt;/a&gt;Nativefier 使用教程&lt;/h1&gt;&lt;h4 id=&quot;基于electron的打包软件&quot;&gt;&lt;a href=&quot;#基于electron的打包软件&quot; class=&quot;headerlink&quot; title=&quot;基于electron的打包软件&quot;&gt;&lt;/a&gt;基于electron的打包软件&lt;/h4&gt;&lt;h5 id=&quot;nativefier-n-p-—-arch-—-weight-—-height&quot;&gt;&lt;a href=&quot;#nativefier-n-p-—-arch-—-weight-—-height&quot; class=&quot;headerlink&quot; title=&quot;nativefier -n &amp;lt;打包后的应用名称&amp;gt; -p &amp;lt;程序兼容的平台&amp;gt; —-arch &amp;lt;架构&amp;gt; —- weight &amp;lt;窗口宽度&amp;gt; —-height &amp;lt;窗口高度&amp;gt; &amp;lt;网页URL&amp;gt;&quot;&gt;&lt;/a&gt;nativefier -n &amp;lt;打包后的应用名称&amp;gt; -p &amp;lt;程序兼容的平台&amp;gt; —-arch &amp;lt;架构&amp;gt; —- weight &amp;lt;窗口宽度&amp;gt; —-height &amp;lt;窗口高度&amp;gt; &amp;lt;网页URL&amp;gt;&lt;/h5&gt;</summary>
-    
-    
-    
-    <category term="Tech" scheme="https://k7tmiz.github.io/categories/Tech/"/>
-    
     
     <category term="Tech" scheme="https://k7tmiz.github.io/tags/Tech/"/>
     
