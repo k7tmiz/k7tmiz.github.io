@@ -304,13 +304,6 @@
   </url>
   
   <url>
-    <loc>https://k7tmiz.github.io/tags/travel/</loc>
-    <lastmod>2026-05-05</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.2</priority>
-  </url>
-  
-  <url>
     <loc>https://k7tmiz.github.io/tags/linux/</loc>
     <lastmod>2026-05-05</lastmod>
     <changefreq>weekly</changefreq>
@@ -332,7 +325,7 @@
   </url>
   
   <url>
-    <loc>https://k7tmiz.github.io/tags/fcitx5/</loc>
+    <loc>https://k7tmiz.github.io/tags/zotero/</loc>
     <lastmod>2026-05-05</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
@@ -353,7 +346,28 @@
   </url>
   
   <url>
-    <loc>https://k7tmiz.github.io/tags/zotero/</loc>
+    <loc>https://k7tmiz.github.io/tags/fcitx5/</loc>
+    <lastmod>2026-05-05</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>https://k7tmiz.github.io/tags/travel/</loc>
+    <lastmod>2026-05-05</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>https://k7tmiz.github.io/tags/study/</loc>
+    <lastmod>2026-05-05</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>https://k7tmiz.github.io/tags/spanish/</loc>
     <lastmod>2026-05-05</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
@@ -387,31 +401,10 @@
     <priority>0.2</priority>
   </url>
   
-  <url>
-    <loc>https://k7tmiz.github.io/tags/study/</loc>
-    <lastmod>2026-05-05</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.2</priority>
-  </url>
-  
-  <url>
-    <loc>https://k7tmiz.github.io/tags/spanish/</loc>
-    <lastmod>2026-05-05</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.2</priority>
-  </url>
-  
 
   
   <url>
     <loc>https://k7tmiz.github.io/categories/Article/</loc>
-    <lastmod>2026-05-05</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.2</priority>
-  </url>
-  
-  <url>
-    <loc>https://k7tmiz.github.io/categories/Travel/</loc>
     <lastmod>2026-05-05</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
@@ -425,7 +418,7 @@
   </url>
   
   <url>
-    <loc>https://k7tmiz.github.io/categories/Tech/</loc>
+    <loc>https://k7tmiz.github.io/categories/Travel/</loc>
     <lastmod>2026-05-05</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
@@ -433,6 +426,13 @@
   
   <url>
     <loc>https://k7tmiz.github.io/categories/Study/</loc>
+    <lastmod>2026-05-05</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>https://k7tmiz.github.io/categories/Tech/</loc>
     <lastmod>2026-05-05</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
