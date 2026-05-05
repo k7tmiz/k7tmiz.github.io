@@ -1,52 +1,34 @@
-# k7tmiz Blog
+# k7tmiz.com
 
-A personal blog about Linux, technology, and learning.
+我的个人博客，记录 Linux、技术折腾、学习笔记和一些碎碎念。
 
-这个仓库用于托管 k7tmiz.com 的静态网站，并通过 GitHub Pages 提供访问。
-
-🌐 https://k7tmiz.com
+🌐 [k7tmiz.com](https://k7tmiz.com)
 
 ---
 
-## About This Site
+## 关于本站
 
-这是我的个人博客与长期记录空间。
+这是 k7tmiz 的个人博客，由 [Hexo](https://hexo.io) 生成，主题 [NexT](https://theme-next.org)，部署在 GitHub Pages。
 
-我创建这个网站，是为了记录自己在 Linux、计算机技术与数字工具 方面的学习与探索，也会分享一些技术经验、学习方法，以及在学习与生活中的思考。
-
-除了技术内容，这里偶尔也会记录一些兴趣、旅行与其他个人话题。
+写的东西比较杂：Linux 使用经验、技术教程、西班牙语学习、旅行记录，还有一些个人随笔。
 
 ---
 
-## About Me
+## 关于我
 
-我是一名文科背景的学生，但始终对计算机世界保持着浓厚的兴趣。
+文科背景的 Linux 用户，喜欢折腾。
 
-我关注的领域包括：
-
-- Linux 与开源软件  
-- 计算机技术与编程  
-- 数字工具与学习方法  
-- 文学艺术与人文思考  
-- 旅行与探索  
-
-这个博客既是一个 技术记录的空间，也是我长期记录学习与成长的地方。
+感兴趣的方向：Linux 与开源、技术工具、数字生活、语言学习、文学。
 
 ---
 
-## Contact
+## 联系
 
-如果你对博客内容有任何建议，或希望交流相关话题，欢迎联系我：
-
-📧 Email: kcyx01@gmail.com
+📧 kcyx01@gmail.com
 
 ---
 
-## Acknowledgements
+## 致谢
 
-本网站基于以下开源项目构建：
-
-- https://hexo.io  
-- https://github.com/theme-next/hexo-theme-next  
-
-同时也感谢一路上给予我支持的 家人、老师与朋友。
+- [Hexo](https://hexo.io) — 静态博客框架
+- [NexT](https://theme-next.org) — 主题
