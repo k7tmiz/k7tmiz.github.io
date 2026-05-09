@@ -1658,11 +1658,11 @@ body.theme-dark .account-badge {
     align-items: start;
   }
 
-  .account-tabs {
+  .view-tabs.account-tabs {
     gap: 6px;
   }
 
-  .account-tabs button {
+  .view-tabs.account-tabs button {
     flex: 1 1 0;
   }
 
@@ -1686,13 +1686,13 @@ body.theme-dark .account-badge {
     font-size: 12px;
   }
 
-  .account-tabs {
+  .view-tabs.account-tabs {
     display: grid;
     grid-template-columns: repeat(3, minmax(0, 1fr));
     gap: 6px;
   }
 
-  .account-tabs button {
+  .view-tabs.account-tabs button {
     width: 100%;
     min-width: 0;
     padding: 8px 4px;
@@ -2090,6 +2090,10 @@ body.theme-dark .account-badge {
 
   .form-row {
     grid-template-columns: 1fr;
+  }
+
+  #settingsModal .form-control > button:not(.full) {
+    width: 100%;
   }
 
   #statusView .word-row {
