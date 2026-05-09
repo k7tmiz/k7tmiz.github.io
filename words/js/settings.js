@@ -2294,7 +2294,17 @@
     }
 
     function formatSyncTime(value) {
-      const time = value ? new Date(value) : null
+      if (!value) return ""
+      // Normalize to UTC: ensure ISO 8601 with Z suffix
+      let s = String(value).trim()
+      if (!s) return ""
+      // Replace space separator with T
+      s = s.replace(" ", "T")
+      // Append Z if no timezone indicator
+      if (!/[+\-Zz]/.test(s.slice(-6))) {
+        s += "Z"
+      }
+      const time = new Date(s)
       if (!time || Number.isNaN(time.getTime())) return ""
       try {
         return time.toLocaleString("zh-CN", {

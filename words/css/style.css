@@ -540,10 +540,8 @@ select:hover {
   }
 
   #importModal .import-actions button {
-    min-height: 44px;
-    line-height: 1.2;
-    padding: 10px 12px;
-    font-size: 14px;
+    padding: 8px 10px;
+    font-size: 13px;
     border-radius: 10px;
   }
 
@@ -555,6 +553,9 @@ select:hover {
 
   #importModal .import-actions .secondary-row button {
     width: 100%;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
 
   /* Wordbook list items: two-tier structure on mobile */
@@ -603,9 +604,8 @@ select:hover {
 
   #importModal .item-primary-action button[data-action="learn"] {
     width: 100%;
-    min-height: 40px;
-    font-size: 14px;
-    padding: 8px 16px;
+    font-size: 13px;
+    padding: 8px 10px;
     border-radius: 10px;
   }
 
@@ -2092,9 +2092,9 @@ body.theme-dark .account-badge {
     grid-template-columns: 1fr;
   }
 
-  .panel .form-control > button.ghost:not(.full) {
-    min-width: 120px;
-    text-align: center;
+  .modal-panel button {
+    padding: 8px 10px;
+    font-size: 13px;
   }
 
   #statusView .word-row {
