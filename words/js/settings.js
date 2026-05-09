@@ -2298,6 +2298,7 @@
       if (!time || Number.isNaN(time.getTime())) return ""
       try {
         return time.toLocaleString("zh-CN", {
+          year: "numeric",
           month: "2-digit",
           day: "2-digit",
           hour: "2-digit",
@@ -2305,6 +2306,23 @@
         })
       } catch (e) {
         return ""
+      }
+    }
+
+    function handleTokenError(result) {
+      const msg = String(result?.error || "").toLowerCase()
+      if (!msg) return
+      const isTokenError =
+        /invalid or expired token/i.test(msg) ||
+        /token.*expired/i.test(msg) ||
+        /unauthorized/i.test(msg) ||
+        (result?.status === 401)
+      if (isTokenError) {
+        window.A4Cloud?.logout?.()
+        updateAccountUi()
+        if (dom.cloudSyncStatus) {
+          dom.cloudSyncStatus.textContent = "登录已过期，请重新登录后再试"
+        }
       }
     }
 
@@ -2387,8 +2405,11 @@
             : "尚未同步"
           dom.cloudLastSyncText.textContent = syncText
         }
-        if (dom.cloudSyncStatus && !String(dom.cloudSyncStatus.textContent || "").trim()) {
-          dom.cloudSyncStatus.textContent = "可上传或恢复学习数据。"
+        if (dom.cloudSyncStatus) {
+          const cur = String(dom.cloudSyncStatus.textContent || "").trim()
+          if (!cur || cur === "登录已过期，请重新登录后再试") {
+            dom.cloudSyncStatus.textContent = "可上传或恢复学习数据。"
+          }
         }
       } else {
         if (dom.cloudAccountTitle) dom.cloudAccountTitle.textContent = "已退出登录"
@@ -2632,12 +2653,14 @@
       if (dom.cloudSyncStatus) dom.cloudSyncStatus.textContent = "上传中…"
       const result = await window.A4Cloud?.uploadState?.()
       if (result?.success) {
-        saveAccountSyncMeta({ label: "上传成功", at: result.savedAt || new Date().toISOString() })
-        if (dom.cloudSyncStatus) dom.cloudSyncStatus.textContent = "上传成功：" + (result.savedAt || "")
+        const savedAt = result.savedAt || new Date().toISOString()
+        saveAccountSyncMeta({ label: "上传成功", at: savedAt })
+        if (dom.cloudSyncStatus) dom.cloudSyncStatus.textContent = "上传成功：" + formatSyncTime(savedAt)
         updateAccountUi()
       } else {
         saveAccountSyncMeta({ label: "上传失败", at: new Date().toISOString() })
         if (dom.cloudSyncStatus) dom.cloudSyncStatus.textContent = "上传失败：" + (result?.error || "未知错误")
+        handleTokenError(result)
         updateAccountUi()
       }
     })
@@ -2650,12 +2673,14 @@
       if (dom.cloudSyncStatus) dom.cloudSyncStatus.textContent = "下载中…"
       const result = await window.A4Cloud?.downloadState?.()
       if (result?.success) {
-        saveAccountSyncMeta({ label: "恢复成功", at: result.savedAt || new Date().toISOString() })
-        if (dom.cloudSyncStatus) dom.cloudSyncStatus.textContent = "恢复成功：" + (result.savedAt || "")
+        const savedAt = result.savedAt || new Date().toISOString()
+        saveAccountSyncMeta({ label: "恢复成功", at: savedAt })
+        if (dom.cloudSyncStatus) dom.cloudSyncStatus.textContent = "恢复成功：" + formatSyncTime(savedAt)
         window.location.reload()
       } else {
         saveAccountSyncMeta({ label: "恢复失败", at: new Date().toISOString() })
         if (dom.cloudSyncStatus) dom.cloudSyncStatus.textContent = "恢复失败：" + (result?.error || "未知错误")
+        handleTokenError(result)
         updateAccountUi()
       }
     })

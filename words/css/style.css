@@ -2092,8 +2092,9 @@ body.theme-dark .account-badge {
     grid-template-columns: 1fr;
   }
 
-  #settingsModal .form-control > button:not(.full) {
-    width: 100%;
+  .panel .form-control > button.ghost:not(.full) {
+    min-width: 120px;
+    text-align: center;
   }
 
   #statusView .word-row {
