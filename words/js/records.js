@@ -677,7 +677,10 @@ function openPrintRoundsAsPdf(list) {
       img.src = url
       img.onload = () => URL.revokeObjectURL(url)
     }
-    setTimeout(() => win.print(), 120)
+    win.onbeforeprint = () => win.focus()
+    win.onafterprint = () => win.close()
+    win.onbeforeunload = () => win.close()
+    setTimeout(() => win.print(), 300)
   })()
 }
 
