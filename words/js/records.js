@@ -104,7 +104,7 @@ async function exportRoundAsPng({ round, roundNo }) {
 
   ctx.font = `500 16px ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif`
   ctx.fillStyle = "#5b6477"
-  ctx.fillText(`A4 Word Memory · 第${roundNo}轮 · ${formatDateTime(round?.startedAt)}`, margin, baseH - margin + 18)
+  ctx.fillText(`A4 Memory · 第${roundNo}轮 · ${formatDateTime(round?.startedAt)}`, margin, baseH - margin + 18)
 
   const blob = await new Promise((resolve) => canvas.toBlob(resolve, "image/png"))
   return blob || null
