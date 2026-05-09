@@ -206,8 +206,16 @@ body.no-select {
   margin-left: auto;
 }
 
+.home-controls .controls-row-secondary > * {
+  white-space: nowrap;
+}
+
 .home-controls .controls-row-toggles {
   justify-content: flex-end;
+}
+
+.home-controls .controls-row-toggles > * {
+  white-space: nowrap;
 }
 
 .home-controls .controls-row-wordbook .select-wrap {
