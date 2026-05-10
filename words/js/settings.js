@@ -786,7 +786,7 @@
             <div class="form-help" id="aiStatus"></div>
           </section>
 
-          <section class="panel">
+          <section class="panel hidden" id="versionPanel">
             <div class="section-title">版本</div>
             <div class="form-row">
               <div class="form-label">当前版本</div>
@@ -963,6 +963,7 @@
       aiStatus: modal.querySelector("#aiStatus"),
       checkUpdateBtn: modal.querySelector("#checkUpdateBtn"),
       updateStatus: modal.querySelector("#updateStatus"),
+      versionPanel: modal.querySelector("#versionPanel"),
     }
 
     let aiPreviewModal = document.getElementById("aiPreviewModal")
@@ -1722,6 +1723,11 @@
 
     dom.backdrop?.addEventListener("click", () => close())
     dom.closeBtn?.addEventListener("click", () => close())
+
+    // Version panel: only show in Tauri (desktop/Android), not on web
+    if (dom.versionPanel && window.A4Updater?.isTauri) {
+      dom.versionPanel.classList.remove("hidden")
+    }
 
     dom.themeModeSelect?.addEventListener("change", () => {
       const themeMode = normalizeThemeMode(dom.themeModeSelect.value)

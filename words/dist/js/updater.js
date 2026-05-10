@@ -201,5 +201,6 @@
   window.A4Updater = {
     checkUpdate: checkUpdate,
     APP_VERSION: APP_VERSION,
+    isTauri: isTauri,
   }
 })()
