@@ -4,55 +4,11 @@
     buildLatestTermMap, buildFirstSeenRoundMap, normalizeLookupRecordMeta,
     getStatusLabel, normalizeStatus, formatDateTime, normalizeLangTag,
     clamp, setModalVisible, formatMeaning, getWordKey,
+    getWordbooksFromGlobal,
   } = window.A4Common || {}
 
   const CACHE_KEY = "a4-memory:lookup-cache:v1"
   const LOOKUP_DEBUG = false
-
-  function getWordsFromGlobal() {
-    const list = Array.isArray(window.WORDS) ? window.WORDS : []
-    return list
-      .map((w) => {
-        if (!w) return null
-        if (typeof w === "string") return { term: w.trim(), pos: "", meaning: "" }
-        const term = String(w.term || "").trim()
-        const pos = String(w.pos || "").trim()
-        const meaning = String(w.meaning || "").trim()
-        if (!term) return null
-        return { term, pos, meaning }
-      })
-      .filter(Boolean)
-  }
-
-  function getWordbooksFromGlobal() {
-    const books = Array.isArray(window.WORDBOOKS) ? window.WORDBOOKS : []
-    if (books.length) {
-      return books
-        .map((b) => {
-          const id = String(b?.id || "").trim()
-          const name = String(b?.name || "").trim()
-          const description = String(b?.description || "").trim()
-          const language = String(b?.language || "").trim()
-          const base = language ? (normalizeLangTag ? normalizeLangTag(language).base : String(language).toLowerCase().split("-")[0]) : ""
-          const wordsRaw = Array.isArray(b?.words) ? b.words : []
-          if (!id || !name) return null
-          const words = wordsRaw
-            .map((w) => {
-              if (!w) return null
-              if (typeof w === "string") return { term: w.trim(), pos: "", meaning: "", lang: base }
-              const term = String(w.term || "").trim()
-              const pos = String(w.pos || "").trim()
-              const meaning = String(w.meaning || "").trim()
-              if (!term) return null
-              return { term, pos, meaning, lang: base }
-            })
-            .filter(Boolean)
-          return { id, name, description, language, words }
-        })
-        .filter(Boolean)
-    }
-    return [{ id: "default", name: "默认词库", description: "", language: "en", words: getWordsFromGlobal().map((w) => ({ ...w, lang: "en" })) }]
-  }
 
   function loadCache() {
     try {
@@ -62,7 +18,7 @@
       if (!parsed || typeof parsed !== "object") return { version: 1, items: {} }
       const items = parsed.items && typeof parsed.items === "object" ? parsed.items : {}
       return { version: 1, items }
-    } catch (e) {
+    } catch {
       return { version: 1, items: {} }
     }
   }
@@ -71,7 +27,7 @@
     try {
       localStorage.setItem(CACHE_KEY, JSON.stringify(cache))
       return true
-    } catch (e) {
+    } catch {
       return false
     }
   }
@@ -171,7 +127,7 @@
         e.stopPropagation()
         try {
           action?.onClick?.()
-        } catch (err) {}
+        } catch { /* ignore */ }
       })
       head.appendChild(btn)
       left.appendChild(head)
@@ -210,14 +166,6 @@
       cacheEnabled: typeof s.lookupCacheEnabled === "boolean" ? s.lookupCacheEnabled : true,
       cacheDays: clamp(Math.round(Number(s.lookupCacheDays) || 30), 1, 365),
     }
-  }
-
-  function guessLookupLanguageBase({ state, wordbookLanguage }) {
-    const raw = String(wordbookLanguage || "").trim()
-    const base = normalizeLangTag ? normalizeLangTag(raw).base : String(raw || "").toLowerCase()
-    const override = String(state?.pronunciationLang || "").trim().toLowerCase()
-    if (override && override !== "auto") return override
-    return base || "en"
   }
 
   function toDictionaryApiLang(base) {
@@ -321,7 +269,7 @@
         if (uniq.length >= 4) break
       }
       return { ok: true, data: uniq, error: "" }
-    } catch (e) {
+    } catch {
       return { ok: false, data: [], error: "network" }
     }
   }
@@ -339,7 +287,7 @@
       }
       const json = await res.json()
       return { ok: true, data: parseDictionaryApiResponse(json), error: "" }
-    } catch (e) {
+    } catch {
       return { ok: false, data: [], error: "network" }
     }
   }
@@ -469,14 +417,14 @@
       let parsed = null
       try {
         parsed = JSON.parse(raw)
-      } catch (e) {
+      } catch {
         return { ok: false, data: [], error: "bad_json" }
       }
       if (LOOKUP_DEBUG) console.debug("[lookup] AI custom raw parsed:", JSON.stringify(parsed).slice(0, 300))
       const list = normalizeOnlineSupplementList(parsed)
       if (LOOKUP_DEBUG) console.debug("[lookup] AI custom normalized:", JSON.stringify(list).slice(0, 300))
       return { ok: true, data: list, error: "" }
-    } catch (e) {
+    } catch {
       return { ok: false, data: [], error: "network" }
     }
   }
@@ -1408,7 +1356,7 @@
         try {
           dom.input?.focus?.()
           if (dom.input && dom.input.value) dom.input.setSelectionRange(0, dom.input.value.length)
-        } catch (e) {}
+        } catch { /* ignore */ }
       })
       if (typeof onOpen === "function") onOpen()
       if (q) runLookup(q)
@@ -1462,7 +1410,7 @@
       if (abortOnline) {
         try {
           abortOnline.abort()
-        } catch (e) {}
+        } catch { /* ignore */ }
       }
       abortOnline = typeof AbortController === "function" ? new AbortController() : null
       const signal = abortOnline?.signal

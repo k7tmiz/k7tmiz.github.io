@@ -96,7 +96,7 @@
 
     let streak = 0
     if (daySet.has(todayKey)) {
-      let cursor = new Date()
+      const cursor = new Date()
       while (true) {
         const key = toLocalDateKey(cursor)
         if (!daySet.has(key)) break
@@ -430,6 +430,70 @@
     })
   }
 
+  // ── Word / wordbook normalization ────────────────────────────────────────────
+
+  function getWordsFromGlobal() {
+    const list = Array.isArray(window.WORDS) ? window.WORDS : []
+    return list
+      .map((w) => {
+        if (!w) return null
+        if (typeof w === "string") return { term: w.trim(), pos: "", meaning: "" }
+        const term = String(w.term || "").trim()
+        const pos = String(w.pos || "").trim()
+        const meaning = String(w.meaning || "").trim()
+        if (!term) return null
+        return { term, pos, meaning }
+      })
+      .filter(Boolean)
+  }
+
+  function getWordbooksFromGlobal() {
+    const books = Array.isArray(window.WORDBOOKS) ? window.WORDBOOKS : []
+    if (books.length) {
+      return books
+        .map((b) => {
+          const id = String(b?.id || "").trim()
+          const name = String(b?.name || "").trim()
+          const description = String(b?.description || "").trim()
+          const language = String(b?.language || "").trim()
+          const base = language ? normalizeLangTag(language).base : ""
+          const wordsRaw = Array.isArray(b?.words) ? b.words : []
+          if (!id || !name) return null
+          const words = wordsRaw
+            .map((w) => {
+              if (!w) return null
+              if (typeof w === "string") return { term: w.trim(), pos: "", meaning: "", lang: base }
+              const term = String(w.term || "").trim()
+              const pos = String(w.pos || "").trim()
+              const meaning = String(w.meaning || "").trim()
+              if (!term) return null
+              return { term, pos, meaning, lang: base }
+            })
+            .filter(Boolean)
+          return { id, name, description, language, words }
+        })
+        .filter(Boolean)
+    }
+    return [{ id: "default", name: "默认词库", description: "", language: "en", words: getWordsFromGlobal().map((w) => ({ ...w, lang: "en" })) }]
+  }
+
+  function normalizeWordObject(w) {
+    if (!w) return null
+    if (typeof w === "string") {
+      const term = w.trim()
+      if (!term) return null
+      return { term, pos: "", meaning: "", example: "", tags: [], lang: "" }
+    }
+    const term = String(w.term || "").trim()
+    const pos = String(w.pos || "").trim()
+    const meaning = String(w.meaning || "").trim()
+    if (!term) return null
+    const example = String(w.example || "").trim()
+    const tags = Array.isArray(w.tags) ? w.tags.map((t) => String(t || "").trim()).filter(Boolean) : []
+    const lang = String(w.lang || w.language || "").trim()
+    return { term, pos, meaning, example, tags, lang }
+  }
+
   window.A4Common = {
     clamp,
     STATUS_MASTERED,
@@ -474,5 +538,8 @@
     isPageFull,
     getNextPageIndex,
     isDuplicateInRound,
+    getWordsFromGlobal,
+    getWordbooksFromGlobal,
+    normalizeWordObject,
   }
 })()

@@ -279,13 +279,13 @@
         done = true
         try {
           synth.removeEventListener("voiceschanged", onChange)
-        } catch (e) {}
+        } catch { /* ignore */ }
         resolve()
       }
       const onChange = () => finish()
       try {
         synth.addEventListener("voiceschanged", onChange)
-      } catch (e) {}
+      } catch { /* ignore */ }
       setTimeout(finish, timeout)
     })
   }
@@ -379,7 +379,7 @@
         }
         speakNext()
       })
-    } catch (e) {
+    } catch {
       window.alert("发音失败：当前设备语音引擎不可用。")
       return false
     }

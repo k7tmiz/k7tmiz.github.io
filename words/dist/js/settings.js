@@ -8,6 +8,7 @@
   const normalizePronunciationLang = window.A4Common?.normalizePronunciationLang
   const normalizeAiProvider = window.A4Common?.normalizeAiProvider
   const normalizeStatus = window.A4Common?.normalizeStatus
+  const normalizeWordObject = window.A4Common?.normalizeWordObject
   const ACCOUNT_REGISTER_CODE_COOLDOWN_KEY = "a4-memory:register-code-cooldown:v1"
   const ACCOUNT_RESET_CODE_COOLDOWN_KEY = "a4-memory:reset-code-cooldown:v1"
   const ACCOUNT_SYNC_META_KEY = "a4-memory:cloud-sync-meta:v1"
@@ -18,20 +19,6 @@
     const learningDays = clamp(Math.round(Number(base.learningDays) || 3), 1, 60)
     const masteredDays = clamp(Math.round(Number(base.masteredDays) || 7), 1, 365)
     return { unknownDays, learningDays, masteredDays }
-  }
-
-  function normalizeWordObject(raw) {
-    const term = String(raw?.term || "").trim()
-    const pos = String(raw?.pos || "").trim()
-    const meaning = String(raw?.meaning || "").trim()
-    if (!term || !pos || !meaning) return null
-    return {
-      term,
-      pos,
-      meaning,
-      example: String(raw?.example || "").trim(),
-      tags: Array.isArray(raw?.tags) ? raw.tags.map((t) => String(t || "").trim()).filter(Boolean) : [],
-    }
   }
 
   function isValidEmail(value) {
@@ -48,7 +35,7 @@
   }
 
   function isValidPassword(value) {
-    return String(value || "").length >= 6
+    return String(value || "").length >= 8
   }
 
   function formatAccountError(error) {
@@ -62,7 +49,7 @@
     if (/发送验证码过于频繁/i.test(text)) return "发送过于频繁，请稍后再试"
     if (/failed to send email/i.test(text)) return "邮件发送失败，请稍后重试"
     if (/valid email required/i.test(text)) return "请输入有效邮箱"
-    if (/password must be at least 6 characters/i.test(text)) return "密码至少需要 6 位"
+    if (/password must be at least 8 characters/i.test(text)) return "密码至少需要 8 位"
     if (/username must be 3-32 characters/i.test(text)) return "用户名长度需为 3-32 个字符"
     if (/invalid email or password/i.test(text)) return "邮箱或密码错误"
     if (/invalid username or password/i.test(text)) return "邮箱或密码错误"
@@ -100,7 +87,7 @@
       const n = Math.max(0, Math.round(Number(untilMs) || 0))
       if (n > Date.now()) localStorage.setItem(key, String(n))
       else localStorage.removeItem(key)
-    } catch (e) {}
+    } catch { /* ignore */ }
   }
 
   function loadAccountCooldown(key) {
@@ -108,7 +95,7 @@
       const raw = localStorage.getItem(key)
       const n = Math.round(Number(raw) || 0)
       return n > Date.now() ? n : 0
-    } catch (e) {
+    } catch {
       return 0
     }
   }
@@ -147,11 +134,11 @@
     next.aiConfig =
       next.aiConfig && typeof next.aiConfig === "object"
         ? {
-            provider: normalizeAiProvider(next.aiConfig.provider),
-            baseUrl: String(next.aiConfig.baseUrl || "").trim(),
-            apiKey: String(next.aiConfig.apiKey || "").trim(),
-            model: String(next.aiConfig.model || "").trim(),
-          }
+          provider: normalizeAiProvider(next.aiConfig.provider),
+          baseUrl: String(next.aiConfig.baseUrl || "").trim(),
+          apiKey: String(next.aiConfig.apiKey || "").trim(),
+          model: String(next.aiConfig.model || "").trim(),
+        }
         : { provider: "custom", baseUrl: "", apiKey: "", model: "" }
 
     next.lookupOnlineEnabled = typeof next.lookupOnlineEnabled === "boolean" ? next.lookupOnlineEnabled : true
@@ -187,7 +174,7 @@
     const roundsRaw = Array.isArray(next.rounds) ? next.rounds : []
     next.rounds = roundsRaw
       .map((r) => {
-        const id = String(r?.id || "").trim() || String(Date.now() + Math.random()).replace(".", "")
+        const id = String(r?.id || "").trim() || `${Date.now()}-${crypto.randomUUID()}`
         const items = Array.isArray(r?.items) ? r.items.map(normalizePlacedItem).filter(Boolean) : []
         const startedAt = String(r?.startedAt || "").trim() || new Date().toISOString()
         const finishedAt = String(r?.finishedAt || "").trim()
@@ -204,7 +191,7 @@
     const booksRaw = Array.isArray(next.customWordbooks) ? next.customWordbooks : []
     next.customWordbooks = booksRaw
       .map((b) => {
-        const id = String(b?.id || "").trim() || `import-${String(Date.now() + Math.random()).replace(".", "")}`
+        const id = String(b?.id || "").trim() || `import-${Date.now()}-${crypto.randomUUID()}`
         const name = String(b?.name || "").trim()
         if (!name) return null
         const language = String(b?.language || "").trim()
@@ -236,6 +223,7 @@
   function buildChatCompletionsUrl(baseUrl) {
     const b = String(baseUrl || "").trim().replace(/\/+$/, "")
     if (!b) return ""
+    if (!b.startsWith("https://")) return ""
     if (b.includes("/chat/completions")) return b
     if (b.endsWith("/openai") || b.includes("/openai/")) return `${b}/chat/completions`
     if (b.endsWith("/v1")) return `${b}/chat/completions`
@@ -585,7 +573,7 @@
                 <div class="form-row">
                   <div class="form-label">密码</div>
                   <div class="form-control form-control-stack">
-                    <input id="cloudPasswordInput" class="text-input" type="password" minlength="6" placeholder="注册密码" autocomplete="new-password" />
+                    <input id="cloudPasswordInput" class="text-input" type="password" minlength="8" placeholder="注册密码" autocomplete="new-password" />
                     <div id="cloudPasswordHint" class="form-help field-help hidden"></div>
                   </div>
                 </div>
@@ -605,7 +593,7 @@
                 <div class="form-row">
                   <div class="form-label">密码</div>
                   <div class="form-control form-control-stack">
-                    <input id="cloudLoginPasswordInput" class="text-input" type="password" minlength="6" placeholder="输入密码" autocomplete="current-password" />
+                    <input id="cloudLoginPasswordInput" class="text-input" type="password" minlength="8" placeholder="输入密码" autocomplete="current-password" />
                     <div id="cloudLoginPasswordHint" class="form-help field-help hidden"></div>
                   </div>
                 </div>
@@ -635,7 +623,7 @@
                 <div class="form-row">
                   <div class="form-label">新密码</div>
                   <div class="form-control form-control-stack">
-                    <input id="cloudResetPasswordInput" class="text-input" type="password" minlength="6" placeholder="至少 6 位" autocomplete="new-password" />
+                    <input id="cloudResetPasswordInput" class="text-input" type="password" minlength="8" placeholder="至少 8 位" autocomplete="new-password" />
                     <div id="cloudResetPasswordHint" class="form-help field-help hidden"></div>
                   </div>
                 </div>
@@ -1048,7 +1036,7 @@
     function getPasswordError(options = {}) {
       const value = dom.cloudPasswordInput?.value || ""
       if (!value) return options.required ? "请输入密码" : ""
-      return isValidPassword(value) ? "" : "密码至少需要 6 位"
+      return isValidPassword(value) ? "" : "密码至少需要 8 位"
     }
 
     function getLoginEmailError(options = {}) {
@@ -1060,7 +1048,7 @@
     function getLoginPasswordError(options = {}) {
       const value = dom.cloudLoginPasswordInput?.value || ""
       if (!value) return options.required ? "请输入密码" : ""
-      return isValidPassword(value) ? "" : "密码至少需要 6 位"
+      return isValidPassword(value) ? "" : "密码至少需要 8 位"
     }
 
     function getResetEmailError(options = {}) {
@@ -1078,7 +1066,7 @@
     function getResetPasswordError(options = {}) {
       const value = dom.cloudResetPasswordInput?.value || ""
       if (!value) return options.required ? "请输入新密码" : ""
-      return isValidPassword(value) ? "" : "新密码至少需要 6 位"
+      return isValidPassword(value) ? "" : "新密码至少需要 8 位"
     }
 
     function updateRegisterEmailHint(options = {}) {
@@ -1634,10 +1622,10 @@
               const objText = s.slice(state.objStart, i + 1)
               state.collecting = false
               state.objStart = 0
-              let parsed = null
+              let parsed
               try {
                 parsed = JSON.parse(objText)
-              } catch (e) {
+              } catch {
                 continue
               }
               const entry = normalizeAiWordEntry(parsed)
@@ -1691,10 +1679,10 @@
             const dataStr = String(line.slice(5) || "").trim()
             if (!dataStr) continue
             if (dataStr === "[DONE]") return content
-            let obj = null
+            let obj
             try {
               obj = JSON.parse(dataStr)
-            } catch (e) {
+            } catch {
               continue
             }
             const delta =
@@ -1714,7 +1702,7 @@
     function open() {
       // Show version panel only in Tauri (desktop/Android), not on web
       if (dom.versionPanel) {
-        var isTauri = !!(window.__TAURI_INTERNALS__ || window.__TAURI__)
+        const isTauri = !!(window.__TAURI_INTERNALS__ || window.__TAURI__)
         dom.versionPanel.classList.toggle("hidden", !isTauri)
       }
       render()
@@ -1919,13 +1907,13 @@
       if (next === "manual") {
         const resolved =
           window.A4Speech?.resolveVoice?.({
-          pronunciationEnabled: true,
-          pronunciationLang: state?.pronunciationLang,
-          wordbookLanguage: getWordbookLang(),
-          accent: state?.pronunciationAccent,
-          voiceMode: "auto",
-          voiceURI: "",
-        }) || { ok: false, voice: null }
+            pronunciationEnabled: true,
+            pronunciationLang: state?.pronunciationLang,
+            wordbookLanguage: getWordbookLang(),
+            accent: state?.pronunciationAccent,
+            voiceMode: "auto",
+            voiceURI: "",
+          }) || { ok: false, voice: null }
         const chosen = resolved.voice || window.A4Speech?.getSystemDefaultVoice?.(voices) || voices[0] || null
         setStateSafe({ voiceMode: "manual", voiceURI: chosen ? String(chosen.voiceURI || "") : "" })
       } else {
@@ -2121,7 +2109,7 @@
       if (aiAbortController) {
         try {
           aiAbortController.abort()
-        } catch (e) {}
+        } catch { /* ignore */ }
       }
       setModalVisible(aiDom.modal, false)
     }
@@ -2148,7 +2136,7 @@
       aiAbortController = new AbortController()
       openAiPreviewModal({ book: aiPreviewer.getPartialBook(), meta: "生成中… · 已解析 0 个词条" })
 
-      let content = ""
+      let content
       try {
         const res = await requestAiChatCompletion({
           endpoint,
@@ -2188,10 +2176,10 @@
         aiAbortController = null
       }
 
-      let parsed = null
+      let parsed
       try {
         parsed = JSON.parse(stripJsonFromText(content))
-      } catch (e) {
+      } catch {
         return setAiStatus("生成失败：AI 返回内容不是合法 JSON。")
       }
 
@@ -2221,7 +2209,7 @@
 
     aiDom.confirmBtn?.addEventListener("click", () => {
       if (!pendingAiBook) return
-      const id = `ai-${Date.now()}-${Math.random().toString(16).slice(2)}`
+      const id = `ai-${Date.now()}-${crypto.randomUUID()}`
       const wordbook = {
         id,
         name: pendingAiBook.name,
@@ -2260,27 +2248,35 @@
       dom.importBackupFile.click()
     })
 
+    let updateCheckFailed = false
+    window.addEventListener("a4-update-check-failed", () => {
+      updateCheckFailed = true
+      setUpdateStatus("检查失败：网络错误或 GitHub API 不可用")
+    })
+
     dom.checkUpdateBtn?.addEventListener("click", () => {
       if (!window.A4Updater) {
         setUpdateStatus("更新检测未加载")
         return
       }
+      updateCheckFailed = false
       setUpdateStatus("正在检查...")
-      var cached = null
-      try { cached = JSON.parse(localStorage.getItem("a4-memory:update-check:v1") || "null") } catch (_) {}
+      let cached = null
+      try { cached = JSON.parse(localStorage.getItem("a4-memory:update-check:v1") || "null") } catch { /* ignore */ }
       // Clear cache to force re-check
-      try { localStorage.removeItem("a4-memory:update-check:v1") } catch (_) {}
-      try { localStorage.removeItem("a4-memory:update-skip:v1") } catch (_) {}
+      try { localStorage.removeItem("a4-memory:update-check:v1") } catch { /* ignore */ }
+      try { localStorage.removeItem("a4-memory:update-skip:v1") } catch { /* ignore */ }
       window.A4Updater.checkUpdate()
       // Restore skip key after check completes (async)
       setTimeout(() => {
-        var el = document.getElementById("updateModal")
+        if (updateCheckFailed) return
+        const el = document.getElementById("updateModal")
         if (el && !el.classList.contains("hidden")) {
           setUpdateStatus("")
         } else {
           setUpdateStatus("已是最新版本")
           if (cached) {
-            try { localStorage.setItem("a4-memory:update-check:v1", JSON.stringify(cached)) } catch (_) {}
+            try { localStorage.setItem("a4-memory:update-check:v1", JSON.stringify(cached)) } catch { /* ignore */ }
           }
         }
       }, 3000)
@@ -2289,17 +2285,22 @@
     dom.importBackupFile?.addEventListener("change", async () => {
       const file = dom.importBackupFile.files && dom.importBackupFile.files[0]
       if (!file) return
-      let rawText = ""
+      const MAX_SIZE = 10 * 1024 * 1024
+      if (file.size > MAX_SIZE) {
+        window.alert("导入失败：文件过大（上限 10 MB）。")
+        return
+      }
+      let rawText
       try {
         rawText = await file.text()
-      } catch (e) {
+      } catch {
         window.alert("导入失败：无法读取文件。")
         return
       }
-      let parsed = null
+      let parsed
       try {
         parsed = JSON.parse(rawText)
-      } catch (e) {
+      } catch {
         window.alert("导入失败：不是合法 JSON。")
         return
       }
@@ -2342,7 +2343,7 @@
           hour: "2-digit",
           minute: "2-digit",
         })
-      } catch (e) {
+      } catch {
         return "当前浏览器会话"
       }
     }
@@ -2368,7 +2369,7 @@
           hour: "2-digit",
           minute: "2-digit",
         })
-      } catch (e) {
+      } catch {
         return ""
       }
     }
@@ -2395,7 +2396,7 @@
         const raw = localStorage.getItem(ACCOUNT_SYNC_META_KEY)
         const parsed = raw ? JSON.parse(raw) : null
         return parsed && typeof parsed === "object" ? parsed : null
-      } catch (e) {
+      } catch {
         return null
       }
     }
@@ -2407,7 +2408,7 @@
           return
         }
         localStorage.setItem(ACCOUNT_SYNC_META_KEY, JSON.stringify(meta))
-      } catch (e) {}
+      } catch { /* ignore */ }
     }
 
     function buildLearningSummary() {
@@ -2450,7 +2451,7 @@
         if (dom.cloudAccountSubtitle) {
           dom.cloudAccountSubtitle.textContent = email
             ? email
-            : `已登录，可上传或恢复学习数据`
+            : "已登录，可上传或恢复学习数据"
         }
         if (dom.cloudBackupStateText) dom.cloudBackupStateText.textContent = "已启用"
         if (dom.cloudRoundsText) dom.cloudRoundsText.textContent = String(summary.roundsCount)
@@ -2563,9 +2564,9 @@
             accountFieldTouched.username = true
             setFieldHint(dom.cloudUsernameInput, dom.cloudUsernameHint, "用户名已存在")
           }
-          if (/password must be at least 6 characters/i.test(errorText)) {
+          if (/password must be at least 8 characters/i.test(errorText)) {
             accountFieldTouched.password = true
-            setFieldHint(dom.cloudPasswordInput, dom.cloudPasswordHint, "密码至少需要 6 位")
+            setFieldHint(dom.cloudPasswordInput, dom.cloudPasswordHint, "密码至少需要 8 位")
           }
           setAccountStatus("注册失败：" + formatAccountError(result?.error), "error")
         }
@@ -2672,9 +2673,9 @@
             accountFieldTouched.resetCode = true
             setFieldHint(dom.cloudResetCodeInput, dom.cloudResetCodeHint, formatAccountError(errorText))
           }
-          if (/password must be at least 6 characters/i.test(errorText)) {
+          if (/password must be at least 8 characters/i.test(errorText)) {
             accountFieldTouched.resetPassword = true
-            setFieldHint(dom.cloudResetPasswordInput, dom.cloudResetPasswordHint, "新密码至少需要 6 位")
+            setFieldHint(dom.cloudResetPasswordInput, dom.cloudResetPasswordHint, "新密码至少需要 8 位")
           }
           setAccountStatus("重置失败：" + formatAccountError(result?.error), "error")
         }
@@ -2768,12 +2769,12 @@
   if (!document.getElementById("settingsModal")) {
     try {
       document.body.appendChild(buildSettingsModalDom())
-    } catch (e) {}
+    } catch { /* ignore */ }
   }
   if (!document.getElementById("aiPreviewModal")) {
     try {
       document.body.appendChild(buildAiPreviewModalDom())
-    } catch (e) {}
+    } catch { /* ignore */ }
   }
 
   window.A4Settings = {

@@ -23,75 +23,15 @@ const {
   clamp,
   normalizeMeaningKey,
   setModalVisible,
+  getWordbooksFromGlobal,
+  normalizeWordObject,
 } = window.A4Common || {}
 
 const { normalizeThemeMode, normalizeAccent, normalizeVoiceMode, normalizePronunciationLang } = window.A4Settings
 const { sanitizeFilename, downloadJsonFile } = window.A4Utils
 
 function makeId() {
-  return `${Date.now()}-${Math.random().toString(16).slice(2)}`
-}
-
-function getWordsFromGlobal() {
-  const list = Array.isArray(window.WORDS) ? window.WORDS : []
-  return list
-    .map((w) => {
-      if (!w) return null
-      if (typeof w === "string") return { term: w.trim(), meaning: "" }
-      const term = String(w.term || "").trim()
-      const pos = String(w.pos || "").trim()
-      const meaning = String(w.meaning || "").trim()
-      if (!term) return null
-      return { term, pos, meaning }
-    })
-    .filter(Boolean)
-}
-
-function getWordbooksFromGlobal() {
-  const books = Array.isArray(window.WORDBOOKS) ? window.WORDBOOKS : []
-  if (books.length) {
-    return books
-      .map((b) => {
-        const id = String(b?.id || "").trim()
-        const name = String(b?.name || "").trim()
-        const description = String(b?.description || "").trim()
-        const language = String(b?.language || "").trim()
-        const wordsRaw = Array.isArray(b?.words) ? b.words : []
-        if (!id || !name) return null
-        const words = wordsRaw
-          .map((w) => {
-            if (!w) return null
-            if (typeof w === "string") return { term: w.trim(), pos: "", meaning: "" }
-            const term = String(w.term || "").trim()
-            const pos = String(w.pos || "").trim()
-            const meaning = String(w.meaning || "").trim()
-            if (!term) return null
-            return { term, pos, meaning }
-          })
-          .filter(Boolean)
-        return { id, name, description, language, words }
-      })
-      .filter(Boolean)
-  }
-
-  return [{ id: "default", name: "默认词库", language: "en", words: getWordsFromGlobal() }]
-}
-
-function normalizeWordObject(w) {
-  if (!w) return null
-  if (typeof w === "string") {
-    const term = w.trim()
-    if (!term) return null
-    return { term, pos: "", meaning: "", example: "", tags: [], lang: "" }
-  }
-  const term = String(w.term || "").trim()
-  const pos = String(w.pos || "").trim()
-  const meaning = String(w.meaning || "").trim()
-  if (!term) return null
-  const example = String(w.example || "").trim()
-  const tags = Array.isArray(w.tags) ? w.tags.map((t) => String(t || "").trim()).filter(Boolean) : []
-  const lang = String(w.lang || w.language || "").trim()
-  return { term, pos, meaning, example, tags, lang }
+  return `${Date.now()}-${crypto.randomUUID()}`
 }
 
 function normalizeWordbookObject(b) {
@@ -165,9 +105,9 @@ function closeRemoteImportModal() {
 
 function openIntroModal() {
   // Show download block only on web, not in Tauri app
-  var block = document.getElementById("introDownloadBlock")
+  const block = document.getElementById("introDownloadBlock")
   if (block) {
-    var isTauri = !!(window.__TAURI_INTERNALS__ || window.__TAURI__)
+    const isTauri = !!(window.__TAURI_INTERNALS__ || window.__TAURI__)
     block.classList.toggle("hidden", isTauri)
   }
   setModalVisible(dom.introModal, true)
@@ -176,7 +116,7 @@ function openIntroModal() {
 function closeIntroModal() {
   try {
     localStorage.setItem(INTRO_SEEN_KEY, "1")
-  } catch (e) {}
+  } catch { /* ignore */ }
   setModalVisible(dom.introModal, false)
 }
 
@@ -258,7 +198,7 @@ async function dismissAnnouncementModal() {
   if (unreadIds.length && window.A4Cloud?.markAnnouncementsRead) {
     try {
       await window.A4Cloud.markAnnouncementsRead(unreadIds)
-    } catch (e) {}
+    } catch { /* ignore */ }
   }
   setModalVisible(ensureAnnouncementModal(), false)
 }
@@ -274,7 +214,7 @@ async function checkAnnouncements() {
     announcementUnreadIds = unreadIds
     renderAnnouncementList(Array.isArray(result.announcements) ? result.announcements : [])
     setModalVisible(ensureAnnouncementModal(), true)
-  } catch (e) {}
+  } catch { /* ignore */ }
 }
 
 function scheduleAnnouncementCheck(delayMs = 0) {
@@ -291,14 +231,6 @@ function openSettingsModal() {
     return
   }
   setModalVisible(dom.settingsModal, true)
-}
-
-function closeSettingsModal() {
-  if (settingsController) {
-    settingsController.close()
-    return
-  }
-  setModalVisible(dom.settingsModal, false)
 }
 
 function openLookupModal({ preset } = {}) {
@@ -883,8 +815,8 @@ async function importWordbookFile(file) {
   const text = await file.text()
   let name = stripFileExtension(file.name)
   let description = ""
-  let language = ""
-  let words = []
+  let language
+  let words
 
   if (String(file.name || "").toLowerCase().endsWith(".json")) {
     const parsed = JSON.parse(String(text || ""))
@@ -983,7 +915,7 @@ function inferWordbookNameFromUrl(url) {
     const base = stripJsonExt(decoded)
     if (!base) return ""
     return base.replaceAll(/[-_]+/g, " ").trim()
-  } catch (e) {
+  } catch {
     const parts = raw.split("/").filter(Boolean)
     const last = parts.length ? parts[parts.length - 1] : raw
     const base = stripJsonExt(last)
@@ -1053,16 +985,16 @@ async function importWordbookFromUrl({ url, name, language, description } = {}) 
   const ct = String(res.headers?.get?.("content-type") || "").toLowerCase()
   const text = await res.text()
 
-  let words = []
+  let words
   let parsedMeta = { name: "", description: "", language: "" }
   const filename = url || name || "remote"
   const looksJson = ct.includes("application/json") || String(filename).toLowerCase().endsWith(".json") || String(url || "").toLowerCase().endsWith(".json")
 
   if (looksJson) {
-    let parsed = null
+    let parsed
     try {
       parsed = JSON.parse(String(text || ""))
-    } catch (e) {
+    } catch {
       return null
     }
     const extracted = extractWordbookFromRemoteJson(parsed)
@@ -1236,10 +1168,10 @@ async function openRemoteImportPicker({ owner, repo, language, name } = {}) {
   openRemoteImportModal()
   setRemoteImportMeta(`加载中… · ${owner}/${repo}`)
 
-  let result = null
+  let result
   try {
     result = await listGithubJsonFiles({ owner, repo })
-  } catch (e) {
+  } catch {
     result = { owner, repo, branch: "", list: [] }
   }
 
@@ -1531,7 +1463,7 @@ function expandSpanishGenderShortForm(text) {
 
   const vowels = "aeiouáéíóúü"
   const last = first.slice(-1).toLowerCase()
-  let second = ""
+  let second
 
   if (suffixRaw.length === 1) {
     if (vowels.includes(last)) second = first.slice(0, -1) + suffixRaw
@@ -1783,8 +1715,8 @@ function generateStatusRound(kind) {
   const nowMs = Date.now()
   const map = buildLatestTermMap(appState.rounds)
 
-  let list = []
-  let title = "生成一轮"
+  let list
+  let title
   if (kind === "due") {
     title = "生成待复习一轮"
     if (!appState.reviewSystemEnabled) {
@@ -2111,7 +2043,7 @@ function restore() {
     try {
       const seen = localStorage.getItem(INTRO_SEEN_KEY)
       if (!seen) requestAnimationFrame(() => openIntroModal())
-    } catch (e) {}
+    } catch { /* ignore */ }
     scheduleAnnouncementCheck(300)
     return
   }
@@ -2165,11 +2097,11 @@ function restore() {
   appState.aiConfig =
     saved.aiConfig && typeof saved.aiConfig === "object"
       ? {
-          provider: normalizeAiProvider(saved.aiConfig.provider),
-          baseUrl: String(saved.aiConfig.baseUrl || "").trim(),
-          apiKey: String(saved.aiConfig.apiKey || "").trim(),
-          model: String(saved.aiConfig.model || "").trim(),
-        }
+        provider: normalizeAiProvider(saved.aiConfig.provider),
+        baseUrl: String(saved.aiConfig.baseUrl || "").trim(),
+        apiKey: String(saved.aiConfig.apiKey || "").trim(),
+        model: String(saved.aiConfig.model || "").trim(),
+      }
       : { provider: "custom", baseUrl: "", apiKey: "", model: "" }
 
   appState.lookupOnlineEnabled = typeof saved.lookupOnlineEnabled === "boolean" ? saved.lookupOnlineEnabled : true
@@ -2213,7 +2145,7 @@ function restore() {
   if (pendingOpenSettings) {
     try {
       saveState({ ...saved, pendingOpenSettings: false })
-    } catch (e) {}
+    } catch { /* ignore */ }
   }
   renderWordbookSelect()
 
@@ -2270,7 +2202,7 @@ function restore() {
     try {
       const seen = localStorage.getItem(INTRO_SEEN_KEY)
       if (!seen) requestAnimationFrame(() => openIntroModal())
-    } catch (e) {}
+    } catch { /* ignore */ }
     scheduleAnnouncementCheck(300)
     return
   }
@@ -2652,7 +2584,7 @@ dom.importCet4Btn.addEventListener("click", async () => {
       name: "英语词库（k7tmiz）",
       language: "en",
     })
-  } catch (e) {}
+  } catch { /* ignore */ }
 })
 
 dom.importCet6Btn.addEventListener("click", async () => {
@@ -2664,7 +2596,7 @@ dom.importCet6Btn.addEventListener("click", async () => {
       name: "西班牙语词库（k7tmiz）",
       language: "es",
     })
-  } catch (e) {}
+  } catch { /* ignore */ }
 })
 
 dom.importFile.addEventListener("change", async () => {
@@ -2673,7 +2605,7 @@ dom.importFile.addEventListener("change", async () => {
   if (!file) return
   try {
     await importWordbookFile(file)
-  } catch (e) {}
+  } catch { /* ignore */ }
 })
 
 dom.introBtn.addEventListener("click", () => {
@@ -3020,7 +2952,7 @@ dom.reviewCard.addEventListener("pointerdown", (e) => {
   setReviewSwipeState("pointer-down")
   try {
     dom.reviewCard.setPointerCapture?.(e.pointerId)
-  } catch (err) {}
+  } catch { /* ignore */ }
   window.addEventListener("pointermove", onReviewPointerMove, { passive: false, capture: true })
   window.addEventListener("pointerup", onReviewPointerUp, { capture: true })
   window.addEventListener("pointercancel", onReviewPointerCancel, { capture: true })
@@ -3241,13 +3173,13 @@ dom.reviewFromFullBtn.addEventListener("click", () => {
 window.A4AddWordFromLookup = (word) => {
   try {
     addWordToCurrentRoundFromLookup(word)
-  } catch (e) {}
+  } catch { /* ignore */ }
 }
 
 window.A4GetActiveLangBase = () => {
   try {
     return getActiveLangBase()
-  } catch (e) {
+  } catch {
     return "en"
   }
 }
