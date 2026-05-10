@@ -164,6 +164,12 @@ function closeRemoteImportModal() {
 }
 
 function openIntroModal() {
+  // Show download block only on web, not in Tauri app
+  var block = document.getElementById("introDownloadBlock")
+  if (block) {
+    var isTauri = !!(window.__TAURI_INTERNALS__ || window.__TAURI__)
+    block.classList.toggle("hidden", isTauri)
+  }
   setModalVisible(dom.introModal, true)
 }
 
