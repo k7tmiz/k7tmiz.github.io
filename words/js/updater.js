@@ -1,5 +1,5 @@
 ;(function () {
-  var APP_VERSION = "1.0.1"
+  var APP_VERSION = "1.0.2"
   var REPO = "k7tmiz/A4-Memory"
   var CACHE_KEY = "a4-memory:update-check:v1"
   var SKIP_KEY = "a4-memory:update-skip:v1"

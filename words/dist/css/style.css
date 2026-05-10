@@ -2155,6 +2155,10 @@ body.theme-dark .account-badge {
     line-height: 1.2;
   }
 
+  .word-meaning {
+    font-size: 9px;
+  }
+
   .word-item {
     padding: 2px 4px;
     box-sizing: border-box;
@@ -2165,6 +2169,10 @@ body.theme-dark .account-badge {
 @media (max-width: 390px) {
   .word-term {
     font-size: 11px;
+  }
+
+  .word-meaning {
+    font-size: 8px;
   }
 
   .word-item {
