@@ -103,10 +103,14 @@
       dismissModal()
     })
 
-    // Download button opens GitHub Releases
+    // Download button: open in system browser
     downloadBtn.addEventListener("click", function () {
       var url = modal._releaseUrl || ("https://github.com/" + REPO + "/releases/latest")
-      window.open(url, "_blank", "noopener")
+      var a = document.createElement("a")
+      a.href = url
+      a.target = "_blank"
+      a.rel = "noopener"
+      a.click()
       dismissModal()
     })
 
@@ -132,12 +136,15 @@
     var titleEl = document.getElementById("updateTitle")
     if (titleEl) titleEl.textContent = "新版本可用 " + version
 
+    var downloadUrl = releaseUrl || ("https://github.com/" + REPO + "/releases/latest")
     var bodyEl = document.getElementById("updateBody")
     if (bodyEl) {
       var text = stripHtml(bodyHtml || "")
-      // Truncate to ~300 chars
       if (text.length > 300) text = text.slice(0, 300) + "..."
-      bodyEl.innerHTML = text ? text.replace(/\n/g, "<br>") : "GitHub 发布了新版本，点击下方按钮查看详情。"
+      var parts = []
+      if (text) parts.push(text.replace(/\n/g, "<br>"))
+      parts.push('<div style="margin-top:10px;font-size:13px;color:var(--muted);word-break:break-all">下载地址：<br><a href="' + downloadUrl + '" target="_blank" rel="noreferrer">' + downloadUrl + '</a></div>')
+      bodyEl.innerHTML = parts.join("")
     }
 
     if (window.A4Common && window.A4Common.setModalVisible) {
