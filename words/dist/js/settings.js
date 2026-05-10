@@ -1712,6 +1712,11 @@
     }
 
     function open() {
+      // Show version panel only in Tauri (desktop/Android), not on web
+      if (dom.versionPanel) {
+        var isTauri = !!(window.__TAURI_INTERNALS__ || window.__TAURI__)
+        dom.versionPanel.classList.toggle("hidden", !isTauri)
+      }
       render()
       renderAiProviderUi()
       setModalVisible(dom.modal, true)
@@ -1723,11 +1728,6 @@
 
     dom.backdrop?.addEventListener("click", () => close())
     dom.closeBtn?.addEventListener("click", () => close())
-
-    // Version panel: only show in Tauri (desktop/Android), not on web
-    if (dom.versionPanel && window.A4Updater?.isTauri) {
-      dom.versionPanel.classList.remove("hidden")
-    }
 
     dom.themeModeSelect?.addEventListener("change", () => {
       const themeMode = normalizeThemeMode(dom.themeModeSelect.value)

@@ -5,8 +5,6 @@
   var SKIP_KEY = "a4-memory:update-skip:v1"
   var CACHE_TTL = 24 * 60 * 60 * 1000 // 24h
   var CHECK_DELAY = 3000
-  var isTauri = !!(window.__TAURI__ || window.__TAURI_INTERNALS__)
-
   var modal = null
 
   function parseSemver(v) {
@@ -192,9 +190,11 @@
       })
   }
 
-  // Only auto-check in Tauri (desktop/Android) — web always has latest
-  if (isTauri) {
-    setTimeout(checkUpdate, CHECK_DELAY)
+  // Always schedule auto-check. On web the version matches so no modal appears.
+  setTimeout(checkUpdate, CHECK_DELAY)
+
+  function isTauri() {
+    return !!(window.__TAURI_INTERNALS__ || window.__TAURI__)
   }
 
   // ── Exports ──────────────────────────────────────────────────────────────────
