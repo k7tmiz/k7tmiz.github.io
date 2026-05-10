@@ -5,6 +5,7 @@
   var SKIP_KEY = "a4-memory:update-skip:v1"
   var CACHE_TTL = 24 * 60 * 60 * 1000 // 24h
   var CHECK_DELAY = 3000
+  var isTauri = !!(window.__TAURI__ || window.__TAURI_INTERNALS__)
 
   var modal = null
 
@@ -191,8 +192,10 @@
       })
   }
 
-  // Schedule first check after app init
-  setTimeout(checkUpdate, CHECK_DELAY)
+  // Only auto-check in Tauri (desktop/Android) — web always has latest
+  if (isTauri) {
+    setTimeout(checkUpdate, CHECK_DELAY)
+  }
 
   // ── Exports ──────────────────────────────────────────────────────────────────
   window.A4Updater = {

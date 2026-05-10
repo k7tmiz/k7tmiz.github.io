@@ -683,7 +683,7 @@ function openPrintRoundsAsPdf(list) {
     win.document.head.appendChild(style)
     const bar = win.document.createElement("div")
     bar.className = "close-bar"
-    bar.style.cssText = "position:fixed;top:0;left:0;right:0;z-index:9999;padding:10px 16px;background:#0b1220;text-align:right"
+    bar.style.cssText = "position:fixed;top:0;left:0;right:0;z-index:9999;padding:calc(10px + env(safe-area-inset-top, 0px)) 16px 10px;background:#0b1220;text-align:right"
     const btn = win.document.createElement("button")
     btn.textContent = "关闭"
     btn.style.cssText = "padding:6px 16px;border:1px solid #cfd6e6;border-radius:6px;background:transparent;color:#fff;font-size:14px;cursor:pointer"
