@@ -604,101 +604,138 @@ function normalizeState(raw) {
 }
 
 function openPrintRoundsAsPdf(list) {
-  const pageMarginMm = 10
-  const innerW = 210 - pageMarginMm * 2
-  const innerH = 297 - pageMarginMm * 2
+  // Build page info array
+  const pageInfos = list.flatMap((item, idx) => {
+    const r = item.round
+    const roundNo = Number(item.roundNo) || idx + 1
+    const pageCount = getRoundPageCount(r)
+    return Array.from({ length: pageCount }).map((_, pageIndex) => ({
+      round: r,
+      roundNo,
+      pageIndex,
+      title: `第${roundNo}轮 · 第${pageIndex + 1}/${pageCount}页`,
+    }))
+  })
 
-  const win = window.open("", "_blank")
-  if (!win) return
+  if (pageInfos.length === 0) return
 
-  const pages = list
-    .flatMap((item, idx) => {
-      const r = item.round
-      const roundNo = Number(item.roundNo) || idx + 1
-      const pageCount = getRoundPageCount(r)
-      const safeRoundId = String(r?.id || idx).replaceAll(/[^a-zA-Z0-9_-]/g, "_")
-      return Array.from({ length: pageCount }).map((_, pageIndex) => {
-        const safeId = `${safeRoundId}_${pageIndex}`
-        const title = `第${roundNo}轮 · 第${pageIndex + 1}/${pageCount}页`
-        return { round: r, roundNo, pageIndex, safeId, title }
-      })
-    })
-    .map(({ safeId, title }) => {
-      return `<section class="page">
-        <div class="inner">
-          <img class="img" id="img_${safeId}" alt="${title}" />
-        </div>
-      </section>`
-    })
-    .join("")
+  // Remove existing overlay if any
+  const existing = document.getElementById("pdfPrintOverlay")
+  if (existing) existing.remove()
 
-  const html = `<!doctype html>
-<html lang="zh-CN">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>A4 Print</title>
-    <style>
-      @page { size: A4; margin: ${pageMarginMm}mm; }
-      html, body { padding: 0; margin: 0; }
-      body { font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif; color: #0b1220; background: #ffffff; }
-      .page { width: 210mm; height: 297mm; page-break-after: always; position: relative; }
-      .page:last-child { page-break-after: auto; }
-      .inner { position: absolute; left: ${pageMarginMm}mm; top: ${pageMarginMm}mm; width: ${innerW}mm; height: ${innerH}mm; border: 1px solid #cfd6e6; border-radius: 8mm; overflow: hidden; display: flex; align-items: center; justify-content: center; }
-      .img { width: 100%; height: 100%; object-fit: contain; }
-    </style>
-  </head>
-  <body>${pages}</body>
-</html>`
+  // Build overlay
+  const overlay = document.createElement("div")
+  overlay.id = "pdfPrintOverlay"
+  overlay.style.cssText = "position:fixed;inset:0;z-index:99999;background:#0b1220;display:flex;flex-direction:column"
 
-  win.document.open()
-  win.document.write(html)
-  win.document.close()
-  win.focus()
+  // Top bar
+  const topBar = document.createElement("div")
+  topBar.style.cssText = "display:flex;align-items:center;justify-content:space-between;padding:calc(8px + env(safe-area-inset-top, 0px)) 12px 8px;color:#fff;flex-shrink:0"
+  const pageLabel = document.createElement("span")
+  pageLabel.style.cssText = "font-size:14px"
+  pageLabel.textContent = `1 / ${pageInfos.length}`
+  const closeBtn = document.createElement("button")
+  closeBtn.textContent = "关闭"
+  closeBtn.style.cssText = "padding:6px 14px;border:1px solid rgba(255,255,255,.35);border-radius:6px;background:transparent;color:#fff;font-size:14px"
+  closeBtn.addEventListener("click", () => overlay.remove())
+  topBar.appendChild(pageLabel)
+  topBar.appendChild(closeBtn)
 
-  ;(async () => {
-    for (const page of list.flatMap((item, idx) => {
-      const r = item.round
-      const roundNo = Number(item.roundNo) || idx + 1
-      const pageCount = getRoundPageCount(r)
-      const safeRoundId = String(r?.id || idx).replaceAll(/[^a-zA-Z0-9_-]/g, "_")
-      return Array.from({ length: pageCount }).map((_, pageIndex) => ({
-        round: r,
-        roundNo,
-        pageIndex,
-        safeId: `${safeRoundId}_${pageIndex}`,
-      }))
-    })) {
-      const img = win.document.getElementById(`img_${page.safeId}`)
-      if (!img) continue
-      const blob = await exportRoundPageAsPng({ round: page.round, roundNo: page.roundNo, pageIndex: page.pageIndex })
-      if (!blob) continue
-      const url = URL.createObjectURL(blob)
-      img.src = url
-      img.onload = () => URL.revokeObjectURL(url)
+  // Image area
+  const imgEl = document.createElement("img")
+  imgEl.style.cssText = "width:100%;flex:1;object-fit:contain;min-height:0"
+  imgEl.alt = ""
+
+  // Bottom bar
+  const bottomBar = document.createElement("div")
+  bottomBar.style.cssText = "display:flex;align-items:center;justify-content:center;gap:12px;padding:8px 12px calc(8px + env(safe-area-inset-bottom, 0px));flex-shrink:0"
+  const prevBtn = document.createElement("button")
+  prevBtn.textContent = "上一页"
+  prevBtn.style.cssText = "padding:8px 18px;border:1px solid rgba(255,255,255,.35);border-radius:8px;background:transparent;color:#fff;font-size:14px"
+  const nextBtn = document.createElement("button")
+  nextBtn.textContent = "下一页"
+  nextBtn.style.cssText = "padding:8px 18px;border:1px solid rgba(255,255,255,.35);border-radius:8px;background:transparent;color:#fff;font-size:14px"
+
+  if (pageInfos.length <= 1) {
+    prevBtn.style.opacity = "0.3"
+    nextBtn.style.opacity = "0.3"
+  }
+
+  // Print button (desktop only)
+  const printBtn = document.createElement("button")
+  printBtn.textContent = "打印"
+  printBtn.style.cssText = "padding:8px 18px;border:1px solid rgba(255,255,255,.35);border-radius:8px;background:transparent;color:#fff;font-size:14px"
+  printBtn.addEventListener("click", () => window.print())
+
+  bottomBar.appendChild(prevBtn)
+  bottomBar.appendChild(printBtn)
+  bottomBar.appendChild(nextBtn)
+
+  overlay.appendChild(topBar)
+  overlay.appendChild(imgEl)
+  overlay.appendChild(bottomBar)
+  document.body.appendChild(overlay)
+
+  // State
+  let currentIdx = 0
+  const blobUrls = []
+
+  function showPage(idx) {
+    currentIdx = ((idx % pageInfos.length) + pageInfos.length) % pageInfos.length
+    pageLabel.textContent = `${currentIdx + 1} / ${pageInfos.length}`
+    const info = pageInfos[currentIdx]
+    if (info._blobUrl) {
+      imgEl.src = info._blobUrl
+      return
     }
-    // Inject close button (mobile fallback)
-    const style = win.document.createElement("style")
-    style.textContent = "@media print { .close-bar { display: none; } }"
-    win.document.head.appendChild(style)
-    const bar = win.document.createElement("div")
-    bar.className = "close-bar"
-    bar.style.cssText = "position:fixed;top:0;left:0;right:0;z-index:9999;padding:calc(10px + env(safe-area-inset-top, 0px)) 16px 10px;background:#0b1220;text-align:right"
-    const btn = win.document.createElement("button")
-    btn.textContent = "关闭"
-    btn.style.cssText = "padding:6px 16px;border:1px solid #cfd6e6;border-radius:6px;background:transparent;color:#fff;font-size:14px;cursor:pointer"
-    btn.onclick = () => win.close()
-    bar.appendChild(btn)
-    win.document.body.insertBefore(bar, win.document.body.firstChild)
+    // Show loading
+    imgEl.src = ""
+    exportRoundPageAsPng({ round: info.round, roundNo: info.roundNo, pageIndex: info.pageIndex }).then(blob => {
+      if (!blob) return
+      const url = URL.createObjectURL(blob)
+      blobUrls.push(url)
+      info._blobUrl = url
+      if (currentIdx === idx) imgEl.src = url
+    })
+  }
 
-    const closeWin = () => { try { win.close() } catch (e) {} }
-    win.onbeforeprint = () => win.focus()
-    win.onafterprint = closeWin
-    win.onbeforeunload = closeWin
-    setTimeout(() => win.print(), 300)
-    // Mobile fallback: auto-close after 60s if user doesn't interact
-    setTimeout(closeWin, 60000)
-  })()
+  prevBtn.addEventListener("click", () => showPage(currentIdx - 1))
+  nextBtn.addEventListener("click", () => showPage(currentIdx + 1))
+
+  // Swipe support
+  let touchStartX = 0
+  overlay.addEventListener("touchstart", e => { touchStartX = e.touches[0].clientX })
+  overlay.addEventListener("touchend", e => {
+    const dx = e.changedTouches[0].clientX - touchStartX
+    if (Math.abs(dx) > 60) {
+      showPage(currentIdx + (dx < 0 ? 1 : -1))
+    }
+  })
+
+  // Cleanup on remove
+  const cleanup = () => { blobUrls.forEach(u => URL.revokeObjectURL(u)) }
+  overlay.addEventListener("remove", cleanup)
+  // Fallback: use MutationObserver since 'remove' event isn't standard
+  const observer = new MutationObserver(() => {
+    if (!document.getElementById("pdfPrintOverlay")) {
+      cleanup()
+      observer.disconnect()
+    }
+  })
+  observer.observe(document.body, { childList: true })
+
+  // Keyboard nav
+  const onKey = (e) => {
+    if (!document.getElementById("pdfPrintOverlay")) return
+    if (e.key === "Escape") overlay.remove()
+    if (e.key === "ArrowLeft") showPage(currentIdx - 1)
+    if (e.key === "ArrowRight") showPage(currentIdx + 1)
+  }
+  document.addEventListener("keydown", onKey)
+  overlay.addEventListener("remove", () => document.removeEventListener("keydown", onKey))
+
+  // Load first page
+  showPage(0)
 }
 
 function main() {
