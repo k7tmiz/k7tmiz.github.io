@@ -265,6 +265,28 @@
     return [raw]
   }
 
+  function isAndroidTauriSpeech() {
+    return !!window.__TAURI_INTERNALS__?.invoke && /Android/i.test(navigator.userAgent || "")
+  }
+
+  function getNativeSpeechLang({ pronunciationLang, wordbookLanguage, accent }) {
+    const base = getCurrentLanguageBase({ pronunciationLang, wordbookLanguage })
+    return getVoiceCandidatesForLanguage({ base, accent: normalizeAccent(accent) })[0] || "en-US"
+  }
+
+  async function speakWithAndroidTts({ text, pronunciationLang, wordbookLanguage, accent }) {
+    const invoke = window.__TAURI_INTERNALS__?.invoke
+    if (typeof invoke !== "function") return false
+    const lang = getNativeSpeechLang({ pronunciationLang, wordbookLanguage, accent })
+    try {
+      await invoke("a4_android_speak", { text, lang })
+      return true
+    } catch {
+      window.alert("Android 系统文字转语音不可用。请在系统设置中安装或启用文字转语音引擎。")
+      return false
+    }
+  }
+
   function waitForVoices({ timeoutMs } = {}) {
     const timeout = clamp(Number(timeoutMs) || 800, 50, 3000)
     return new Promise((resolve) => {
@@ -293,6 +315,12 @@
   async function speak({ text, pronunciationEnabled, pronunciationLang, wordbookLanguage, accent, voiceMode, voiceURI }) {
     const t = String(text || "").trim()
     if (!t) return false
+    if (!pronunciationEnabled) return false
+
+    if (isAndroidTauriSpeech()) {
+      return speakWithAndroidTts({ text: t, pronunciationLang, wordbookLanguage, accent })
+    }
+
     const resolved0 = resolveVoice({
       pronunciationEnabled,
       pronunciationLang,
@@ -394,6 +422,8 @@
     getVoiceStatusText,
     getCurrentVoiceLabel,
     speak,
+    isAndroidTauriSpeech,
+    getNativeSpeechLang,
     findVoiceByURI,
     getSystemDefaultVoice,
     normalizeLangTag,

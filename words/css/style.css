@@ -1882,6 +1882,78 @@ body.theme-dark .account-badge {
   box-shadow: none;
 }
 
+#pdfPrintPages {
+  display: none;
+}
+
+.pdf-preview-stage {
+  flex: 1;
+  min-height: 0;
+  overflow: auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 12px;
+  box-sizing: border-box;
+}
+
+.pdf-preview-viewport {
+  position: relative;
+  flex: 0 0 auto;
+}
+
+#pdfPrintOverlay .a4-print-page {
+  width: 794px;
+  height: 1123px;
+  background: #ffffff;
+  color: #0b1220;
+  box-shadow: 0 18px 50px rgba(0, 0, 0, 0.35);
+  overflow: hidden;
+  flex: 0 0 auto;
+  transform-origin: top left;
+}
+
+#pdfPrintOverlay .a4-print-paper {
+  width: 100%;
+  height: 100%;
+  box-sizing: border-box;
+  padding: 5.714%;
+}
+
+#pdfPrintOverlay .a4-print-inner {
+  position: relative;
+  width: 100%;
+  height: calc(100% - 3.8%);
+  box-sizing: border-box;
+  border: 1px solid #cfd6e6;
+  overflow: hidden;
+}
+
+#pdfPrintOverlay .a4-print-word {
+  position: absolute;
+  box-sizing: border-box;
+  max-width: 70%;
+  padding: 0.7% 0.95%;
+  border: 1px solid rgba(11, 18, 32, 0.08);
+  border-radius: 6px;
+  background: rgba(11, 18, 32, 0.04);
+  color: #0b1220;
+  font-weight: 600;
+  line-height: 1.2;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+#pdfPrintOverlay .a4-print-footer {
+  height: 3.8%;
+  padding-top: 0.95%;
+  box-sizing: border-box;
+  color: #5b6477;
+  font-size: 10px;
+  line-height: 1;
+}
+
 .words-list {
   display: grid;
   gap: 8px;
@@ -2180,6 +2252,11 @@ body.theme-dark .account-badge {
   }
 }
 
+@page {
+  size: A4 portrait;
+  margin: 0;
+}
+
 @media print {
   body {
     background: #ffffff;
@@ -2216,5 +2293,69 @@ body.theme-dark .account-badge {
   .round-card:not(:last-child) {
     break-after: page;
     page-break-after: always;
+  }
+
+  body.a4-printing > :not(#pdfPrintPages) {
+    display: none !important;
+  }
+
+  body.a4-printing #pdfPrintPages {
+    display: block !important;
+  }
+
+  body.a4-printing .a4-print-page {
+    width: 210mm;
+    height: 297mm;
+    break-after: page;
+    page-break-after: always;
+    background: #ffffff;
+    color: #0b1220;
+    overflow: hidden;
+  }
+
+  body.a4-printing .a4-print-page:last-child {
+    break-after: auto;
+    page-break-after: auto;
+  }
+
+  body.a4-printing .a4-print-paper {
+    width: 100%;
+    height: 100%;
+    box-sizing: border-box;
+    padding: 12mm;
+  }
+
+  body.a4-printing .a4-print-inner {
+    position: relative;
+    width: 100%;
+    height: calc(100% - 8mm);
+    box-sizing: border-box;
+    border: 0.3mm solid #cfd6e6;
+    overflow: hidden;
+  }
+
+  body.a4-printing .a4-print-word {
+    position: absolute;
+    box-sizing: border-box;
+    max-width: 70%;
+    padding: 1.5mm 2mm;
+    border: 0.2mm solid rgba(11, 18, 32, 0.08);
+    border-radius: 2mm;
+    background: rgba(11, 18, 32, 0.04);
+    color: #0b1220;
+    font-weight: 600;
+    line-height: 1.2;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  body.a4-printing .a4-print-footer {
+    height: 8mm;
+    padding-top: 2mm;
+    box-sizing: border-box;
+    color: #5b6477;
+    font-size: 9pt;
+    line-height: 1;
   }
 }

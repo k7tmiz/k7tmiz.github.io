@@ -1,5 +1,5 @@
 ;(function () {
-  const APP_VERSION = "1.0.6"
+  const APP_VERSION = "1.0.10"
   const REPO = "k7tmiz/A4-Memory"
   const CACHE_KEY = "a4-memory:update-check:v1"
   const SKIP_KEY = "a4-memory:update-skip:v1"
@@ -27,6 +27,68 @@
     } catch {
       return String(html || "").replace(/<[^>]*>/g, "").trim()
     }
+  }
+
+  function getPlatformKind() {
+    const ua = String(navigator.userAgent || "")
+    const platform = String(navigator.platform || "")
+    const uaPlatform = String(navigator.userAgentData?.platform || "")
+    const text = [ua, platform, uaPlatform].join(" ")
+    if (/Android/i.test(ua)) return "android"
+    if (/Win/i.test(text) || /Windows/i.test(text)) return "windows"
+    if (/Mac/i.test(text) || /Macintosh|Mac OS X/i.test(text)) return "macos"
+    if (/Linux/i.test(text)) return "linux"
+    return "unknown"
+  }
+
+  function isDownloadAsset(asset) {
+    const name = String(asset?.name || "").toLowerCase()
+    const url = String(asset?.browser_download_url || "").trim()
+    if (!url) return false
+    if (name.endsWith(".sig") || name.endsWith(".sha256") || name.endsWith(".json")) return false
+    if (name.endsWith(".app.tar.gz") || name.endsWith(".tar.gz") || name.endsWith(".zip")) return false
+    return true
+  }
+
+  function selectReleaseDownloadUrl(release) {
+    const fallback = String(release?.html_url || "").trim() || ("https://github.com/" + REPO + "/releases/latest")
+    const assets = Array.isArray(release?.assets) ? release.assets.filter(isDownloadAsset) : []
+    const platform = getPlatformKind()
+
+    const match = (patterns) => {
+      for (const pattern of patterns) {
+        const asset = assets.find((item) => pattern.test(String(item?.name || "").toLowerCase()))
+        const url = String(asset?.browser_download_url || "").trim()
+        if (url) return url
+      }
+      return ""
+    }
+
+    if (platform === "android") return match([/a4-memory-v[\d.]+-android\.apk$/, /android\.apk$/, /\.apk$/]) || fallback
+    if (platform === "macos") return match([/_aarch64\.dmg$/, /\.dmg$/]) || fallback
+    if (platform === "windows") return match([/_x64-setup\.exe$/, /_x64.*\.msi$/, /\.exe$/, /\.msi$/]) || fallback
+    if (platform === "linux") return match([/_amd64\.appimage$/, /_amd64\.deb$/, /\.appimage$/, /\.deb$/]) || fallback
+
+    return fallback
+  }
+
+  function openExternalUrl(url) {
+    const target = String(url || "").trim()
+    if (!target) return Promise.resolve(false)
+
+    const tauriInvoke = window.__TAURI_INTERNALS__?.invoke
+    if (isTauri() && typeof tauriInvoke === "function") {
+      return tauriInvoke("a4_open_external", { url: target }).then(function () {
+        return true
+      }).catch(function () {
+        window.alert("无法打开系统浏览器，请手动复制下载地址。")
+        return false
+      })
+    }
+
+    const opened = window.open(target, "_blank", "noopener,noreferrer")
+    if (!opened) window.location.href = target
+    return Promise.resolve(true)
   }
 
   function buildModal() {
@@ -109,16 +171,9 @@
     // Download button: open in system browser
     downloadBtn.addEventListener("click", function () {
       const url = modal._releaseUrl || ("https://github.com/" + REPO + "/releases/latest")
-      if (window.__TAURI_INTERNALS__) {
-        import("@tauri-apps/plugin-shell").then(function (shell) {
-          shell.open(url)
-        }).catch(function () {
-          window.open(url, "_blank")
-        })
-      } else {
-        window.open(url, "_blank")
-      }
-      dismissModal()
+      openExternalUrl(url).then(function (opened) {
+        if (opened) dismissModal()
+      })
     })
 
     document.body.appendChild(modal)
@@ -135,15 +190,15 @@
     }
   }
 
-  function showModal(version, bodyHtml, releaseUrl) {
+  function showModal(version, bodyHtml, releaseUrl, downloadUrl) {
     const m = buildModal()
     m._latestVersion = version
-    m._releaseUrl = releaseUrl
+    m._releaseUrl = downloadUrl || releaseUrl
 
     const titleEl = document.getElementById("updateTitle")
     if (titleEl) titleEl.textContent = "新版本可用 " + version
 
-    const downloadUrl = releaseUrl || ("https://github.com/" + REPO + "/releases/latest")
+    const resolvedDownloadUrl = downloadUrl || releaseUrl || ("https://github.com/" + REPO + "/releases/latest")
     const bodyEl = document.getElementById("updateBody")
     if (bodyEl) {
       bodyEl.innerHTML = ""
@@ -163,20 +218,12 @@
       footer.appendChild(document.createTextNode("下载地址："))
       footer.appendChild(document.createElement("br"))
       const a = document.createElement("a")
-      a.href = downloadUrl
-      a.textContent = downloadUrl
+      a.href = resolvedDownloadUrl
+      a.textContent = resolvedDownloadUrl
       a.style.cursor = "pointer"
       a.addEventListener("click", function (e) {
         e.preventDefault()
-        if (window.__TAURI_INTERNALS__) {
-          import("@tauri-apps/plugin-shell").then(function (shell) {
-            shell.open(downloadUrl)
-          }).catch(function () {
-            window.open(downloadUrl, "_blank")
-          })
-        } else {
-          window.open(downloadUrl, "_blank")
-        }
+        openExternalUrl(resolvedDownloadUrl)
       })
       footer.appendChild(a)
       bodyEl.appendChild(footer)
@@ -232,7 +279,7 @@
 
         if (release.prerelease) return
 
-        showModal(tag, release.body || "", release.html_url || "")
+        showModal(tag, release.body || "", release.html_url || "", selectReleaseDownloadUrl(release))
       })
       .catch(function () {
         try {
@@ -253,5 +300,8 @@
     checkUpdate: checkUpdate,
     APP_VERSION: APP_VERSION,
     isTauri: isTauri,
+    openExternalUrl: openExternalUrl,
+    getPlatformKind: getPlatformKind,
+    selectReleaseDownloadUrl: selectReleaseDownloadUrl,
   }
 })()

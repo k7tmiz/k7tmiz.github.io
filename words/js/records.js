@@ -46,75 +46,78 @@
     const n = Math.round(Number(value) || 30)
     return Math.max(20, Math.min(30, n || 30))
   })
+  const PRINT_PREVIEW_WIDTH = 794
+  const PRINT_PREVIEW_HEIGHT = 1123
 
-  function truncateText(ctx, text, maxWidth) {
-    const s = String(text || "")
-    if (ctx.measureText(s).width <= maxWidth) return s
-    const ell = "…"
-    let lo = 0
-    let hi = s.length
-    while (lo < hi) {
-      const mid = Math.floor((lo + hi) / 2)
-      const t = s.slice(0, mid) + ell
-      if (ctx.measureText(t).width <= maxWidth) lo = mid + 1
-      else hi = mid
-    }
-    const n = Math.max(0, lo - 1)
-    return s.slice(0, n) + ell
+  function clearPrintPages() {
+    const existing = document.getElementById("pdfPrintPages")
+    if (existing) existing.remove()
+    document.body.classList.remove("a4-printing")
   }
 
-  async function exportRoundAsPng({ round, roundNo }) {
-    const baseW = 1200
-    const baseH = Math.round((baseW * 297) / 210)
-    const ratio = Math.max(1, Math.min(2, window.devicePixelRatio || 1))
-    const canvas = document.createElement("canvas")
-    canvas.width = Math.round(baseW * ratio)
-    canvas.height = Math.round(baseH * ratio)
-    const ctx = canvas.getContext("2d")
-    if (!ctx) return null
-    ctx.scale(ratio, ratio)
+  function buildPrintPages(pageInfos) {
+    clearPrintPages()
 
-    ctx.fillStyle = "#ffffff"
-    ctx.fillRect(0, 0, baseW, baseH)
+    const root = document.createElement("div")
+    root.id = "pdfPrintPages"
+    root.setAttribute("aria-hidden", "true")
 
-    const margin = 60
-    const innerW = baseW - margin * 2
-    const innerH = baseH - margin * 2
+    for (const info of pageInfos) {
+      root.appendChild(createPrintPage(info))
+    }
 
-    ctx.strokeStyle = "#cfd6e6"
-    ctx.lineWidth = 2
-    ctx.strokeRect(margin, margin, innerW, innerH)
+    document.body.appendChild(root)
+    return root
+  }
 
-    const items = Array.isArray(round?.items) ? round.items : []
-    const scale = baseW / 520
-    ctx.textBaseline = "top"
-    ctx.fillStyle = "#0b1220"
+  function createPrintPage(info) {
+    const page = el("section", "a4-print-page")
+    const paper = el("div", "a4-print-paper")
+    const inner = el("div", "a4-print-inner")
+    const items = getRoundItemsByPage(info.round, info.pageIndex)
 
     for (const it of items) {
       const term = String(it?.word?.term || "").trim()
       const pos = it?.pos
       if (!term || !pos) continue
-      const x = margin + Math.max(0, Math.min(1, pos.x)) * innerW
-      const y = margin + Math.max(0, Math.min(1, pos.y)) * innerH
-      const basePx = Number.parseFloat(String(it?.fontSize || "").replace("px", "")) || 16
-      const fontPx = Math.max(18, Math.min(52, basePx * scale))
-      ctx.font = `600 ${fontPx}px ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif`
-      const maxW = innerW * 0.7
-      ctx.fillText(truncateText(ctx, term, maxW), x, y)
+
+      const word = el("div", "a4-print-word", term)
+      const base = Number.parseFloat(String(it.fontSize || "").replace("px", "")) || 16
+      word.style.left = `${Math.max(0, Math.min(1, Number(pos.x) || 0)) * 100}%`
+      word.style.top = `${Math.max(0, Math.min(1, Number(pos.y) || 0)) * 100}%`
+      word.style.fontSize = `${Math.max(11, Math.min(28, base))}px`
+      inner.appendChild(word)
     }
 
-    ctx.font = "500 16px ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, \"Segoe UI\", Arial, \"PingFang SC\", \"Hiragino Sans GB\", \"Microsoft YaHei\", sans-serif"
-    ctx.fillStyle = "#5b6477"
-    ctx.fillText(`A4 Memory · 第${roundNo}轮 · ${formatDateTime(round?.startedAt)}`, margin, baseH - margin + 18)
-
-    const blob = await new Promise((resolve) => canvas.toBlob(resolve, "image/png"))
-    return blob || null
+    const footer = el("div", "a4-print-footer", `A4 Memory · ${info.title} · ${formatDateTime(info.round?.startedAt)}`)
+    paper.appendChild(inner)
+    paper.appendChild(footer)
+    page.appendChild(paper)
+    return page
   }
 
-  async function exportRoundPageAsPng({ round, roundNo, pageIndex }) {
-    const pageItems = getRoundItemsByPage(round, pageIndex)
-    const nextRound = { ...round, items: pageItems }
-    return exportRoundAsPng({ round: nextRound, roundNo })
+  function isAndroidTauri() {
+    return !!window.__TAURI_INTERNALS__?.invoke && /Android/i.test(navigator.userAgent || "")
+  }
+
+  function printCurrentDocument() {
+    if (isAndroidTauri()) {
+      window.__TAURI_INTERNALS__.invoke("a4_android_print").catch(() => {
+        window.alert("无法调用 Android 打印系统。请确认当前 Android 版本已包含原生打印支持。")
+      })
+      return
+    }
+
+    try {
+      const result = window.print()
+      if (result && typeof result.catch === "function") {
+        result.catch(() => {
+          window.alert("无法调用系统打印。请确认当前桌面/Android 版本已包含打印权限。")
+        })
+      }
+    } catch {
+      window.alert("无法调用系统打印。请确认当前桌面/Android 版本已包含打印权限。")
+    }
   }
 
   function buildCsv(rounds) {
@@ -619,6 +622,7 @@
     })
 
     if (pageInfos.length === 0) return
+    buildPrintPages(pageInfos)
 
     // Remove existing overlay if any
     const existing = document.getElementById("pdfPrintOverlay")
@@ -638,14 +642,19 @@
     const closeBtn = document.createElement("button")
     closeBtn.textContent = "关闭"
     closeBtn.style.cssText = "padding:6px 14px;border:1px solid rgba(255,255,255,.35);border-radius:6px;background:transparent;color:#fff;font-size:14px"
-    closeBtn.addEventListener("click", () => overlay.remove())
+    closeBtn.addEventListener("click", () => {
+      overlay.remove()
+      clearPrintPages()
+    })
     topBar.appendChild(pageLabel)
     topBar.appendChild(closeBtn)
 
-    // Image area
-    const imgEl = document.createElement("img")
-    imgEl.style.cssText = "width:100%;flex:1;object-fit:contain;min-height:0"
-    imgEl.alt = ""
+    // Preview area uses the same A4 DOM as the actual print output.
+    const previewStage = document.createElement("div")
+    previewStage.className = "pdf-preview-stage"
+    const previewViewport = document.createElement("div")
+    previewViewport.className = "pdf-preview-viewport"
+    previewStage.appendChild(previewViewport)
 
     // Bottom bar
     const bottomBar = document.createElement("div")
@@ -666,39 +675,46 @@
     const printBtn = document.createElement("button")
     printBtn.textContent = "打印"
     printBtn.style.cssText = "padding:8px 18px;border:1px solid rgba(255,255,255,.35);border-radius:8px;background:transparent;color:#fff;font-size:14px"
-    printBtn.addEventListener("click", () => window.print())
+    printBtn.addEventListener("click", () => {
+      document.body.classList.add("a4-printing")
+      printCurrentDocument()
+    })
 
     bottomBar.appendChild(prevBtn)
     bottomBar.appendChild(printBtn)
     bottomBar.appendChild(nextBtn)
 
     overlay.appendChild(topBar)
-    overlay.appendChild(imgEl)
+    overlay.appendChild(previewStage)
     overlay.appendChild(bottomBar)
     document.body.appendChild(overlay)
 
     // State
     let currentIdx = 0
-    const blobUrls = []
+    function fitPreviewPage() {
+      const page = previewViewport.querySelector(".a4-print-page")
+      if (!page) return
+
+      const rect = previewStage.getBoundingClientRect()
+      const scale = Math.max(0.1, Math.min(
+        1,
+        (rect.width - 24) / PRINT_PREVIEW_WIDTH,
+        (rect.height - 24) / PRINT_PREVIEW_HEIGHT
+      ))
+      previewViewport.style.width = `${Math.round(PRINT_PREVIEW_WIDTH * scale)}px`
+      previewViewport.style.height = `${Math.round(PRINT_PREVIEW_HEIGHT * scale)}px`
+      page.style.transform = `scale(${scale})`
+    }
 
     function showPage(idx) {
       currentIdx = ((idx % pageInfos.length) + pageInfos.length) % pageInfos.length
       pageLabel.textContent = `${currentIdx + 1} / ${pageInfos.length}`
       const info = pageInfos[currentIdx]
-      if (info._blobUrl) {
-        imgEl.src = info._blobUrl
-        return
-      }
-      // Show loading
-      imgEl.src = ""
-      exportRoundPageAsPng({ round: info.round, roundNo: info.roundNo, pageIndex: info.pageIndex }).then(blob => {
-        if (!blob) return
-        const url = URL.createObjectURL(blob)
-        blobUrls.push(url)
-        info._blobUrl = url
-        if (currentIdx === idx) imgEl.src = url
-      })
+      previewViewport.replaceChildren(createPrintPage(info))
+      requestAnimationFrame(fitPreviewPage)
     }
+
+    window.addEventListener("resize", fitPreviewPage)
 
     prevBtn.addEventListener("click", () => showPage(currentIdx - 1))
     nextBtn.addEventListener("click", () => showPage(currentIdx + 1))
@@ -713,13 +729,10 @@
       }
     })
 
-    // Cleanup on remove
-    const cleanup = () => { blobUrls.forEach(u => URL.revokeObjectURL(u)) }
-    overlay.addEventListener("remove", cleanup)
     // Fallback: use MutationObserver since 'remove' event isn't standard
     const observer = new MutationObserver(() => {
       if (!document.getElementById("pdfPrintOverlay")) {
-        cleanup()
+        window.removeEventListener("resize", fitPreviewPage)
         observer.disconnect()
       }
     })
@@ -728,7 +741,10 @@
     // Keyboard nav
     const onKey = (e) => {
       if (!document.getElementById("pdfPrintOverlay")) return
-      if (e.key === "Escape") overlay.remove()
+      if (e.key === "Escape") {
+        overlay.remove()
+        clearPrintPages()
+      }
       if (e.key === "ArrowLeft") showPage(currentIdx - 1)
       if (e.key === "ArrowRight") showPage(currentIdx + 1)
     }
