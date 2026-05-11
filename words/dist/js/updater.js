@@ -1,5 +1,5 @@
 ;(function () {
-  const APP_VERSION = "1.0.10"
+  const APP_VERSION = "1.0.11"
   const REPO = "k7tmiz/A4-Memory"
   const CACHE_KEY = "a4-memory:update-check:v1"
   const SKIP_KEY = "a4-memory:update-skip:v1"
@@ -50,26 +50,46 @@
     return true
   }
 
-  function selectReleaseDownloadUrl(release) {
+  function getReleasePageUrl(release) {
     const fallback = String(release?.html_url || "").trim() || ("https://github.com/" + REPO + "/releases/latest")
+    return fallback
+  }
+
+  function selectReleaseDownloadAsset(release) {
     const assets = Array.isArray(release?.assets) ? release.assets.filter(isDownloadAsset) : []
     const platform = getPlatformKind()
 
     const match = (patterns) => {
       for (const pattern of patterns) {
         const asset = assets.find((item) => pattern.test(String(item?.name || "").toLowerCase()))
-        const url = String(asset?.browser_download_url || "").trim()
-        if (url) return url
+        if (String(asset?.browser_download_url || "").trim()) return asset
       }
-      return ""
+      return null
     }
 
-    if (platform === "android") return match([/a4-memory-v[\d.]+-android\.apk$/, /android\.apk$/, /\.apk$/]) || fallback
-    if (platform === "macos") return match([/_aarch64\.dmg$/, /\.dmg$/]) || fallback
-    if (platform === "windows") return match([/_x64-setup\.exe$/, /_x64.*\.msi$/, /\.exe$/, /\.msi$/]) || fallback
-    if (platform === "linux") return match([/_amd64\.appimage$/, /_amd64\.deb$/, /\.appimage$/, /\.deb$/]) || fallback
+    if (platform === "android") return match([/a4-memory-v[\d.]+-android\.apk$/, /android\.apk$/, /\.apk$/])
+    if (platform === "macos") return match([/_aarch64\.dmg$/, /\.dmg$/])
+    if (platform === "windows") return match([/_x64-setup\.exe$/, /_x64.*\.msi$/, /\.exe$/, /\.msi$/])
+    if (platform === "linux") return match([/_amd64\.appimage$/, /_amd64\.deb$/, /\.appimage$/, /\.deb$/])
 
-    return fallback
+    return null
+  }
+
+  function selectReleaseDownloadUrl(release) {
+    const asset = selectReleaseDownloadAsset(release)
+    return String(asset?.browser_download_url || "").trim() || getReleasePageUrl(release)
+  }
+
+  function getDownloadFileName(downloadUrl, assetName) {
+    const name = String(assetName || "").trim()
+    if (name) return name
+    try {
+      const path = new URL(downloadUrl).pathname
+      const fileName = decodeURIComponent(path.split("/").filter(Boolean).pop() || "")
+      return fileName || ""
+    } catch {
+      return ""
+    }
   }
 
   function openExternalUrl(url) {
@@ -190,15 +210,18 @@
     }
   }
 
-  function showModal(version, bodyHtml, releaseUrl, downloadUrl) {
+  function showModal(version, bodyHtml, releaseUrl, downloadUrl, assetName) {
     const m = buildModal()
+    const platform = getPlatformKind()
     m._latestVersion = version
-    m._releaseUrl = downloadUrl || releaseUrl
+    m._releaseUrl = platform === "android" ? (releaseUrl || downloadUrl) : (downloadUrl || releaseUrl)
 
     const titleEl = document.getElementById("updateTitle")
     if (titleEl) titleEl.textContent = "新版本可用 " + version
 
     const resolvedDownloadUrl = downloadUrl || releaseUrl || ("https://github.com/" + REPO + "/releases/latest")
+    const resolvedReleaseUrl = releaseUrl || ("https://github.com/" + REPO + "/releases/latest")
+    const downloadFileName = getDownloadFileName(resolvedDownloadUrl, assetName)
     const bodyEl = document.getElementById("updateBody")
     if (bodyEl) {
       bodyEl.innerHTML = ""
@@ -215,7 +238,26 @@
       }
       const footer = document.createElement("div")
       footer.style.cssText = "margin-top:10px;font-size:13px;color:var(--muted);word-break:break-all"
-      footer.appendChild(document.createTextNode("下载地址："))
+      if (platform === "android" && downloadFileName.endsWith(".apk")) {
+        footer.appendChild(document.createTextNode("Android 下载：请在打开的 Release 页面点击 "))
+        const strong = document.createElement("strong")
+        strong.textContent = downloadFileName
+        footer.appendChild(strong)
+        footer.appendChild(document.createElement("br"))
+        const releaseLink = document.createElement("a")
+        releaseLink.href = resolvedReleaseUrl
+        releaseLink.textContent = resolvedReleaseUrl
+        releaseLink.style.cursor = "pointer"
+        releaseLink.addEventListener("click", function (e) {
+          e.preventDefault()
+          openExternalUrl(resolvedReleaseUrl)
+        })
+        footer.appendChild(releaseLink)
+        footer.appendChild(document.createElement("br"))
+        footer.appendChild(document.createTextNode("备用直链："))
+      } else {
+        footer.appendChild(document.createTextNode("下载地址："))
+      }
       footer.appendChild(document.createElement("br"))
       const a = document.createElement("a")
       a.href = resolvedDownloadUrl
@@ -279,7 +321,9 @@
 
         if (release.prerelease) return
 
-        showModal(tag, release.body || "", release.html_url || "", selectReleaseDownloadUrl(release))
+        const asset = selectReleaseDownloadAsset(release)
+        const downloadUrl = String(asset?.browser_download_url || "").trim() || getReleasePageUrl(release)
+        showModal(tag, release.body || "", release.html_url || "", downloadUrl, asset?.name || "")
       })
       .catch(function () {
         try {
@@ -302,6 +346,7 @@
     isTauri: isTauri,
     openExternalUrl: openExternalUrl,
     getPlatformKind: getPlatformKind,
+    selectReleaseDownloadAsset: selectReleaseDownloadAsset,
     selectReleaseDownloadUrl: selectReleaseDownloadUrl,
   }
 })()

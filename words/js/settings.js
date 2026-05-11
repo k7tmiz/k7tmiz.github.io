@@ -136,7 +136,7 @@
         ? {
           provider: normalizeAiProvider(next.aiConfig.provider),
           baseUrl: String(next.aiConfig.baseUrl || "").trim(),
-          apiKey: String(next.aiConfig.apiKey || "").trim(),
+          apiKey: "",
           model: String(next.aiConfig.model || "").trim(),
         }
         : { provider: "custom", baseUrl: "", apiKey: "", model: "" }
@@ -991,6 +991,8 @@
       login: false,
       sendResetCode: false,
       resetPassword: false,
+      uploadState: false,
+      downloadState: false,
     }
 
     function getStateSafe() {
@@ -1228,6 +1230,16 @@
       if (dom.cloudResetPasswordBtn) {
         dom.cloudResetPasswordBtn.disabled = accountBusy.resetPassword
         dom.cloudResetPasswordBtn.textContent = accountBusy.resetPassword ? "重置中…" : "重置密码"
+      }
+
+      const syncBusy = accountBusy.uploadState || accountBusy.downloadState
+      if (dom.cloudUploadBtn) {
+        dom.cloudUploadBtn.disabled = syncBusy
+        dom.cloudUploadBtn.textContent = accountBusy.uploadState ? "上传中…" : "上传云端"
+      }
+      if (dom.cloudDownloadBtn) {
+        dom.cloudDownloadBtn.disabled = syncBusy
+        dom.cloudDownloadBtn.textContent = accountBusy.downloadState ? "恢复中…" : "恢复本机"
       }
     }
 
@@ -2711,42 +2723,60 @@
     })
 
     dom.cloudUploadBtn?.addEventListener("click", async () => {
+      if (accountBusy.uploadState || accountBusy.downloadState) return
       if (!window.A4Cloud?.isLoggedIn?.()) {
         if (dom.cloudSyncStatus) dom.cloudSyncStatus.textContent = "请先登录"
         return
       }
-      if (dom.cloudSyncStatus) dom.cloudSyncStatus.textContent = "上传中…"
-      const result = await window.A4Cloud?.uploadState?.()
-      if (result?.success) {
-        const savedAt = result.savedAt || new Date().toISOString()
-        saveAccountSyncMeta({ label: "上传成功", at: savedAt })
-        if (dom.cloudSyncStatus) dom.cloudSyncStatus.textContent = "上传成功：" + formatSyncTime(savedAt)
-        updateAccountUi()
-      } else {
-        saveAccountSyncMeta({ label: "上传失败", at: new Date().toISOString() })
-        if (dom.cloudSyncStatus) dom.cloudSyncStatus.textContent = "上传失败：" + (result?.error || "未知错误")
-        handleTokenError(result)
-        updateAccountUi()
+      accountBusy.uploadState = true
+      renderAccountActionButtons()
+      try {
+        if (dom.cloudSyncStatus) dom.cloudSyncStatus.textContent = "上传中…"
+        const result = await window.A4Cloud?.uploadState?.()
+        if (result?.success) {
+          const savedAt = result.savedAt || new Date().toISOString()
+          saveAccountSyncMeta({ label: "上传成功", at: savedAt })
+          if (dom.cloudSyncStatus) dom.cloudSyncStatus.textContent = "上传成功：" + formatSyncTime(savedAt)
+          updateAccountUi()
+        } else {
+          saveAccountSyncMeta({ label: "上传失败", at: new Date().toISOString() })
+          if (dom.cloudSyncStatus) dom.cloudSyncStatus.textContent = "上传失败：" + (result?.error || "未知错误")
+          handleTokenError(result)
+          updateAccountUi()
+        }
+      } finally {
+        accountBusy.uploadState = false
+        renderAccountActionButtons()
       }
     })
 
     dom.cloudDownloadBtn?.addEventListener("click", async () => {
+      if (accountBusy.uploadState || accountBusy.downloadState) return
       if (!window.A4Cloud?.isLoggedIn?.()) {
         if (dom.cloudSyncStatus) dom.cloudSyncStatus.textContent = "请先登录"
         return
       }
-      if (dom.cloudSyncStatus) dom.cloudSyncStatus.textContent = "下载中…"
-      const result = await window.A4Cloud?.downloadState?.()
-      if (result?.success) {
-        const savedAt = result.savedAt || new Date().toISOString()
-        saveAccountSyncMeta({ label: "恢复成功", at: savedAt })
-        if (dom.cloudSyncStatus) dom.cloudSyncStatus.textContent = "恢复成功：" + formatSyncTime(savedAt)
-        window.location.reload()
-      } else {
-        saveAccountSyncMeta({ label: "恢复失败", at: new Date().toISOString() })
-        if (dom.cloudSyncStatus) dom.cloudSyncStatus.textContent = "恢复失败：" + (result?.error || "未知错误")
-        handleTokenError(result)
-        updateAccountUi()
+      const confirmed = window.confirm("恢复本机会用云端学习数据覆盖当前浏览器本地数据。建议先导出完整学习数据作为备份。确定继续吗？")
+      if (!confirmed) return
+      accountBusy.downloadState = true
+      renderAccountActionButtons()
+      try {
+        if (dom.cloudSyncStatus) dom.cloudSyncStatus.textContent = "下载中…"
+        const result = await window.A4Cloud?.downloadState?.()
+        if (result?.success) {
+          const savedAt = result.savedAt || new Date().toISOString()
+          saveAccountSyncMeta({ label: "恢复成功", at: savedAt })
+          if (dom.cloudSyncStatus) dom.cloudSyncStatus.textContent = "恢复成功：" + formatSyncTime(savedAt)
+          window.location.reload()
+        } else {
+          saveAccountSyncMeta({ label: "恢复失败", at: new Date().toISOString() })
+          if (dom.cloudSyncStatus) dom.cloudSyncStatus.textContent = "恢复失败：" + (result?.error || "未知错误")
+          handleTokenError(result)
+          updateAccountUi()
+        }
+      } finally {
+        accountBusy.downloadState = false
+        renderAccountActionButtons()
       }
     })
 

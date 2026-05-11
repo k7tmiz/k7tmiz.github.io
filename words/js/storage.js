@@ -27,8 +27,7 @@
     try {
       // Never persist sensitive fields to localStorage
       const safe = JSON.parse(JSON.stringify(state))
-      stripSensitive(safe)
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(safe))
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(stripSensitive(safe)))
       return true
     } catch {
       return false
