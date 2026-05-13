@@ -181,20 +181,28 @@
   function showConfirmDialog(message) {
     return new Promise((resolve) => {
       const backdrop = el("div", "modal-backdrop")
-      const panel = el("div", "modal-panel")
+      const panel = el("div", "modal-panel records-confirm-panel")
       panel.setAttribute("role", "alertdialog")
       panel.setAttribute("aria-modal", "true")
 
       const header = el("div", "modal-header")
-      const title = el("h2", "", "确认删除")
-      header.appendChild(title)
+      const titleWrap = el("div", "records-confirm-title-wrap")
+      const title = el("h2", "records-confirm-title", "删除本轮")
+      const subtitle = el("div", "records-confirm-subtitle", "删除后无法恢复")
+      titleWrap.appendChild(title)
+      titleWrap.appendChild(subtitle)
+      header.appendChild(titleWrap)
+      const actionsHead = el("div", "modal-actions")
+      const closeBtn = el("button", "ghost records-confirm-close", "关闭")
+      actionsHead.appendChild(closeBtn)
+      header.appendChild(actionsHead)
 
       const body = el("div", "modal-body")
       body.textContent = message
 
-      const actions = el("div", "modal-actions")
+      const actions = el("div", "modal-actions records-confirm-actions")
       const cancelBtn = el("button", "ghost", "取消")
-      const okBtn = el("button", "primary", "确定删除")
+      const okBtn = el("button", "primary records-confirm-danger", "删除本轮")
 
       actions.appendChild(cancelBtn)
       actions.appendChild(okBtn)
@@ -217,6 +225,7 @@
       }
 
       backdrop.addEventListener("click", () => finish(false))
+      closeBtn.addEventListener("click", () => finish(false))
       cancelBtn.addEventListener("click", () => finish(false))
       okBtn.addEventListener("click", () => finish(true))
     })

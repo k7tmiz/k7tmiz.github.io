@@ -2771,12 +2771,12 @@ dom.reviewUnknownBtn.addEventListener("click", () => {
 dom.reviewCardTerm.addEventListener("click", (e) => {
   if (reviewBlockClickUntil && Date.now() < reviewBlockClickUntil) return
   if (reviewSwipe.dragging || reviewSwipe.animating) return
-  if (appState.reviewCardFlipEnabled) {
-    const entry = appState.reviewQueue[appState.reviewIndex]
-    const flipped = !!reviewCardFlipMap.get(entry?.roundItem)
-    if (flipped) return
-  }
+  e.preventDefault()
+  e.stopPropagation()
   speakTerm(dom.reviewCardTerm.textContent)
+})
+
+dom.reviewCardTerm.addEventListener("pointerdown", (e) => {
   e.stopPropagation()
 })
 

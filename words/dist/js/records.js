@@ -178,6 +178,59 @@
     return node
   }
 
+  function showConfirmDialog(message) {
+    return new Promise((resolve) => {
+      const backdrop = el("div", "modal-backdrop")
+      const panel = el("div", "modal-panel records-confirm-panel")
+      panel.setAttribute("role", "alertdialog")
+      panel.setAttribute("aria-modal", "true")
+
+      const header = el("div", "modal-header")
+      const titleWrap = el("div", "records-confirm-title-wrap")
+      const title = el("h2", "records-confirm-title", "删除本轮")
+      const subtitle = el("div", "records-confirm-subtitle", "删除后无法恢复")
+      titleWrap.appendChild(title)
+      titleWrap.appendChild(subtitle)
+      header.appendChild(titleWrap)
+      const actionsHead = el("div", "modal-actions")
+      const closeBtn = el("button", "ghost records-confirm-close", "关闭")
+      actionsHead.appendChild(closeBtn)
+      header.appendChild(actionsHead)
+
+      const body = el("div", "modal-body")
+      body.textContent = message
+
+      const actions = el("div", "modal-actions records-confirm-actions")
+      const cancelBtn = el("button", "ghost", "取消")
+      const okBtn = el("button", "primary records-confirm-danger", "删除本轮")
+
+      actions.appendChild(cancelBtn)
+      actions.appendChild(okBtn)
+
+      panel.appendChild(header)
+      panel.appendChild(body)
+      panel.appendChild(actions)
+
+      const modal = el("div", "modal")
+      modal.appendChild(backdrop)
+      modal.appendChild(panel)
+      document.body.appendChild(modal)
+
+      let settled = false
+      const finish = (value) => {
+        if (settled) return
+        settled = true
+        document.body.removeChild(modal)
+        resolve(value)
+      }
+
+      backdrop.addEventListener("click", () => finish(false))
+      closeBtn.addEventListener("click", () => finish(false))
+      cancelBtn.addEventListener("click", () => finish(false))
+      okBtn.addEventListener("click", () => finish(true))
+    })
+  }
+
   function buildPaperPreview(items) {
     const paper = el("div", "paper paper-mini")
     const inner = el("div", "paper-inner")
@@ -936,12 +989,12 @@
     const render = () => {
       renderRounds(rounds, {
         state,
-        onDeleteRound: (roundId) => {
+        onDeleteRound: async (roundId) => {
           const idx = rounds.findIndex((r) => r.id === roundId)
           if (idx < 0) return
           const roundNo = idx + 1
-          const ok = window.confirm(`确定删除第${roundNo}轮？删除后后续轮次会自动顺位前移。`)
-          if (!ok) return
+          const ok = await showConfirmDialog(`确定删除第${roundNo}轮？删除后后续轮次会自动顺位前移。`)
+          if (ok !== true) return
 
           rounds = rounds.filter((r) => r.id !== roundId)
           const next = { ...state, rounds, currentRoundId: state.currentRoundId === roundId ? "" : state.currentRoundId }

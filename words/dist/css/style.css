@@ -909,6 +909,51 @@ select:hover {
   min-width: 0;
 }
 
+.records-confirm-panel {
+  width: min(92vw, 420px);
+}
+
+.records-confirm-panel .modal-header {
+  align-items: flex-start;
+}
+
+.records-confirm-title-wrap {
+  display: grid;
+  gap: 4px;
+  min-width: 0;
+}
+
+.records-confirm-title {
+  margin: 0;
+  font-size: 16px;
+  line-height: 1.2;
+}
+
+.records-confirm-subtitle {
+  color: var(--muted);
+  font-size: 12px;
+  line-height: 1.2;
+}
+
+.records-confirm-close {
+  min-width: 0;
+}
+
+.records-confirm-actions {
+  justify-content: flex-end;
+}
+
+.records-confirm-danger {
+  background: #c62828;
+  border-color: #c62828;
+  color: #ffffff;
+}
+
+.records-confirm-danger:hover {
+  background: #b71c1c;
+  border-color: #b71c1c;
+}
+
 .announcement-modal-panel {
   width: min(760px, 92vw);
 }
