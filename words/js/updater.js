@@ -1,5 +1,5 @@
 ;(function () {
-  const APP_VERSION = "1.0.11"
+  const APP_VERSION = "1.0.12"
   const REPO = "k7tmiz/A4-Memory"
   const CACHE_KEY = "a4-memory:update-check:v1"
   const SKIP_KEY = "a4-memory:update-skip:v1"

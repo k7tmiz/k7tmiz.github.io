@@ -1,6 +1,53 @@
 ;(function () {
   const clamp = window.A4Common?.clamp
 
+  function showConfirmDialog(message) {
+    return new Promise((resolve) => {
+      const modal = document.createElement("div")
+      modal.className = "modal"
+      const backdrop = document.createElement("div")
+      backdrop.className = "modal-backdrop"
+      const panel = document.createElement("div")
+      panel.className = "modal-panel"
+      panel.setAttribute("role", "alertdialog")
+      panel.setAttribute("aria-modal", "true")
+      const header = document.createElement("div")
+      header.className = "modal-header"
+      const title = document.createElement("h2")
+      title.textContent = "确认"
+      header.appendChild(title)
+      const body = document.createElement("div")
+      body.className = "modal-body"
+      body.textContent = message
+      const actions = document.createElement("div")
+      actions.className = "modal-actions"
+      const cancelBtn = document.createElement("button")
+      cancelBtn.className = "ghost"
+      cancelBtn.textContent = "取消"
+      const okBtn = document.createElement("button")
+      okBtn.className = "primary"
+      okBtn.textContent = "确定"
+      actions.appendChild(cancelBtn)
+      actions.appendChild(okBtn)
+      panel.appendChild(header)
+      panel.appendChild(body)
+      panel.appendChild(actions)
+      modal.appendChild(backdrop)
+      modal.appendChild(panel)
+      document.body.appendChild(modal)
+      let settled = false
+      const finish = (value) => {
+        if (settled) return
+        settled = true
+        document.body.removeChild(modal)
+        resolve(value)
+      }
+      backdrop.addEventListener("click", () => finish(false))
+      cancelBtn.addEventListener("click", () => finish(false))
+      okBtn.addEventListener("click", () => finish(true))
+    })
+  }
+
   const normalizeThemeMode = window.A4Common?.normalizeThemeMode
   const normalizeRoundCap = window.A4Common?.normalizeRoundCap
   const normalizeAccent = window.A4Common?.normalizeAccent
@@ -2756,8 +2803,8 @@
         if (dom.cloudSyncStatus) dom.cloudSyncStatus.textContent = "请先登录"
         return
       }
-      const confirmed = window.confirm("恢复本机会用云端学习数据覆盖当前浏览器本地数据。建议先导出完整学习数据作为备份。确定继续吗？")
-      if (!confirmed) return
+      const confirmed = await showConfirmDialog("恢复本机会用云端学习数据覆盖当前浏览器本地数据。建议先导出完整学习数据作为备份。确定继续吗？")
+      if (confirmed !== true) return
       accountBusy.downloadState = true
       renderAccountActionButtons()
       try {

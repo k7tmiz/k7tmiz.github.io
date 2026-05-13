@@ -34,6 +34,53 @@ function makeId() {
   return `${Date.now()}-${crypto.randomUUID()}`
 }
 
+function showConfirmDialog(message) {
+  return new Promise((resolve) => {
+    const modal = document.createElement("div")
+    modal.className = "modal"
+    const backdrop = document.createElement("div")
+    backdrop.className = "modal-backdrop"
+    const panel = document.createElement("div")
+    panel.className = "modal-panel"
+    panel.setAttribute("role", "alertdialog")
+    panel.setAttribute("aria-modal", "true")
+    const header = document.createElement("div")
+    header.className = "modal-header"
+    const title = document.createElement("h2")
+    title.textContent = "确认"
+    header.appendChild(title)
+    const body = document.createElement("div")
+    body.className = "modal-body"
+    body.textContent = message
+    const actions = document.createElement("div")
+    actions.className = "modal-actions"
+    const cancelBtn = document.createElement("button")
+    cancelBtn.className = "ghost"
+    cancelBtn.textContent = "取消"
+    const okBtn = document.createElement("button")
+    okBtn.className = "primary"
+    okBtn.textContent = "确定"
+    actions.appendChild(cancelBtn)
+    actions.appendChild(okBtn)
+    panel.appendChild(header)
+    panel.appendChild(body)
+    panel.appendChild(actions)
+    modal.appendChild(backdrop)
+    modal.appendChild(panel)
+    document.body.appendChild(modal)
+    let settled = false
+    const finish = (value) => {
+      if (settled) return
+      settled = true
+      document.body.removeChild(modal)
+      resolve(value)
+    }
+    backdrop.addEventListener("click", () => finish(false))
+    cancelBtn.addEventListener("click", () => finish(false))
+    okBtn.addEventListener("click", () => finish(true))
+  })
+}
+
 function normalizeWordbookObject(b) {
   const id = String(b?.id || "").trim()
   const name = String(b?.name || "").trim()
@@ -554,9 +601,10 @@ function renderCustomWordbooksManage() {
     del.type = "button"
     del.textContent = "删除"
     del.addEventListener("click", () => {
-      const ok = window.confirm(`确定删除词书「${b.name}」？`)
-      if (!ok) return
-      deleteCustomWordbook(b.id)
+      showConfirmDialog(`确定删除词书「${b.name}」？`).then((ok) => {
+        if (ok !== true) return
+        deleteCustomWordbook(b.id)
+      })
     })
 
     secondary.appendChild(exp)
