@@ -2307,38 +2307,34 @@
       dom.importBackupFile.click()
     })
 
-    let updateCheckFailed = false
     window.addEventListener("a4-update-check-failed", () => {
-      updateCheckFailed = true
       setUpdateStatus("检查失败：网络错误或 GitHub API 不可用")
     })
 
-    dom.checkUpdateBtn?.addEventListener("click", () => {
+    dom.checkUpdateBtn?.addEventListener("click", async () => {
       if (!window.A4Updater) {
         setUpdateStatus("更新检测未加载")
         return
       }
-      updateCheckFailed = false
       setUpdateStatus("正在检查...")
       let cached = null
       try { cached = JSON.parse(localStorage.getItem("a4-memory:update-check:v1") || "null") } catch { /* ignore */ }
       // Clear cache to force re-check
       try { localStorage.removeItem("a4-memory:update-check:v1") } catch { /* ignore */ }
       try { localStorage.removeItem("a4-memory:update-skip:v1") } catch { /* ignore */ }
-      window.A4Updater.checkUpdate()
-      // Restore skip key after check completes (async)
-      setTimeout(() => {
-        if (updateCheckFailed) return
-        const el = document.getElementById("updateModal")
-        if (el && !el.classList.contains("hidden")) {
-          setUpdateStatus("")
-        } else {
-          setUpdateStatus("已是最新版本")
-          if (cached) {
-            try { localStorage.setItem("a4-memory:update-check:v1", JSON.stringify(cached)) } catch { /* ignore */ }
-          }
-        }
-      }, 3000)
+      const result = await window.A4Updater.checkUpdate()
+      if (result === "error") {
+        // status already set by a4-update-check-failed event
+        return
+      }
+      if (result === "update") {
+        setUpdateStatus("")
+        return
+      }
+      setUpdateStatus("已是最新版本")
+      if (cached) {
+        try { localStorage.setItem("a4-memory:update-check:v1", JSON.stringify(cached)) } catch { /* ignore */ }
+      }
     })
 
     dom.importBackupFile?.addEventListener("change", async () => {

@@ -284,18 +284,18 @@
     try { cached = JSON.parse(localStorage.getItem(CACHE_KEY) || "null") } catch { /* ignore */ }
 
     if (cached && cached.ts && (Date.now() - cached.ts) < CACHE_TTL) {
-      return
+      return Promise.resolve("cached")
     }
 
     const url = "https://api.github.com/repos/" + REPO + "/releases/latest"
-    fetch(url, { headers: { Accept: "application/vnd.github+json" } })
+    return fetch(url, { headers: { Accept: "application/vnd.github+json" } })
       .then(function (res) {
         if (!res.ok) throw new Error("GitHub API returned " + res.status)
         return res.json()
       })
       .then(function (release) {
         const tag = (release.tag_name || "").trim()
-        if (!tag) return
+        if (!tag) return "latest"
 
         const releaseId = Number(release.id) || 0
         const latest = parseSemver(tag)
@@ -308,7 +308,7 @@
             sameVersionRereleased = true
           } else {
             // No update — don't cache so next app start re-checks
-            return
+            return "latest"
           }
         }
 
@@ -317,18 +317,20 @@
 
         let skipped = ""
         try { skipped = localStorage.getItem(SKIP_KEY) || "" } catch { /* ignore */ }
-        if (skipped === tag && !sameVersionRereleased) return
+        if (skipped === tag && !sameVersionRereleased) return "skipped"
 
-        if (release.prerelease) return
+        if (release.prerelease) return "prerelease"
 
         const asset = selectReleaseDownloadAsset(release)
         const downloadUrl = String(asset?.browser_download_url || "").trim() || getReleasePageUrl(release)
         showModal(tag, release.body || "", release.html_url || "", downloadUrl, asset?.name || "")
+        return "update"
       })
       .catch(function () {
         try {
           window.dispatchEvent(new CustomEvent("a4-update-check-failed"))
         } catch { /* ignore */ }
+        return "error"
       })
   }
 
