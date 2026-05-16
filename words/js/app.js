@@ -208,8 +208,13 @@ function ensureAnnouncementModal() {
   return announcementModal
 }
 
-function escapeAnnouncementHtml(value) {
-  return String(value || "").replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;")
+const escapeHtmlAttr = window.A4Sanitize?.escapeHtml || function (value) {
+  return String(value || "")
+    .replace(/&/g, "&amp;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#x27;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
 }
 
 function renderAnnouncementList(announcements) {
@@ -220,15 +225,15 @@ function renderAnnouncementList(announcements) {
   list.innerHTML = items
     .map((item, index) => {
       const title = String(item?.title || "").trim() || `公告 #${item?.id || index + 1}`
-      const content = escapeAnnouncementHtml(item?.content || "").replace(/\n/g, "<br />")
+      const content = escapeHtmlAttr(item?.content || "").replace(/\n/g, "<br />")
       const createdAt = item?.createdAt || item?.created_at || ""
       const meta = createdAt && formatDateTime ? formatDateTime(createdAt) : String(createdAt || "")
       return `
         <article class="announcement-item ${item?.isUnread ? "is-unread" : ""}">
           <div class="announcement-item-head">
             <div>
-              <div class="announcement-item-title">${escapeAnnouncementHtml(title)}</div>
-              <div class="announcement-item-meta">${escapeAnnouncementHtml(meta)}</div>
+              <div class="announcement-item-title">${escapeHtmlAttr(title)}</div>
+              <div class="announcement-item-meta">${escapeHtmlAttr(meta)}</div>
             </div>
             ${item?.isUnread ? '<span class="announcement-item-badge">新公告</span>' : ""}
           </div>
@@ -2147,10 +2152,10 @@ function restore() {
       ? {
         provider: normalizeAiProvider(saved.aiConfig.provider),
         baseUrl: String(saved.aiConfig.baseUrl || "").trim(),
-        apiKey: String(saved.aiConfig.apiKey || "").trim(),
         model: String(saved.aiConfig.model || "").trim(),
+        apiKey: "", // Never restore apiKey from persisted state
       }
-      : { provider: "custom", baseUrl: "", apiKey: "", model: "" }
+      : { provider: "custom", baseUrl: "", model: "", apiKey: "" }
 
   appState.lookupOnlineEnabled = typeof saved.lookupOnlineEnabled === "boolean" ? saved.lookupOnlineEnabled : true
   appState.lookupOnlineSource = String(saved.lookupOnlineSource || "").trim().toLowerCase() === "custom" ? "custom" : "builtin"

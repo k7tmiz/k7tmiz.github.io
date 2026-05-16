@@ -1,4 +1,13 @@
 ;(function () {
+  const escapeHtmlAttr = window.A4Sanitize?.escapeHtml || function (value) {
+    return String(value || "")
+      .replace(/&/g, "&amp;")
+      .replace(/"/g, "&quot;")
+      .replace(/'/g, "&#x27;")
+      .replace(/</g, "&lt;")
+      .replace(/>/g, "&gt;")
+  }
+
   function loadState() {
     return window.A4Storage?.loadState?.() || null
   }
@@ -877,12 +886,12 @@
       list.innerHTML = items
         .map((item, index) => {
           const title = String(item?.title || "").trim() || `公告 #${item?.id || index + 1}`
-          const content = String(item?.content || "").replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/\n/g, "<br />")
+          const content = escapeHtmlAttr(item?.content || "").replace(/\n/g, "<br />")
           return `
           <article class="announcement-item ${item?.isUnread ? "is-unread" : ""}">
             <div class="announcement-item-head">
               <div>
-                <div class="announcement-item-title">${title.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;")}</div>
+                <div class="announcement-item-title">${escapeHtmlAttr(title)}</div>
                 <div class="announcement-item-meta">${String(formatDateTimeText(item?.createdAt || item?.created_at || "") || "")}</div>
               </div>
               ${item?.isUnread ? '<span class="announcement-item-badge">新公告</span>' : ""}
