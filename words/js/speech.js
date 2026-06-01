@@ -54,6 +54,18 @@
     })
   }
 
+  function getTauriInvoke() {
+    return window.__TAURI__?.core?.invoke || window.__TAURI__?.invoke || window.__TAURI_INTERNALS__?.invoke || null
+  }
+
+  function isAndroidRuntime() {
+    return /Android/i.test(navigator.userAgent || "")
+  }
+
+  function isAndroidTauriSpeech() {
+    return typeof getTauriInvoke() === "function" && isAndroidRuntime()
+  }
+
   function getVoiceLabel(v) {
     const name = String(v?.name || "").trim()
     const lang = String(v?.lang || "").trim()
@@ -117,7 +129,7 @@
     const name = String(v.name || "").toLowerCase()
     if (name.includes("neural") || name.includes("enhanced") || name.includes("premium") || name.includes("natural"))
       score += 8
-    if (name.includes("compact") || name.includes("espeak")) score -= 14
+    if (name.includes("compact")) score -= 14
     if (exactIndex >= 0) score += 3
     return score
   }
@@ -265,24 +277,24 @@
     return [raw]
   }
 
-  function isAndroidTauriSpeech() {
-    return !!window.__TAURI_INTERNALS__?.invoke && /Android/i.test(navigator.userAgent || "")
-  }
-
   function getNativeSpeechLang({ pronunciationLang, wordbookLanguage, accent }) {
     const base = getCurrentLanguageBase({ pronunciationLang, wordbookLanguage })
     return getVoiceCandidatesForLanguage({ base, accent: normalizeAccent(accent) })[0] || "en-US"
   }
 
   async function speakWithAndroidTts({ text, pronunciationLang, wordbookLanguage, accent }) {
-    const invoke = window.__TAURI_INTERNALS__?.invoke
-    if (typeof invoke !== "function") return false
+    const invoke = getTauriInvoke()
+    if (typeof invoke !== "function") {
+      if (isAndroidRuntime()) window.alert("Android 原生发音桥接不可用，请安装最新 Android 版 A4 Memory。")
+      return false
+    }
     const lang = getNativeSpeechLang({ pronunciationLang, wordbookLanguage, accent })
     try {
       await invoke("a4_android_speak", { text, lang })
       return true
-    } catch {
-      window.alert("Android 系统文字转语音不可用。请在系统设置中安装或启用文字转语音引擎。")
+    } catch (err) {
+      const message = String(err || "")
+      window.alert(message || "Android 系统文字转语音不可用。请在系统设置中安装或启用文字转语音引擎。")
       return false
     }
   }

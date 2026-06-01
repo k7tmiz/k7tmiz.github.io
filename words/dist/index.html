@@ -9,6 +9,7 @@
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
     <meta name="apple-mobile-web-app-title" content="A4 Memory" />
     <meta name="mobile-web-app-capable" content="yes" />
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; connect-src https://api.github.com https://api.dictionaryapi.dev https://api.mymemory.translated.net https://api.k7tmiz.com; font-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self';" />
     <link rel="manifest" href="./manifest.webmanifest" />
     <link rel="icon" href="./assets/icon.svg" type="image/svg+xml" />
     <link rel="mask-icon" href="./assets/mask-icon.svg" color="#0b1220" />
@@ -311,6 +312,7 @@ ability,n.,能力</pre>
 
     <script src="./data/words.js"></script>
     <script src="./js/core/common.js"></script>
+    <script src="./js/core/sanitize.js"></script>
     <script src="./js/utils.js?v=20260329-6"></script>
     <script src="./js/storage.js"></script>
     <script src="./js/cloud.js?v=20260329-5"></script>

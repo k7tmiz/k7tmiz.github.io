@@ -106,12 +106,16 @@
   }
 
   function isAndroidTauri() {
-    return !!window.__TAURI_INTERNALS__?.invoke && /Android/i.test(navigator.userAgent || "")
+    return typeof getTauriInvoke() === "function" && /Android/i.test(navigator.userAgent || "")
+  }
+
+  function getTauriInvoke() {
+    return window.__TAURI__?.core?.invoke || window.__TAURI__?.invoke || window.__TAURI_INTERNALS__?.invoke || null
   }
 
   function printCurrentDocument() {
     if (isAndroidTauri()) {
-      window.__TAURI_INTERNALS__.invoke("a4_android_print").catch(() => {
+      getTauriInvoke()("a4_android_print").catch(() => {
         window.alert("无法调用 Android 打印系统。请确认当前 Android 版本已包含原生打印支持。")
       })
       return

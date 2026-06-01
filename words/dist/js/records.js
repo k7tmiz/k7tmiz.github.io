@@ -1,4 +1,13 @@
 ;(function () {
+  const escapeHtmlAttr = window.A4Sanitize?.escapeHtml || function (value) {
+    return String(value || "")
+      .replace(/&/g, "&amp;")
+      .replace(/"/g, "&quot;")
+      .replace(/'/g, "&#x27;")
+      .replace(/</g, "&lt;")
+      .replace(/>/g, "&gt;")
+  }
+
   function loadState() {
     return window.A4Storage?.loadState?.() || null
   }
@@ -97,12 +106,16 @@
   }
 
   function isAndroidTauri() {
-    return !!window.__TAURI_INTERNALS__?.invoke && /Android/i.test(navigator.userAgent || "")
+    return typeof getTauriInvoke() === "function" && /Android/i.test(navigator.userAgent || "")
+  }
+
+  function getTauriInvoke() {
+    return window.__TAURI__?.core?.invoke || window.__TAURI__?.invoke || window.__TAURI_INTERNALS__?.invoke || null
   }
 
   function printCurrentDocument() {
     if (isAndroidTauri()) {
-      window.__TAURI_INTERNALS__.invoke("a4_android_print").catch(() => {
+      getTauriInvoke()("a4_android_print").catch(() => {
         window.alert("无法调用 Android 打印系统。请确认当前 Android 版本已包含原生打印支持。")
       })
       return
@@ -877,12 +890,12 @@
       list.innerHTML = items
         .map((item, index) => {
           const title = String(item?.title || "").trim() || `公告 #${item?.id || index + 1}`
-          const content = String(item?.content || "").replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/\n/g, "<br />")
+          const content = escapeHtmlAttr(item?.content || "").replace(/\n/g, "<br />")
           return `
           <article class="announcement-item ${item?.isUnread ? "is-unread" : ""}">
             <div class="announcement-item-head">
               <div>
-                <div class="announcement-item-title">${title.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;")}</div>
+                <div class="announcement-item-title">${escapeHtmlAttr(title)}</div>
                 <div class="announcement-item-meta">${String(formatDateTimeText(item?.createdAt || item?.created_at || "") || "")}</div>
               </div>
               ${item?.isUnread ? '<span class="announcement-item-badge">新公告</span>' : ""}

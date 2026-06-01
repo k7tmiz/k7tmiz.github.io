@@ -3,11 +3,15 @@
 
   function stripSensitive(state) {
     if (!state || typeof state !== "object") return state
-    const stripped = JSON.parse(JSON.stringify(state))
-    if (stripped.aiConfig && typeof stripped.aiConfig === "object") {
-      stripped.aiConfig.apiKey = ""
+    try {
+      const stripped = JSON.parse(JSON.stringify(state))
+      if (stripped.aiConfig && typeof stripped.aiConfig === "object") {
+        stripped.aiConfig.apiKey = ""
+      }
+      return stripped
+    } catch {
+      return state
     }
-    return stripped
   }
 
   function loadState() {
