@@ -8,7 +8,7 @@
       const backdrop = document.createElement("div")
       backdrop.className = "modal-backdrop"
       const panel = document.createElement("div")
-      panel.className = "modal-panel"
+      panel.className = "modal-panel records-confirm-panel"
       panel.setAttribute("role", "alertdialog")
       panel.setAttribute("aria-modal", "true")
       const header = document.createElement("div")
@@ -20,12 +20,12 @@
       body.className = "modal-body"
       body.textContent = message
       const actions = document.createElement("div")
-      actions.className = "modal-actions"
+      actions.className = "modal-actions records-confirm-actions"
       const cancelBtn = document.createElement("button")
       cancelBtn.className = "ghost"
       cancelBtn.textContent = "取消"
       const okBtn = document.createElement("button")
-      okBtn.className = "primary"
+      okBtn.className = "primary records-confirm-danger"
       okBtn.textContent = "确定"
       actions.appendChild(cancelBtn)
       actions.appendChild(okBtn)
@@ -56,6 +56,8 @@
   const normalizeAiProvider = window.A4Common?.normalizeAiProvider
   const normalizeOnlineTtsProvider = window.A4Common?.normalizeOnlineTtsProvider
   const normalizeStatus = window.A4Common?.normalizeStatus
+  const normalizeRoundType = window.A4Common?.normalizeRoundType
+  const ROUND_TYPE_NORMAL = window.A4Common?.ROUND_TYPE_NORMAL || "normal"
   const normalizeWordObject = window.A4Common?.normalizeWordObject
   const ACCOUNT_REGISTER_CODE_COOLDOWN_KEY = "a4-memory:register-code-cooldown:v1"
   const ACCOUNT_RESET_CODE_COOLDOWN_KEY = "a4-memory:reset-code-cooldown:v1"
@@ -67,6 +69,14 @@
     const learningDays = clamp(Math.round(Number(base.learningDays) || 3), 1, 60)
     const masteredDays = clamp(Math.round(Number(base.masteredDays) || 7), 1, 365)
     return { unknownDays, learningDays, masteredDays }
+  }
+
+  function normalizePendingKind(value) {
+    const v = String(value || "").trim().toLowerCase()
+    if (v === "due") return "due"
+    const status = normalizeStatus(v)
+    if (status === "mastered" || status === "learning" || status === "unknown") return status
+    return ""
   }
 
   function isValidEmail(value) {
@@ -204,12 +214,15 @@
       ? next.unknownTerms.map((s) => String(s || "").trim()).filter(Boolean)
       : []
 
-    const normalizePlacedItem = (it) => {
+    const normalizePlacedItem = (it, itemIndex, roundCap) => {
       const word = normalizeWordObject(it?.word || it)
       if (!word) return null
       const pos = it?.pos
       const x = clamp(Number(pos?.x) || 0, 0, 1)
       const y = clamp(Number(pos?.y) || 0, 0, 1)
+      const rawPageIndex = Number(it?.pageIndex)
+      const fallbackPageIndex = Math.floor(Math.max(0, Number(itemIndex) || 0) / normalizeRoundCap(roundCap))
+      const pageIndex = Number.isFinite(rawPageIndex) ? Math.max(0, Math.floor(rawPageIndex)) : fallbackPageIndex
       return {
         word,
         pos: { x, y },
@@ -218,6 +231,7 @@
         status: normalizeStatus(it?.status),
         lastReviewedAt: String(it?.lastReviewedAt || ""),
         nextReviewAt: String(it?.nextReviewAt || ""),
+        pageIndex,
       }
     }
 
@@ -225,17 +239,22 @@
     next.rounds = roundsRaw
       .map((r) => {
         const id = String(r?.id || "").trim() || `${Date.now()}-${crypto.randomUUID()}`
-        const items = Array.isArray(r?.items) ? r.items.map(normalizePlacedItem).filter(Boolean) : []
         const startedAt = String(r?.startedAt || "").trim() || new Date().toISOString()
         const finishedAt = String(r?.finishedAt || "").trim()
         const roundCap = normalizeRoundCap(r?.roundCap || next.roundCap)
-        return { id, startedAt, finishedAt, items, roundCap }
+        const items = Array.isArray(r?.items)
+          ? r.items.map((it, itemIndex) => normalizePlacedItem(it, itemIndex, roundCap)).filter(Boolean)
+          : []
+        const type = typeof normalizeRoundType === "function" ? normalizeRoundType(r?.type) : ROUND_TYPE_NORMAL
+        const language = String(r?.language || "").trim()
+        return { id, startedAt, finishedAt, items, roundCap, type, language }
       })
       .filter(Boolean)
 
     const hasCurrent = next.rounds.some((r) => r.id === next.currentRoundId)
     next.currentRoundId = hasCurrent ? String(next.currentRoundId || "") : next.rounds.length ? next.rounds[next.rounds.length - 1].id : ""
     next.pendingReviewRoundId = ""
+    next.pendingGenerateStatusKind = normalizePendingKind(next.pendingGenerateStatusKind)
     next.pendingOpenSettings = false
 
     const booksRaw = Array.isArray(next.customWordbooks) ? next.customWordbooks : []
