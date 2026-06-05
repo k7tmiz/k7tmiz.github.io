@@ -41,24 +41,24 @@ function showConfirmDialog(message) {
     const backdrop = document.createElement("div")
     backdrop.className = "modal-backdrop"
     const panel = document.createElement("div")
-    panel.className = "modal-panel"
+    panel.className = "modal-panel records-confirm-panel"
     panel.setAttribute("role", "alertdialog")
     panel.setAttribute("aria-modal", "true")
     const header = document.createElement("div")
     header.className = "modal-header"
     const title = document.createElement("h2")
-    title.textContent = "确认"
+    title.textContent = "确认删除"
     header.appendChild(title)
     const body = document.createElement("div")
     body.className = "modal-body"
     body.textContent = message
     const actions = document.createElement("div")
-    actions.className = "modal-actions"
+    actions.className = "modal-actions records-confirm-actions"
     const cancelBtn = document.createElement("button")
     cancelBtn.className = "ghost"
     cancelBtn.textContent = "取消"
     const okBtn = document.createElement("button")
-    okBtn.className = "primary"
+    okBtn.className = "primary records-confirm-danger"
     okBtn.textContent = "确定"
     actions.appendChild(cancelBtn)
     actions.appendChild(okBtn)
@@ -578,9 +578,9 @@ function renderCustomWordbooksManage() {
     secondary.className = "import-manage-secondary"
 
     const exp = document.createElement("button")
-    exp.className = "ghost"
+    exp.className = "ghost icon-btn"
     exp.type = "button"
-    exp.textContent = "导出"
+    exp.innerHTML = "<svg width=\"14\" height=\"14\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" style=\"margin-right:4px;\"><path d=\"M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4\"></path><polyline points=\"7 10 12 15 17 10\"></polyline><line x1=\"12\" y1=\"15\" x2=\"12\" y2=\"3\"></line></svg>导出"
     exp.addEventListener("click", () => {
       const name = sanitizeFilename(b.name || "wordbook")
       downloadJsonFile({
@@ -595,9 +595,9 @@ function renderCustomWordbooksManage() {
     })
 
     const del = document.createElement("button")
-    del.className = "ghost"
+    del.className = "ghost icon-btn danger"
     del.type = "button"
-    del.textContent = "删除"
+    del.innerHTML = "<svg width=\"14\" height=\"14\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" style=\"margin-right:4px;\"><polyline points=\"3 6 5 6 21 6\"></polyline><path d=\"M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2\"></path></svg>删除"
     del.addEventListener("click", () => {
       showConfirmDialog(`确定删除词书「${b.name}」？`).then((ok) => {
         if (ok !== true) return
@@ -2831,14 +2831,14 @@ function getReviewSwipeConfig(pointerType) {
   const isMouse = String(pointerType || "") === "mouse"
   return {
     isMouse,
-    startDistancePx: isMouse ? 4 : 7,
-    directionLockRatio: isMouse ? 1.1 : 1.3,
+    startDistancePx: isMouse ? 3 : 5,
+    directionLockRatio: isMouse ? 1.1 : 1.2,
     directionCancelRatio: isMouse ? 1.45 : 1.65,
-    commitRatio: isMouse ? 0.18 : 0.26,
-    commitMinPx: isMouse ? 44 : 60,
-    velocityCommitPxPerMs: isMouse ? 0.85 : 0.6,
-    maxRotDeg: isMouse ? 13 : 12,
-    rubberBandResistance: isMouse ? 0.58 : 0.48,
+    commitRatio: isMouse ? 0.15 : 0.20,
+    commitMinPx: isMouse ? 40 : 50,
+    velocityCommitPxPerMs: isMouse ? 0.7 : 0.45,
+    maxRotDeg: isMouse ? 16 : 18,
+    rubberBandResistance: isMouse ? 0.6 : 0.5,
   }
 }
 
@@ -2868,9 +2868,9 @@ function applyReviewSwipeVisual({ dx, pointerType }) {
   dom.reviewCard.style.setProperty("--swipe-left-alpha", x < 0 ? String(prog.toFixed(3)) : "0")
 }
 
-function setReviewSwipeTransition({ durationMs } = {}) {
+function setReviewSwipeTransition({ durationMs, type } = {}) {
   const d = clamp(Math.round(Number(durationMs) || 0), 80, 420)
-  const easing = "cubic-bezier(0.2, 0.9, 0.25, 1)"
+  const easing = type === "return" ? "cubic-bezier(0.34, 1.56, 0.64, 1)" : "cubic-bezier(0.2, 0.9, 0.25, 1)"
   dom.reviewCard.style.transition = `transform ${d}ms ${easing}, opacity ${d}ms ${easing}`
 }
 
@@ -2921,14 +2921,14 @@ function resetReviewToCenter({ hard } = {}) {
     setReviewSwipeState("idle")
     return
   }
-  setReviewSwipeTransition({ durationMs: 200 })
+  setReviewSwipeTransition({ durationMs: 300, type: "return" })
   resetReviewSwipeVisual()
-  reviewBlockClickUntil = Date.now() + 260
+  reviewBlockClickUntil = Date.now() + 360
   reviewSwipe.settleTimer = window.setTimeout(() => {
     clearReviewSwipeTransition()
     cleanupReviewSwipeCore()
     setReviewSwipeState("idle")
-  }, 240)
+  }, 340)
 }
 
 function commitReviewSwipe(dir, { fromPointerType } = {}) {

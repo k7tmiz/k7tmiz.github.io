@@ -21,8 +21,8 @@ html {
   --accentText: #ffffff;
   --surfaceHover: #f6f7fb;
   --paperBorder: #e1e5f0;
-  --shadow: 0 12px 30px rgba(11, 18, 32, 0.08);
-  --shadowModal: 0 16px 50px rgba(11, 18, 32, 0.18);
+  --shadow: 0 16px 40px rgba(11, 18, 32, 0.05);
+  --shadowModal: 0 20px 60px rgba(11, 18, 32, 0.12);
   --wordBg: rgba(11, 18, 32, 0.04);
   --wordBorder: rgba(11, 18, 32, 0.08);
   --backdrop: rgba(11, 18, 32, 0.45);
@@ -47,8 +47,8 @@ body.theme-dark {
   --accentText: #0b1220;
   --surfaceHover: rgba(255, 255, 255, 0.06);
   --paperBorder: rgba(231, 234, 242, 0.14);
-  --shadow: 0 18px 50px rgba(0, 0, 0, 0.35);
-  --shadowModal: 0 22px 70px rgba(0, 0, 0, 0.55);
+  --shadow: 0 20px 60px rgba(0, 0, 0, 0.4);
+  --shadowModal: 0 24px 80px rgba(0, 0, 0, 0.65);
   --wordBg: rgba(255, 255, 255, 0.06);
   --wordBorder: rgba(255, 255, 255, 0.12);
   --backdrop: rgba(0, 0, 0, 0.55);
@@ -295,17 +295,23 @@ button {
   font-size: 14px;
   line-height: 1;
   cursor: pointer;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 button:hover {
   background: var(--surfaceHover);
 }
 
+button:active:not(:disabled),
+.button-link:active:not(.disabled) {
+  transform: scale(0.97);
+}
+
 button:focus-visible,
 select:focus-visible,
 .button-link:focus-visible {
-  outline: 2px solid var(--accent);
-  outline-offset: 2px;
+  outline: none;
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent) 15%, transparent);
 }
 
 button:disabled {
@@ -362,6 +368,7 @@ select {
   background-repeat: no-repeat;
   width: 100%;
   max-width: 100%;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
   overflow: hidden;
   white-space: nowrap;
   text-overflow: ellipsis;
@@ -645,6 +652,17 @@ select:hover {
   border-radius: 12px;
   padding: 10px;
   overflow: hidden;
+  transition: all 0.2s ease;
+}
+
+.import-manage-row:hover {
+  border-color: var(--border3);
+  box-shadow: 0 4px 12px rgba(11, 18, 32, 0.04);
+  transform: translateY(-1px);
+}
+
+body.theme-dark .import-manage-row:hover {
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
 }
 
 .item-header {
@@ -678,6 +696,23 @@ select:hover {
   font-size: 13px;
   min-height: 30px;
   border-radius: 8px;
+}
+
+.import-manage-secondary button.icon-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.import-manage-secondary button.danger:hover {
+  background: rgba(239, 68, 68, 0.1);
+  color: #ef4444;
+  border-color: rgba(239, 68, 68, 0.2);
+}
+
+body.theme-dark .import-manage-secondary button.danger:hover {
+  background: rgba(239, 68, 68, 0.15);
+  border-color: rgba(239, 68, 68, 0.25);
 }
 
 .item-primary-action {
@@ -773,12 +808,13 @@ select:hover {
 .paper {
   width: min(92vw, 520px);
   height: calc(min(92vw, 520px) * 297 / 210);
-  background: var(--card);
+  background: linear-gradient(135deg, color-mix(in srgb, var(--text) 1.5%, transparent) 0%, transparent 100%), var(--card);
   border: 1px solid var(--paperBorder);
   border-radius: 14px;
   box-shadow: var(--shadow);
   position: relative;
   overflow: hidden;
+  transition: box-shadow 0.3s ease;
 }
 
 .paper-inner {
@@ -808,6 +844,8 @@ select:hover {
   max-width: 70%;
   white-space: normal;
   overflow: hidden;
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
 }
 
 .word-term {
@@ -861,10 +899,23 @@ select:hover {
   padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
 }
 
+@keyframes modalFadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(12px) scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
 .modal-backdrop {
   position: absolute;
   inset: 0;
   background: var(--backdrop);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
 }
 
 .modal-panel {
@@ -879,6 +930,7 @@ select:hover {
   display: flex;
   flex-direction: column;
   overflow: hidden;
+  animation: modalFadeInUp 0.3s cubic-bezier(0.2, 0.9, 0.25, 1) forwards;
 }
 
 .modal-header {
@@ -941,6 +993,7 @@ select:hover {
 
 .records-confirm-actions {
   justify-content: flex-end;
+  padding: 16px 20px;
 }
 
 .records-confirm-danger {
@@ -1430,11 +1483,13 @@ select:hover {
   font-family: inherit;
   font-size: 14px;
   line-height: 1;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .text-input:focus {
   outline: none;
   border-color: var(--accent);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent) 15%, transparent);
 }
 
 .text-input.is-invalid {
