@@ -198,6 +198,8 @@
   }
 
   function getVoiceStatusText(resolved, { voiceMode, voiceURI } = {}) {
+    if (isAndroidTauriSpeech()) return "Android 原生发音已启用；系统语音不可用时会尝试在线兜底。"
+
     if (!resolved || !resolved.ok) {
       if (resolved?.reason === "disabled") return "发音已关闭。"
       if (resolved?.reason === "no_support") return "当前浏览器不支持发音。"
@@ -221,6 +223,8 @@
   }
 
   function getCurrentVoiceLabel(resolved) {
+    if (isAndroidTauriSpeech()) return "Android 系统语音"
+
     const v = resolved?.voice
     if (!v) return "—"
     return `${String(v.name || "").trim() || "Voice"}${v.lang ? ` (${v.lang})` : ""}`
