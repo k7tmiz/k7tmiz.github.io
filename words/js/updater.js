@@ -1,5 +1,5 @@
 ;(function () {
-  const APP_VERSION = "1.0.16"
+  const APP_VERSION = "1.0.17"
   const REPO = "k7tmiz/A4-Memory"
   const CACHE_KEY = "a4-memory:update-check:v1"
   const SKIP_KEY = "a4-memory:update-skip:v1"
@@ -334,8 +334,8 @@
       })
   }
 
-  // Always schedule auto-check. On web the version matches so no modal appears.
-  setTimeout(checkUpdate, CHECK_DELAY)
+  // Auto-check only in Tauri app (desktop / Android); web users visit the site directly.
+  if (isTauri()) setTimeout(checkUpdate, CHECK_DELAY)
 
   function isTauri() {
     return !!(window.__TAURI_INTERNALS__ || window.__TAURI__)

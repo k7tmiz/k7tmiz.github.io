@@ -1,12 +1,5 @@
 ;(function () {
-  const escapeHtmlAttr = window.A4Sanitize?.escapeHtml || function (value) {
-    return String(value || "")
-      .replace(/&/g, "&amp;")
-      .replace(/"/g, "&quot;")
-      .replace(/'/g, "&#x27;")
-      .replace(/</g, "&lt;")
-      .replace(/>/g, "&gt;")
-  }
+  const escapeHtmlAttr = window.A4Sanitize.escapeHtml
 
   function loadState() {
     return window.A4Storage?.loadState?.() || null

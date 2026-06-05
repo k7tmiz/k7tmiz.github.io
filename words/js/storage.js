@@ -3,15 +3,10 @@
 
   function stripSensitive(state) {
     if (!state || typeof state !== "object") return state
-    try {
-      const stripped = JSON.parse(JSON.stringify(state))
-      if (stripped.aiConfig && typeof stripped.aiConfig === "object") {
-        stripped.aiConfig.apiKey = ""
-      }
-      return stripped
-    } catch {
-      return state
+    if (state.aiConfig && typeof state.aiConfig === "object") {
+      state.aiConfig.apiKey = ""
     }
+    return state
   }
 
   function loadState() {
@@ -29,9 +24,10 @@
 
   function saveState(state) {
     try {
-      // Never persist sensitive fields to localStorage
+      // Deep-clone once, strip sensitive fields, then persist
       const safe = JSON.parse(JSON.stringify(state))
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(stripSensitive(safe)))
+      stripSensitive(safe)
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(safe))
       return true
     } catch {
       return false

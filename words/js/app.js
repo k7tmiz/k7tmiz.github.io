@@ -208,14 +208,7 @@ function ensureAnnouncementModal() {
   return announcementModal
 }
 
-const escapeHtmlAttr = window.A4Sanitize?.escapeHtml || function (value) {
-  return String(value || "")
-    .replace(/&/g, "&amp;")
-    .replace(/"/g, "&quot;")
-    .replace(/'/g, "&#x27;")
-    .replace(/</g, "&lt;")
-    .replace(/>/g, "&gt;")
-}
+const escapeHtmlAttr = window.A4Sanitize.escapeHtml
 
 function renderAnnouncementList(announcements) {
   const modal = ensureAnnouncementModal()

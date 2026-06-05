@@ -1001,6 +1001,10 @@
       versionPanel: modal.querySelector("#versionPanel"),
     }
 
+    // Hide update check on web — only Tauri app needs update prompts
+    const isTauri = !!(window.__TAURI_INTERNALS__ || window.__TAURI__)
+    if (!isTauri && dom.checkUpdateBtn) dom.checkUpdateBtn.parentElement.classList.add("hidden")
+
     let aiPreviewModal = document.getElementById("aiPreviewModal")
     if (!aiPreviewModal) {
       aiPreviewModal = buildAiPreviewModalDom()
