@@ -224,9 +224,9 @@
     <category term="Tech" scheme="https://k7tmiz.github.io/categories/Tech/"/>
     
     
-    <category term="linux" scheme="https://k7tmiz.github.io/tags/linux/"/>
-    
     <category term="git" scheme="https://k7tmiz.github.io/tags/git/"/>
+    
+    <category term="linux" scheme="https://k7tmiz.github.io/tags/linux/"/>
     
   </entry>
   
@@ -521,49 +521,6 @@
   </entry>
   
   <entry>
-    <title>Archlinux安装指南</title>
-    <link href="https://k7tmiz.github.io/posts/a907d758.html"/>
-    <id>https://k7tmiz.github.io/posts/a907d758.html</id>
-    <published>2025-04-19T14:28:32.000Z</published>
-    <updated>2026-05-05T07:28:54.638Z</updated>
-    
-    
-    <summary type="html">&lt;h2 id=&quot;初步配置&quot;&gt;&lt;a href=&quot;#初步配置&quot; class=&quot;headerlink&quot; title=&quot;初步配置&quot;&gt;&lt;/a&gt;初步配置&lt;/h2&gt;&lt;h4 id=&quot;联网&quot;&gt;&lt;a href=&quot;#联网&quot; class=&quot;headerlink&quot; title=&quot;联网&quot;&gt;&lt;/a&gt;联网&lt;/h4&gt; &lt;figure class=&quot;highlight plaintext&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;dhcpcd/iwctl&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;</summary>
-    
-    
-    
-    <category term="Linux" scheme="https://k7tmiz.github.io/categories/Linux/"/>
-    
-    
-    <category term="linux" scheme="https://k7tmiz.github.io/tags/linux/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>Switch-SteamLibrary</title>
-    <link href="https://k7tmiz.github.io/posts/2a1b98b0.html"/>
-    <id>https://k7tmiz.github.io/posts/2a1b98b0.html</id>
-    <published>2025-04-19T14:28:32.000Z</published>
-    <updated>2026-05-05T07:38:12.360Z</updated>
-    
-    
-    <summary type="html">&lt;h1 id=&quot;Switch-SteamLibrary&quot;&gt;&lt;a href=&quot;#Switch-SteamLibrary&quot; class=&quot;headerlink&quot; title=&quot;Switch-SteamLibrary&quot;&gt;&lt;/a&gt;Switch-SteamLibrary&lt;/h1&gt;&lt;blockquote&gt;
-&lt;p&gt;这是一个用于电脑中有多Linux系统，并且希望自己的游戏统一存放在NTFS格式盘的小脚本。它旨在可以让你的多Linux系统，包括Windows都可以调用一个同一个Steam游戏库的小脚本。&lt;/p&gt;
-&lt;/blockquote&gt;
-&lt;h3 id=&quot;使用说明&quot;&gt;&lt;a href=&quot;#使用说明&quot; class=&quot;headerlink&quot; title=&quot;使用说明:&quot;&gt;&lt;/a&gt;使用说明:&lt;/h3&gt;</summary>
-    
-    
-    
-    <category term="Linux" scheme="https://k7tmiz.github.io/categories/Linux/"/>
-    
-    
-    <category term="tech" scheme="https://k7tmiz.github.io/tags/tech/"/>
-    
-    <category term="steam" scheme="https://k7tmiz.github.io/tags/steam/"/>
-    
-  </entry>
-  
-  <entry>
     <title>Nativefier 使用教程</title>
     <link href="https://k7tmiz.github.io/posts/b56059f9.html"/>
     <id>https://k7tmiz.github.io/posts/b56059f9.html</id>
@@ -603,6 +560,49 @@
     <category term="linux" scheme="https://k7tmiz.github.io/tags/linux/"/>
     
     <category term="msi" scheme="https://k7tmiz.github.io/tags/msi/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>Switch-SteamLibrary</title>
+    <link href="https://k7tmiz.github.io/posts/2a1b98b0.html"/>
+    <id>https://k7tmiz.github.io/posts/2a1b98b0.html</id>
+    <published>2025-04-19T14:28:32.000Z</published>
+    <updated>2026-05-05T07:38:12.360Z</updated>
+    
+    
+    <summary type="html">&lt;h1 id=&quot;Switch-SteamLibrary&quot;&gt;&lt;a href=&quot;#Switch-SteamLibrary&quot; class=&quot;headerlink&quot; title=&quot;Switch-SteamLibrary&quot;&gt;&lt;/a&gt;Switch-SteamLibrary&lt;/h1&gt;&lt;blockquote&gt;
+&lt;p&gt;这是一个用于电脑中有多Linux系统，并且希望自己的游戏统一存放在NTFS格式盘的小脚本。它旨在可以让你的多Linux系统，包括Windows都可以调用一个同一个Steam游戏库的小脚本。&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;h3 id=&quot;使用说明&quot;&gt;&lt;a href=&quot;#使用说明&quot; class=&quot;headerlink&quot; title=&quot;使用说明:&quot;&gt;&lt;/a&gt;使用说明:&lt;/h3&gt;</summary>
+    
+    
+    
+    <category term="Linux" scheme="https://k7tmiz.github.io/categories/Linux/"/>
+    
+    
+    <category term="tech" scheme="https://k7tmiz.github.io/tags/tech/"/>
+    
+    <category term="steam" scheme="https://k7tmiz.github.io/tags/steam/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>Archlinux安装指南</title>
+    <link href="https://k7tmiz.github.io/posts/a907d758.html"/>
+    <id>https://k7tmiz.github.io/posts/a907d758.html</id>
+    <published>2025-04-19T14:28:32.000Z</published>
+    <updated>2026-05-05T07:28:54.638Z</updated>
+    
+    
+    <summary type="html">&lt;h2 id=&quot;初步配置&quot;&gt;&lt;a href=&quot;#初步配置&quot; class=&quot;headerlink&quot; title=&quot;初步配置&quot;&gt;&lt;/a&gt;初步配置&lt;/h2&gt;&lt;h4 id=&quot;联网&quot;&gt;&lt;a href=&quot;#联网&quot; class=&quot;headerlink&quot; title=&quot;联网&quot;&gt;&lt;/a&gt;联网&lt;/h4&gt; &lt;figure class=&quot;highlight plaintext&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;dhcpcd/iwctl&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;</summary>
+    
+    
+    
+    <category term="Linux" scheme="https://k7tmiz.github.io/categories/Linux/"/>
+    
+    
+    <category term="linux" scheme="https://k7tmiz.github.io/tags/linux/"/>
     
   </entry>
   
