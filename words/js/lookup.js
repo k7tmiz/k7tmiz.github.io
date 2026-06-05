@@ -1342,6 +1342,8 @@
           accent: state?.pronunciationAccent,
           voiceMode: state?.voiceMode,
           voiceURI: state?.voiceURI,
+          onlineTtsEnabled: state?.onlineTtsEnabled !== false,
+          onlineTtsProvider: state?.onlineTtsProvider,
         })
       })
     }

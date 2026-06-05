@@ -250,18 +250,6 @@
     }
   }
 
-  function warnFallbackLanguage(resolved) {
-    const v = resolved?.voice
-    const targetBase = String(resolved?.targetBase || "")
-    if (!v || !targetBase) return
-    const chosenBase = normalizeLangTag(v.lang).base
-    if (!chosenBase || chosenBase === targetBase) return
-    const key = `${targetBase}->${chosenBase}`
-    if (speechState.warnedFallbackLang.has(key)) return
-    speechState.warnedFallbackLang.add(key)
-    window.alert(`未找到「${targetBase}」语音，已使用「${chosenBase || "默认"}」语音：${v.name}（${v.lang}）`)
-  }
-
   function splitSpeakText(text) {
     const raw = String(text || "").trim()
     if (!raw) return []
@@ -292,12 +280,162 @@
     try {
       await invoke("a4_android_speak", { text, lang })
       return true
-    } catch (err) {
-      const message = String(err || "")
-      window.alert(message || "Android 系统文字转语音不可用。请在系统设置中安装或启用文字转语音引擎。")
+    } catch {
+      // Return false to allow online TTS fallback
       return false
     }
   }
+
+  // ── Online TTS ──────────────────────────────────────────────────────────────
+
+  const EDGE_TTS_TOKEN = "6A5AA1D4EAFF4E9FB37E23D68491D6F4"
+  const EDGE_TTS_WS_URL = "wss://speech.platform.bing.com/consumer/speech/synthesize/readaloud/edge/v1"
+  const ONLINE_TTS_TIMEOUT = 8000
+
+  const EDGE_VOICE_MAP = {
+    "en-US": "en-US-AriaNeural",
+    "en-GB": "en-GB-SoniaNeural",
+    "es-ES": "es-ES-ElviraNeural",
+    "es-MX": "es-MX-DaliaNeural",
+    "ja-JP": "ja-JP-NanamiNeural",
+    "ko-KR": "ko-KR-SunHiNeural",
+    "pt-BR": "pt-BR-FranciscaNeural",
+    "pt-PT": "pt-PT-RaquelNeural",
+    "fr-FR": "fr-FR-DeniseNeural",
+    "de-DE": "de-DE-KatjaNeural",
+    "it-IT": "it-IT-ElsaNeural",
+    "zh-CN": "zh-CN-XiaoxiaoNeural",
+  }
+
+  function getEdgeVoiceName(langTag) {
+    const tag = String(langTag || "").trim()
+    if (EDGE_VOICE_MAP[tag]) return EDGE_VOICE_MAP[tag]
+    const base = normalizeLangTag(tag).base
+    for (const [k, v] of Object.entries(EDGE_VOICE_MAP)) {
+      if (normalizeLangTag(k).base === base) return v
+    }
+    return EDGE_VOICE_MAP["en-US"]
+  }
+
+  function escapeXml(text) {
+    return String(text || "")
+      .replace(/&/g, "&amp;")
+      .replace(/</g, "&lt;")
+      .replace(/>/g, "&gt;")
+      .replace(/"/g, "&quot;")
+      .replace(/'/g, "&apos;")
+  }
+
+  function makeConnectionId() {
+    const hex = "0123456789abcdef"
+    let id = ""
+    for (let i = 0; i < 32; i++) id += hex[Math.floor(Math.random() * 16)]
+    return id
+  }
+
+  async function speakWithEdgeTts(text, langTag) {
+    const voice = getEdgeVoiceName(langTag)
+    const connId = makeConnectionId()
+    const wsUrl = `${EDGE_TTS_WS_URL}?TrustedClientToken=${EDGE_TTS_TOKEN}&ConnectionId=${connId}`
+
+    return new Promise((resolve) => {
+      let settled = false
+      const finish = (ok) => { if (!settled) { settled = true; resolve(ok) } }
+      const timer = setTimeout(() => finish(false), ONLINE_TTS_TIMEOUT)
+
+      let ws
+      try {
+        ws = new WebSocket(wsUrl)
+      } catch { clearTimeout(timer); finish(false); return }
+
+      ws.binaryType = "arraybuffer"
+      const audioChunks = []
+
+      ws.onopen = () => {
+        // Send speech config
+        ws.send(
+          "Content-Type:application/json; charset=utf-8\r\nPath:speech.config\r\n\r\n" +
+          JSON.stringify({
+            context: {
+              synthesis: {
+                audio: {
+                  metadataoptions: { sentenceBoundaryEnabled: "false", wordBoundaryEnabled: "false" },
+                  outputFormat: "audio-24khz-48kbitrate-mono-mp3",
+                },
+              },
+            },
+          })
+        )
+
+        // Send SSML request
+        const ssml = `<speak version='1.0' xmlns='http://www.w3.org/2001/10/synthesis' xml:lang='${escapeXml(langTag)}'><voice name='${escapeXml(voice)}'>${escapeXml(text)}</voice></speak>`
+        ws.send(`X-RequestId:${connId}\r\nContent-Type:application/ssml+xml\r\nPath:ssml\r\n\r\n${ssml}`)
+      }
+
+      ws.onmessage = (e) => {
+        if (e.data instanceof ArrayBuffer) {
+          // Binary frame: header (text) + separator + audio data
+          const view = new Uint8Array(e.data)
+          // Find the separator "Path:audio\r\n" in the binary header
+          const headerEnd = findAudioHeaderEnd(view)
+          if (headerEnd > 0 && headerEnd < view.length) {
+            audioChunks.push(view.slice(headerEnd))
+          }
+        } else if (typeof e.data === "string" && e.data.includes("Path:turn.end")) {
+          try { ws.close() } catch { /* ignore */ }
+          if (audioChunks.length) {
+            playAudioChunks(audioChunks).then(() => { clearTimeout(timer); finish(true) })
+              .catch(() => { clearTimeout(timer); finish(false) })
+          } else {
+            clearTimeout(timer); finish(false)
+          }
+        }
+      }
+
+      ws.onerror = () => { clearTimeout(timer); finish(false) }
+      ws.onclose = () => { if (!settled) { clearTimeout(timer); finish(false) } }
+    })
+  }
+
+  function findAudioHeaderEnd(view) {
+    // The binary message starts with a 2-byte header length (big-endian),
+    // followed by that many bytes of text header, then the audio payload.
+    if (view.length < 2) return -1
+    const headerLen = (view[0] << 8) | view[1]
+    const dataStart = 2 + headerLen
+    return dataStart <= view.length ? dataStart : -1
+  }
+
+  function playAudioChunks(chunks) {
+    const blob = new Blob(chunks, { type: "audio/mp3" })
+    const url = URL.createObjectURL(blob)
+    const audio = new Audio(url)
+    return new Promise((resolve, reject) => {
+      audio.onended = () => { URL.revokeObjectURL(url); resolve() }
+      audio.onerror = () => { URL.revokeObjectURL(url); reject() }
+      audio.play().catch(reject)
+    })
+  }
+
+  async function speakWithGoogleTts(text, langTag) {
+    const base = normalizeLangTag(langTag).base || "en"
+    const url = `https://translate.google.com/translate_tts?ie=UTF-8&tl=${encodeURIComponent(base)}&client=tw-ob&q=${encodeURIComponent(text)}`
+    const audio = new Audio(url)
+    return new Promise((resolve) => {
+      const timer = setTimeout(() => resolve(false), ONLINE_TTS_TIMEOUT)
+      audio.onended = () => { clearTimeout(timer); resolve(true) }
+      audio.onerror = () => { clearTimeout(timer); resolve(false) }
+      audio.play().catch(() => { clearTimeout(timer); resolve(false) })
+    })
+  }
+
+  async function speakOnline(text, langTag, provider) {
+    const p = String(provider || "edge").toLowerCase()
+    if (p === "google") return speakWithGoogleTts(text, langTag)
+    return speakWithEdgeTts(text, langTag)
+  }
+
+  // ── Main speak ──────────────────────────────────────────────────────────────
 
   function waitForVoices({ timeoutMs } = {}) {
     const timeout = clamp(Number(timeoutMs) || 800, 50, 3000)
@@ -324,13 +462,26 @@
     })
   }
 
-  async function speak({ text, pronunciationEnabled, pronunciationLang, wordbookLanguage, accent, voiceMode, voiceURI }) {
+  function isVoiceLanguageMatch(voice, targetBase) {
+    if (!voice || !targetBase) return false
+    const voiceBase = normalizeLangTag(voice.lang).base
+    return voiceBase === targetBase
+  }
+
+  async function speak({ text, pronunciationEnabled, pronunciationLang, wordbookLanguage, accent, voiceMode, voiceURI, onlineTtsEnabled, onlineTtsProvider }) {
     const t = String(text || "").trim()
     if (!t) return false
     if (!pronunciationEnabled) return false
 
+    const targetBase = getCurrentLanguageBase({ pronunciationLang, wordbookLanguage })
+    const targetLangTag = getVoiceCandidatesForLanguage({ base: targetBase, accent: normalizeAccent(accent) })[0] || "en-US"
+
+    // Android Tauri: try native TTS first, then online fallback
     if (isAndroidTauriSpeech()) {
-      return speakWithAndroidTts({ text: t, pronunciationLang, wordbookLanguage, accent })
+      const ok = await speakWithAndroidTts({ text: t, pronunciationLang, wordbookLanguage, accent })
+      if (ok) return true
+      if (onlineTtsEnabled) return speakOnline(t, targetLangTag, onlineTtsProvider)
+      return false
     }
 
     const resolved0 = resolveVoice({
@@ -341,7 +492,10 @@
       voiceMode,
       voiceURI,
     })
+
+    // No SpeechSynthesis support at all → try online
     if (!resolved0.ok) {
+      if (onlineTtsEnabled) return speakOnline(t, targetLangTag, onlineTtsProvider)
       warnSpeechFailure(resolved0)
       return false
     }
@@ -359,6 +513,7 @@
       voiceURI,
     })
     if (!resolved.ok) {
+      if (onlineTtsEnabled) return speakOnline(t, targetLangTag, onlineTtsProvider)
       warnSpeechFailure(resolved)
       return false
     }
@@ -373,7 +528,16 @@
       resolved.voice = sys || voices[0] || null
     }
 
-    warnFallbackLanguage(resolved)
+    // If system voice doesn't match target language → prefer online TTS
+    if (resolved.voice && !isVoiceLanguageMatch(resolved.voice, targetBase) && onlineTtsEnabled) {
+      return speakOnline(t, targetLangTag, onlineTtsProvider)
+    }
+
+    // No voice at all → try online
+    if (!resolved.voice) {
+      if (onlineTtsEnabled) return speakOnline(t, targetLangTag, onlineTtsProvider)
+      return false
+    }
 
     const synth = window.speechSynthesis
     try {
@@ -420,7 +584,8 @@
         speakNext()
       })
     } catch {
-      window.alert("发音失败：当前设备语音引擎不可用。")
+      // System TTS failed → try online as last resort
+      if (onlineTtsEnabled) return speakOnline(t, targetLangTag, onlineTtsProvider)
       return false
     }
   }
@@ -439,5 +604,6 @@
     findVoiceByURI,
     getSystemDefaultVoice,
     normalizeLangTag,
+    speakOnline,
   }
 })()

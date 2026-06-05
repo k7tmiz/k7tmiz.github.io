@@ -355,6 +355,14 @@
     roundCap: 30,
     dailyGoalRounds: 0,
     dailyGoalWords: 0,
+    onlineTtsEnabled: true,
+    onlineTtsProvider: "edge",
+  }
+
+  function normalizeOnlineTtsProvider(value) {
+    const v = String(value || "").trim().toLowerCase()
+    if (v === "google") return "google"
+    return "edge"
   }
 
   // ── Modal utility ────────────────────────────────────────────────────────────
@@ -531,6 +539,7 @@
     buildFirstSeenRoundMap,
     normalizeLookupRecordMeta,
     DEFAULTS,
+    normalizeOnlineTtsProvider,
     setModalVisible,
     formatMeaning,
     getRoundLastPageIndex,

@@ -1565,6 +1565,8 @@ function speakTerm(term) {
     accent: appState.pronunciationAccent,
     voiceMode: appState.voiceMode,
     voiceURI: appState.voiceURI,
+    onlineTtsEnabled: appState.onlineTtsEnabled !== false,
+    onlineTtsProvider: appState.onlineTtsProvider,
   })
 
   if (settingsController) settingsController.updateVoiceUi()

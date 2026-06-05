@@ -54,6 +54,7 @@
   const normalizeVoiceMode = window.A4Common?.normalizeVoiceMode
   const normalizePronunciationLang = window.A4Common?.normalizePronunciationLang
   const normalizeAiProvider = window.A4Common?.normalizeAiProvider
+  const normalizeOnlineTtsProvider = window.A4Common?.normalizeOnlineTtsProvider
   const normalizeStatus = window.A4Common?.normalizeStatus
   const normalizeWordObject = window.A4Common?.normalizeWordObject
   const ACCOUNT_REGISTER_CODE_COOLDOWN_KEY = "a4-memory:register-code-cooldown:v1"
@@ -177,6 +178,8 @@
     next.pronunciationLang = normalizePronunciationLang(next.pronunciationLang)
     next.voiceMode = normalizeVoiceMode(next.voiceMode)
     next.voiceURI = typeof next.voiceURI === "string" ? next.voiceURI : ""
+    next.onlineTtsEnabled = typeof next.onlineTtsEnabled === "boolean" ? next.onlineTtsEnabled : true
+    next.onlineTtsProvider = normalizeOnlineTtsProvider(next.onlineTtsProvider)
 
     next.aiConfig =
       next.aiConfig && typeof next.aiConfig === "object"
@@ -531,6 +534,22 @@
             <div class="stack">
               <button class="ghost" id="testVoiceBtn" type="button">测试发音</button>
             </div>
+            <div class="form-row" style="margin-top:8px">
+              <div class="form-label">在线发音兜底</div>
+              <div class="form-control">
+                <button class="ghost" id="onlineTtsToggleBtn" type="button">在线兜底：开</button>
+              </div>
+            </div>
+            <div class="form-row" id="onlineTtsProviderRow">
+              <div class="form-label">在线发音源</div>
+              <div class="form-control">
+                <select id="onlineTtsProviderSelect" aria-label="在线发音源">
+                  <option value="edge">Microsoft Edge（推荐，国内可用）</option>
+                  <option value="google">Google 翻译</option>
+                </select>
+              </div>
+            </div>
+            <div class="form-help">当系统没有匹配语音时，通过网络获取发音。Microsoft 国内可直连，Google 需科学上网。</div>
           </section>
 
           <section class="panel">
@@ -928,6 +947,9 @@
       currentVoiceText: modal.querySelector("#currentVoiceText"),
       voiceHint: modal.querySelector("#voiceHint"),
       testVoiceBtn: modal.querySelector("#testVoiceBtn"),
+      onlineTtsToggleBtn: modal.querySelector("#onlineTtsToggleBtn"),
+      onlineTtsProviderSelect: modal.querySelector("#onlineTtsProviderSelect"),
+      onlineTtsProviderRow: modal.querySelector("#onlineTtsProviderRow"),
       lookupOnlineToggleBtn: modal.querySelector("#lookupOnlineToggleBtn"),
       lookupOnlineSourceSelect: modal.querySelector("#lookupOnlineSourceSelect"),
       lookupSpanishToggleBtn: modal.querySelector("#lookupSpanishToggleBtn"),
@@ -1447,6 +1469,13 @@
       renderVoiceModeUi()
       if (dom.pronounceToggleBtn)
         dom.pronounceToggleBtn.textContent = `发音：${state?.pronunciationEnabled ? "开" : "关"}`
+      const onlineTtsEnabled = typeof state?.onlineTtsEnabled === "boolean" ? state.onlineTtsEnabled : true
+      if (dom.onlineTtsToggleBtn)
+        dom.onlineTtsToggleBtn.textContent = `在线兜底：${onlineTtsEnabled ? "开" : "关"}`
+      if (dom.onlineTtsProviderSelect)
+        dom.onlineTtsProviderSelect.value = normalizeOnlineTtsProvider(state?.onlineTtsProvider)
+      if (dom.onlineTtsProviderRow)
+        dom.onlineTtsProviderRow.classList.toggle("hidden", !onlineTtsEnabled)
       const lookupOnlineEnabled = typeof state?.lookupOnlineEnabled === "boolean" ? state.lookupOnlineEnabled : true
       const lookupOnlineSource = String(state?.lookupOnlineSource || "").trim().toLowerCase() === "custom" ? "custom" : "builtin"
       const lookupSpanishConjugationEnabled =
@@ -2038,7 +2067,25 @@
         accent: state?.pronunciationAccent,
         voiceMode: state?.voiceMode,
         voiceURI: state?.voiceURI,
+        onlineTtsEnabled: state?.onlineTtsEnabled !== false,
+        onlineTtsProvider: state?.onlineTtsProvider,
       })
+    })
+
+    dom.onlineTtsToggleBtn?.addEventListener("click", () => {
+      const state = getStateSafe()
+      const prev = typeof state?.onlineTtsEnabled === "boolean" ? state.onlineTtsEnabled : true
+      setStateSafe({ onlineTtsEnabled: !prev })
+      persistSafe()
+      render()
+      afterChange("onlineTtsEnabled")
+    })
+
+    dom.onlineTtsProviderSelect?.addEventListener("change", () => {
+      const onlineTtsProvider = normalizeOnlineTtsProvider(dom.onlineTtsProviderSelect.value)
+      setStateSafe({ onlineTtsProvider })
+      persistSafe()
+      afterChange("onlineTtsProvider")
     })
 
     dom.lookupOnlineToggleBtn?.addEventListener("click", () => {
