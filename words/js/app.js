@@ -1319,6 +1319,8 @@ function persist() {
     pronunciationLang: appState.pronunciationLang,
     voiceMode: appState.voiceMode,
     voiceURI: appState.voiceURI,
+    onlineTtsEnabled: !!appState.onlineTtsEnabled,
+    onlineTtsProvider: normalizeOnlineTtsProvider(appState.onlineTtsProvider),
     aiConfig: appState.aiConfig,
     lookupOnlineEnabled: !!appState.lookupOnlineEnabled,
     lookupOnlineSource: String(appState.lookupOnlineSource || "").trim().toLowerCase() === "custom" ? "custom" : "builtin",

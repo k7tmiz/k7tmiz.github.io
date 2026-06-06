@@ -296,6 +296,38 @@
     })
   }
 
+  async function synthesizeSpeech({ text, langTag, provider }) {
+    const canAbort = typeof AbortController !== "undefined"
+    const controller = canAbort ? new AbortController() : null
+    const timeoutId = controller ? setTimeout(() => controller.abort(), REQUEST_TIMEOUT_MS) : null
+    try {
+      const res = await fetch(API_BASE + "/api/tts", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ text, langTag, provider }),
+        signal: controller?.signal,
+      })
+      if (!res.ok) return { success: false, status: res.status }
+      const audio = await res.arrayBuffer()
+      if (!audio.byteLength) return { success: false, status: res.status }
+      return {
+        success: true,
+        status: res.status,
+        provider: String(res.headers.get("x-a4-tts-provider") || provider || ""),
+        contentType: String(res.headers.get("content-type") || "audio/mpeg"),
+        audio,
+      }
+    } catch {
+      return { success: false, status: 0 }
+    } finally {
+      if (timeoutId) clearTimeout(timeoutId)
+    }
+  }
+
+  window.A4TtsBridge = {
+    synthesize: synthesizeSpeech,
+  }
+
   window.A4Cloud = {
     register,
     login,

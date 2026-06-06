@@ -13,7 +13,11 @@
     warnedNoVoice: false,
     warnedFallbackLang: new Set(),
     warnedNoLang: new Set(),
+    warnedOnlineFailure: false,
     lastVoiceURI: "",
+    lastOnlineProvider: "",
+    lastSpeakResult: null,
+    activeAudio: null,
   }
 
   function refreshVoices() {
@@ -294,7 +298,10 @@
 
   const EDGE_TTS_TOKEN = "6A5AA1D4EAFF4E9FB37E23D68491D6F4"
   const EDGE_TTS_WS_URL = "wss://speech.platform.bing.com/consumer/speech/synthesize/readaloud/edge/v1"
-  const ONLINE_TTS_TIMEOUT = 8000
+  const EDGE_TTS_VERSION = "1-143.0.3650.75"
+  const WINDOWS_EPOCH_SECONDS = 11644473600
+  const ONLINE_TTS_CONNECT_TIMEOUT = 10000
+  const ONLINE_TTS_PLAYBACK_TIMEOUT = 30000
 
   const EDGE_VOICE_MAP = {
     "en-US": "en-US-AriaNeural",
@@ -337,28 +344,72 @@
     return id
   }
 
+  function getEdgeTimestamp() {
+    const date = new Date()
+    const weekdays = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"]
+    const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]
+    const pad = (value) => String(value).padStart(2, "0")
+    return (
+      `${weekdays[date.getUTCDay()]} ${months[date.getUTCMonth()]} ${pad(date.getUTCDate())} ` +
+      `${date.getUTCFullYear()} ${pad(date.getUTCHours())}:${pad(date.getUTCMinutes())}:${pad(date.getUTCSeconds())} ` +
+      "GMT+0000 (Coordinated Universal Time)"
+    )
+  }
+
+  async function getEdgeSecMsGec() {
+    if (!window.crypto?.subtle || typeof window.TextEncoder !== "function") return ""
+    const seconds = Math.floor(Date.now() / 1000) + WINDOWS_EPOCH_SECONDS
+    const roundedSeconds = seconds - (seconds % 300)
+    const ticks = String(BigInt(roundedSeconds) * 10000000n)
+    const bytes = new window.TextEncoder().encode(`${ticks}${EDGE_TTS_TOKEN}`)
+    const digest = await window.crypto.subtle.digest("SHA-256", bytes)
+    return Array.from(new Uint8Array(digest), (byte) => byte.toString(16).padStart(2, "0")).join("").toUpperCase()
+  }
+
   async function speakWithEdgeTts(text, langTag) {
     const voice = getEdgeVoiceName(langTag)
     const connId = makeConnectionId()
-    const wsUrl = `${EDGE_TTS_WS_URL}?TrustedClientToken=${EDGE_TTS_TOKEN}&ConnectionId=${connId}`
+    const requestId = makeConnectionId()
+    const secMsGec = await getEdgeSecMsGec()
+    if (!secMsGec) return false
+    const wsUrl =
+      `${EDGE_TTS_WS_URL}?TrustedClientToken=${EDGE_TTS_TOKEN}` +
+      `&ConnectionId=${connId}&Sec-MS-GEC=${secMsGec}&Sec-MS-GEC-Version=${EDGE_TTS_VERSION}`
 
     return new Promise((resolve) => {
       let settled = false
-      const finish = (ok) => { if (!settled) { settled = true; resolve(ok) } }
-      const timer = setTimeout(() => finish(false), ONLINE_TTS_TIMEOUT)
+      let receivedTurnEnd = false
+      let timer = null
+      const finish = (ok) => {
+        if (settled) return
+        settled = true
+        if (timer) clearTimeout(timer)
+        try {
+          ws?.close()
+        } catch { /* ignore */ }
+        if (ok) speechState.lastOnlineProvider = "edge"
+        resolve(ok)
+      }
+      timer = setTimeout(() => finish(false), ONLINE_TTS_CONNECT_TIMEOUT)
 
       let ws
       try {
         ws = new WebSocket(wsUrl)
-      } catch { clearTimeout(timer); finish(false); return }
+      } catch {
+        finish(false)
+        return
+      }
 
       ws.binaryType = "arraybuffer"
       const audioChunks = []
 
       ws.onopen = () => {
+        if (timer) clearTimeout(timer)
+        timer = setTimeout(() => finish(false), ONLINE_TTS_CONNECT_TIMEOUT)
+        const timestamp = getEdgeTimestamp()
         // Send speech config
         ws.send(
-          "Content-Type:application/json; charset=utf-8\r\nPath:speech.config\r\n\r\n" +
+          `X-Timestamp:${timestamp}\r\nContent-Type:application/json; charset=utf-8\r\nPath:speech.config\r\n\r\n` +
           JSON.stringify({
             context: {
               synthesis: {
@@ -372,8 +423,14 @@
         )
 
         // Send SSML request
-        const ssml = `<speak version='1.0' xmlns='http://www.w3.org/2001/10/synthesis' xml:lang='${escapeXml(langTag)}'><voice name='${escapeXml(voice)}'>${escapeXml(text)}</voice></speak>`
-        ws.send(`X-RequestId:${connId}\r\nContent-Type:application/ssml+xml\r\nPath:ssml\r\n\r\n${ssml}`)
+        const ssml =
+          `<speak version='1.0' xmlns='http://www.w3.org/2001/10/synthesis' xml:lang='${escapeXml(langTag)}'>` +
+          `<voice name='${escapeXml(voice)}'><prosody pitch='+0Hz' rate='+0%' volume='+0%'>` +
+          `${escapeXml(text)}</prosody></voice></speak>`
+        ws.send(
+          `X-RequestId:${requestId}\r\nContent-Type:application/ssml+xml\r\n` +
+          `X-Timestamp:${timestamp}Z\r\nPath:ssml\r\n\r\n${ssml}`
+        )
       }
 
       ws.onmessage = (e) => {
@@ -386,18 +443,21 @@
             audioChunks.push(view.slice(headerEnd))
           }
         } else if (typeof e.data === "string" && e.data.includes("Path:turn.end")) {
-          try { ws.close() } catch { /* ignore */ }
+          receivedTurnEnd = true
           if (audioChunks.length) {
-            playAudioChunks(audioChunks).then(() => { clearTimeout(timer); finish(true) })
-              .catch(() => { clearTimeout(timer); finish(false) })
+            if (timer) clearTimeout(timer)
+            timer = setTimeout(() => finish(false), ONLINE_TTS_PLAYBACK_TIMEOUT)
+            playAudioChunks(audioChunks).then(() => finish(true)).catch(() => finish(false))
           } else {
-            clearTimeout(timer); finish(false)
+            finish(false)
           }
         }
       }
 
-      ws.onerror = () => { clearTimeout(timer); finish(false) }
-      ws.onclose = () => { if (!settled) { clearTimeout(timer); finish(false) } }
+      ws.onerror = () => finish(false)
+      ws.onclose = () => {
+        if (!settled && !receivedTurnEnd) finish(false)
+      }
     })
   }
 
@@ -410,33 +470,102 @@
     return dataStart <= view.length ? dataStart : -1
   }
 
-  function playAudioChunks(chunks) {
-    const blob = new Blob(chunks, { type: "audio/mp3" })
+  function playAudioChunks(chunks, contentType = "audio/mpeg") {
+    const blob = new Blob(chunks, { type: contentType })
     const url = URL.createObjectURL(blob)
     const audio = new Audio(url)
+    stopActiveAudio()
+    speechState.activeAudio = audio
     return new Promise((resolve, reject) => {
-      audio.onended = () => { URL.revokeObjectURL(url); resolve() }
-      audio.onerror = () => { URL.revokeObjectURL(url); reject() }
-      audio.play().catch(reject)
+      const cleanup = () => {
+        if (speechState.activeAudio === audio) speechState.activeAudio = null
+        URL.revokeObjectURL(url)
+      }
+      audio.onended = () => {
+        cleanup()
+        resolve()
+      }
+      audio.onerror = () => {
+        cleanup()
+        reject(new Error("audio playback failed"))
+      }
+      audio.play().catch((error) => {
+        cleanup()
+        reject(error)
+      })
     })
+  }
+
+  async function speakWithTtsBridge(text, langTag, provider) {
+    const bridge = window.A4TtsBridge?.synthesize
+    if (typeof bridge !== "function") return false
+    try {
+      const result = await bridge({ text, langTag, provider })
+      if (!result?.success || !result.audio) return false
+      await playAudioChunks([result.audio], result.contentType || "audio/mpeg")
+      speechState.lastOnlineProvider = result.provider === "google" ? "google" : "edge"
+      return true
+    } catch {
+      return false
+    }
+  }
+
+  function stopActiveAudio() {
+    const audio = speechState.activeAudio
+    if (!audio) return
+    speechState.activeAudio = null
+    try {
+      audio.pause()
+      audio.removeAttribute("src")
+      audio.load()
+    } catch { /* ignore */ }
   }
 
   async function speakWithGoogleTts(text, langTag) {
     const base = normalizeLangTag(langTag).base || "en"
     const url = `https://translate.google.com/translate_tts?ie=UTF-8&tl=${encodeURIComponent(base)}&client=tw-ob&q=${encodeURIComponent(text)}`
     const audio = new Audio(url)
+    stopActiveAudio()
+    speechState.activeAudio = audio
     return new Promise((resolve) => {
-      const timer = setTimeout(() => resolve(false), ONLINE_TTS_TIMEOUT)
-      audio.onended = () => { clearTimeout(timer); resolve(true) }
-      audio.onerror = () => { clearTimeout(timer); resolve(false) }
-      audio.play().catch(() => { clearTimeout(timer); resolve(false) })
+      let settled = false
+      const finish = (ok) => {
+        if (settled) return
+        settled = true
+        clearTimeout(timer)
+        if (speechState.activeAudio === audio) {
+          speechState.activeAudio = null
+          if (!ok) {
+            try {
+              audio.pause()
+              audio.removeAttribute("src")
+              audio.load()
+            } catch { /* ignore */ }
+          }
+        }
+        if (ok) speechState.lastOnlineProvider = "google"
+        resolve(ok)
+      }
+      const timer = setTimeout(() => finish(false), ONLINE_TTS_PLAYBACK_TIMEOUT)
+      audio.onended = () => finish(true)
+      audio.onerror = () => finish(false)
+      audio.play().catch(() => finish(false))
     })
   }
 
   async function speakOnline(text, langTag, provider) {
     const p = String(provider || "edge").toLowerCase()
-    if (p === "google") return speakWithGoogleTts(text, langTag)
-    return speakWithEdgeTts(text, langTag)
+    const providers = p === "google" ? ["google", "edge"] : ["edge", "google"]
+    if (typeof window.A4TtsBridge?.synthesize === "function") {
+      for (const currentProvider of providers) {
+        if (await speakWithTtsBridge(text, langTag, currentProvider)) return true
+      }
+    }
+    for (const currentProvider of providers) {
+      const directSpeak = currentProvider === "google" ? speakWithGoogleTts : speakWithEdgeTts
+      if (await directSpeak(text, langTag)) return true
+    }
+    return false
   }
 
   // ── Main speak ──────────────────────────────────────────────────────────────
@@ -466,26 +595,9 @@
     })
   }
 
-  function isVoiceLanguageMatch(voice, targetBase) {
-    if (!voice || !targetBase) return false
-    const voiceBase = normalizeLangTag(voice.lang).base
-    return voiceBase === targetBase
-  }
-
-  async function speak({ text, pronunciationEnabled, pronunciationLang, wordbookLanguage, accent, voiceMode, voiceURI, onlineTtsEnabled, onlineTtsProvider }) {
+  async function speakWithSystemTts({ text, pronunciationLang, wordbookLanguage, accent, voiceMode, voiceURI }) {
     const t = String(text || "").trim()
-    if (!t) return false
-    if (!pronunciationEnabled) return false
 
-    const targetBase = getCurrentLanguageBase({ pronunciationLang, wordbookLanguage })
-    const targetLangTag = getVoiceCandidatesForLanguage({ base: targetBase, accent: normalizeAccent(accent) })[0] || "en-US"
-
-    // If online TTS mode is selected, bypass local TTS completely
-    if (onlineTtsEnabled) {
-      return speakOnline(t, targetLangTag, onlineTtsProvider || "edge")
-    }
-
-    // Android Tauri: try native TTS first
     if (isAndroidTauriSpeech()) {
       const ok = await speakWithAndroidTts({ text: t, pronunciationLang, wordbookLanguage, accent })
       if (ok) return true
@@ -493,7 +605,7 @@
     }
 
     const resolved0 = resolveVoice({
-      pronunciationEnabled,
+      pronunciationEnabled: true,
       pronunciationLang,
       wordbookLanguage,
       accent,
@@ -501,9 +613,7 @@
       voiceURI,
     })
 
-    // No SpeechSynthesis support at all → try online
     if (!resolved0.ok) {
-      if (onlineTtsEnabled) return speakOnline(t, targetLangTag, onlineTtsProvider)
       warnSpeechFailure(resolved0)
       return false
     }
@@ -513,7 +623,7 @@
     }
 
     const resolved = resolveVoice({
-      pronunciationEnabled,
+      pronunciationEnabled: true,
       pronunciationLang,
       wordbookLanguage,
       accent,
@@ -521,7 +631,6 @@
       voiceURI,
     })
     if (!resolved.ok) {
-      if (onlineTtsEnabled) return speakOnline(t, targetLangTag, onlineTtsProvider)
       warnSpeechFailure(resolved)
       return false
     }
@@ -536,14 +645,7 @@
       resolved.voice = sys || voices[0] || null
     }
 
-    // If system voice doesn't match target language → prefer online TTS
-    if (resolved.voice && !isVoiceLanguageMatch(resolved.voice, targetBase) && onlineTtsEnabled) {
-      return speakOnline(t, targetLangTag, onlineTtsProvider)
-    }
-
-    // No voice at all → try online
     if (!resolved.voice) {
-      if (onlineTtsEnabled) return speakOnline(t, targetLangTag, onlineTtsProvider)
       return false
     }
 
@@ -566,36 +668,115 @@
       }
 
       if (parts.length === 1) {
-        synth.speak(makeUtterance(parts[0]))
-        return true
+        return await new Promise((resolve) => {
+          const u = makeUtterance(parts[0])
+          let finished = false
+          const timer = setTimeout(() => {
+            if (finished) return
+            finished = true
+            resolve(false)
+          }, 15000)
+          const finish = (ok) => {
+            if (finished) return
+            finished = true
+            clearTimeout(timer)
+            resolve(ok)
+          }
+          u.onend = () => finish(true)
+          u.onerror = () => finish(false)
+          synth.speak(u)
+        })
       }
 
       return await new Promise((resolve) => {
         let idx = 0
+        let timer = null
+        const finish = (ok) => {
+          if (timer) clearTimeout(timer)
+          resolve(ok)
+        }
         const speakNext = () => {
-          if (idx >= parts.length) return resolve(true)
+          if (idx >= parts.length) return finish(true)
           const u = makeUtterance(parts[idx])
           let finished = false
+          timer = setTimeout(() => {
+            if (finished) return
+            finished = true
+            finish(false)
+          }, 15000)
           u.onend = () => {
             if (finished) return
             finished = true
+            clearTimeout(timer)
             idx += 1
             setTimeout(speakNext, 140)
           }
           u.onerror = () => {
             if (finished) return
             finished = true
-            resolve(false)
+            finish(false)
           }
           synth.speak(u)
         }
         speakNext()
       })
     } catch {
-      // System TTS failed → try online as last resort
-      if (onlineTtsEnabled) return speakOnline(t, targetLangTag, onlineTtsProvider)
       return false
     }
+  }
+
+  async function speak({ text, pronunciationEnabled, pronunciationLang, wordbookLanguage, accent, voiceMode, voiceURI, onlineTtsEnabled, onlineTtsProvider }) {
+    const t = String(text || "").trim()
+    if (!t || !pronunciationEnabled) return false
+
+    speechState.lastOnlineProvider = ""
+    speechState.lastSpeakResult = null
+    stopActiveAudio()
+    window.speechSynthesis?.cancel?.()
+
+    if (!onlineTtsEnabled) {
+      const ok = await speakWithSystemTts({ text: t, pronunciationLang, wordbookLanguage, accent, voiceMode, voiceURI })
+      speechState.lastSpeakResult = { ok, requestedMode: "system", usedMode: ok ? "system" : "" }
+      return ok
+    }
+
+    const targetBase = getCurrentLanguageBase({ pronunciationLang, wordbookLanguage })
+    const targetLangTag = getVoiceCandidatesForLanguage({ base: targetBase, accent: normalizeAccent(accent) })[0] || "en-US"
+    const requestedProvider = String(onlineTtsProvider || "edge").toLowerCase() === "google" ? "google" : "edge"
+    if (await speakOnline(t, targetLangTag, requestedProvider)) {
+      speechState.lastSpeakResult = {
+        ok: true,
+        requestedMode: "online",
+        requestedProvider,
+        usedMode: "online",
+        usedProvider: speechState.lastOnlineProvider,
+      }
+      return true
+    }
+
+    const systemOk = await speakWithSystemTts({
+      text: t,
+      pronunciationLang,
+      wordbookLanguage,
+      accent,
+      voiceMode,
+      voiceURI,
+    })
+    if (!systemOk && !speechState.warnedOnlineFailure) {
+      speechState.warnedOnlineFailure = true
+      window.alert("在线发音和系统语音均不可用。请检查网络连接，或在系统设置中安装对应语言的语音。")
+    }
+    speechState.lastSpeakResult = {
+      ok: systemOk,
+      requestedMode: "online",
+      requestedProvider,
+      usedMode: systemOk ? "system" : "",
+    }
+    return systemOk
+  }
+
+  function getLastSpeakResult() {
+    return speechState.lastSpeakResult ? { ...speechState.lastSpeakResult } : null
   }
 
   window.A4Speech = {
@@ -613,5 +794,6 @@
     getSystemDefaultVoice,
     normalizeLangTag,
     speakOnline,
+    getLastSpeakResult,
   }
 })()
