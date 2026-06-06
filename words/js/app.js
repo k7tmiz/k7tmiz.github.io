@@ -25,6 +25,7 @@ const {
   setModalVisible,
   getWordbooksFromGlobal,
   normalizeWordObject,
+  normalizeOnlineTtsProvider,
 } = window.A4Common || {}
 
 const { normalizeThemeMode, normalizeAccent, normalizeVoiceMode, normalizePronunciationLang } = window.A4Settings
@@ -336,6 +337,7 @@ const dom = {
   pageNextBtn: document.getElementById("pageNextBtn"),
   pageIndicator: document.getElementById("pageIndicator"),
   reviewModal: document.getElementById("reviewModal"),
+  reviewTitleEl: document.getElementById("reviewTitle"),
   reviewBackdrop: document.getElementById("reviewBackdrop"),
   reviewMeta: document.getElementById("reviewMeta"),
   reviewCard: document.getElementById("reviewCard"),
@@ -430,6 +432,8 @@ const appState = {
   pronunciationLang: "auto",
   voiceMode: "auto",
   voiceURI: "",
+  onlineTtsEnabled: true,
+  onlineTtsProvider: "edge",
   aiConfig: { provider: "custom", baseUrl: "", apiKey: "", model: "" },
   lookupOnlineEnabled: true,
   lookupOnlineSource: "builtin",
@@ -1686,6 +1690,7 @@ function openReviewModal() {
   appState.reviewScope = "round"
   appState.reviewScopePageIndex = clamp(Math.floor(Number(appState.currentPageIndex) || 0), 0, 999)
   refreshReviewList({ scope: "round" })
+  if (dom.reviewTitleEl) dom.reviewTitleEl.textContent = "复习轮"
   setModalVisible(dom.reviewModal, true)
 }
 
@@ -1708,6 +1713,7 @@ function openAutoReviewModal(pinnedRoundItem) {
     appState.reviewScopePageIndex = pageIndex
     refreshReviewList({ scope: "round" })
   }
+  if (dom.reviewTitleEl) dom.reviewTitleEl.textContent = "学习轮"
   setModalVisible(dom.reviewModal, true)
 }
 
@@ -2142,6 +2148,8 @@ function restore() {
   appState.pronunciationLang = normalizePronunciationLang(saved.pronunciationLang)
   appState.voiceMode = normalizeVoiceMode(saved.voiceMode)
   appState.voiceURI = typeof saved.voiceURI === "string" ? saved.voiceURI : ""
+  appState.onlineTtsEnabled = typeof saved.onlineTtsEnabled === "boolean" ? saved.onlineTtsEnabled : true
+  appState.onlineTtsProvider = normalizeOnlineTtsProvider(saved.onlineTtsProvider)
   appState.aiConfig =
     saved.aiConfig && typeof saved.aiConfig === "object"
       ? {

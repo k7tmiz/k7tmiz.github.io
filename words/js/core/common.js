@@ -367,14 +367,29 @@
 
   // ── Modal utility ────────────────────────────────────────────────────────────
 
+  let _modalOpenCount = 0
+  let _savedScrollY = 0
+
   function setModalVisible(modal, visible) {
     if (!modal) return
     if (visible) {
       modal.classList.remove("hidden")
       modal.setAttribute("aria-hidden", "false")
+      if (_modalOpenCount === 0) {
+        _savedScrollY = window.scrollY || 0
+        document.body.style.top = `-${_savedScrollY}px`
+        document.body.classList.add("modal-open")
+      }
+      _modalOpenCount += 1
     } else {
       modal.classList.add("hidden")
       modal.setAttribute("aria-hidden", "true")
+      _modalOpenCount = Math.max(0, _modalOpenCount - 1)
+      if (_modalOpenCount === 0) {
+        document.body.classList.remove("modal-open")
+        document.body.style.top = ""
+        window.scrollTo(0, _savedScrollY)
+      }
     }
   }
 

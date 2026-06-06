@@ -480,11 +480,15 @@
     const targetBase = getCurrentLanguageBase({ pronunciationLang, wordbookLanguage })
     const targetLangTag = getVoiceCandidatesForLanguage({ base: targetBase, accent: normalizeAccent(accent) })[0] || "en-US"
 
-    // Android Tauri: try native TTS first, then online fallback
+    // If online TTS mode is selected, bypass local TTS completely
+    if (onlineTtsEnabled) {
+      return speakOnline(t, targetLangTag, onlineTtsProvider || "edge")
+    }
+
+    // Android Tauri: try native TTS first
     if (isAndroidTauriSpeech()) {
       const ok = await speakWithAndroidTts({ text: t, pronunciationLang, wordbookLanguage, accent })
       if (ok) return true
-      if (onlineTtsEnabled) return speakOnline(t, targetLangTag, onlineTtsProvider)
       return false
     }
 
