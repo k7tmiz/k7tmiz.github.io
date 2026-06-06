@@ -986,6 +986,23 @@
     // Hide update check on web — only Tauri app needs update prompts
     const isTauri = !!(window.__TAURI_INTERNALS__ || window.__TAURI__)
     if (!isTauri && dom.checkUpdateBtn) dom.checkUpdateBtn.parentElement.classList.add("hidden")
+    window.A4Utils?.installAndroidSelectPicker?.(
+      modal,
+      [
+        "#themeModeSelect",
+        "#roundCapInput",
+        "#ttsModeSelect",
+        "#onlineTtsProviderSelect",
+        "#accentSelect",
+        "#pronunciationLangSelect",
+        "#voiceModeSelect",
+        "#voiceSelect",
+        "#aiServiceModeSelect",
+        "#aiProviderSelect",
+        "#aiTypeSelect",
+        "#lookupOnlineSourceSelect",
+      ].join(", ")
+    )
 
     let aiPreviewModal = document.getElementById("aiPreviewModal")
     if (!aiPreviewModal) {
@@ -1369,6 +1386,7 @@
         select.appendChild(opt)
       }
       if (selected && voices.some((v) => String(v?.voiceURI || "") === selected)) select.value = selected
+      window.A4Utils?.refreshAndroidSelectPickers?.(dom.modal)
     }
 
     function renderVoiceModeUi() {
@@ -1480,6 +1498,7 @@
       renderAiProviderUi()
       setAccountMode(accountMode)
       renderAccountActionButtons()
+      window.A4Utils?.refreshAndroidSelectPickers?.(dom.modal)
       if (getCooldownSecondsLeft(registerCodeCooldownUntil) > 0 || getCooldownSecondsLeft(resetCodeCooldownUntil) > 0) {
         ensureAccountCooldownTicker()
       }

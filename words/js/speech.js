@@ -300,7 +300,8 @@
   const EDGE_TTS_WS_URL = "wss://speech.platform.bing.com/consumer/speech/synthesize/readaloud/edge/v1"
   const EDGE_TTS_VERSION = "1-143.0.3650.75"
   const WINDOWS_EPOCH_SECONDS = 11644473600
-  const ONLINE_TTS_CONNECT_TIMEOUT = 10000
+  const ONLINE_TTS_CONNECT_TIMEOUT = 5000
+  const ONLINE_TTS_PLAY_START_TIMEOUT = 3500
   const ONLINE_TTS_PLAYBACK_TIMEOUT = 30000
 
   const EDGE_VOICE_MAP = {
@@ -470,30 +471,53 @@
     return dataStart <= view.length ? dataStart : -1
   }
 
+  function playAudioElement(audio, { cleanup } = {}) {
+    stopActiveAudio()
+    speechState.activeAudio = audio
+    return new Promise((resolve, reject) => {
+      let settled = false
+      let cleaned = false
+      const cleanupAudio = () => {
+        if (cleaned) return
+        cleaned = true
+        if (speechState.activeAudio === audio) speechState.activeAudio = null
+        if (typeof cleanup === "function") cleanup()
+      }
+      audio._a4Cleanup = cleanupAudio
+      const finishStarted = () => {
+        if (settled) return
+        settled = true
+        clearTimeout(timer)
+        resolve()
+      }
+      const finishFailed = (error) => {
+        if (settled) return
+        settled = true
+        clearTimeout(timer)
+        try {
+          audio.pause()
+          audio.removeAttribute("src")
+          audio.load()
+        } catch { /* ignore */ }
+        cleanupAudio()
+        reject(error instanceof Error ? error : new Error("audio playback failed"))
+      }
+      const timer = setTimeout(() => finishFailed(new Error("audio playback start timeout")), ONLINE_TTS_PLAY_START_TIMEOUT)
+      audio.onplaying = () => finishStarted()
+      audio.onended = () => cleanupAudio()
+      audio.onerror = () => {
+        if (settled) cleanupAudio()
+        else finishFailed(new Error("audio playback failed"))
+      }
+      audio.play().then(() => finishStarted()).catch((error) => finishFailed(error))
+    })
+  }
+
   function playAudioChunks(chunks, contentType = "audio/mpeg") {
     const blob = new Blob(chunks, { type: contentType })
     const url = URL.createObjectURL(blob)
     const audio = new Audio(url)
-    stopActiveAudio()
-    speechState.activeAudio = audio
-    return new Promise((resolve, reject) => {
-      const cleanup = () => {
-        if (speechState.activeAudio === audio) speechState.activeAudio = null
-        URL.revokeObjectURL(url)
-      }
-      audio.onended = () => {
-        cleanup()
-        resolve()
-      }
-      audio.onerror = () => {
-        cleanup()
-        reject(new Error("audio playback failed"))
-      }
-      audio.play().catch((error) => {
-        cleanup()
-        reject(error)
-      })
-    })
+    return playAudioElement(audio, { cleanup: () => URL.revokeObjectURL(url) })
   }
 
   async function speakWithTtsBridge(text, langTag, provider) {
@@ -515,6 +539,7 @@
     if (!audio) return
     speechState.activeAudio = null
     try {
+      if (typeof audio._a4Cleanup === "function") audio._a4Cleanup()
       audio.pause()
       audio.removeAttribute("src")
       audio.load()
@@ -525,32 +550,13 @@
     const base = normalizeLangTag(langTag).base || "en"
     const url = `https://translate.google.com/translate_tts?ie=UTF-8&tl=${encodeURIComponent(base)}&client=tw-ob&q=${encodeURIComponent(text)}`
     const audio = new Audio(url)
-    stopActiveAudio()
-    speechState.activeAudio = audio
-    return new Promise((resolve) => {
-      let settled = false
-      const finish = (ok) => {
-        if (settled) return
-        settled = true
-        clearTimeout(timer)
-        if (speechState.activeAudio === audio) {
-          speechState.activeAudio = null
-          if (!ok) {
-            try {
-              audio.pause()
-              audio.removeAttribute("src")
-              audio.load()
-            } catch { /* ignore */ }
-          }
-        }
-        if (ok) speechState.lastOnlineProvider = "google"
-        resolve(ok)
-      }
-      const timer = setTimeout(() => finish(false), ONLINE_TTS_PLAYBACK_TIMEOUT)
-      audio.onended = () => finish(true)
-      audio.onerror = () => finish(false)
-      audio.play().catch(() => finish(false))
-    })
+    try {
+      await playAudioElement(audio)
+      speechState.lastOnlineProvider = "google"
+      return true
+    } catch {
+      return false
+    }
   }
 
   async function speakOnline(text, langTag, provider) {
@@ -559,9 +565,7 @@
     for (const currentProvider of providers) {
       const directSpeak = currentProvider === "google" ? speakWithGoogleTts : speakWithEdgeTts
       if (await directSpeak(text, langTag)) return true
-    }
-    if (typeof window.A4TtsBridge?.synthesize === "function") {
-      for (const currentProvider of providers) {
+      if (typeof window.A4TtsBridge?.synthesize === "function") {
         if (await speakWithTtsBridge(text, langTag, currentProvider)) return true
       }
     }

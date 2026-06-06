@@ -61,8 +61,15 @@
       .slice(0, 80)
   }
 
-  function downloadTextFile({ filename, mime, content }) {
-    const blob = new Blob([content], { type: mime })
+  function getTauriInvoke() {
+    return window.__TAURI__?.core?.invoke || window.__TAURI__?.invoke || window.__TAURI_INTERNALS__?.invoke || null
+  }
+
+  function isAndroidTauri() {
+    return typeof getTauriInvoke() === "function" && /Android/i.test(navigator.userAgent || "")
+  }
+
+  function downloadBlobInBrowser({ filename, blob }) {
     const url = URL.createObjectURL(blob)
     const a = document.createElement("a")
     a.href = url
@@ -71,6 +78,27 @@
     a.click()
     a.remove()
     URL.revokeObjectURL(url)
+  }
+
+  function saveTextFileOnAndroid({ filename, mime, content }) {
+    const invoke = getTauriInvoke()
+    if (!isAndroidTauri() || typeof invoke !== "function") return false
+    invoke("a4_android_save_text_file", {
+      filename: String(filename || "a4-memory-export.txt"),
+      mime: String(mime || "text/plain;charset=utf-8"),
+      content: String(content ?? ""),
+    }).catch(() => {
+      downloadBlobInBrowser({
+        filename,
+        blob: new Blob([content], { type: mime }),
+      })
+    })
+    return true
+  }
+
+  function downloadTextFile({ filename, mime, content }) {
+    if (saveTextFileOnAndroid({ filename, mime, content })) return
+    downloadBlobInBrowser({ filename, blob: new Blob([content], { type: mime }) })
   }
 
   function downloadJsonFile({ filename, data }) {
@@ -79,14 +107,143 @@
   }
 
   function downloadBlob({ filename, blob }) {
-    const url = URL.createObjectURL(blob)
-    const a = document.createElement("a")
-    a.href = url
-    a.download = filename
-    document.body.appendChild(a)
-    a.click()
-    a.remove()
-    URL.revokeObjectURL(url)
+    if (isAndroidTauri() && blob && typeof blob.text === "function") {
+      blob
+        .text()
+        .then((content) => {
+          if (!saveTextFileOnAndroid({ filename, mime: blob.type || "application/octet-stream", content })) {
+            downloadBlobInBrowser({ filename, blob })
+          }
+        })
+        .catch(() => downloadBlobInBrowser({ filename, blob }))
+      return
+    }
+    downloadBlobInBrowser({ filename, blob })
+  }
+
+  function ensureAndroidSelectPickerModal() {
+    let modal = document.getElementById("androidSelectPickerModal")
+    if (modal) return modal
+
+    modal = document.createElement("div")
+    modal.id = "androidSelectPickerModal"
+    modal.className = "modal hidden android-select-picker-modal"
+    modal.setAttribute("aria-hidden", "true")
+    modal.innerHTML = `
+      <div class="modal-backdrop" data-android-select-close></div>
+      <div class="modal-panel android-select-picker-panel" role="dialog" aria-modal="true" aria-labelledby="androidSelectPickerTitle">
+        <div class="modal-header">
+          <h2 id="androidSelectPickerTitle">请选择</h2>
+          <div class="modal-actions">
+            <button class="ghost" type="button" data-android-select-close>关闭</button>
+          </div>
+        </div>
+        <div class="android-select-picker-list"></div>
+      </div>
+    `
+    modal.addEventListener("click", (event) => {
+      if (event.target?.closest?.("[data-android-select-close]")) closeAndroidSelectPicker()
+    })
+    document.body.appendChild(modal)
+    return modal
+  }
+
+  function closeAndroidSelectPicker() {
+    const modal = document.getElementById("androidSelectPickerModal")
+    if (!modal) return
+    modal.classList.add("hidden")
+    modal.setAttribute("aria-hidden", "true")
+    document.querySelectorAll(".android-select-picker-btn[aria-expanded='true']").forEach((button) => {
+      button.setAttribute("aria-expanded", "false")
+    })
+  }
+
+  function getSelectLabel(select) {
+    const selected = select?.selectedOptions?.[0]
+    return String(selected?.textContent || select?.options?.[select.selectedIndex]?.textContent || "请选择").trim()
+  }
+
+  function refreshAndroidSelectPicker(select) {
+    if (!select || !select.__a4AndroidSelectButton) return
+    const button = select.__a4AndroidSelectButton
+    const text = button.querySelector(".android-select-picker-text")
+    if (text) text.textContent = getSelectLabel(select)
+    button.disabled = !!select.disabled
+    button.setAttribute("aria-expanded", "false")
+  }
+
+  function refreshAndroidSelectPickers(root = document) {
+    root.querySelectorAll?.("select[data-a4-android-picker='1']").forEach(refreshAndroidSelectPicker)
+  }
+
+  function appendAndroidSelectOption({ list, select, option }) {
+    const button = document.createElement("button")
+    button.type = "button"
+    button.className = "android-select-picker-option"
+    if (option.disabled) button.disabled = true
+    if (option.value === select.value) button.classList.add("active")
+    button.textContent = String(option.textContent || "").trim() || option.value
+    button.addEventListener("click", () => {
+      if (option.disabled) return
+      select.value = option.value
+      select.dispatchEvent(new Event("change", { bubbles: true }))
+      refreshAndroidSelectPicker(select)
+      closeAndroidSelectPicker()
+    })
+    list.appendChild(button)
+  }
+
+  function openAndroidSelectPicker(select) {
+    const modal = ensureAndroidSelectPickerModal()
+    const title = modal.querySelector("#androidSelectPickerTitle")
+    const list = modal.querySelector(".android-select-picker-list")
+    if (!list) return
+
+    const label = select.getAttribute("aria-label") || select.closest(".form-row")?.querySelector(".form-label")?.textContent || "请选择"
+    if (title) title.textContent = String(label).trim() || "请选择"
+    list.innerHTML = ""
+
+    for (const child of select.children) {
+      if (child.tagName === "OPTGROUP") {
+        const groupTitle = document.createElement("div")
+        groupTitle.className = "android-select-picker-group-title"
+        groupTitle.textContent = child.label || ""
+        list.appendChild(groupTitle)
+        for (const option of child.children) appendAndroidSelectOption({ list, select, option })
+      } else if (child.tagName === "OPTION") {
+        appendAndroidSelectOption({ list, select, option: child })
+      }
+    }
+
+    modal.classList.remove("hidden")
+    modal.setAttribute("aria-hidden", "false")
+    select.__a4AndroidSelectButton?.setAttribute("aria-expanded", "true")
+  }
+
+  function installAndroidSelectPicker(root = document, selector = "select") {
+    if (!/Android/i.test(navigator.userAgent || "")) return
+    root.querySelectorAll?.(selector).forEach((select) => {
+      if (!select || select.dataset.a4AndroidPicker === "1") {
+        refreshAndroidSelectPicker(select)
+        return
+      }
+      select.dataset.a4AndroidPicker = "1"
+      select.classList.add("android-select-source")
+      select.tabIndex = -1
+
+      const button = document.createElement("button")
+      button.type = "button"
+      button.className = "android-select-picker-btn"
+      button.setAttribute("aria-haspopup", "listbox")
+      button.setAttribute("aria-expanded", "false")
+      button.innerHTML = '<span class="android-select-picker-text"></span><span class="android-select-picker-icon" aria-hidden="true"></span>'
+      button.addEventListener("click", () => {
+        if (!select.disabled) openAndroidSelectPicker(select)
+      })
+      select.insertAdjacentElement("afterend", button)
+      select.__a4AndroidSelectButton = button
+      refreshAndroidSelectPicker(select)
+    })
   }
 
   window.A4Utils = {
@@ -95,6 +252,8 @@
     downloadJsonFile,
     downloadBlob,
     installMobileTapGuard,
+    installAndroidSelectPicker,
+    refreshAndroidSelectPickers,
   }
 
   if (typeof document !== "undefined") {

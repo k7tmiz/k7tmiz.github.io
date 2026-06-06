@@ -15,7 +15,7 @@
     <link rel="icon" href="./assets/icon.svg" type="image/svg+xml" />
     <link rel="mask-icon" href="./assets/mask-icon.svg" color="#0b1220" />
     <link rel="apple-touch-icon" href="./assets/icon.svg" />
-    <link rel="stylesheet" href="./css/style.css?v=20260329-6" />
+    <link rel="stylesheet" href="./css/style.css?v=20260606-1" />
   </head>
   <body>
     <header class="app-header">
@@ -52,6 +52,10 @@
         <div class="controls-row controls-row-wordbook immersive-hide">
           <div class="select-wrap">
             <select id="wordbookSelect" aria-label="选择词书"></select>
+            <button class="wordbook-picker-btn hidden" id="wordbookPickerBtn" type="button" aria-haspopup="dialog" aria-expanded="false">
+              <span class="wordbook-picker-text" id="wordbookPickerText">选择词书</span>
+              <span class="wordbook-picker-icon" aria-hidden="true"></span>
+            </button>
           </div>
           <button id="importWordbookBtn" type="button">导入词书</button>
           <input id="importFile" type="file" accept=".csv,.txt,.json" hidden />
@@ -320,16 +324,29 @@ ability,n.,能力</pre>
       </div>
     </div>
 
+    <div class="modal hidden wordbook-picker-modal" id="wordbookPickerModal" aria-hidden="true">
+      <div class="modal-backdrop" id="wordbookPickerBackdrop"></div>
+      <div class="modal-panel wordbook-picker-panel" role="dialog" aria-modal="true" aria-labelledby="wordbookPickerTitle">
+        <div class="modal-header">
+          <h2 id="wordbookPickerTitle">选择词书</h2>
+          <div class="modal-actions">
+            <button class="ghost" id="wordbookPickerCloseBtn" type="button">关闭</button>
+          </div>
+        </div>
+        <div class="wordbook-picker-list" id="wordbookPickerList"></div>
+      </div>
+    </div>
+
     <script src="./data/words.js"></script>
     <script src="./js/core/common.js"></script>
     <script src="./js/core/sanitize.js"></script>
     <script src="./js/utils.js?v=20260329-6"></script>
     <script src="./js/storage.js"></script>
     <script src="./js/cloud.js?v=20260606-4"></script>
-    <script src="./js/speech.js?v=20260606-6"></script>
+    <script src="./js/speech.js?v=20260606-7"></script>
     <script src="./js/updater.js?v=20260510-1"></script>
     <script src="./js/settings.js?v=20260606-6"></script>
     <script src="./js/lookup.js"></script>
-    <script src="./js/app.js?v=20260606-3"></script>
+    <script src="./js/app.js?v=20260606-4"></script>
   </body>
 </html>

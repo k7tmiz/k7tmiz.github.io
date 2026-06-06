@@ -168,6 +168,21 @@ function closeIntroModal() {
   setModalVisible(dom.introModal, false)
 }
 
+function shouldUseAndroidWordbookPicker() {
+  return /Android/i.test(navigator.userAgent || "") && !!dom.wordbookPickerBtn && !!dom.wordbookPickerModal
+}
+
+function openWordbookPicker() {
+  renderWordbookPicker()
+  if (dom.wordbookPickerBtn) dom.wordbookPickerBtn.setAttribute("aria-expanded", "true")
+  setModalVisible(dom.wordbookPickerModal, true)
+}
+
+function closeWordbookPicker() {
+  if (dom.wordbookPickerBtn) dom.wordbookPickerBtn.setAttribute("aria-expanded", "false")
+  setModalVisible(dom.wordbookPickerModal, false)
+}
+
 let settingsController = null
 let lookupController = null
 let pendingAddWordAfterRoundFull = null
@@ -304,6 +319,12 @@ const dom = {
   reviewBtn: document.getElementById("reviewBtn"),
   newRoundBtn: document.getElementById("newRoundBtn"),
   wordbookSelect: document.getElementById("wordbookSelect"),
+  wordbookPickerBtn: document.getElementById("wordbookPickerBtn"),
+  wordbookPickerText: document.getElementById("wordbookPickerText"),
+  wordbookPickerModal: document.getElementById("wordbookPickerModal"),
+  wordbookPickerBackdrop: document.getElementById("wordbookPickerBackdrop"),
+  wordbookPickerCloseBtn: document.getElementById("wordbookPickerCloseBtn"),
+  wordbookPickerList: document.getElementById("wordbookPickerList"),
   importWordbookBtn: document.getElementById("importWordbookBtn"),
   importFile: document.getElementById("importFile"),
   importModal: document.getElementById("importModal"),
@@ -660,6 +681,26 @@ function getSelectedWordbook() {
   return selected
 }
 
+function applyWordbookSelection(wordbookId) {
+  const id = String(wordbookId || "").trim()
+  if (id) appState.selectedWordbookId = id
+  if (dom.wordbookSelect) dom.wordbookSelect.value = appState.selectedWordbookId
+  updateSourceWords()
+  updateWordbookPickerButton()
+  renderWordbookPicker()
+  const round = getCurrentRound()
+  const roundType = normalizeRoundType(round?.type || ROUND_TYPE_NORMAL)
+  const nextLang = getActiveLangBase()
+  const roundLang = getLangBase(round?.language || "")
+  if (roundType === ROUND_TYPE_NORMAL && Array.isArray(round?.items) && round.items.length > 0 && roundLang && roundLang !== nextLang) {
+    startNextRound()
+  } else {
+    appState.pool = []
+    appState.poolIndex = 0
+  }
+  persist()
+}
+
 function updateSourceWords() {
   const all = getAllWordbooks()
   const restrictBase = appState.pronunciationLang && appState.pronunciationLang !== "auto" ? String(appState.pronunciationLang) : ""
@@ -684,6 +725,7 @@ function updateSourceWords() {
     [base]: book.id,
   }
   dom.wordbookSelect.value = book.id
+  updateWordbookPickerButton()
 }
 
 function renderWordbookSelect() {
@@ -714,6 +756,62 @@ function renderWordbookSelect() {
     dom.wordbookSelect.appendChild(og)
   }
   updateSourceWords()
+  renderWordbookPicker()
+}
+
+function updateWordbookPickerButton() {
+  if (!dom.wordbookPickerText) return
+  const book = getSelectedWordbook()
+  const count = Array.isArray(book.words) ? book.words.length : 0
+  dom.wordbookPickerText.textContent = `${book.name || "选择词书"}（${count}）`
+}
+
+function renderWordbookPicker() {
+  if (!dom.wordbookPickerList || !shouldUseAndroidWordbookPicker()) return
+  const all0 = getAllWordbooks()
+  const restrictBase =
+    appState.pronunciationLang && appState.pronunciationLang !== "auto" ? getLangBase(appState.pronunciationLang) : ""
+  const all = restrictBase ? all0.filter((b) => getWordbookLangBase(b) === restrictBase) : all0
+  const list = all.length ? all : all0
+  dom.wordbookPickerList.innerHTML = ""
+  const groups = new Map()
+  for (const b of list) {
+    const base = getWordbookLangBase(b)
+    if (!groups.has(base)) groups.set(base, [])
+    groups.get(base).push(b)
+  }
+  const bases = Array.from(groups.keys()).sort((a, b) => a.localeCompare(b))
+  for (const base of bases) {
+    const group = document.createElement("div")
+    group.className = "wordbook-picker-group"
+    const title = document.createElement("div")
+    title.className = "wordbook-picker-group-title"
+    title.textContent = getLangLabel(base)
+    group.appendChild(title)
+    for (const b of groups.get(base) || []) {
+      const option = document.createElement("button")
+      const active = b.id === appState.selectedWordbookId
+      option.className = `wordbook-picker-option${active ? " active" : ""}`
+      option.type = "button"
+      option.dataset.wordbookId = b.id
+      option.setAttribute("aria-pressed", active ? "true" : "false")
+
+      const name = document.createElement("span")
+      name.className = "wordbook-picker-name"
+      name.textContent = b.name || "未命名词书"
+      const count = document.createElement("span")
+      count.className = "wordbook-picker-count"
+      count.textContent = `${Array.isArray(b.words) ? b.words.length : 0} 词`
+      option.appendChild(name)
+      option.appendChild(count)
+      option.addEventListener("click", () => {
+        applyWordbookSelection(b.id)
+        closeWordbookPicker()
+      })
+      group.appendChild(option)
+    }
+    dom.wordbookPickerList.appendChild(group)
+  }
 }
 
 function stripFileExtension(filename) {
@@ -2569,21 +2667,24 @@ if (window.A4Lookup && typeof window.A4Lookup.createLookupModalController === "f
 dom.settingsBtn.addEventListener("click", () => openSettingsModal())
 dom.lookupBtn?.addEventListener("click", () => openLookupModal())
 
+if (shouldUseAndroidWordbookPicker()) {
+  document.body.classList.add("android-wordbook-picker")
+  dom.wordbookPickerBtn?.classList.remove("hidden")
+  dom.wordbookSelect?.setAttribute("aria-hidden", "true")
+  dom.wordbookSelect?.setAttribute("tabindex", "-1")
+  updateWordbookPickerButton()
+}
+
 dom.wordbookSelect.addEventListener("change", () => {
-  appState.selectedWordbookId = dom.wordbookSelect.value
-  updateSourceWords()
-  const round = getCurrentRound()
-  const roundType = normalizeRoundType(round?.type || ROUND_TYPE_NORMAL)
-  const nextLang = getActiveLangBase()
-  const roundLang = getLangBase(round?.language || "")
-  if (roundType === ROUND_TYPE_NORMAL && Array.isArray(round?.items) && round.items.length > 0 && roundLang && roundLang !== nextLang) {
-    startNextRound()
-  } else {
-    appState.pool = []
-    appState.poolIndex = 0
-  }
-  persist()
+  applyWordbookSelection(dom.wordbookSelect.value)
 })
+
+dom.wordbookPickerBtn?.addEventListener("click", () => {
+  if (shouldUseAndroidWordbookPicker()) openWordbookPicker()
+})
+
+dom.wordbookPickerBackdrop?.addEventListener("click", () => closeWordbookPicker())
+dom.wordbookPickerCloseBtn?.addEventListener("click", () => closeWordbookPicker())
 
 dom.importWordbookBtn.addEventListener("click", () => {
   openImportModal()
@@ -3132,6 +3233,7 @@ function isAnyModalOpen() {
     isModalOpen(dom.reviewModal) ||
     isModalOpen(dom.roundFullModal) ||
     isModalOpen(dom.importModal) ||
+    isModalOpen(dom.wordbookPickerModal) ||
     isModalOpen(dom.introModal)
   )
 }
