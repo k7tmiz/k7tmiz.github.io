@@ -556,14 +556,14 @@
   async function speakOnline(text, langTag, provider) {
     const p = String(provider || "edge").toLowerCase()
     const providers = p === "google" ? ["google", "edge"] : ["edge", "google"]
+    for (const currentProvider of providers) {
+      const directSpeak = currentProvider === "google" ? speakWithGoogleTts : speakWithEdgeTts
+      if (await directSpeak(text, langTag)) return true
+    }
     if (typeof window.A4TtsBridge?.synthesize === "function") {
       for (const currentProvider of providers) {
         if (await speakWithTtsBridge(text, langTag, currentProvider)) return true
       }
-    }
-    for (const currentProvider of providers) {
-      const directSpeak = currentProvider === "google" ? speakWithGoogleTts : speakWithEdgeTts
-      if (await directSpeak(text, langTag)) return true
     }
     return false
   }

@@ -463,7 +463,7 @@
               <div class="form-label">发音方式</div>
               <div class="form-control">
                 <select id="ttsModeSelect" aria-label="发音方式">
-                  <option value="online">在线 TTS（Microsoft Edge，推荐）</option>
+                  <option value="online">在线 TTS（推荐）</option>
                   <option value="system">系统语音</option>
                 </select>
               </div>
@@ -478,7 +478,7 @@
               </div>
             </div>
             <div class="form-help" id="onlineTtsPrivacyHint">
-              在线发音会将朗读文本发送给 Microsoft Edge 或 Google 翻译；首选源不可用时可能发送给另一在线源。
+              在线发音会将朗读文本直接发送给 Microsoft Edge 或 Google 翻译；直连失败时可能通过服务端代理或切换至另一在线源。
             </div>
             <div class="form-row hidden" style="display:none;">
               <div class="form-label">在线兜底开关</div>
@@ -2102,6 +2102,7 @@
       const onlineTtsProvider = normalizeOnlineTtsProvider(dom.onlineTtsProviderSelect.value)
       setStateSafe({ onlineTtsProvider })
       persistSafe()
+      render()
       afterChange("onlineTtsProvider")
     })
 
