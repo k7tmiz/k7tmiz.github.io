@@ -387,136 +387,6 @@
           </div>
         </div>
         <div class="modal-body">
-          <section class="panel account-panel" id="accountPanel">
-            <div class="section-title">账号与云备份</div>
-            <div id="accountLoggedOut">
-              <div class="form-help">登录后可用云端备份；没有账号可注册或重置密码。</div>
-              <div class="view-tabs account-tabs" role="tablist" aria-label="账号操作">
-                <button class="ghost active" id="accountTabLoginBtn" type="button" role="tab" aria-selected="true">登录</button>
-                <button class="ghost" id="accountTabRegisterBtn" type="button" role="tab" aria-selected="false">注册</button>
-                <button class="ghost" id="accountTabResetBtn" type="button" role="tab" aria-selected="false">重置密码</button>
-              </div>
-              <div class="account-section hidden" id="accountRegisterSection">
-                <div class="account-section-title">邮箱验证码注册</div>
-                <div class="form-row">
-                  <div class="form-label">注册邮箱</div>
-                  <div class="form-control form-control-stack">
-                    <input id="cloudEmailInput" class="text-input" type="email" placeholder="用于接收注册验证码" autocomplete="email" />
-                    <div id="cloudEmailHint" class="form-help field-help hidden"></div>
-                  </div>
-                </div>
-                <div class="form-row">
-                  <div class="form-label">注册验证码</div>
-                  <div class="form-control form-control-stack">
-                    <input id="cloudRegisterCodeInput" class="text-input" type="text" inputmode="numeric" maxlength="6" pattern="\\d{6}" placeholder="6 位验证码" autocomplete="one-time-code" />
-                    <div id="cloudRegisterCodeHint" class="form-help field-help hidden"></div>
-                  </div>
-                </div>
-                <div class="account-actions">
-                  <button class="ghost full" id="cloudSendCodeBtn" type="button">发送注册验证码</button>
-                </div>
-                <div class="form-row">
-                  <div class="form-label">用户名</div>
-                  <div class="form-control form-control-stack">
-                    <input id="cloudUsernameInput" class="text-input" type="text" maxlength="32" placeholder="注册用户名" autocomplete="username" />
-                    <div id="cloudUsernameHint" class="form-help field-help hidden"></div>
-                  </div>
-                </div>
-                <div class="form-row">
-                  <div class="form-label">密码</div>
-                  <div class="form-control form-control-stack">
-                    <input id="cloudPasswordInput" class="text-input" type="password" minlength="8" placeholder="注册密码" autocomplete="new-password" />
-                    <div id="cloudPasswordHint" class="form-help field-help hidden"></div>
-                  </div>
-                </div>
-                <div class="account-actions">
-                  <button class="ghost full" id="cloudRegisterBtn" type="button">邮箱验证码注册</button>
-                </div>
-              </div>
-              <div class="account-section" id="accountLoginSection">
-                <div class="account-section-title">账号登录</div>
-                <div class="form-row">
-                  <div class="form-label">登录邮箱</div>
-                  <div class="form-control form-control-stack">
-                    <input id="cloudLoginEmailInput" class="text-input" type="email" placeholder="输入注册邮箱" autocomplete="email" />
-                    <div id="cloudLoginEmailHint" class="form-help field-help hidden"></div>
-                  </div>
-                </div>
-                <div class="form-row">
-                  <div class="form-label">密码</div>
-                  <div class="form-control form-control-stack">
-                    <input id="cloudLoginPasswordInput" class="text-input" type="password" minlength="8" placeholder="输入密码" autocomplete="current-password" />
-                    <div id="cloudLoginPasswordHint" class="form-help field-help hidden"></div>
-                  </div>
-                </div>
-                <div class="account-actions">
-                  <button class="primary full" id="cloudLoginBtn" type="button">登录</button>
-                </div>
-              </div>
-              <div class="account-section hidden" id="accountResetSection">
-                <div class="account-section-title">重置密码</div>
-                <div class="form-row">
-                  <div class="form-label">重置邮箱</div>
-                  <div class="form-control form-control-stack">
-                    <input id="cloudResetEmailInput" class="text-input" type="email" placeholder="接收重置验证码的邮箱" autocomplete="email" />
-                    <div id="cloudResetEmailHint" class="form-help field-help hidden"></div>
-                  </div>
-                </div>
-                <div class="form-row">
-                  <div class="form-label">重置验证码</div>
-                  <div class="form-control form-control-stack">
-                    <input id="cloudResetCodeInput" class="text-input" type="text" inputmode="numeric" maxlength="6" pattern="\\d{6}" placeholder="6 位验证码" autocomplete="one-time-code" />
-                    <div id="cloudResetCodeHint" class="form-help field-help hidden"></div>
-                  </div>
-                </div>
-                <div class="account-actions">
-                  <button class="ghost full" id="cloudSendResetCodeBtn" type="button">发送重置验证码</button>
-                </div>
-                <div class="form-row">
-                  <div class="form-label">新密码</div>
-                  <div class="form-control form-control-stack">
-                    <input id="cloudResetPasswordInput" class="text-input" type="password" minlength="8" placeholder="至少 8 位" autocomplete="new-password" />
-                    <div id="cloudResetPasswordHint" class="form-help field-help hidden"></div>
-                  </div>
-                </div>
-                <div class="account-actions">
-                  <button class="ghost full" id="cloudResetPasswordBtn" type="button">重置密码</button>
-                </div>
-              </div>
-            </div>
-            <div id="accountLoggedIn" class="hidden">
-              <div class="account-summary account-summary-compact">
-                <div class="account-summary-head">
-                  <div class="account-summary-identity">
-                    <div class="account-summary-title" id="cloudAccountTitle">已登录</div>
-                    <div class="account-summary-subtitle" id="cloudAccountSubtitle">当前浏览器已启用云端备份</div>
-                  </div>
-                  <div class="account-badge">在线</div>
-                </div>
-                <div class="account-summary-meta-row account-summary-meta-row-tight">
-                  <div class="account-summary-meta-item"><span>云备份</span><strong id="cloudBackupStateText">已启用</strong></div>
-                  <div class="account-summary-meta-item"><span>最近同步</span><strong id="cloudLastSyncText">尚未同步</strong></div>
-                </div>
-                <div class="account-summary-grid account-summary-grid-dense">
-                  <div class="account-summary-item"><span>单词</span><strong id="cloudWordsText">0</strong></div>
-                  <div class="account-summary-item"><span>轮次</span><strong id="cloudRoundsText">0</strong></div>
-                  <div class="account-summary-item"><span>今日新增</span><strong id="cloudTodayWordsText">0</strong></div>
-                  <div class="account-summary-item"><span>连续</span><strong id="cloudStreakText">0 天</strong></div>
-                  <div class="account-summary-item"><span>今日完成</span><strong id="cloudTodayRoundsText">0 轮</strong></div>
-                  <div class="account-summary-item"><span>当前轮</span><strong id="cloudCurrentRoundText">未开始</strong></div>
-                  <div class="account-summary-item account-summary-item-wide"><span>会话</span><strong id="cloudSessionText">刚刚开始</strong></div>
-                </div>
-                <div class="account-summary-actions">
-                  <button class="primary" id="cloudUploadBtn" type="button">上传云端</button>
-                  <button class="ghost" id="cloudDownloadBtn" type="button">恢复本机</button>
-                  <button class="ghost" id="cloudLogoutBtn" type="button">退出登录</button>
-                </div>
-                <div class="form-help account-sync-note" id="cloudSyncStatus"></div>
-              </div>
-            </div>
-            <div class="form-help account-status hidden" id="accountStatus"></div>
-          </section>
-
           <section class="panel">
             <div class="section-title">学习</div>
             <div class="form-row">
@@ -529,6 +399,15 @@
                 </select>
               </div>
             </div>
+            <div class="form-row">
+              <div class="form-label">每日目标轮次</div>
+              <div class="form-control"><input id="dailyGoalRoundsInput" class="text-input" type="number" min="0" max="20" value="0" /></div>
+            </div>
+            <div class="form-row">
+              <div class="form-label">每日目标单词</div>
+              <div class="form-control"><input id="dailyGoalWordsInput" class="text-input" type="number" min="0" max="500" value="0" /></div>
+            </div>
+            <div class="form-help">填 0 表示不启用该目标；首页与记录页会展示今日进度。</div>
             <div class="form-row">
               <div class="form-label">每轮上限</div>
               <div class="form-control">
@@ -543,20 +422,8 @@
               </div>
             </div>
             <div class="form-help">可选 20–30。修改后对新一轮生效。</div>
-            <div class="form-row">
-              <div class="form-label">每日目标轮次</div>
-              <div class="form-control"><input id="dailyGoalRoundsInput" class="text-input" type="number" min="0" max="20" value="0" /></div>
-            </div>
-            <div class="form-row">
-              <div class="form-label">每日目标单词</div>
-              <div class="form-control"><input id="dailyGoalWordsInput" class="text-input" type="number" min="0" max="500" value="0" /></div>
-            </div>
-            <div class="form-help">填 0 表示不启用该目标；首页与记录页会展示今日进度。</div>
-          </section>
 
-          <section class="panel">
-            <div class="section-title">复习</div>
-            <div class="form-row">
+            <div class="form-row" style="margin-top: 12px;">
               <div class="form-label">启用轻量复习</div>
               <div class="form-control"><button class="ghost" id="reviewSystemToggleBtn" type="button">复习：开</button></div>
             </div>
@@ -601,290 +468,21 @@
                 </select>
               </div>
             </div>
-            <div class="form-help">在线 TTS 使用 Microsoft Edge 神经网络语音，效果好且无需安装系统语音包。</div>
-            <div class="form-row">
-              <div class="form-label">英语口音</div>
-              <div class="form-control">
-                <select id="accentSelect" aria-label="英语口音">
-                  <option value="auto">自动</option>
-                  <option value="us">美式（en-US）</option>
-                  <option value="gb">英式（en-GB）</option>
-                </select>
-              </div>
-            </div>
-            <div class="form-row">
-              <div class="form-label">语言（可选）</div>
-              <div class="form-control">
-                <select id="pronunciationLangSelect" aria-label="发音语言">
-                  <option value="auto">自动（按词书 language）</option>
-                  <option value="en">英语</option><option value="es">西班牙语</option>
-                  <option value="ja">日语</option><option value="ko">韩语</option>
-                  <option value="pt">葡萄牙语</option><option value="fr">法语</option>
-                  <option value="de">德语</option><option value="it">意大利语</option>
-                  <option value="eo">世界语</option>
-                </select>
-              </div>
-            </div>
-            <div class="form-row">
-              <div class="form-label">语音模式</div>
-              <div class="form-control">
-                <select id="voiceModeSelect" aria-label="语音模式">
-                  <option value="auto">自动选择（推荐）</option>
-                  <option value="manual">手动选择（当前设备语音）</option>
-                </select>
-              </div>
-            </div>
-            <div class="form-row hidden" id="voiceManualRow">
-              <div class="form-label">可用语音</div>
-              <div class="form-control"><select id="voiceSelect" aria-label="可用语音"></select></div>
-            </div>
-            <div class="form-row">
-              <div class="form-label">当前语音</div>
-              <div class="form-control"><div id="currentVoiceText" class="form-help"></div></div>
-            </div>
-            <div class="form-help" id="voiceHint"></div>
-            <div class="stack"><button class="ghost" id="testVoiceBtn" type="button">测试发音</button></div>
-            <div class="form-row" style="margin-top:8px">
-              <div class="form-label">在线发音兜底</div>
-              <div class="form-control"><button class="ghost" id="onlineTtsToggleBtn" type="button">在线兜底：开</button></div>
-            </div>
             <div class="form-row" id="onlineTtsProviderRow">
               <div class="form-label">在线发音源</div>
               <div class="form-control">
                 <select id="onlineTtsProviderSelect" aria-label="在线发音源">
-                  <option value="edge">Microsoft Edge（推荐，国内可用）</option>
+                  <option value="edge">Microsoft Edge（国内可用）</option>
                   <option value="google">Google 翻译</option>
                 </select>
               </div>
             </div>
-            <div class="form-help">系统语音模式下，当系统没有匹配语音时通过网络兜底。</div>
-          </section>
+            <div class="form-row hidden" style="display:none;">
+              <div class="form-label">在线兜底开关</div>
+              <div class="form-control"><button class="ghost" id="onlineTtsToggleBtn" type="button">在线兜底：开</button></div>
+            </div>
 
-          <section class="panel">
-            <div class="section-title">查词</div>
-            <div class="form-row">
-              <div class="form-label">联网补充</div>
-              <div class="form-control"><button class="ghost" id="lookupOnlineToggleBtn" type="button">联网补充：开</button></div>
-            </div>
-            <div class="form-row">
-              <div class="form-label">补充来源</div>
-              <div class="form-control">
-                <select id="lookupOnlineSourceSelect" aria-label="查词补充来源">
-                  <option value="builtin">内置在线补充源（默认）</option>
-                  <option value="custom">自定义 API（替换内置）</option>
-                </select>
-              </div>
-            </div>
-            <div class="form-help">选择「自定义 API」后会复用下方「AI 生成词书」的 API 配置（只需配置一次）。</div>
-            <div class="form-row">
-              <div class="form-label">西语动词变位</div>
-              <div class="form-control"><button class="ghost" id="lookupSpanishToggleBtn" type="button">西语变位：开</button></div>
-            </div>
-            <div class="form-row">
-              <div class="form-label">查词缓存</div>
-              <div class="form-control"><button class="ghost" id="lookupCacheToggleBtn" type="button">缓存：开</button></div>
-            </div>
-            <div class="form-row">
-              <div class="form-label">缓存时长（天）</div>
-              <div class="form-control"><input id="lookupCacheDaysInput" class="text-input" type="number" min="1" max="365" value="30" /></div>
-            </div>
-            <div class="form-help">本地词书与学习记录优先显示；在线补充会异步补充并缓存。</div>
-          </section>
-
-          <section class="panel">
-            <div class="section-title">AI 生成词书</div>
-            <div class="form-row">
-              <div class="form-label">服务模式</div>
-              <div class="form-control">
-                <select id="aiServiceModeSelect" aria-label="AI 服务模式">
-                  <option value="custom">自定义 API</option>
-                  <option value="official">官方服务</option>
-                </select>
-              </div>
-            </div>
-            <div id="aiOfficialServiceHint" class="form-help hidden">官方服务：使用登录账号的官方额度（暂未开放）</div>
-            <div id="aiCustomConfigPanel">
-            <div class="form-row">
-              <div class="form-label">API 提供商</div>
-              <div class="form-control">
-                <select id="aiProviderSelect" aria-label="API 提供商">
-                  <option value="openai">OpenAI</option><option value="gemini">Gemini</option>
-                  <option value="deepseek">DeepSeek</option><option value="siliconcloud">SiliconCloud</option>
-                  <option value="custom">自定义</option>
-                </select>
-              </div>
-            </div>
-            <div class="form-row">
-              <div class="form-label">API Base URL</div>
-              <div class="form-control"><input id="aiBaseUrlInput" class="text-input" type="text" placeholder="https://api.example.com/v1" /></div>
-            </div>
-            <div class="form-row">
-              <div class="form-label">API Key</div>
-              <div class="form-control"><input id="aiApiKeyInput" class="text-input" type="password" placeholder="只保存在当前浏览器本地" /></div>
-            </div>
-            <div class="form-row">
-              <div class="form-label">Model</div>
-              <div class="form-control">
-                <input id="aiModelInput" class="text-input" type="text" list="aiModelDatalist" placeholder="可直接输入或选常用模型" />
-                <datalist id="aiModelDatalist"></datalist>
-              </div>
-            </div>
-            </div>
-            <div class="form-help">可先选择提供商自动填充建议值；API Key 仅保存在当前浏览器本地。</div>
-            <div class="form-row">
-              <div class="form-label">词书类型</div>
-              <div class="form-control">
-                <select id="aiTypeSelect" aria-label="词书类型">
-                  <option value="toefl">托福词书</option><option value="programming">编程词汇</option>
-                  <option value="medical">医学词汇</option><option value="jp">日语</option>
-                  <option value="kr">韩语</option><option value="fr">法语</option>
-                  <option value="de">德语</option><option value="es">西班牙语</option>
-                  <option value="it">意大利语</option><option value="ru">俄语</option>
-                  <option value="custom">自定义主题</option>
-                </select>
-              </div>
-            </div>
-            <div class="form-row">
-              <div class="form-label">主题（可选）</div>
-              <div class="form-control"><input id="aiCustomTopicInput" class="text-input" type="text" placeholder="可选：为词书增加主题/领域（小语种也可用）" /></div>
-            </div>
-            <div class="form-row">
-              <div class="form-label">数量</div>
-              <div class="form-control"><input id="aiCountInput" class="text-input" type="number" min="10" max="500" value="120" /></div>
-            </div>
-            <div class="stack"><button class="primary full" id="aiGenerateBtn" type="button">生成并预览</button></div>
-            <div class="form-help" id="aiStatus"></div>
-          </section>
-
-          <section class="panel">
-            <div class="section-title">数据与版本</div>
-            <div class="stack">
-              <button class="ghost full" id="exportBackupBtn" type="button">导出完整学习数据（JSON）</button>
-              <button class="ghost full" id="importBackupBtn" type="button">导入完整学习数据（JSON）</button>
-              <input id="importBackupFile" type="file" accept=".json,application/json" hidden />
-            </div>
-            <div class="form-help">包含学习记录与设置；导入会覆盖当前浏览器本地数据。</div>
-            <div class="form-row" id="versionPanel">
-              <div class="form-label">当前版本</div>
-              <div class="form-control"><span class="form-help" id="versionText">v\${window.A4Updater?.APP_VERSION || "1.0.0"}</span></div>
-            </div>
-            <div class="stack" style="margin-top:4px"><button class="ghost full" id="checkUpdateBtn" type="button">检查更新</button></div>
-            <div class="form-help hidden" id="updateStatus"></div>
-          </section>
-        </div>
-      </div>
-            <div class="form-row">
-              <div class="form-label">主题模式</div>
-              <div class="form-control">
-                <select id="themeModeSelect" aria-label="主题模式">
-                  <option value="auto">自动（跟随系统）</option>
-                  <option value="light">浅色</option>
-                  <option value="dark">深色</option>
-                </select>
-              </div>
-            </div>
-          </section>
-
-          <section class="panel">
-            <div class="section-title">学习目标</div>
-            <div class="form-row">
-              <div class="form-label">每日目标轮次</div>
-              <div class="form-control">
-                <input id="dailyGoalRoundsInput" class="text-input" type="number" min="0" max="20" value="0" />
-              </div>
-            </div>
-            <div class="form-row">
-              <div class="form-label">每日目标单词</div>
-              <div class="form-control">
-                <input id="dailyGoalWordsInput" class="text-input" type="number" min="0" max="500" value="0" />
-              </div>
-            </div>
-            <div class="form-help">填 0 表示不启用该目标；首页与记录页会展示今日进度。</div>
-          </section>
-
-          <section class="panel">
-            <div class="section-title">学习设置</div>
-            <div class="form-row">
-              <div class="form-label">每轮上限</div>
-              <div class="form-control">
-                <div class="select-wrap">
-                  <select id="roundCapInput" aria-label="每轮上限">
-                    <option value="20">20</option>
-                    <option value="21">21</option>
-                    <option value="22">22</option>
-                    <option value="23">23</option>
-                    <option value="24">24</option>
-                    <option value="25">25</option>
-                    <option value="26">26</option>
-                    <option value="27">27</option>
-                    <option value="28">28</option>
-                    <option value="29">29</option>
-                    <option value="30">30</option>
-                  </select>
-                </div>
-              </div>
-            </div>
-            <div class="form-help">可选 20–30。修改后对新一轮生效；已经开始的轮次会继续使用原来的上限。</div>
-          </section>
-
-          <section class="panel">
-            <div class="section-title">复习</div>
-            <div class="form-row">
-              <div class="form-label">启用轻量复习</div>
-              <div class="form-control">
-                <button class="ghost" id="reviewSystemToggleBtn" type="button">复习：开</button>
-              </div>
-            </div>
-            <div id="reviewIntervalsPanel">
-              <div class="form-row">
-                <div class="form-label">不会（天）</div>
-                <div class="form-control">
-                  <input id="reviewUnknownDaysInput" class="text-input" type="number" min="1" max="60" value="1" />
-                </div>
-              </div>
-              <div class="form-row">
-                <div class="form-label">学习中（天）</div>
-                <div class="form-control">
-                  <input id="reviewLearningDaysInput" class="text-input" type="number" min="1" max="60" value="3" />
-                </div>
-              </div>
-              <div class="form-row">
-                <div class="form-label">已掌握（天）</div>
-                <div class="form-control">
-                  <input id="reviewMasteredDaysInput" class="text-input" type="number" min="1" max="365" value="7" />
-                </div>
-              </div>
-            </div>
-            <div class="form-row">
-              <div class="form-label">复习完成后自动关闭弹窗</div>
-              <div class="form-control">
-                <div class="form-help">固定开启</div>
-              </div>
-            </div>
-            <div class="form-row">
-              <div class="form-label">持续背书模式</div>
-              <div class="form-control">
-                <button class="ghost" id="continuousStudyModeToggleBtn" type="button">持续背书：关</button>
-              </div>
-            </div>
-            <div class="form-help">开启后，普通学习轮的复习结束会自动继续下一词，不需要再点「下一个单词」。</div>
-            <div class="form-row">
-              <div class="form-label">启用复习卡片翻面</div>
-              <div class="form-control">
-                <button class="ghost" id="reviewCardFlipToggleBtn" type="button">翻面：关</button>
-              </div>
-            </div>
-            <div class="form-help">到期规则：按状态计算下次复习时间；到期后会显示“待复习”。</div>
-          </section>
-
-          <section class="panel">
-            <div class="section-title">发音</div>
-            <div class="form-row">
-              <div class="form-label">启用发音</div>
-              <div class="form-control">
-                <button class="ghost" id="pronounceToggleBtn" type="button">发音：开</button>
-              </div>
-            </div>
+            <!-- Below are shown when System mode is selected -->
             <div class="form-row">
               <div class="form-label">英语口音</div>
               <div class="form-control">
@@ -913,22 +511,22 @@
               </div>
             </div>
             <div class="form-row">
-              <div class="form-label">语音模式</div>
+              <div class="form-label">系统语音模式</div>
               <div class="form-control">
-                <select id="voiceModeSelect" aria-label="语音模式">
-                  <option value="auto">自动选择（推荐）</option>
-                  <option value="manual">手动选择（当前设备语音）</option>
+                <select id="voiceModeSelect" aria-label="系统语音模式">
+                  <option value="auto">自动选择</option>
+                  <option value="manual">手动选择</option>
                 </select>
               </div>
             </div>
             <div class="form-row hidden" id="voiceManualRow">
-              <div class="form-label">可用语音</div>
+              <div class="form-label">可用系统语音</div>
               <div class="form-control">
-                <select id="voiceSelect" aria-label="可用语音"></select>
+                <select id="voiceSelect" aria-label="可用系统语音"></select>
               </div>
             </div>
             <div class="form-row">
-              <div class="form-label">当前语音</div>
+              <div class="form-label">当前生效语音</div>
               <div class="form-control">
                 <div id="currentVoiceText" class="form-help"></div>
               </div>
@@ -937,31 +535,77 @@
             <div class="stack">
               <button class="ghost" id="testVoiceBtn" type="button">测试发音</button>
             </div>
-            <div class="form-row" style="margin-top:8px">
-              <div class="form-label">在线发音兜底</div>
-              <div class="form-control">
-                <button class="ghost" id="onlineTtsToggleBtn" type="button">在线兜底：开</button>
-              </div>
-            </div>
-            <div class="form-row" id="onlineTtsProviderRow">
-              <div class="form-label">在线发音源</div>
-              <div class="form-control">
-                <select id="onlineTtsProviderSelect" aria-label="在线发音源">
-                  <option value="edge">Microsoft Edge（推荐，国内可用）</option>
-                  <option value="google">Google 翻译</option>
-                </select>
-              </div>
-            </div>
-            <div class="form-help">当系统没有匹配语音时，通过网络获取发音。Microsoft 国内可直连，Google 需科学上网。</div>
           </section>
 
           <section class="panel">
-            <div class="section-title">查词</div>
+            <div class="section-title">AI 制卡</div>
+            <div class="form-row">
+              <div class="form-label">服务模式</div>
+              <div class="form-control">
+                <select id="aiServiceModeSelect" aria-label="AI 服务模式">
+                  <option value="custom">自定义 API</option>
+                  <option value="official">官方服务</option>
+                </select>
+              </div>
+            </div>
+            <div id="aiOfficialServiceHint" class="form-help hidden">官方服务：使用登录账号的官方额度（暂未开放）</div>
+            <div id="aiCustomConfigPanel">
+              <div class="form-row">
+                <div class="form-label">API 提供商</div>
+                <div class="form-control">
+                  <select id="aiProviderSelect" aria-label="API 提供商">
+                    <option value="openai">OpenAI</option><option value="gemini">Gemini</option>
+                    <option value="deepseek">DeepSeek</option><option value="siliconcloud">SiliconCloud</option>
+                    <option value="custom">自定义</option>
+                  </select>
+                </div>
+              </div>
+              <div class="form-row">
+                <div class="form-label">API Base URL</div>
+                <div class="form-control"><input id="aiBaseUrlInput" class="text-input" type="text" placeholder="https://api.example.com/v1" /></div>
+              </div>
+              <div class="form-row">
+                <div class="form-label">API Key</div>
+                <div class="form-control"><input id="aiApiKeyInput" class="text-input" type="password" placeholder="只保存在当前浏览器本地" /></div>
+              </div>
+              <div class="form-row">
+                <div class="form-label">Model</div>
+                <div class="form-control">
+                  <input id="aiModelInput" class="text-input" type="text" list="aiModelDatalist" placeholder="可直接输入或选常用模型" />
+                  <datalist id="aiModelDatalist"></datalist>
+                </div>
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="form-label">词书类型</div>
+              <div class="form-control">
+                <select id="aiTypeSelect" aria-label="词书类型">
+                  <option value="toefl">托福词书</option><option value="programming">编程词汇</option>
+                  <option value="medical">医学词汇</option><option value="jp">日语</option>
+                  <option value="kr">韩语</option><option value="fr">法语</option>
+                  <option value="de">德语</option><option value="es">西班牙语</option>
+                  <option value="it">意大利语</option><option value="ru">俄语</option>
+                  <option value="custom">自定义主题</option>
+                </select>
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="form-label">主题（可选）</div>
+              <div class="form-control"><input id="aiCustomTopicInput" class="text-input" type="text" placeholder="可选：为词书增加主题/领域" /></div>
+            </div>
+            <div class="form-row">
+              <div class="form-label">数量</div>
+              <div class="form-control"><input id="aiCountInput" class="text-input" type="number" min="10" max="500" value="120" /></div>
+            </div>
+            <div class="stack"><button class="primary full" id="aiGenerateBtn" type="button">生成并预览</button></div>
+            <div class="form-help" id="aiStatus"></div>
+          </section>
+
+          <section class="panel">
+            <div class="section-title">联网补充</div>
             <div class="form-row">
               <div class="form-label">联网补充</div>
-              <div class="form-control">
-                <button class="ghost" id="lookupOnlineToggleBtn" type="button">联网补充：开</button>
-              </div>
+              <div class="form-control"><button class="ghost" id="lookupOnlineToggleBtn" type="button">联网补充：开</button></div>
             </div>
             <div class="form-row">
               <div class="form-label">补充来源</div>
@@ -972,36 +616,19 @@
                 </select>
               </div>
             </div>
-            <div class="form-help">选择「自定义 API」后会复用下方「AI 生成词书」的 API 配置（只需配置一次）。</div>
+            <div class="form-help">选择「自定义 API」后会复用上方「AI 制卡」的 API 配置。</div>
             <div class="form-row">
               <div class="form-label">西语动词变位</div>
-              <div class="form-control">
-                <button class="ghost" id="lookupSpanishToggleBtn" type="button">西语变位：开</button>
-              </div>
+              <div class="form-control"><button class="ghost" id="lookupSpanishToggleBtn" type="button">西语变位：开</button></div>
             </div>
             <div class="form-row">
               <div class="form-label">查词缓存</div>
-              <div class="form-control">
-                <button class="ghost" id="lookupCacheToggleBtn" type="button">缓存：开</button>
-              </div>
+              <div class="form-control"><button class="ghost" id="lookupCacheToggleBtn" type="button">缓存：开</button></div>
             </div>
             <div class="form-row">
               <div class="form-label">缓存时长（天）</div>
-              <div class="form-control">
-                <input id="lookupCacheDaysInput" class="text-input" type="number" min="1" max="365" value="30" />
-              </div>
+              <div class="form-control"><input id="lookupCacheDaysInput" class="text-input" type="number" min="1" max="365" value="30" /></div>
             </div>
-            <div class="form-help">本地词书与学习记录优先显示；在线补充会异步补充并缓存。</div>
-          </section>
-
-          <section class="panel">
-            <div class="section-title">学习数据</div>
-            <div class="stack">
-              <button class="ghost full" id="exportBackupBtn" type="button">导出完整学习数据（JSON）</button>
-              <button class="ghost full" id="importBackupBtn" type="button">导入完整学习数据（JSON）</button>
-              <input id="importBackupFile" type="file" accept=".json,application/json" hidden />
-            </div>
-            <div class="form-help">包含学习记录与设置；导入会覆盖当前浏览器本地数据。</div>
           </section>
 
           <section class="panel account-panel" id="accountPanel">
@@ -1162,100 +789,25 @@
           </section>
 
           <section class="panel">
-            <div class="section-title">AI（生成词书 / 查词补充）</div>
-            <div class="form-row">
-              <div class="form-label">服务模式</div>
-              <div class="form-control">
-                <select id="aiServiceModeSelect" aria-label="AI 服务模式">
-                  <option value="custom">自定义 API</option>
-                  <option value="official">官方服务</option>
-                </select>
-              </div>
-            </div>
-            <div id="aiOfficialServiceHint" class="form-help hidden">官方服务：使用登录账号的官方额度（暂未开放）</div>
-            <div id="aiCustomConfigPanel">
-            <div class="form-row">
-              <div class="form-label">API 提供商</div>
-              <div class="form-control">
-                <select id="aiProviderSelect" aria-label="API 提供商">
-                  <option value="openai">OpenAI</option>
-                  <option value="gemini">Gemini</option>
-                  <option value="deepseek">DeepSeek</option>
-                  <option value="siliconcloud">SiliconCloud</option>
-                  <option value="custom">自定义</option>
-                </select>
-              </div>
-            </div>
-            <div class="form-row">
-              <div class="form-label">API Base URL</div>
-              <div class="form-control">
-                <input id="aiBaseUrlInput" class="text-input" type="text" placeholder="https://api.example.com/v1" />
-              </div>
-            </div>
-            <div class="form-row">
-              <div class="form-label">API Key</div>
-              <div class="form-control">
-                <input id="aiApiKeyInput" class="text-input" type="password" placeholder="只保存在当前浏览器本地" />
-              </div>
-            </div>
-            <div class="form-row">
-              <div class="form-label">Model</div>
-              <div class="form-control">
-                <input id="aiModelInput" class="text-input" type="text" list="aiModelDatalist" placeholder="可直接输入或选常用模型" />
-                <datalist id="aiModelDatalist"></datalist>
-              </div>
-            </div>
-            </div>
-            <div class="form-help">可先选择提供商自动填充建议值；API Key 仅保存在当前浏览器本地。</div>
-            <div class="form-row">
-              <div class="form-label">词书类型</div>
-              <div class="form-control">
-                <select id="aiTypeSelect" aria-label="词书类型">
-                  <option value="toefl">托福词书</option>
-                  <option value="programming">编程词汇</option>
-                  <option value="medical">医学词汇</option>
-                  <option value="jp">日语</option>
-                  <option value="kr">韩语</option>
-                  <option value="fr">法语</option>
-                  <option value="de">德语</option>
-                  <option value="es">西班牙语</option>
-                  <option value="it">意大利语</option>
-                  <option value="ru">俄语</option>
-                  <option value="custom">自定义主题</option>
-                </select>
-              </div>
-            </div>
-            <div class="form-row">
-              <div class="form-label">主题（可选）</div>
-              <div class="form-control">
-                <input id="aiCustomTopicInput" class="text-input" type="text" placeholder="可选：为词书增加主题/领域（小语种也可用）" />
-              </div>
-            </div>
-            <div class="form-row">
-              <div class="form-label">数量</div>
-              <div class="form-control">
-                <input id="aiCountInput" class="text-input" type="number" min="10" max="500" value="120" />
-              </div>
-            </div>
+            <div class="section-title">数据管理</div>
             <div class="stack">
-              <button class="primary full" id="aiGenerateBtn" type="button">生成并预览</button>
+              <button class="ghost full" id="exportBackupBtn" type="button">导出完整学习数据（JSON）</button>
+              <button class="ghost full" id="importBackupBtn" type="button">导入完整学习数据（JSON）</button>
+              <input id="importBackupFile" type="file" accept=".json,application/json" hidden />
             </div>
-            <div class="form-help" id="aiStatus"></div>
+            <div class="form-help">包含学习记录与设置；导入会覆盖当前浏览器本地数据。</div>
           </section>
 
-          <section class="panel hidden" id="versionPanel">
-            <div class="section-title">版本</div>
+          <section class="panel" id="versionPanel">
+            <div class="section-title">版本信息</div>
             <div class="form-row">
               <div class="form-label">当前版本</div>
-              <div class="form-control">
-                <span class="form-help" id="versionText">v${window.A4Updater?.APP_VERSION || "1.0.0"}</span>
-              </div>
+              <div class="form-control"><span class="form-help" id="versionText">v${window.A4Updater?.APP_VERSION || "1.0.0"}</span></div>
             </div>
-            <div class="stack" style="margin-top:4px">
-              <button class="ghost full" id="checkUpdateBtn" type="button">检查更新</button>
-            </div>
+            <div class="stack" style="margin-top:4px"><button class="ghost full" id="checkUpdateBtn" type="button">检查更新</button></div>
             <div class="form-help hidden" id="updateStatus"></div>
           </section>
+
         </div>
       </div>
     `
