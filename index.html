@@ -4,23 +4,17 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="color-scheme" content="light dark">
-  <meta name="theme-color" content="#f1eee7" media="(prefers-color-scheme: light)">
-  <meta name="theme-color" content="#111319" media="(prefers-color-scheme: dark)">
+  <meta name="theme-color" content="#f5f7f9" media="(prefers-color-scheme: light)">
+  <meta name="theme-color" content="#282828" media="(prefers-color-scheme: dark)">
   <meta name="description" content="k7tmiz 的个人空间。记录所见、所想，以及正在发生的生活。">
   <title>k7tmiz</title>
   <link rel="icon" href="/images/favicon-32.png" sizes="32x32">
   <link rel="stylesheet" href="/css/landing.css">
 </head>
 <body>
-  <div class="ambient-field" aria-hidden="true">
-    <span class="ambient ambient-primary"></span>
-    <span class="ambient ambient-secondary"></span>
-  </div>
-
   <div class="page-shell">
-    <header class="masthead">
+    <header class="header-block block-surface">
       <a class="wordmark" href="/" aria-label="k7tmiz 介绍页">K7TMIZ</a>
-      <p class="edition" aria-hidden="true">Personal Journal · Est. 2026</p>
       <nav class="primary-nav" aria-label="主要导航">
         <a href="/blog/">博客</a>
         <a href="/about/">关于</a>
@@ -29,105 +23,70 @@
     </header>
 
     <main>
-      <section class="hero" aria-labelledby="intro-title">
-        <div class="hero-copy">
+      <section class="hero-block block-surface" aria-labelledby="intro-title">
+        <div class="hero-content">
           <p class="eyebrow">Notes, ideas &amp; everything between</p>
           <h1 id="intro-title">世界很大，<br>值得慢慢记录。</h1>
           <p class="introduction">
             一个属于我的数字角落。写感兴趣的事，也保存那些不想遗忘的时刻。
           </p>
           <div class="hero-actions">
-            <a class="button button-primary" href="/blog/">
-              开始阅读
-              <span aria-hidden="true">↗</span>
-            </a>
-            <a class="text-link" href="/about/">关于这里</a>
+            <a class="btn" href="/blog/">开始阅读</a>
+            <a class="btn btn-outline" href="/about/">关于这里</a>
           </div>
         </div>
-
-        <aside class="hero-mark" aria-label="站点标识">
-          <span class="mark-orbit" aria-hidden="true"></span>
-          <span class="mark-letter" aria-hidden="true">K</span>
-          <p>Keep looking.<br>Keep writing.</p>
-        </aside>
-      </section>
-
-      <section class="destinations" aria-labelledby="destinations-title">
-        <div class="section-heading">
-          <p class="section-number">01</p>
-          <div>
-            <p class="eyebrow">Explore</p>
-            <h2 id="destinations-title">从这里开始</h2>
-          </div>
-        </div>
-
-        <div class="destination-grid">
-          <a class="destination-card" href="/blog/">
-            <span class="card-index">A</span>
-            <div>
-              <h3>博客</h3>
-              <p>阅读文章、随笔和持续更新的个人记录。</p>
-            </div>
-            <span class="card-arrow" aria-hidden="true">↗</span>
-          </a>
-
-          <a class="destination-card" href="/about/">
-            <span class="card-index">B</span>
-            <div>
-              <h3>关于</h3>
-              <p>了解这个站点，以及屏幕另一边的我。</p>
-            </div>
-            <span class="card-arrow" aria-hidden="true">↗</span>
-          </a>
-
-          <a class="destination-card" href="#more">
-            <span class="card-index">C</span>
-            <div>
-              <h3>更多</h3>
-              <p>看看文章之外，还有哪些正在生长的作品。</p>
-            </div>
-            <span class="card-arrow" aria-hidden="true">↓</span>
-          </a>
+        <div class="hero-graphic" aria-hidden="true">
+           <!-- Subtle geometric parallax graphic -->
+           <div class="geo-circle geo-1 parallax-layer-1"></div>
+           <div class="geo-circle geo-2 parallax-layer-2"></div>
+           <div class="geo-letter parallax-layer-3">K</div>
         </div>
       </section>
 
-      <section class="more-section" id="more" aria-labelledby="more-title">
-        <div class="section-heading">
-          <p class="section-number">02</p>
-          <div>
-            <p class="eyebrow">Elsewhere on this site</p>
-            <h2 id="more-title">更多作品</h2>
-          </div>
-        </div>
+      <div class="grid-3-col">
+        <a class="nav-card block-surface" href="/blog/">
+          <div class="card-icon">📚</div>
+          <h3>博客</h3>
+          <p>阅读文章、随笔和持续更新的个人记录。</p>
+        </a>
+        <a class="nav-card block-surface" href="/about/">
+          <div class="card-icon">👤</div>
+          <h3>关于</h3>
+          <p>了解这个站点，以及屏幕另一边的我。</p>
+        </a>
+        <a class="nav-card block-surface" href="#more">
+          <div class="card-icon">✨</div>
+          <h3>更多</h3>
+          <p>看看文章之外，还有哪些正在生长的作品。</p>
+        </a>
+      </div>
 
+      <section class="projects-block block-surface" id="more" aria-labelledby="more-title">
+        <h2 id="more-title" class="section-title">独立应用</h2>
         <div class="project-list">
-          <a class="project" href="/words/">
-            <div>
-              <p class="project-type">Learning Tool</p>
+          <a class="project-item" href="/words/">
+            <div class="project-info">
               <h3>A4 纸记忆法</h3>
+              <p>一个专注于词汇记忆、查询与复习的轻量工具。</p>
             </div>
-            <p>一个专注于词汇记忆、查询与复习的轻量工具。</p>
-            <span aria-hidden="true">↗</span>
+            <span class="project-arrow">→</span>
           </a>
-
-          <a class="project" href="/converter/">
-            <div>
-              <p class="project-type">Web Application</p>
+          <a class="project-item" href="/converter/">
+            <div class="project-info">
               <h3>LexiForge</h3>
+              <p>把不同来源的词汇内容整理为更易使用的数据格式。</p>
             </div>
-            <p>把不同来源的词汇内容整理为更易使用的数据格式。</p>
-            <span aria-hidden="true">↗</span>
+            <span class="project-arrow">→</span>
           </a>
         </div>
       </section>
     </main>
 
     <footer class="site-footer">
-      <p>© 2026 k7tmiz</p>
-      <a href="mailto:kcyx01@gmail.com">kcyx01@gmail.com</a>
-      <p class="footer-note">Made for curiosity.</p>
+      <p>© 2026 k7tmiz. Made for curiosity.</p>
     </footer>
   </div>
+
   <script src="/js/landing-motion.js" defer></script>
 </body>
 </html>
