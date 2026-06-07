@@ -434,25 +434,6 @@
     <author>
       <name>k7tmiz</name>
     </author>
-    <category term="Tech" scheme="https://k7tmiz.github.io/categories/Tech/"/>
-    <category term="linux" scheme="https://k7tmiz.github.io/tags/linux/"/>
-    <category term="msi" scheme="https://k7tmiz.github.io/tags/msi/"/>
-    <id>https://k7tmiz.github.io/posts/5a88bde.html</id>
-    <link href="https://k7tmiz.github.io/posts/5a88bde.html"/>
-    <published>2025-04-19T14:28:32.000Z</published>
-    <summary>
-      <![CDATA[<h1 id="MSI-PERKEYRGB"><a href="#MSI-PERKEYRGB" class="headerlink" title="MSI-PERKEYRGB"></a>MSI-PERKEYRGB</h1><blockquote>
-<p>适用于我MSI-GP68HX的键盘RGB调光的git项目</p>
-</blockquote>
-<p>下面是Github的项目地址： <a href="https://github.com/Askannz/msi-perkeyrgb">msi-perkeyrgb</a></p>]]>
-    </summary>
-    <title>MSI-PERKEYRGB</title>
-    <updated>2026-05-05T07:38:12.361Z</updated>
-  </entry>
-  <entry>
-    <author>
-      <name>k7tmiz</name>
-    </author>
     <category term="Linux" scheme="https://k7tmiz.github.io/categories/Linux/"/>
     <category term="tech" scheme="https://k7tmiz.github.io/tags/tech/"/>
     <category term="steam" scheme="https://k7tmiz.github.io/tags/steam/"/>
@@ -467,6 +448,25 @@
     </summary>
     <title>Switch-SteamLibrary</title>
     <updated>2026-05-05T07:38:12.360Z</updated>
+  </entry>
+  <entry>
+    <author>
+      <name>k7tmiz</name>
+    </author>
+    <category term="Tech" scheme="https://k7tmiz.github.io/categories/Tech/"/>
+    <category term="linux" scheme="https://k7tmiz.github.io/tags/linux/"/>
+    <category term="msi" scheme="https://k7tmiz.github.io/tags/msi/"/>
+    <id>https://k7tmiz.github.io/posts/5a88bde.html</id>
+    <link href="https://k7tmiz.github.io/posts/5a88bde.html"/>
+    <published>2025-04-19T14:28:32.000Z</published>
+    <summary>
+      <![CDATA[<h1 id="MSI-PERKEYRGB"><a href="#MSI-PERKEYRGB" class="headerlink" title="MSI-PERKEYRGB"></a>MSI-PERKEYRGB</h1><blockquote>
+<p>适用于我MSI-GP68HX的键盘RGB调光的git项目</p>
+</blockquote>
+<p>下面是Github的项目地址： <a href="https://github.com/Askannz/msi-perkeyrgb">msi-perkeyrgb</a></p>]]>
+    </summary>
+    <title>MSI-PERKEYRGB</title>
+    <updated>2026-05-05T07:38:12.361Z</updated>
   </entry>
   <entry>
     <author>
