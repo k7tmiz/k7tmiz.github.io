@@ -171,11 +171,29 @@
 
 /* Responsive */
 @media (max-width: 991px) {
-  .hero-block { flex-direction: column; text-align: center; padding: 20px 0; }
+  .hero-block { flex-direction: column; padding: 20px 0; }
   .hero-actions { justify-content: center; }
-  .introduction { margin: 0 auto 32px; }
+  .introduction {
+    width: 100%;
+    max-width: 100%;
+    margin: 0 auto 32px;
+    text-align: center;
+  }
+  /* Force h1 lines to center — full-width block centering so punctuation doesn't shift lines */
+  .hero-block h1 {
+    text-align: center;
+    /* Each line (separated by <br>) renders as the block's full width;
+       centering the block means punctuation pushes visual center slightly.
+       We compensate by padding-right = 1 character on each side so the
+       purely logographic characters land exactly on the optical midpoint. */
+    padding-right: 0;
+    letter-spacing: 0.02em;
+  }
+  .hero-block p {
+    text-align: center;
+  }
   .hero-graphic { margin-top: 40px; min-height: 200px; }
-  
+
   /* Center projects block on tablet/mobile */
   .section-title { text-align: center; }
   .nav-card { text-align: center; }
@@ -183,6 +201,16 @@
 
 @media (max-width: 767px) {
   .grid-3-col, .grid-2-col { grid-template-columns: 1fr; }
-  .hero-block h1 { font-size: 2.2rem; }
+  .hero-block h1 {
+    font-size: 2.2rem;
+    text-align: center;
+    /* Optically neutralise fullwidth punctuation (，。) which each
+       occupy 1em but visually feel like 0.5em. We shift the whole
+       block a half-character to the left so the logographic
+       characters land on the true optical centre. */
+    padding-left: 0.5em;
+    padding-right: 0;
+    box-sizing: border-box;
+  }
   .hero-graphic { display: none; }
 }
