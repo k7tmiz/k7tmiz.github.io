@@ -1414,7 +1414,7 @@ pre code {
     vertical-align: middle;
   }
   .links-of-author a::before {
-    background: #4effe3;
+    background: #ff678a;
     display: inline-block;
     margin-right: 3px;
     transform: translateY(-2px);
@@ -3204,4 +3204,14 @@ header.header,
 }
 .post-block {
   padding: 40px !important;
+}
+@media (max-width: 991px) {
+  .sidebar-toggle,
+  .back-to-top {
+    left: auto !important;
+    right: 20px !important;
+  }
+  .post-block {
+    padding: 20px !important;
+  }
 }

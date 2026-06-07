@@ -137,6 +137,7 @@
 .grid-2-col { grid-template-columns: repeat(2, 1fr); }
 
 .nav-card {
+  display: block;
   padding: 24px;
   border-radius: 8px;
   text-decoration: none;
@@ -174,6 +175,10 @@
   .hero-actions { justify-content: center; }
   .introduction { margin: 0 auto 32px; }
   .hero-graphic { margin-top: 40px; min-height: 200px; }
+  
+  /* Center projects block on tablet/mobile */
+  .section-title { text-align: center; }
+  .nav-card { text-align: center; }
 }
 
 @media (max-width: 767px) {
