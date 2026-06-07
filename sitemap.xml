@@ -2,6 +2,24 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>https://k7tmiz.github.io/about/index.html</loc>
+    
+    <lastmod>2026-06-07</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://k7tmiz.github.io/index.html</loc>
+    
+    <lastmod>2026-06-07</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
     <loc>https://k7tmiz.github.io/posts/d773eb13.html</loc>
     
     <lastmod>2026-06-07</lastmod>
@@ -56,15 +74,6 @@
   </url>
   
   <url>
-    <loc>https://k7tmiz.github.io/posts/8b69008.html</loc>
-    
-    <lastmod>2026-05-05</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
     <loc>https://k7tmiz.github.io/posts/Infinity.html</loc>
     
     <lastmod>2026-05-05</lastmod>
@@ -83,7 +92,7 @@
   </url>
   
   <url>
-    <loc>https://k7tmiz.github.io/posts/2a1b98b0.html</loc>
+    <loc>https://k7tmiz.github.io/posts/8b69008.html</loc>
     
     <lastmod>2026-05-05</lastmod>
     
@@ -110,15 +119,6 @@
   </url>
   
   <url>
-    <loc>https://k7tmiz.github.io/posts/5982c65e.html</loc>
-    
-    <lastmod>2026-05-05</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
     <loc>https://k7tmiz.github.io/posts/e85c1bad.html</loc>
     
     <lastmod>2026-05-05</lastmod>
@@ -128,7 +128,25 @@
   </url>
   
   <url>
-    <loc>https://k7tmiz.github.io/posts/a3d041ec.html</loc>
+    <loc>https://k7tmiz.github.io/posts/5982c65e.html</loc>
+    
+    <lastmod>2026-05-05</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://k7tmiz.github.io/posts/2a1b98b0.html</loc>
+    
+    <lastmod>2026-05-05</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://k7tmiz.github.io/posts/567971b1.html</loc>
     
     <lastmod>2026-05-05</lastmod>
     
@@ -146,7 +164,7 @@
   </url>
   
   <url>
-    <loc>https://k7tmiz.github.io/posts/ac1a683e.html</loc>
+    <loc>https://k7tmiz.github.io/posts/a3d041ec.html</loc>
     
     <lastmod>2026-05-05</lastmod>
     
@@ -155,7 +173,7 @@
   </url>
   
   <url>
-    <loc>https://k7tmiz.github.io/posts/567971b1.html</loc>
+    <loc>https://k7tmiz.github.io/posts/ac1a683e.html</loc>
     
     <lastmod>2026-05-05</lastmod>
     
@@ -254,15 +272,6 @@
   </url>
   
   <url>
-    <loc>https://k7tmiz.github.io/about/index.html</loc>
-    
-    <lastmod>2026-03-13</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
     <loc>https://k7tmiz.github.io/tags/index.html</loc>
     
     <lastmod>2026-03-06</lastmod>
@@ -304,6 +313,20 @@
   </url>
   
   <url>
+    <loc>https://k7tmiz.github.io/tags/study/</loc>
+    <lastmod>2026-06-07</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>https://k7tmiz.github.io/tags/spanish/</loc>
+    <lastmod>2026-06-07</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
     <loc>https://k7tmiz.github.io/tags/linux/</loc>
     <lastmod>2026-06-07</lastmod>
     <changefreq>weekly</changefreq>
@@ -325,20 +348,6 @@
   </url>
   
   <url>
-    <loc>https://k7tmiz.github.io/tags/steam/</loc>
-    <lastmod>2026-06-07</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.2</priority>
-  </url>
-  
-  <url>
-    <loc>https://k7tmiz.github.io/tags/fcitx5/</loc>
-    <lastmod>2026-06-07</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.2</priority>
-  </url>
-  
-  <url>
     <loc>https://k7tmiz.github.io/tags/gaming/</loc>
     <lastmod>2026-06-07</lastmod>
     <changefreq>weekly</changefreq>
@@ -353,14 +362,7 @@
   </url>
   
   <url>
-    <loc>https://k7tmiz.github.io/tags/study/</loc>
-    <lastmod>2026-06-07</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.2</priority>
-  </url>
-  
-  <url>
-    <loc>https://k7tmiz.github.io/tags/spanish/</loc>
+    <loc>https://k7tmiz.github.io/tags/fcitx5/</loc>
     <lastmod>2026-06-07</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
@@ -375,6 +377,13 @@
   
   <url>
     <loc>https://k7tmiz.github.io/tags/msi/</loc>
+    <lastmod>2026-06-07</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>https://k7tmiz.github.io/tags/steam/</loc>
     <lastmod>2026-06-07</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
@@ -411,14 +420,14 @@
   </url>
   
   <url>
-    <loc>https://k7tmiz.github.io/categories/Linux/</loc>
+    <loc>https://k7tmiz.github.io/categories/Study/</loc>
     <lastmod>2026-06-07</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
-    <loc>https://k7tmiz.github.io/categories/Study/</loc>
+    <loc>https://k7tmiz.github.io/categories/Linux/</loc>
     <lastmod>2026-06-07</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>

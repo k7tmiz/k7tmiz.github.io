@@ -434,25 +434,6 @@
     <author>
       <name>k7tmiz</name>
     </author>
-    <category term="Linux" scheme="https://k7tmiz.github.io/categories/Linux/"/>
-    <category term="tech" scheme="https://k7tmiz.github.io/tags/tech/"/>
-    <category term="steam" scheme="https://k7tmiz.github.io/tags/steam/"/>
-    <id>https://k7tmiz.github.io/posts/2a1b98b0.html</id>
-    <link href="https://k7tmiz.github.io/posts/2a1b98b0.html"/>
-    <published>2025-04-19T14:28:32.000Z</published>
-    <summary>
-      <![CDATA[<h1 id="Switch-SteamLibrary"><a href="#Switch-SteamLibrary" class="headerlink" title="Switch-SteamLibrary"></a>Switch-SteamLibrary</h1><blockquote>
-<p>这是一个用于电脑中有多Linux系统，并且希望自己的游戏统一存放在NTFS格式盘的小脚本。它旨在可以让你的多Linux系统，包括Windows都可以调用一个同一个Steam游戏库的小脚本。</p>
-</blockquote>
-<h3 id="使用说明"><a href="#使用说明" class="headerlink" title="使用说明:"></a>使用说明:</h3>]]>
-    </summary>
-    <title>Switch-SteamLibrary</title>
-    <updated>2026-05-05T07:38:12.360Z</updated>
-  </entry>
-  <entry>
-    <author>
-      <name>k7tmiz</name>
-    </author>
     <category term="Tech" scheme="https://k7tmiz.github.io/categories/Tech/"/>
     <category term="linux" scheme="https://k7tmiz.github.io/tags/linux/"/>
     <category term="msi" scheme="https://k7tmiz.github.io/tags/msi/"/>
@@ -467,6 +448,25 @@
     </summary>
     <title>MSI-PERKEYRGB</title>
     <updated>2026-05-05T07:38:12.361Z</updated>
+  </entry>
+  <entry>
+    <author>
+      <name>k7tmiz</name>
+    </author>
+    <category term="Linux" scheme="https://k7tmiz.github.io/categories/Linux/"/>
+    <category term="tech" scheme="https://k7tmiz.github.io/tags/tech/"/>
+    <category term="steam" scheme="https://k7tmiz.github.io/tags/steam/"/>
+    <id>https://k7tmiz.github.io/posts/2a1b98b0.html</id>
+    <link href="https://k7tmiz.github.io/posts/2a1b98b0.html"/>
+    <published>2025-04-19T14:28:32.000Z</published>
+    <summary>
+      <![CDATA[<h1 id="Switch-SteamLibrary"><a href="#Switch-SteamLibrary" class="headerlink" title="Switch-SteamLibrary"></a>Switch-SteamLibrary</h1><blockquote>
+<p>这是一个用于电脑中有多Linux系统，并且希望自己的游戏统一存放在NTFS格式盘的小脚本。它旨在可以让你的多Linux系统，包括Windows都可以调用一个同一个Steam游戏库的小脚本。</p>
+</blockquote>
+<h3 id="使用说明"><a href="#使用说明" class="headerlink" title="使用说明:"></a>使用说明:</h3>]]>
+    </summary>
+    <title>Switch-SteamLibrary</title>
+    <updated>2026-05-05T07:38:12.360Z</updated>
   </entry>
   <entry>
     <author>

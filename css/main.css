@@ -1414,7 +1414,7 @@ pre code {
     vertical-align: middle;
   }
   .links-of-author a::before {
-    background: #44c770;
+    background: #918805;
     display: inline-block;
     margin-right: 3px;
     transform: translateY(-2px);
@@ -1664,10 +1664,6 @@ pre code {
   border: 1px solid #eee;
   max-width: 120px;
   padding: 2px;
-  transition: transform 1s ease-out;
-}
-.site-author-image:hover {
-  transform: rotateZ(360deg);
 }
 .site-author-name {
   color: var(--text-color);
@@ -1883,7 +1879,7 @@ pre code {
 }
 .reading-progress-bar {
   --progress: 0;
-  background: #37c6c0;
+  background: #555;
   height: 3px;
   position: fixed;
   z-index: 50;
@@ -2908,7 +2904,6 @@ header.header {
     color: var(--text-color);
     margin-top: 12px;
     max-height: calc(100vh - 24px);
-    visibility: hidden;
   }
   .site-state-item {
     padding: 0 10px;
@@ -3135,4 +3130,78 @@ header.header {
     background: #1d1f21 !important;
     color: #666 !important;
   }
+}
+.post-body p {
+  line-height: 1.8;
+  margin-bottom: 20px;
+}
+.highlight,
+figure.highlight,
+pre {
+  border-radius: 4px;
+}
+.site-author-image {
+  transition: transform 0.2s ease, box-shadow 0.2s ease !important;
+}
+.site-author-image:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+}
+body {
+  background: linear-gradient(135deg, #fdfbfb 0%, #ebedee 100%) !important;
+  background-attachment: fixed !important;
+}
+@media (prefers-color-scheme: dark) {
+  body {
+    background: linear-gradient(135deg, #1a1c20 0%, #0d0e12 100%) !important;
+    background-attachment: fixed !important;
+  }
+}
+header.header,
+.header-inner,
+.sidebar-inner,
+.post-block,
+.comments,
+.pagination {
+  background: rgba(255,255,255,0.85) !important;
+  backdrop-filter: saturate(180%) blur(20px);
+  -webkit-backdrop-filter: saturate(180%) blur(20px);
+  border: 1px solid rgba(255,255,255,0.8) !important;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.05) !important;
+  border-radius: 8px !important;
+}
+.site-brand-container {
+  overflow: hidden;
+}
+.site-brand-container {
+  background: rgba(34,34,34,0.85) !important;
+  backdrop-filter: saturate(180%) blur(20px);
+  -webkit-backdrop-filter: saturate(180%) blur(20px);
+}
+.site-title {
+  color: #fff !important;
+}
+.site-subtitle {
+  color: #ddd !important;
+}
+@media (prefers-color-scheme: dark) {
+  header.header,
+  .header-inner,
+  .sidebar-inner,
+  .post-block,
+  .comments,
+  .pagination {
+    background: rgba(30,32,36,0.85) !important;
+    border: 1px solid rgba(255,255,255,0.08) !important;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.2) !important;
+  }
+  .site-brand-container {
+    background: rgba(18,18,18,0.85) !important;
+  }
+  .site-title {
+    color: #eee !important;
+  }
+}
+.post-block {
+  padding: 40px !important;
 }
