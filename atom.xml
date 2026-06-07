@@ -351,7 +351,7 @@
 <p>父母工作繁忙，陪伴我成长的，是家里那两台早早备下的电脑。或许这算得上一种时代的馈赠，让我在懵懂的年纪便与数字世界结缘。那时的热爱简单而纯粹——查资料、玩游戏、折腾软件。至于服务器、Linux、编程这些更深的概念，还远在认知的地平线之外。</p>]]>
     </summary>
     <title>我与计算机的故事</title>
-    <updated>2026-05-05T07:28:54.639Z</updated>
+    <updated>2026-06-07T08:31:02.646Z</updated>
   </entry>
   <entry>
     <author>
@@ -454,6 +454,21 @@
       <name>k7tmiz</name>
     </author>
     <category term="Tech" scheme="https://k7tmiz.github.io/categories/Tech/"/>
+    <category term="tech" scheme="https://k7tmiz.github.io/tags/tech/"/>
+    <id>https://k7tmiz.github.io/posts/b56059f9.html</id>
+    <link href="https://k7tmiz.github.io/posts/b56059f9.html"/>
+    <published>2025-04-19T14:28:32.000Z</published>
+    <summary>
+      <![CDATA[<h1 id="Nativefier-使用教程"><a href="#Nativefier-使用教程" class="headerlink" title="Nativefier 使用教程"></a>Nativefier 使用教程</h1><h4 id="基于electron的打包软件"><a href="#基于electron的打包软件" class="headerlink" title="基于electron的打包软件"></a>基于electron的打包软件</h4><h5 id="nativefier-n-p-—-arch-—-weight-—-height"><a href="#nativefier-n-p-—-arch-—-weight-—-height" class="headerlink" title="nativefier -n &lt;打包后的应用名称&gt; -p &lt;程序兼容的平台&gt; —-arch &lt;架构&gt; —- weight &lt;窗口宽度&gt; —-height &lt;窗口高度&gt; &lt;网页URL&gt;"></a>nativefier -n &lt;打包后的应用名称&gt; -p &lt;程序兼容的平台&gt; —-arch &lt;架构&gt; —- weight &lt;窗口宽度&gt; —-height &lt;窗口高度&gt; &lt;网页URL&gt;</h5>]]>
+    </summary>
+    <title>Nativefier 使用教程</title>
+    <updated>2026-05-05T07:28:54.641Z</updated>
+  </entry>
+  <entry>
+    <author>
+      <name>k7tmiz</name>
+    </author>
+    <category term="Tech" scheme="https://k7tmiz.github.io/categories/Tech/"/>
     <category term="linux" scheme="https://k7tmiz.github.io/tags/linux/"/>
     <category term="msi" scheme="https://k7tmiz.github.io/tags/msi/"/>
     <id>https://k7tmiz.github.io/posts/5a88bde.html</id>
@@ -467,20 +482,5 @@
     </summary>
     <title>MSI-PERKEYRGB</title>
     <updated>2026-05-05T07:38:12.361Z</updated>
-  </entry>
-  <entry>
-    <author>
-      <name>k7tmiz</name>
-    </author>
-    <category term="Tech" scheme="https://k7tmiz.github.io/categories/Tech/"/>
-    <category term="tech" scheme="https://k7tmiz.github.io/tags/tech/"/>
-    <id>https://k7tmiz.github.io/posts/b56059f9.html</id>
-    <link href="https://k7tmiz.github.io/posts/b56059f9.html"/>
-    <published>2025-04-19T14:28:32.000Z</published>
-    <summary>
-      <![CDATA[<h1 id="Nativefier-使用教程"><a href="#Nativefier-使用教程" class="headerlink" title="Nativefier 使用教程"></a>Nativefier 使用教程</h1><h4 id="基于electron的打包软件"><a href="#基于electron的打包软件" class="headerlink" title="基于electron的打包软件"></a>基于electron的打包软件</h4><h5 id="nativefier-n-p-—-arch-—-weight-—-height"><a href="#nativefier-n-p-—-arch-—-weight-—-height" class="headerlink" title="nativefier -n &lt;打包后的应用名称&gt; -p &lt;程序兼容的平台&gt; —-arch &lt;架构&gt; —- weight &lt;窗口宽度&gt; —-height &lt;窗口高度&gt; &lt;网页URL&gt;"></a>nativefier -n &lt;打包后的应用名称&gt; -p &lt;程序兼容的平台&gt; —-arch &lt;架构&gt; —- weight &lt;窗口宽度&gt; —-height &lt;窗口高度&gt; &lt;网页URL&gt;</h5>]]>
-    </summary>
-    <title>Nativefier 使用教程</title>
-    <updated>2026-05-05T07:28:54.641Z</updated>
   </entry>
 </feed>
