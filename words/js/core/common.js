@@ -3,6 +3,24 @@
     return Math.max(min, Math.min(max, n))
   }
 
+  function makeUuid() {
+    if (typeof crypto !== "undefined" && typeof crypto.randomUUID === "function") {
+      try {
+        return crypto.randomUUID()
+      } catch {
+        // fall through to manual fallback
+      }
+    }
+    const hex = "0123456789abcdef"
+    const r = () => hex[Math.floor(Math.random() * 16)]
+    const variant = hex[8 + Math.floor(Math.random() * 4)]
+    return (
+      `${r()}${r()}${r()}${r()}${r()}${r()}${r()}${r()}-` +
+      `${r()}${r()}${r()}${r()}-4${r()}${r()}${r()}-` +
+      `${variant}${r()}${r()}${r()}-${r()}${r()}${r()}${r()}${r()}${r()}${r()}${r()}${r()}${r()}${r()}${r()}`
+    )
+  }
+
   const STATUS_MASTERED = "mastered"
   const STATUS_LEARNING = "learning"
   const STATUS_UNKNOWN = "unknown"
@@ -357,6 +375,8 @@
     dailyGoalWords: 0,
     onlineTtsEnabled: true,
     onlineTtsProvider: "edge",
+    ttsMode: "online",
+    offlineVoiceByLang: {},
   }
 
   function normalizeOnlineTtsProvider(value) {
@@ -365,30 +385,109 @@
     return "edge"
   }
 
+  function normalizeTtsMode(value) {
+    const v = String(value || "").trim().toLowerCase()
+    if (v === "offline") return "offline"
+    if (v === "system") return "system"
+    return "online"
+  }
+
+  function normalizeOfflineVoiceByLang(value) {
+    if (!value || typeof value !== "object" || Array.isArray(value)) return {}
+    const out = {}
+    for (const [k, v] of Object.entries(value)) {
+      const key = String(k || "").trim().toLowerCase()
+      const id = String(v || "").trim()
+      if (key && id) out[key] = id
+    }
+    return out
+  }
+
   // ── Modal utility ────────────────────────────────────────────────────────────
 
   let _modalOpenCount = 0
   let _savedScrollY = 0
+  const _modalStack = []
+  let _focusTrapHandler = null
+
+  function getFocusableElements(root) {
+    const selector =
+      'a[href], button, input, textarea, select, details, [tabindex]:not([tabindex="-1"])'
+    return Array.from(root.querySelectorAll(selector)).filter(
+      (el) => !el.disabled && !el.classList.contains("hidden") && el.offsetParent !== null
+    )
+  }
+
+  function trapFocus(e) {
+    const modal = _modalStack[_modalStack.length - 1]
+    if (!modal || e.key !== "Tab") return
+    const focusable = getFocusableElements(modal)
+    if (focusable.length === 0) {
+      e.preventDefault()
+      return
+    }
+    const first = focusable[0]
+    const last = focusable[focusable.length - 1]
+    if (e.shiftKey) {
+      if (document.activeElement === first || !modal.contains(document.activeElement)) {
+        e.preventDefault()
+        last.focus()
+      }
+    } else {
+      if (document.activeElement === last || !modal.contains(document.activeElement)) {
+        e.preventDefault()
+        first.focus()
+      }
+    }
+  }
 
   function setModalVisible(modal, visible) {
     if (!modal) return
     if (visible) {
+      const prevFocus = document.activeElement
+      modal.dataset.prevFocus = prevFocus ? prevFocus.id || "" : ""
       modal.classList.remove("hidden")
       modal.setAttribute("aria-hidden", "false")
       if (_modalOpenCount === 0) {
         _savedScrollY = window.scrollY || 0
         document.body.style.top = `-${_savedScrollY}px`
         document.body.classList.add("modal-open")
+        _focusTrapHandler = (e) => trapFocus(e)
+        document.addEventListener("keydown", _focusTrapHandler)
       }
       _modalOpenCount += 1
+      _modalStack.push(modal)
+      const focusable = getFocusableElements(modal)
+      const autofocus = modal.querySelector("[data-autofocus]")
+      if (autofocus && focusable.includes(autofocus)) {
+        autofocus.focus()
+      } else if (focusable.length) {
+        const closeBtn = modal.querySelector(".modal-actions button, [data-modal-close]")
+        if (closeBtn && focusable.includes(closeBtn)) {
+          focusable.find((el) => el !== closeBtn)?.focus()
+        } else {
+          focusable[0].focus()
+        }
+      }
     } else {
       modal.classList.add("hidden")
       modal.setAttribute("aria-hidden", "true")
+      const idx = _modalStack.lastIndexOf(modal)
+      if (idx >= 0) _modalStack.splice(idx, 1)
       _modalOpenCount = Math.max(0, _modalOpenCount - 1)
       if (_modalOpenCount === 0) {
         document.body.classList.remove("modal-open")
         document.body.style.top = ""
         window.scrollTo(0, _savedScrollY)
+        if (_focusTrapHandler) {
+          document.removeEventListener("keydown", _focusTrapHandler)
+          _focusTrapHandler = null
+        }
+      }
+      const prevId = modal.dataset.prevFocus
+      const prevEl = prevId ? document.getElementById(prevId) : null
+      if (prevEl && typeof prevEl.focus === "function" && document.body.contains(prevEl)) {
+        prevEl.focus()
       }
     }
   }
@@ -519,6 +618,7 @@
 
   window.A4Common = {
     clamp,
+    makeUuid,
     STATUS_MASTERED,
     STATUS_LEARNING,
     STATUS_UNKNOWN,
@@ -555,6 +655,8 @@
     normalizeLookupRecordMeta,
     DEFAULTS,
     normalizeOnlineTtsProvider,
+    normalizeTtsMode,
+    normalizeOfflineVoiceByLang,
     setModalVisible,
     formatMeaning,
     getRoundLastPageIndex,

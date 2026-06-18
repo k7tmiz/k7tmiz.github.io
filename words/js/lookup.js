@@ -1334,6 +1334,16 @@
         const speech = window.A4Speech
         if (!speech) return
         const wordbookLanguage = typeof getWordbookLanguage === "function" ? getWordbookLanguage() : ""
+        const targetBase = String(
+          speech.getCurrentLanguageBase?.({
+            pronunciationLang: state?.pronunciationLang,
+            wordbookLanguage,
+          }) || ""
+        ).toLowerCase()
+        const offlineMap =
+          state?.offlineVoiceByLang && typeof state.offlineVoiceByLang === "object"
+            ? state.offlineVoiceByLang
+            : {}
         speech.speak({
           text: term,
           pronunciationEnabled: !!state?.pronunciationEnabled,
@@ -1344,6 +1354,8 @@
           voiceURI: state?.voiceURI,
           onlineTtsEnabled: state?.onlineTtsEnabled !== false,
           onlineTtsProvider: state?.onlineTtsProvider,
+          ttsMode: state?.ttsMode || "online",
+          offlineVoiceId: String(offlineMap[targetBase] || ""),
         })
       })
     }
@@ -1424,14 +1436,14 @@
           : String(base || "").toLowerCase() === "en"
             ? await fetchOnlineEnglishWithChinese({ term, signal })
             : await fetchOnlineDictionary({ term, base, signal })
-      if (queryId !== lastQueryId) return
+      if (queryId !== lastQueryId || signal?.aborted) return
 
       if (!res.ok) {
         const canFallback = onlineSource === "builtin" && canUseCustomLookupFallback(state)
         if (canFallback) {
           renderOnlineSection({ status: "loading", items: [], source: "custom", base, fallbackFrom: "builtin" })
           const fallbackRes = await fetchOnlineCustomApi({ term, base, state, signal })
-          if (queryId !== lastQueryId) return
+          if (queryId !== lastQueryId || signal?.aborted) return
           if (fallbackRes.ok) {
             renderOnlineSection({
               status: "done",

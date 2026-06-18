@@ -1718,6 +1718,57 @@ body.theme-dark .paper {
   line-height: 1.35;
 }
 
+.offline-voice-row {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 10px;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  background: var(--card2);
+}
+
+.offline-voice-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.offline-voice-title {
+  flex: 1 1 auto;
+  min-width: 0;
+  word-break: break-word;
+}
+
+.offline-voice-actions {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+.offline-voice-progress {
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+@media (max-width: 520px) {
+  .offline-voice-head {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .offline-voice-actions {
+    justify-content: flex-end;
+  }
+
+  .offline-voice-actions button {
+    flex: 1 1 auto;
+  }
+}
+
 .field-help {
   color: #b42318;
 }

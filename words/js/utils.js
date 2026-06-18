@@ -69,6 +69,95 @@
     return typeof getTauriInvoke() === "function" && /Android/i.test(navigator.userAgent || "")
   }
 
+  function showConfirmDialog(messageOrOpts) {
+    const opts = typeof messageOrOpts === "string" ? { message: messageOrOpts } : messageOrOpts || {}
+    const {
+      message = "",
+      title = "确认",
+      subtitle = "",
+      okText = "确定",
+      cancelText = "取消",
+      danger = false,
+    } = opts
+
+    return new Promise((resolve) => {
+      const backdrop = document.createElement("div")
+      backdrop.className = "modal-backdrop"
+      const panel = document.createElement("div")
+      panel.className = "modal-panel records-confirm-panel"
+      panel.setAttribute("role", "alertdialog")
+      panel.setAttribute("aria-modal", "true")
+      panel.setAttribute("aria-labelledby", "a4-confirm-title")
+      panel.setAttribute("aria-describedby", "a4-confirm-body")
+
+      const header = document.createElement("div")
+      header.className = "modal-header"
+      const titleWrap = document.createElement("div")
+      titleWrap.className = "records-confirm-title-wrap"
+      const titleEl = document.createElement("h2")
+      titleEl.id = "a4-confirm-title"
+      titleEl.className = "records-confirm-title"
+      titleEl.textContent = title
+      titleWrap.appendChild(titleEl)
+      if (subtitle) {
+        const subtitleEl = document.createElement("div")
+        subtitleEl.className = "records-confirm-subtitle"
+        subtitleEl.textContent = subtitle
+        titleWrap.appendChild(subtitleEl)
+      }
+      header.appendChild(titleWrap)
+      const actionsHead = document.createElement("div")
+      actionsHead.className = "modal-actions"
+      const closeBtn = document.createElement("button")
+      closeBtn.className = "ghost records-confirm-close"
+      closeBtn.type = "button"
+      closeBtn.textContent = "关闭"
+      actionsHead.appendChild(closeBtn)
+      header.appendChild(actionsHead)
+
+      const body = document.createElement("div")
+      body.className = "modal-body"
+      body.id = "a4-confirm-body"
+      body.textContent = message
+
+      const actions = document.createElement("div")
+      actions.className = "modal-actions records-confirm-actions"
+      const cancelBtn = document.createElement("button")
+      cancelBtn.className = "ghost"
+      cancelBtn.type = "button"
+      cancelBtn.textContent = cancelText
+      const okBtn = document.createElement("button")
+      okBtn.className = danger ? "primary records-confirm-danger" : "primary"
+      okBtn.type = "button"
+      okBtn.textContent = okText
+
+      actions.appendChild(cancelBtn)
+      actions.appendChild(okBtn)
+      panel.appendChild(header)
+      panel.appendChild(body)
+      panel.appendChild(actions)
+
+      const modal = document.createElement("div")
+      modal.className = "modal"
+      modal.appendChild(backdrop)
+      modal.appendChild(panel)
+      document.body.appendChild(modal)
+
+      let settled = false
+      const finish = (value) => {
+        if (settled) return
+        settled = true
+        document.body.removeChild(modal)
+        resolve(value)
+      }
+
+      backdrop.addEventListener("click", () => finish(false))
+      closeBtn.addEventListener("click", () => finish(false))
+      cancelBtn.addEventListener("click", () => finish(false))
+      okBtn.addEventListener("click", () => finish(true))
+    })
+  }
+
   function downloadBlobInBrowser({ filename, blob }) {
     const url = URL.createObjectURL(blob)
     const a = document.createElement("a")
@@ -251,6 +340,8 @@
     downloadTextFile,
     downloadJsonFile,
     downloadBlob,
+    showConfirmDialog,
+    getTauriInvoke,
     installMobileTapGuard,
     installAndroidSelectPicker,
     refreshAndroidSelectPickers,

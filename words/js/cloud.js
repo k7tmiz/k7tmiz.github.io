@@ -154,7 +154,10 @@
   function normalizeCloudState(state) {
     if (!state || typeof state !== "object") return null
     const normalizer = window.A4Settings?.normalizeImportedState
-    if (typeof normalizer !== "function") return state
+    if (typeof normalizer !== "function") {
+      console.error("normalizeCloudState: A4Settings.normalizeImportedState unavailable — aborting restore")
+      return null
+    }
     try {
       return normalizer(state)
     } catch (e) {

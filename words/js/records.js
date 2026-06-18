@@ -9,7 +9,7 @@
     window.A4Storage?.saveState?.(state)
   }
 
-  const { downloadTextFile } = window.A4Utils || {}
+  const { downloadTextFile, showConfirmDialog } = window.A4Utils || {}
 
   const {
     STATUS_MASTERED,
@@ -99,16 +99,12 @@
   }
 
   function isAndroidTauri() {
-    return typeof getTauriInvoke() === "function" && /Android/i.test(navigator.userAgent || "")
-  }
-
-  function getTauriInvoke() {
-    return window.__TAURI__?.core?.invoke || window.__TAURI__?.invoke || window.__TAURI_INTERNALS__?.invoke || null
+    return typeof window.A4Utils?.getTauriInvoke?.() === "function" && /Android/i.test(navigator.userAgent || "")
   }
 
   function printCurrentDocument() {
     if (isAndroidTauri()) {
-      getTauriInvoke()("a4_android_print").catch(() => {
+      window.A4Utils.getTauriInvoke()("a4_android_print").catch(() => {
         window.alert("无法调用 Android 打印系统。请确认当前 Android 版本已包含原生打印支持。")
       })
       return
@@ -182,59 +178,6 @@
     if (className) node.className = className
     if (text != null) node.textContent = text
     return node
-  }
-
-  function showConfirmDialog(message) {
-    return new Promise((resolve) => {
-      const backdrop = el("div", "modal-backdrop")
-      const panel = el("div", "modal-panel records-confirm-panel")
-      panel.setAttribute("role", "alertdialog")
-      panel.setAttribute("aria-modal", "true")
-
-      const header = el("div", "modal-header")
-      const titleWrap = el("div", "records-confirm-title-wrap")
-      const title = el("h2", "records-confirm-title", "删除本轮")
-      const subtitle = el("div", "records-confirm-subtitle", "删除后无法恢复")
-      titleWrap.appendChild(title)
-      titleWrap.appendChild(subtitle)
-      header.appendChild(titleWrap)
-      const actionsHead = el("div", "modal-actions")
-      const closeBtn = el("button", "ghost records-confirm-close", "关闭")
-      actionsHead.appendChild(closeBtn)
-      header.appendChild(actionsHead)
-
-      const body = el("div", "modal-body")
-      body.textContent = message
-
-      const actions = el("div", "modal-actions records-confirm-actions")
-      const cancelBtn = el("button", "ghost", "取消")
-      const okBtn = el("button", "primary records-confirm-danger", "删除本轮")
-
-      actions.appendChild(cancelBtn)
-      actions.appendChild(okBtn)
-
-      panel.appendChild(header)
-      panel.appendChild(body)
-      panel.appendChild(actions)
-
-      const modal = el("div", "modal")
-      modal.appendChild(backdrop)
-      modal.appendChild(panel)
-      document.body.appendChild(modal)
-
-      let settled = false
-      const finish = (value) => {
-        if (settled) return
-        settled = true
-        document.body.removeChild(modal)
-        resolve(value)
-      }
-
-      backdrop.addEventListener("click", () => finish(false))
-      closeBtn.addEventListener("click", () => finish(false))
-      cancelBtn.addEventListener("click", () => finish(false))
-      okBtn.addEventListener("click", () => finish(true))
-    })
   }
 
   function buildPaperPreview(items) {
@@ -780,35 +723,43 @@
 
     // Swipe support
     let touchStartX = 0
-    overlay.addEventListener("touchstart", e => { touchStartX = e.touches[0].clientX })
-    overlay.addEventListener("touchend", e => {
+    const onTouchStart = (e) => { touchStartX = e.touches[0].clientX }
+    const onTouchEnd = (e) => {
       const dx = e.changedTouches[0].clientX - touchStartX
       if (Math.abs(dx) > 60) {
         showPage(currentIdx + (dx < 0 ? 1 : -1))
       }
-    })
-
-    // Fallback: use MutationObserver since 'remove' event isn't standard
-    const observer = new MutationObserver(() => {
-      if (!document.getElementById("pdfPrintOverlay")) {
-        window.removeEventListener("resize", fitPreviewPage)
-        observer.disconnect()
-      }
-    })
-    observer.observe(document.body, { childList: true })
+    }
+    overlay.addEventListener("touchstart", onTouchStart)
+    overlay.addEventListener("touchend", onTouchEnd)
 
     // Keyboard nav
     const onKey = (e) => {
       if (!document.getElementById("pdfPrintOverlay")) return
       if (e.key === "Escape") {
         overlay.remove()
-        clearPrintPages()
+        return
       }
       if (e.key === "ArrowLeft") showPage(currentIdx - 1)
       if (e.key === "ArrowRight") showPage(currentIdx + 1)
     }
     document.addEventListener("keydown", onKey)
-    overlay.addEventListener("remove", () => document.removeEventListener("keydown", onKey))
+
+    const teardown = () => {
+      window.removeEventListener("resize", fitPreviewPage)
+      overlay.removeEventListener("touchstart", onTouchStart)
+      overlay.removeEventListener("touchend", onTouchEnd)
+      document.removeEventListener("keydown", onKey)
+      observer.disconnect()
+    }
+
+    // MutationObserver tears down listeners once the overlay is removed
+    const observer = new MutationObserver(() => {
+      if (!document.getElementById("pdfPrintOverlay")) {
+        teardown()
+      }
+    })
+    observer.observe(document.body, { childList: true })
 
     // Load first page
     showPage(0)
@@ -999,7 +950,13 @@
           const idx = rounds.findIndex((r) => r.id === roundId)
           if (idx < 0) return
           const roundNo = idx + 1
-          const ok = await showConfirmDialog(`确定删除第${roundNo}轮？删除后后续轮次会自动顺位前移。`)
+          const ok = await showConfirmDialog({
+            title: "删除本轮",
+            subtitle: "删除后无法恢复",
+            message: `确定删除第${roundNo}轮？删除后后续轮次会自动顺位前移。`,
+            okText: "删除本轮",
+            danger: true,
+          })
           if (ok !== true) return
 
           rounds = rounds.filter((r) => r.id !== roundId)
@@ -1078,7 +1035,9 @@
       if (lookupController) lookupController.open()
     })
 
-    clearBtn.addEventListener("click", () => {
+    clearBtn.addEventListener("click", async () => {
+      const ok = await showConfirmDialog("确定清空所有学习记录？清空后无法恢复。")
+      if (ok !== true) return
       const next = {
         ...state,
         rounds: [],

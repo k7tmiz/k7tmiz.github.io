@@ -28,58 +28,18 @@ const {
   normalizeOnlineTtsProvider,
 } = window.A4Common || {}
 
-const { normalizeThemeMode, normalizeAccent, normalizeVoiceMode, normalizePronunciationLang } = window.A4Settings
-const { sanitizeFilename, downloadJsonFile } = window.A4Utils
+const settings = window.A4Settings || {}
+const utils = window.A4Utils || {}
+const {
+  normalizeThemeMode = (v) => (v === "dark" || v === "light" ? v : "auto"),
+  normalizeAccent = (v) => String(v || "").trim().toLowerCase(),
+  normalizeVoiceMode = (v) => (v === "manual" || v === "auto" ? v : "auto"),
+  normalizePronunciationLang = (v) => String(v || "").trim().toLowerCase() || "auto",
+} = settings
+const { sanitizeFilename = (v) => String(v || ""), downloadJsonFile = () => {}, showConfirmDialog = () => Promise.resolve(false) } = utils
 
 function makeId() {
-  return `${Date.now()}-${crypto.randomUUID()}`
-}
-
-function showConfirmDialog(message) {
-  return new Promise((resolve) => {
-    const modal = document.createElement("div")
-    modal.className = "modal"
-    const backdrop = document.createElement("div")
-    backdrop.className = "modal-backdrop"
-    const panel = document.createElement("div")
-    panel.className = "modal-panel records-confirm-panel"
-    panel.setAttribute("role", "alertdialog")
-    panel.setAttribute("aria-modal", "true")
-    const header = document.createElement("div")
-    header.className = "modal-header"
-    const title = document.createElement("h2")
-    title.textContent = "确认删除"
-    header.appendChild(title)
-    const body = document.createElement("div")
-    body.className = "modal-body"
-    body.textContent = message
-    const actions = document.createElement("div")
-    actions.className = "modal-actions records-confirm-actions"
-    const cancelBtn = document.createElement("button")
-    cancelBtn.className = "ghost"
-    cancelBtn.textContent = "取消"
-    const okBtn = document.createElement("button")
-    okBtn.className = "primary records-confirm-danger"
-    okBtn.textContent = "确定"
-    actions.appendChild(cancelBtn)
-    actions.appendChild(okBtn)
-    panel.appendChild(header)
-    panel.appendChild(body)
-    panel.appendChild(actions)
-    modal.appendChild(backdrop)
-    modal.appendChild(panel)
-    document.body.appendChild(modal)
-    let settled = false
-    const finish = (value) => {
-      if (settled) return
-      settled = true
-      document.body.removeChild(modal)
-      resolve(value)
-    }
-    backdrop.addEventListener("click", () => finish(false))
-    cancelBtn.addEventListener("click", () => finish(false))
-    okBtn.addEventListener("click", () => finish(true))
-  })
+  return `${Date.now()}-${window.A4Common.makeUuid()}`
 }
 
 function normalizeWordbookObject(b) {
@@ -409,6 +369,18 @@ const dom = {
   aiPreviewMeta: document.getElementById("aiPreviewMeta"),
   aiPreviewList: document.getElementById("aiPreviewList"),
   aiConfirmBtn: document.getElementById("aiConfirmBtn"),
+  appToast: document.getElementById("appToast"),
+}
+
+let appToastTimer = null
+function showToast(message) {
+  if (!dom.appToast) return
+  if (appToastTimer) window.clearTimeout(appToastTimer)
+  dom.appToast.textContent = String(message || "")
+  dom.appToast.classList.remove("hidden")
+  appToastTimer = window.setTimeout(() => {
+    dom.appToast?.classList.add("hidden")
+  }, 3000)
 }
 
 const appState = {
@@ -455,6 +427,8 @@ const appState = {
   voiceURI: "",
   onlineTtsEnabled: true,
   onlineTtsProvider: "edge",
+  ttsMode: "online",
+  offlineVoiceByLang: {},
   aiConfig: { provider: "custom", baseUrl: "", apiKey: "", model: "" },
   lookupOnlineEnabled: true,
   lookupOnlineSource: "builtin",
@@ -967,7 +941,12 @@ async function importWordbookFile(file) {
   let words
 
   if (String(file.name || "").toLowerCase().endsWith(".json")) {
-    const parsed = JSON.parse(String(text || ""))
+    let parsed
+    try {
+      parsed = JSON.parse(String(text || ""))
+    } catch {
+      throw new Error("JSON 解析失败，请检查文件格式")
+    }
     if (parsed && typeof parsed === "object" && !Array.isArray(parsed)) {
       const n = String(parsed.name || "").trim()
       if (n) name = n
@@ -991,7 +970,7 @@ async function importWordbookFile(file) {
 
   const id = `import-${makeId()}`
   const book = normalizeWordbookObject({ id, name: name || "导入词书", description, language, words })
-  if (!book || !book.words.length) return null
+  if (!book || !book.words.length) throw new Error("文件中没有可用单词")
 
   appState.customWordbooks = [...appState.customWordbooks, book]
   appState.selectedWordbookId = book.id
@@ -1128,8 +1107,16 @@ function extractWordbookFromRemoteJson(parsed) {
 }
 
 async function importWordbookFromUrl({ url, name, language, description } = {}) {
-  const res = await fetch(url, { cache: "no-store" })
-  if (!res.ok) return null
+  let res
+  try {
+    res = await fetch(url, { cache: "no-store" })
+  } catch (e) {
+    throw new Error(`网络请求失败：${e?.message || "无法下载词书文件"}`, { cause: e })
+  }
+  if (res.status === 403 || res.status === 429) {
+    throw new Error("GitHub API 请求过于频繁，请稍后再试")
+  }
+  if (!res.ok) throw new Error(`下载失败（HTTP ${res.status}）`)
   const ct = String(res.headers?.get?.("content-type") || "").toLowerCase()
   const text = await res.text()
 
@@ -1143,10 +1130,10 @@ async function importWordbookFromUrl({ url, name, language, description } = {}) 
     try {
       parsed = JSON.parse(String(text || ""))
     } catch {
-      return null
+      throw new Error("词书 JSON 解析失败，请检查文件格式")
     }
     const extracted = extractWordbookFromRemoteJson(parsed)
-    if (!extracted) return null
+    if (!extracted) throw new Error("词书 JSON 结构不符合要求")
     parsedMeta = extracted
     words = extracted.words
   } else {
@@ -1168,7 +1155,7 @@ async function importWordbookFromUrl({ url, name, language, description } = {}) 
     words,
   })
   const book = normalizeWordbookObject({ id, name: finalName, description: finalDesc, language: inferredLang, words })
-  if (!book || !book.words.length) return null
+  if (!book || !book.words.length) throw new Error("词书中没有可用单词")
 
   appState.customWordbooks = [...appState.customWordbooks, book]
   appState.selectedWordbookId = book.id
@@ -1183,6 +1170,9 @@ async function fetchGithubTree({ owner, repo, branch }) {
     cache: "no-store",
     headers: { Accept: "application/vnd.github+json" },
   })
+  if (res.status === 403 || res.status === 429) {
+    throw new Error("GitHub API 请求过于频繁，请稍后再试")
+  }
   if (!res.ok) return null
   return (await res.json()) || null
 }
@@ -1319,14 +1309,19 @@ async function openRemoteImportPicker({ owner, repo, language, name } = {}) {
   let result
   try {
     result = await listGithubJsonFiles({ owner, repo })
-  } catch {
+  } catch (e) {
+    showToast(`在线词书加载失败：${e?.message || "无法获取文件列表"}`)
     result = { owner, repo, branch: "", list: [] }
   }
 
   remoteImportAll = Array.isArray(result?.list) ? result.list : []
   const branch = String(result?.branch || "")
   setRemoteImportMeta(`${owner}/${repo}${branch ? `（${branch}）` : ""} · 共 ${remoteImportAll.length} 个 JSON`)
-  renderRemoteImportOptions({ keyword: "" })
+  if (!remoteImportAll.length) {
+    setRemoteImportHint("未找到可用的 JSON 文件，请检查仓库地址或稍后再试。")
+  } else {
+    renderRemoteImportOptions({ keyword: "" })
+  }
   setRemoteImportBusy(false)
 }
 
@@ -1387,7 +1382,24 @@ function getCurrentRoundCap() {
   return normalizeRoundCap(appState.roundCap)
 }
 
+let _persistTimer = null
+function persistNow() {
+  if (_persistTimer) {
+    clearTimeout(_persistTimer)
+    _persistTimer = null
+  }
+  _persistImpl()
+}
 function persist() {
+  if (_persistTimer) return
+  _persistTimer = setTimeout(() => {
+    _persistTimer = null
+    _persistImpl()
+  }, 80)
+}
+window.addEventListener("pagehide", () => persistNow(), { once: false })
+window.addEventListener("beforeunload", () => persistNow())
+function _persistImpl() {
   const darkMode = getResolvedDarkMode()
   saveState({
     version: 2,
@@ -1660,6 +1672,11 @@ function speakTerm(term) {
       ""
   ).toLowerCase()
   const speakText = targetBase === "es" ? expandSpanishGenderShortForm(text) : text
+  const offlineMap =
+    appState.offlineVoiceByLang && typeof appState.offlineVoiceByLang === "object"
+      ? appState.offlineVoiceByLang
+      : {}
+  const offlineVoiceId = String(offlineMap[targetBase] || "")
 
   speech.speak({
     text: speakText,
@@ -1671,6 +1688,8 @@ function speakTerm(term) {
     voiceURI: appState.voiceURI,
     onlineTtsEnabled: appState.onlineTtsEnabled !== false,
     onlineTtsProvider: appState.onlineTtsProvider,
+    ttsMode: appState.ttsMode || "online",
+    offlineVoiceId,
   })
 
   if (settingsController) settingsController.updateVoiceUi()
@@ -2178,6 +2197,7 @@ function placeWordElement(word) {
 
 function clearPaper() {
   dom.paperInner.innerHTML = ""
+  appState.placed = []
 }
 
 function newRound() {
@@ -2729,6 +2749,9 @@ dom.confirmRemoteImportBtn?.addEventListener("click", async () => {
       return
     }
     closeRemoteImportModal()
+  } catch (e) {
+    showToast(`导入失败：${e?.message || "无法下载词书"}`)
+    setRemoteImportHint("")
   } finally {
     setRemoteImportBusy(false)
   }
@@ -2743,7 +2766,9 @@ dom.importCet4Btn.addEventListener("click", async () => {
       name: "英语词库（k7tmiz）",
       language: "en",
     })
-  } catch { /* ignore */ }
+  } catch (e) {
+    showToast(`在线词书加载失败：${e?.message || "无法获取文件列表"}`)
+  }
 })
 
 dom.importCet6Btn.addEventListener("click", async () => {
@@ -2755,7 +2780,9 @@ dom.importCet6Btn.addEventListener("click", async () => {
       name: "西班牙语词库（k7tmiz）",
       language: "es",
     })
-  } catch { /* ignore */ }
+  } catch (e) {
+    showToast(`在线词书加载失败：${e?.message || "无法获取文件列表"}`)
+  }
 })
 
 dom.importFile.addEventListener("change", async () => {
@@ -2764,7 +2791,9 @@ dom.importFile.addEventListener("change", async () => {
   if (!file) return
   try {
     await importWordbookFile(file)
-  } catch { /* ignore */ }
+  } catch (e) {
+    showToast(`导入失败：${e?.message || "无法解析文件"}`)
+  }
 })
 
 dom.introBtn.addEventListener("click", () => {
@@ -3233,8 +3262,13 @@ function isAnyModalOpen() {
     isModalOpen(dom.reviewModal) ||
     isModalOpen(dom.roundFullModal) ||
     isModalOpen(dom.importModal) ||
+    isModalOpen(dom.remoteImportModal) ||
     isModalOpen(dom.wordbookPickerModal) ||
-    isModalOpen(dom.introModal)
+    isModalOpen(dom.introModal) ||
+    isModalOpen(dom.settingsModal) ||
+    isModalOpen(dom.aiPreviewModal) ||
+    isModalOpen(document.getElementById("lookupModal")) ||
+    isModalOpen(document.getElementById("a4-confirm-title")?.closest(".modal"))
   )
 }
 
@@ -3284,9 +3318,12 @@ window.addEventListener("keydown", (e) => {
   }
 })
 
+let resizeDebounceTimer = null
 window.addEventListener("resize", () => {
-  renderCurrentRound()
-  persist()
+  if (resizeDebounceTimer) clearTimeout(resizeDebounceTimer)
+  resizeDebounceTimer = setTimeout(() => {
+    renderCurrentRound()
+  }, 150)
 })
 
 window.addEventListener("a4-cloud-auth-changed", (e) => {
