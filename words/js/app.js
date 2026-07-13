@@ -26,6 +26,7 @@ const {
   getWordbooksFromGlobal,
   normalizeWordObject,
   normalizeOnlineTtsProvider,
+  normalizeTtsPreferences,
 } = window.A4Common || {}
 
 const settings = window.A4Settings || {}
@@ -1401,6 +1402,7 @@ window.addEventListener("pagehide", () => persistNow(), { once: false })
 window.addEventListener("beforeunload", () => persistNow())
 function _persistImpl() {
   const darkMode = getResolvedDarkMode()
+  const ttsPreferences = normalizeTtsPreferences(appState)
   saveState({
     version: 2,
     showMeaning: appState.showMeaning,
@@ -1429,8 +1431,10 @@ function _persistImpl() {
     pronunciationLang: appState.pronunciationLang,
     voiceMode: appState.voiceMode,
     voiceURI: appState.voiceURI,
-    onlineTtsEnabled: !!appState.onlineTtsEnabled,
+    onlineTtsEnabled: ttsPreferences.onlineTtsEnabled,
     onlineTtsProvider: normalizeOnlineTtsProvider(appState.onlineTtsProvider),
+    ttsMode: ttsPreferences.ttsMode,
+    offlineVoiceByLang: ttsPreferences.offlineVoiceByLang,
     aiConfig: appState.aiConfig,
     lookupOnlineEnabled: !!appState.lookupOnlineEnabled,
     lookupOnlineSource: String(appState.lookupOnlineSource || "").trim().toLowerCase() === "custom" ? "custom" : "builtin",
@@ -2268,7 +2272,10 @@ function restore() {
   appState.pronunciationLang = normalizePronunciationLang(saved.pronunciationLang)
   appState.voiceMode = normalizeVoiceMode(saved.voiceMode)
   appState.voiceURI = typeof saved.voiceURI === "string" ? saved.voiceURI : ""
-  appState.onlineTtsEnabled = typeof saved.onlineTtsEnabled === "boolean" ? saved.onlineTtsEnabled : true
+  const ttsPreferences = normalizeTtsPreferences(saved)
+  appState.ttsMode = ttsPreferences.ttsMode
+  appState.onlineTtsEnabled = ttsPreferences.onlineTtsEnabled
+  appState.offlineVoiceByLang = ttsPreferences.offlineVoiceByLang
   appState.onlineTtsProvider = normalizeOnlineTtsProvider(saved.onlineTtsProvider)
   appState.aiConfig =
     saved.aiConfig && typeof saved.aiConfig === "object"

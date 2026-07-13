@@ -1,10 +1,29 @@
 /* ---------------------------------
    Landing Page Internal Content CSS
-   (Layout & Sidebar are now handled natively by NexT)
+   (Layout & Sidebar are now handled by NexT)
 --------------------------------- */
+
+:root {
+  --text-main: #222222;
+  --text-muted: #666666;
+  --serif: "Noto Serif SC", "Songti SC", "Source Han Serif SC", Georgia, "Times New Roman", serif;
+  --shadow-color: rgba(0, 0, 0, 0.08);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --text-main: #e8e8e8;
+    --text-muted: #9a9a9a;
+    --shadow-color: rgba(0, 0, 0, 0.35);
+  }
+}
 
 .landing-content {
   margin-top: -20px; /* Offset the post-body default padding if needed */
+}
+
+#more {
+  scroll-margin-top: 24px;
 }
 
 /* Hero Section */
@@ -166,9 +185,6 @@
 .nav-card h3 { margin: 0 0 8px; font-size: 1.05rem; border-bottom: none !important; }
 .nav-card p { margin: 0; font-size: 0.9rem; color: var(--text-muted); line-height: 1.5; }
 
-/* Interactive Tilt */
-.interactive-tilt { transform-style: preserve-3d; will-change: transform; }
-
 /* Responsive */
 @media (max-width: 991px) {
   .hero-block { flex-direction: column; padding: 20px 0; }
@@ -197,6 +213,7 @@
   /* Center projects block on tablet/mobile */
   .section-title { text-align: center; }
   .nav-card { text-align: center; }
+  .grid-3-col { grid-template-columns: repeat(2, 1fr); }
 }
 
 @media (max-width: 767px) {

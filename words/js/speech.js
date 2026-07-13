@@ -21,6 +21,10 @@
     speakGen: 0,
   }
 
+  function isSpeakRequestCurrent(requestGen) {
+    return typeof requestGen !== "number" || requestGen === speechState.speakGen
+  }
+
   function refreshVoices() {
     const synth = window.speechSynthesis
     if (!synth) return []
@@ -446,12 +450,12 @@
     }
   }
 
-  async function speakWithEdgeTts(text, langTag) {
+  async function speakWithEdgeTts(text, langTag, requestGen) {
     const voice = getEdgeVoiceName(langTag)
     const connId = makeConnectionId()
     const requestId = makeConnectionId()
     const secMsGec = await getEdgeSecMsGec()
-    if (!secMsGec) return false
+    if (!secMsGec || !isSpeakRequestCurrent(requestGen)) return false
     const wsUrl =
       `${EDGE_TTS_WS_URL}?TrustedClientToken=${EDGE_TTS_TOKEN}` +
       `&ConnectionId=${connId}&Sec-MS-GEC=${secMsGec}&Sec-MS-GEC-Version=${EDGE_TTS_VERSION}`
@@ -467,16 +471,17 @@
       const finish = (ok) => {
         if (settled) return
         settled = true
+        const accepted = !!ok && isSpeakRequestCurrent(requestGen)
         if (timer) clearTimeout(timer)
         try {
           ws?.close()
         } catch { /* ignore */ }
-        if (!ok && sink) {
+        if (!accepted && sink) {
           try { sink.audio.pause() } catch { /* ignore */ }
           sink.cleanup()
         }
-        if (ok) speechState.lastOnlineProvider = "edge"
-        resolve(ok)
+        if (accepted) speechState.lastOnlineProvider = "edge"
+        resolve(accepted)
       }
       timer = setTimeout(() => finish(false), ONLINE_TTS_CONNECT_TIMEOUT)
 
@@ -491,6 +496,7 @@
       ws.binaryType = "arraybuffer"
 
       ws.onopen = () => {
+        if (!isSpeakRequestCurrent(requestGen)) return finish(false)
         if (timer) clearTimeout(timer)
         timer = setTimeout(() => finish(false), ONLINE_TTS_CONNECT_TIMEOUT)
         const timestamp = getEdgeTimestamp()
@@ -519,6 +525,7 @@
       }
 
       ws.onmessage = (e) => {
+        if (!isSpeakRequestCurrent(requestGen)) return finish(false)
         if (e.data instanceof ArrayBuffer) {
           const view = new Uint8Array(e.data)
           const headerEnd = findAudioHeaderEnd(view)
@@ -529,7 +536,7 @@
               sink.append(chunk)
               if (timer) clearTimeout(timer)
               timer = setTimeout(() => finish(false), ONLINE_TTS_PLAYBACK_TIMEOUT)
-              sinkPlayPromise = playAudioElement(sink.audio, { cleanup: sink.cleanup })
+              sinkPlayPromise = playAudioElement(sink.audio, { cleanup: sink.cleanup, requestGen })
                 .then(() => finish(true))
                 .catch(() => {
                   // MSE start failed — fall back to buffered playback after turn.end.
@@ -548,7 +555,7 @@
           if (audioChunks.length) {
             if (timer) clearTimeout(timer)
             timer = setTimeout(() => finish(false), ONLINE_TTS_PLAYBACK_TIMEOUT)
-            playAudioChunks(audioChunks).then(() => finish(true)).catch(() => finish(false))
+            playAudioChunks(audioChunks, "audio/mpeg", requestGen).then(() => finish(true)).catch(() => finish(false))
           } else {
             finish(false)
           }
@@ -571,7 +578,11 @@
     return dataStart <= view.length ? dataStart : -1
   }
 
-  function playAudioElement(audio, { cleanup } = {}) {
+  function playAudioElement(audio, { cleanup, requestGen } = {}) {
+    if (!isSpeakRequestCurrent(requestGen)) {
+      if (typeof cleanup === "function") cleanup()
+      return Promise.reject(new Error("stale speech request"))
+    }
     stopActiveAudio()
     speechState.activeAudio = audio
     return new Promise((resolve, reject) => {
@@ -586,6 +597,10 @@
       audio._a4Cleanup = cleanupAudio
       const finishStarted = () => {
         if (settled) return
+        if (!isSpeakRequestCurrent(requestGen)) {
+          finishFailed(new Error("stale speech request"))
+          return
+        }
         settled = true
         clearTimeout(timer)
         resolve()
@@ -613,20 +628,22 @@
     })
   }
 
-  function playAudioChunks(chunks, contentType = "audio/mpeg") {
+  function playAudioChunks(chunks, contentType = "audio/mpeg", requestGen) {
     const blob = new Blob(chunks, { type: contentType })
     const url = URL.createObjectURL(blob)
     const audio = new Audio(url)
-    return playAudioElement(audio, { cleanup: () => URL.revokeObjectURL(url) })
+    return playAudioElement(audio, { cleanup: () => URL.revokeObjectURL(url), requestGen })
   }
 
-  async function speakWithTtsBridge(text, langTag, provider) {
+  async function speakWithTtsBridge(text, langTag, provider, requestGen) {
     const bridge = window.A4TtsBridge?.synthesize
-    if (typeof bridge !== "function") return false
+    if (typeof bridge !== "function" || !isSpeakRequestCurrent(requestGen)) return false
     try {
       const result = await bridge({ text, langTag, provider })
+      if (!isSpeakRequestCurrent(requestGen)) return false
       if (!result?.success || !result.audio) return false
-      await playAudioChunks([result.audio], result.contentType || "audio/mpeg")
+      await playAudioChunks([result.audio], result.contentType || "audio/mpeg", requestGen)
+      if (!isSpeakRequestCurrent(requestGen)) return false
       speechState.lastOnlineProvider = result.provider === "google" ? "google" : "edge"
       return true
     } catch {
@@ -646,12 +663,14 @@
     } catch { /* ignore */ }
   }
 
-  async function speakWithGoogleTts(text, langTag) {
+  async function speakWithGoogleTts(text, langTag, requestGen) {
+    if (!isSpeakRequestCurrent(requestGen)) return false
     const base = normalizeLangTag(langTag).base || "en"
     const url = `https://translate.google.com/translate_tts?ie=UTF-8&tl=${encodeURIComponent(base)}&client=tw-ob&q=${encodeURIComponent(text)}`
     const audio = new Audio(url)
     try {
-      await playAudioElement(audio)
+      await playAudioElement(audio, { requestGen })
+      if (!isSpeakRequestCurrent(requestGen)) return false
       speechState.lastOnlineProvider = "google"
       return true
     } catch {
@@ -659,14 +678,16 @@
     }
   }
 
-  async function speakOnline(text, langTag, provider) {
+  async function speakOnline(text, langTag, provider, requestGen) {
     const p = String(provider || "edge").toLowerCase()
     const providers = p === "google" ? ["google", "edge"] : ["edge", "google"]
     for (const currentProvider of providers) {
+      if (!isSpeakRequestCurrent(requestGen)) return false
       const directSpeak = currentProvider === "google" ? speakWithGoogleTts : speakWithEdgeTts
-      if (await directSpeak(text, langTag)) return true
+      if (await directSpeak(text, langTag, requestGen)) return isSpeakRequestCurrent(requestGen)
+      if (!isSpeakRequestCurrent(requestGen)) return false
       if (typeof window.A4TtsBridge?.synthesize === "function") {
-        if (await speakWithTtsBridge(text, langTag, currentProvider)) return true
+        if (await speakWithTtsBridge(text, langTag, currentProvider, requestGen)) return isSpeakRequestCurrent(requestGen)
       }
     }
     return false
@@ -677,6 +698,14 @@
   const offlineTtsState = {
     installedCache: null,
     cacheExpiry: 0,
+    installedError: "",
+  }
+
+  function getErrorMessage(error, fallback) {
+    if (error instanceof Error && error.message) return error.message
+    if (error && typeof error === "object" && error.error) return String(error.error)
+    const text = String(error || "").trim()
+    return text || fallback
   }
 
   async function refreshOfflineInstalled({ force = false } = {}) {
@@ -686,18 +715,23 @@
     }
     const invoke = window.A4Utils?.getTauriInvoke?.()
     if (typeof invoke !== "function") {
-      offlineTtsState.installedCache = []
-      offlineTtsState.cacheExpiry = now + 30000
-      return offlineTtsState.installedCache
+      offlineTtsState.installedCache = null
+      offlineTtsState.cacheExpiry = 0
+      offlineTtsState.installedError = "离线 TTS 桥接不可用。"
+      return []
     }
     try {
       const list = await invoke("a4_offline_voices_installed")
       offlineTtsState.installedCache = Array.isArray(list) ? list : []
-    } catch {
-      offlineTtsState.installedCache = []
+      offlineTtsState.cacheExpiry = now + 30000
+      offlineTtsState.installedError = ""
+      return offlineTtsState.installedCache
+    } catch (error) {
+      offlineTtsState.installedCache = null
+      offlineTtsState.cacheExpiry = 0
+      offlineTtsState.installedError = `读取已安装离线语音失败：${getErrorMessage(error, "未知错误")}`
+      return []
     }
-    offlineTtsState.cacheExpiry = now + 30000
-    return offlineTtsState.installedCache
   }
 
   function pickOfflineVoiceForLang(installed, base, preferredId) {
@@ -713,29 +747,43 @@
     return null
   }
 
-  async function speakWithOfflineTts({ text, voiceId }) {
+  async function speakWithOfflineTts({ text, voiceId, requestGen }) {
     const invoke = window.A4Utils?.getTauriInvoke?.()
-    if (typeof invoke !== "function") return false
-    if (!voiceId) return false
+    if (typeof invoke !== "function") return { ok: false, error: "离线 TTS 桥接不可用。" }
+    if (!voiceId) return { ok: false, error: "未选择可用的离线语音。" }
+    if (!isSpeakRequestCurrent(requestGen)) return { ok: false, error: "", cancelled: true }
     let result
     try {
       result = await invoke("a4_offline_speak", { text, voiceId })
-    } catch {
-      return false
+    } catch (error) {
+      return {
+        ok: false,
+        error: `离线语音合成调用失败：${getErrorMessage(error, "未知错误")}`,
+      }
     }
-    if (!result?.ok || !result.wav?.length) return false
+    if (!isSpeakRequestCurrent(requestGen)) return { ok: false, error: "", cancelled: true }
+    if (!result?.ok) {
+      return {
+        ok: false,
+        error: `离线语音合成失败：${getErrorMessage(result?.error, "未返回音频")}`,
+      }
+    }
+    if (!result.wav?.length) return { ok: false, error: "离线语音合成失败：未返回音频。" }
     try {
       const wavBytes = result.wav instanceof Uint8Array ? result.wav : new Uint8Array(result.wav)
-      await playAudioChunks([wavBytes], "audio/wav")
+      await playAudioChunks([wavBytes], "audio/wav", requestGen)
+      if (!isSpeakRequestCurrent(requestGen)) return { ok: false, error: "", cancelled: true }
       speechState.lastOnlineProvider = "offline"
-      return true
-    } catch {
-      return false
+      return { ok: true, error: "" }
+    } catch (error) {
+      return {
+        ok: false,
+        error: `离线音频播放失败：${getErrorMessage(error, "未知错误")}`,
+      }
     }
   }
 
   async function isOfflineAvailableForLang(base, preferredId) {
-    if (isAndroidTauriSpeech()) return false
     const installed = await refreshOfflineInstalled()
     return !!pickOfflineVoiceForLang(installed, base, preferredId)
   }
@@ -743,6 +791,7 @@
   function invalidateOfflineCache() {
     offlineTtsState.installedCache = null
     offlineTtsState.cacheExpiry = 0
+    offlineTtsState.installedError = ""
   }
 
   // ── Main speak ──────────────────────────────────────────────────────────────
@@ -772,12 +821,13 @@
     })
   }
 
-  async function speakWithSystemTts({ text, pronunciationLang, wordbookLanguage, accent, voiceMode, voiceURI }) {
+  async function speakWithSystemTts({ text, pronunciationLang, wordbookLanguage, accent, voiceMode, voiceURI, requestGen }) {
     const t = String(text || "").trim()
+    if (!isSpeakRequestCurrent(requestGen)) return false
 
     if (isAndroidTauriSpeech()) {
       const ok = await speakWithAndroidTts({ text: t, pronunciationLang, wordbookLanguage, accent })
-      if (ok) return true
+      if (ok && isSpeakRequestCurrent(requestGen)) return true
       return false
     }
 
@@ -797,6 +847,7 @@
 
     if (!resolved0.voice) {
       await waitForVoices({ timeoutMs: 900 })
+      if (!isSpeakRequestCurrent(requestGen)) return false
     }
 
     const resolved = resolveVoice({
@@ -828,6 +879,7 @@
 
     const synth = window.speechSynthesis
     try {
+      if (!isSpeakRequestCurrent(requestGen)) return false
       synth.cancel()
       const v = resolved.voice
       const parts = splitSpeakText(t)
@@ -859,8 +911,9 @@
             clearTimeout(timer)
             resolve(ok)
           }
-          u.onend = () => finish(true)
+          u.onend = () => finish(isSpeakRequestCurrent(requestGen))
           u.onerror = () => finish(false)
+          if (!isSpeakRequestCurrent(requestGen)) return finish(false)
           synth.speak(u)
         })
       }
@@ -868,13 +921,12 @@
       return await new Promise((resolve) => {
         let idx = 0
         let timer = null
-        const myGen = ++speechState.speakGen
         const finish = (ok) => {
           if (timer) clearTimeout(timer)
           resolve(ok)
         }
         const speakNext = () => {
-          if (myGen !== speechState.speakGen) return finish(false)
+          if (!isSpeakRequestCurrent(requestGen)) return finish(false)
           if (idx >= parts.length) return finish(true)
           const u = makeUtterance(parts[idx])
           let finished = false
@@ -889,7 +941,7 @@
             clearTimeout(timer)
             idx += 1
             setTimeout(() => {
-              if (myGen !== speechState.speakGen) return finish(false)
+              if (!isSpeakRequestCurrent(requestGen)) return finish(false)
               speakNext()
             }, 140)
           }
@@ -913,7 +965,8 @@
 
     speechState.lastOnlineProvider = ""
     speechState.lastSpeakResult = null
-    speechState.speakGen = (speechState.speakGen || 0) + 1
+    const requestGen = (speechState.speakGen || 0) + 1
+    speechState.speakGen = requestGen
     stopActiveAudio()
     window.speechSynthesis?.cancel?.()
 
@@ -923,68 +976,91 @@
     const mode = String(ttsMode || "").toLowerCase()
 
     const tryOffline = async () => {
-      if (isAndroidTauriSpeech()) return false
       const installed = await refreshOfflineInstalled()
+      if (!isSpeakRequestCurrent(requestGen)) return { ok: false, error: "", cancelled: true }
+      if (offlineTtsState.installedError) return { ok: false, error: offlineTtsState.installedError }
       const voice = pickOfflineVoiceForLang(installed, targetBase, offlineVoiceId)
-      if (!voice) return false
-      return speakWithOfflineTts({ text: t, voiceId: voice.id })
+      if (!voice) return { ok: false, error: `未安装 ${targetBase || "当前语言"} 的离线语音。` }
+      return speakWithOfflineTts({ text: t, voiceId: voice.id, requestGen })
     }
 
     const tryOnline = async () => {
       if (!onlineTtsEnabled) return false
-      return speakOnline(t, targetLangTag, requestedProvider)
+      return speakOnline(t, targetLangTag, requestedProvider, requestGen)
     }
 
     const trySystem = async () =>
-      speakWithSystemTts({ text: t, pronunciationLang, wordbookLanguage, accent, voiceMode, voiceURI })
+      speakWithSystemTts({ text: t, pronunciationLang, wordbookLanguage, accent, voiceMode, voiceURI, requestGen })
 
     let usedMode
+    let offlineError = ""
     let ok
+
+    const useOffline = async () => {
+      const result = await tryOffline()
+      if (!result.ok && !result.cancelled) offlineError = result.error || "离线发音失败。"
+      return result.ok
+    }
 
     if (mode === "system") {
       ok = await trySystem()
+      if (!isSpeakRequestCurrent(requestGen)) return false
       usedMode = ok ? "system" : ""
     } else if (mode === "offline") {
-      if (await tryOffline()) {
+      if (await useOffline()) {
+        if (!isSpeakRequestCurrent(requestGen)) return false
         ok = true
         usedMode = "offline"
-      } else if (await tryOnline()) {
-        ok = true
-        usedMode = "online"
       } else {
+        if (!isSpeakRequestCurrent(requestGen)) return false
         ok = await trySystem()
+        if (!isSpeakRequestCurrent(requestGen)) return false
         usedMode = ok ? "system" : ""
       }
     } else {
       // mode === "online" or unset (default)
       if (onlineTtsEnabled) {
-        if (await tryOnline()) {
+        const onlineOk = await tryOnline()
+        if (!isSpeakRequestCurrent(requestGen)) return false
+        if (onlineOk) {
           ok = true
           usedMode = "online"
-        } else if (await tryOffline()) {
-          ok = true
-          usedMode = "offline"
         } else {
-          ok = await trySystem()
-          usedMode = ok ? "system" : ""
+          const offlineOk = await useOffline()
+          if (!isSpeakRequestCurrent(requestGen)) return false
+          if (offlineOk) {
+            ok = true
+            usedMode = "offline"
+          } else {
+            ok = await trySystem()
+            if (!isSpeakRequestCurrent(requestGen)) return false
+            usedMode = ok ? "system" : ""
+          }
         }
       } else {
         ok = await trySystem()
+        if (!isSpeakRequestCurrent(requestGen)) return false
         usedMode = ok ? "system" : ""
       }
     }
 
+    if (!isSpeakRequestCurrent(requestGen)) return false
     if (!ok && !speechState.warnedOnlineFailure) {
       speechState.warnedOnlineFailure = true
-      window.alert("发音不可用。请检查网络、安装系统语音，或在设置页下载离线语音包。")
+      window.alert(
+        mode === "offline"
+          ? "离线发音和系统语音均不可用。请检查离线语音包或系统语音。"
+          : "发音不可用。请检查网络、安装系统语音，或在设置页下载离线语音包。"
+      )
     }
 
     speechState.lastSpeakResult = {
       ok,
       requestedMode: mode || (onlineTtsEnabled ? "online" : "system"),
       requestedProvider,
-      usedMode,
+      usedMode: usedMode || "",
       usedProvider: speechState.lastOnlineProvider,
+      error: offlineError || (!ok ? "没有可用的发音方式。" : ""),
     }
     return ok
   }

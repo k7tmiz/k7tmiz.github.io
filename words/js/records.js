@@ -29,6 +29,7 @@
     getRoundItemsByPage,
     buildFirstSeenRoundMap,
     formatMeaning,
+    normalizeTtsPreferences,
   } = window.A4Common || {}
 
   function formatDateTimeText(value) {
@@ -547,6 +548,7 @@
     const roundCap = normalizeRoundCap(raw?.roundCap)
     const dailyGoalRounds = Math.max(0, Math.min(20, Math.round(Number(raw?.dailyGoalRounds) || 0)))
     const dailyGoalWords = Math.max(0, Math.min(500, Math.round(Number(raw?.dailyGoalWords) || 0)))
+    const ttsPreferences = normalizeTtsPreferences?.(raw || {}) || {}
     if (!raw)
       return {
         version: 2,
@@ -558,12 +560,14 @@
         dailyGoalRounds: 0,
         dailyGoalWords: 0,
         reviewAutoCloseModal: true,
+        ...ttsPreferences,
         rounds: [],
         currentRoundId: "",
       }
     if (raw.version === 2 && Array.isArray(raw.rounds))
       return {
         ...raw,
+        ...ttsPreferences,
         darkMode: !!raw.darkMode,
         themeMode:
         normalizedThemeMode || (typeof raw.darkMode === "boolean" ? (raw.darkMode ? "dark" : "light") : "auto"),
@@ -604,6 +608,7 @@
       dailyGoalRounds,
       dailyGoalWords,
       reviewAutoCloseModal: true,
+      ...ttsPreferences,
       rounds: [round],
       currentRoundId: round.id,
     }

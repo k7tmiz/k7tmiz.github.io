@@ -1718,28 +1718,96 @@ body.theme-dark .paper {
   line-height: 1.35;
 }
 
+.offline-tts-section {
+  grid-template-columns: minmax(0, 1fr);
+  align-items: stretch;
+  gap: 8px;
+}
+
+.offline-tts-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.offline-tts-control {
+  width: 100%;
+  min-width: 0;
+}
+
+.offline-voice-list {
+  display: grid;
+  gap: 6px;
+  width: 100%;
+}
+
+.offline-tts-status {
+  width: 100%;
+  margin-top: 0;
+  box-sizing: border-box;
+  overflow-wrap: anywhere;
+}
+
+.offline-tts-status.is-success {
+  color: #0f6b44;
+  border-color: rgba(15, 107, 68, 0.22);
+  background: rgba(15, 107, 68, 0.08);
+}
+
+.offline-tts-status.is-error {
+  color: #b42318;
+  border-color: rgba(180, 35, 24, 0.22);
+  background: rgba(180, 35, 24, 0.08);
+}
+
+.offline-tts-status details {
+  margin-top: 5px;
+}
+
+.offline-tts-status summary {
+  cursor: pointer;
+}
+
+.offline-tts-status .form-help {
+  margin-top: 4px;
+  color: inherit;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+
+.offline-tts-hint {
+  margin-top: 2px;
+}
+
 .offline-voice-row {
   display: flex;
   flex-direction: column;
-  gap: 6px;
-  padding: 10px;
+  gap: 4px;
+  padding: 8px 10px;
   border: 1px solid var(--border);
   border-radius: 10px;
   background: var(--card2);
 }
 
 .offline-voice-head {
-  display: flex;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
   align-items: center;
-  justify-content: space-between;
   gap: 8px;
-  flex-wrap: wrap;
 }
 
 .offline-voice-title {
-  flex: 1 1 auto;
+  display: flex;
+  align-items: baseline;
+  gap: 0 4px;
+  flex-wrap: wrap;
   min-width: 0;
-  word-break: break-word;
+  overflow-wrap: anywhere;
+}
+
+.offline-voice-meta {
+  display: inline;
 }
 
 .offline-voice-actions {
@@ -1747,25 +1815,44 @@ body.theme-dark .paper {
   gap: 6px;
   flex-wrap: wrap;
   align-items: center;
+  justify-content: flex-end;
+}
+
+.modal-panel .offline-voice-actions button {
+  padding: 6px 8px;
+  font-size: 12px;
+  white-space: nowrap;
 }
 
 .offline-voice-progress {
   font-variant-numeric: tabular-nums;
   white-space: nowrap;
+  text-align: right;
 }
 
-@media (max-width: 520px) {
+.offline-voice-progress:empty {
+  display: none;
+}
+
+body.theme-dark .offline-tts-status.is-success {
+  color: #7ee2b8;
+  border-color: rgba(126, 226, 184, 0.24);
+  background: rgba(126, 226, 184, 0.08);
+}
+
+body.theme-dark .offline-tts-status.is-error {
+  color: #ff9b8f;
+  border-color: rgba(255, 155, 143, 0.24);
+  background: rgba(255, 155, 143, 0.08);
+}
+
+@media (max-width: 360px) {
   .offline-voice-head {
-    flex-direction: column;
-    align-items: stretch;
+    grid-template-columns: minmax(0, 1fr);
   }
 
   .offline-voice-actions {
-    justify-content: flex-end;
-  }
-
-  .offline-voice-actions button {
-    flex: 1 1 auto;
+    justify-content: flex-start;
   }
 }
 

@@ -403,6 +403,21 @@
     return out
   }
 
+  function normalizeTtsPreferences(state) {
+    const source = state && typeof state === "object" ? state : {}
+    const rawMode = typeof source.ttsMode === "string" ? source.ttsMode.trim() : ""
+    const ttsMode = rawMode
+      ? normalizeTtsMode(rawMode)
+      : source.onlineTtsEnabled === false
+        ? "system"
+        : "online"
+    return {
+      ttsMode,
+      onlineTtsEnabled: ttsMode === "online",
+      offlineVoiceByLang: normalizeOfflineVoiceByLang(source.offlineVoiceByLang),
+    }
+  }
+
   // ── Modal utility ────────────────────────────────────────────────────────────
 
   let _modalOpenCount = 0
@@ -657,6 +672,7 @@
     normalizeOnlineTtsProvider,
     normalizeTtsMode,
     normalizeOfflineVoiceByLang,
+    normalizeTtsPreferences,
     setModalVisible,
     formatMeaning,
     getRoundLastPageIndex,
