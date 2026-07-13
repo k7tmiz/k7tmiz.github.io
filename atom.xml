@@ -171,8 +171,8 @@
       <name>k7tmiz</name>
     </author>
     <category term="Tech" scheme="https://k7tmiz.github.io/categories/Tech/"/>
-    <category term="git" scheme="https://k7tmiz.github.io/tags/git/"/>
     <category term="linux" scheme="https://k7tmiz.github.io/tags/linux/"/>
+    <category term="git" scheme="https://k7tmiz.github.io/tags/git/"/>
     <id>https://k7tmiz.github.io/posts/c819bd8f.html</id>
     <link href="https://k7tmiz.github.io/posts/c819bd8f.html"/>
     <published>2025-06-07T12:48:52.000Z</published>
@@ -419,40 +419,6 @@
     <author>
       <name>k7tmiz</name>
     </author>
-    <category term="Tech" scheme="https://k7tmiz.github.io/categories/Tech/"/>
-    <category term="linux" scheme="https://k7tmiz.github.io/tags/linux/"/>
-    <category term="msi" scheme="https://k7tmiz.github.io/tags/msi/"/>
-    <id>https://k7tmiz.github.io/posts/5a88bde.html</id>
-    <link href="https://k7tmiz.github.io/posts/5a88bde.html"/>
-    <published>2025-04-19T14:28:32.000Z</published>
-    <summary>
-      <![CDATA[<h1 id="MSI-PERKEYRGB"><a href="#MSI-PERKEYRGB" class="headerlink" title="MSI-PERKEYRGB"></a>MSI-PERKEYRGB</h1><blockquote>
-<p>适用于我MSI-GP68HX的键盘RGB调光的git项目</p>
-</blockquote>
-<p>下面是Github的项目地址： <a href="https://github.com/Askannz/msi-perkeyrgb">msi-perkeyrgb</a></p>]]>
-    </summary>
-    <title>MSI-PERKEYRGB</title>
-    <updated>2026-05-05T07:38:12.361Z</updated>
-  </entry>
-  <entry>
-    <author>
-      <name>k7tmiz</name>
-    </author>
-    <category term="Tech" scheme="https://k7tmiz.github.io/categories/Tech/"/>
-    <category term="tech" scheme="https://k7tmiz.github.io/tags/tech/"/>
-    <id>https://k7tmiz.github.io/posts/b56059f9.html</id>
-    <link href="https://k7tmiz.github.io/posts/b56059f9.html"/>
-    <published>2025-04-19T14:28:32.000Z</published>
-    <summary>
-      <![CDATA[<h1 id="Nativefier-使用教程"><a href="#Nativefier-使用教程" class="headerlink" title="Nativefier 使用教程"></a>Nativefier 使用教程</h1><h4 id="基于electron的打包软件"><a href="#基于electron的打包软件" class="headerlink" title="基于electron的打包软件"></a>基于electron的打包软件</h4><h5 id="nativefier-n-p-—-arch-—-weight-—-height"><a href="#nativefier-n-p-—-arch-—-weight-—-height" class="headerlink" title="nativefier -n &lt;打包后的应用名称&gt; -p &lt;程序兼容的平台&gt; —-arch &lt;架构&gt; —- weight &lt;窗口宽度&gt; —-height &lt;窗口高度&gt; &lt;网页URL&gt;"></a>nativefier -n &lt;打包后的应用名称&gt; -p &lt;程序兼容的平台&gt; —-arch &lt;架构&gt; —- weight &lt;窗口宽度&gt; —-height &lt;窗口高度&gt; &lt;网页URL&gt;</h5>]]>
-    </summary>
-    <title>Nativefier 使用教程</title>
-    <updated>2026-05-05T07:28:54.641Z</updated>
-  </entry>
-  <entry>
-    <author>
-      <name>k7tmiz</name>
-    </author>
     <category term="Linux" scheme="https://k7tmiz.github.io/categories/Linux/"/>
     <category term="linux" scheme="https://k7tmiz.github.io/tags/linux/"/>
     <id>https://k7tmiz.github.io/posts/a907d758.html</id>
@@ -482,5 +448,39 @@
     </summary>
     <title>Switch-SteamLibrary</title>
     <updated>2026-05-05T07:38:12.360Z</updated>
+  </entry>
+  <entry>
+    <author>
+      <name>k7tmiz</name>
+    </author>
+    <category term="Tech" scheme="https://k7tmiz.github.io/categories/Tech/"/>
+    <category term="linux" scheme="https://k7tmiz.github.io/tags/linux/"/>
+    <category term="msi" scheme="https://k7tmiz.github.io/tags/msi/"/>
+    <id>https://k7tmiz.github.io/posts/5a88bde.html</id>
+    <link href="https://k7tmiz.github.io/posts/5a88bde.html"/>
+    <published>2025-04-19T14:28:32.000Z</published>
+    <summary>
+      <![CDATA[<h1 id="MSI-PERKEYRGB"><a href="#MSI-PERKEYRGB" class="headerlink" title="MSI-PERKEYRGB"></a>MSI-PERKEYRGB</h1><blockquote>
+<p>适用于我MSI-GP68HX的键盘RGB调光的git项目</p>
+</blockquote>
+<p>下面是Github的项目地址： <a href="https://github.com/Askannz/msi-perkeyrgb">msi-perkeyrgb</a></p>]]>
+    </summary>
+    <title>MSI-PERKEYRGB</title>
+    <updated>2026-05-05T07:38:12.361Z</updated>
+  </entry>
+  <entry>
+    <author>
+      <name>k7tmiz</name>
+    </author>
+    <category term="Tech" scheme="https://k7tmiz.github.io/categories/Tech/"/>
+    <category term="tech" scheme="https://k7tmiz.github.io/tags/tech/"/>
+    <id>https://k7tmiz.github.io/posts/b56059f9.html</id>
+    <link href="https://k7tmiz.github.io/posts/b56059f9.html"/>
+    <published>2025-04-19T14:28:32.000Z</published>
+    <summary>
+      <![CDATA[<h1 id="Nativefier-使用教程"><a href="#Nativefier-使用教程" class="headerlink" title="Nativefier 使用教程"></a>Nativefier 使用教程</h1><h4 id="基于electron的打包软件"><a href="#基于electron的打包软件" class="headerlink" title="基于electron的打包软件"></a>基于electron的打包软件</h4><h5 id="nativefier-n-p-—-arch-—-weight-—-height"><a href="#nativefier-n-p-—-arch-—-weight-—-height" class="headerlink" title="nativefier -n &lt;打包后的应用名称&gt; -p &lt;程序兼容的平台&gt; —-arch &lt;架构&gt; —- weight &lt;窗口宽度&gt; —-height &lt;窗口高度&gt; &lt;网页URL&gt;"></a>nativefier -n &lt;打包后的应用名称&gt; -p &lt;程序兼容的平台&gt; —-arch &lt;架构&gt; —- weight &lt;窗口宽度&gt; —-height &lt;窗口高度&gt; &lt;网页URL&gt;</h5>]]>
+    </summary>
+    <title>Nativefier 使用教程</title>
+    <updated>2026-05-05T07:28:54.641Z</updated>
   </entry>
 </feed>
