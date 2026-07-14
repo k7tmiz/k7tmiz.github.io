@@ -259,11 +259,14 @@ a.btn-secondary:hover,
   display: flex;
   flex-wrap: wrap;
   align-items: center;
+  justify-content: center;
   gap: 6px 12px;
   padding-top: 18px;
   border-top: 1px solid var(--line);
   font-size: 13px;
   font-weight: 400;
+  text-align: center;
+  width: 100%;
 }
 
 .cover-nav a {
