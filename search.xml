@@ -1662,7 +1662,7 @@
   </entry>
   <entry>
     <title>其实是献给自己的Hexo教程 2</title>
-    <url>/posts/Infinity.html</url>
+    <url>/posts/null.html</url>
     <content><![CDATA[<h1 id="使用git分支保存Hexo源码到Github"><a href="#使用git分支保存Hexo源码到Github" class="headerlink" title="使用git分支保存Hexo源码到Github"></a>使用git分支保存Hexo源码到Github</h1><p>引言：最开始想弄这个主要是因为我有多系统，多台设备，每次都要把整个文件夹进行压缩备份到U盘，效率低且不够优雅，偶然搜索到两篇帖子，助我解决了这一大难题，这里感谢<a href="https://zhuanlan.zhihu.com/p/71544809">使用git分支保存hexo博客源码到github</a> 和 <a href="https://www.cnblogs.com/eidolonw/p/13066869.html">hexo源码上传到GitHub</a> 这两篇帖子的编写者！</p>
 <p>那么，教程开始</p>
 <h2 id="教程"><a href="#教程" class="headerlink" title="教程"></a>教程</h2><h3 id="1-如图："><a href="#1-如图：" class="headerlink" title="1. 如图："></a>1. 如图：</h3><p><img src="/../../images/Hexo/b.png" alt="如图" title="如图"></p>
