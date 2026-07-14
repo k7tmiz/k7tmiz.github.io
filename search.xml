@@ -1,608 +1,169 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
-    <title>KDE崩溃了怎么办</title>
-    <url>/posts/fff51a63.html</url>
-    <content><![CDATA[<h2 id="起因"><a href="#起因" class="headerlink" title="起因"></a>起因</h2><p>因为这个Wallpaper Engine暂时没有适配Linux端，所以我就一直在用这个第三方的插件</p>
-<blockquote>
-<p>因为SteamOS也是基于ArchLinux的，那我用Arch的，拿儿子点东西不过分哈</p>
-</blockquote>
-<p>ref： <a href="https://github.com/slynobody/SteamOS-wallpaper-engine-kde-plugin?tab=readme-ov-file">SteamOS-wallpaper-engine-kde-plugin</a></p>
-<p>然后有的壁纸用了会崩溃死机，以下几条命令或许能帮到你</p>
-<blockquote>
-<p>我已经全面迁移到了Wayland环境，如果用X11,请自行类比或退出自行搜索哈</p>
-</blockquote>
-<h2 id="开始"><a href="#开始" class="headerlink" title="开始"></a>开始</h2><h4 id="重启kwin"><a href="#重启kwin" class="headerlink" title="重启kwin"></a>重启kwin</h4><p>KDE桌面按下 <code>Alt+Space</code> 输入：</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">kwin_wayland --replace</span><br></pre></td></tr></table></figure>
-
-<p>kwin就会重启，这时百分之八十的问题都能解决掉</p>
-<h4 id="还是不行？Plasma-Shell崩溃了？？"><a href="#还是不行？Plasma-Shell崩溃了？？" class="headerlink" title="还是不行？Plasma Shell崩溃了？？"></a>还是不行？Plasma Shell崩溃了？？</h4><p>如果在KDE桌面可以通过快捷键 <code>Ctrl+Alt+T</code> 快速打开 <code>Konsole</code></p>
-<p>或者 <code>Alt+Space</code> 然后搜索 <code>Konsole</code> 打开也可以</p>
-<p>以下命令重启 <code>plasmashell</code></p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">kstart5 plasmashell</span><br></pre></td></tr></table></figure>
-
-<p>有挂起的进程就先 <code>kill</code> 掉，再重启：</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">killall plasmashell &amp;&amp; kstart5 plasmashell</span><br></pre></td></tr></table></figure>
-
-<h4 id="KDE小组件崩溃了？"><a href="#KDE小组件崩溃了？" class="headerlink" title="KDE小组件崩溃了？"></a>KDE小组件崩溃了？</h4><p>重启解决百分之九十九的问题</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">killall plasmashell &amp;&amp; kstart5 plasmashell</span><br></pre></td></tr></table></figure>
-
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">reboot</span><br></pre></td></tr></table></figure>
-
-<p><strong>以上方法简单粗暴，懵逼不伤脑</strong></p>
-<p><strong>祝好运</strong></p>
+    <title>谈谈我为什么放弃了无纸化学习</title>
+    <url>/posts/4fa1af2a.html</url>
+    <content><![CDATA[<p>如标题所见，我最终还是放弃了无纸化学习。这个决定并非一时兴起，而是经历了反复尝试与深刻反思之后的结果。很多人称赞数字化工具的便捷与环保，我也曾满怀期待地拥抱这一切，却发现它并不如想象中那般适合我。原因很多，听我一一道来。</p>
+<p>作为24年高考生，我高考结束以后便在网络上搜寻大学的高效率学习模式，然而作为一名文科生，电脑的使用率较低，而平板和手写笔成为了我的首选。</p>
+<p>刚进入大学的前两个星期，大约是新鲜期，那时候基本上使用率比较高，原因或许是内容强度不高，记忆难度小。直到大一上学期过完，回到学校以后，情况开始有所改变。</p>
+<p>大一下的内容强度逐渐上升，而我逐渐发现，使用平板的学习效率不升反降。电子产品给我这种不太自律的人来讲带来的干扰远高于帮助—消息通知，翻译时候的懒惰，甚至只是搜索一个东西，我的思绪就已经抽离出课堂了。而在纸上书写时，没有那么多顾虑，没有那么多干扰，注意力更持久。我逐渐明白，无纸化学习并不适合每一个人。真正的”高效率”学习不是看书时有多方便，而是看书的时候能看多久，能学进去多少。</p>
+<p>更重要的是，无纸化学习的过程让我的学习开始“走马观花”。这种虚拟的数字化“纸笔”并没有真实的书写触感，在屏幕上划重点，复制粘贴，直接截屏等操作，看似方便，实则丧失了主动吸纳的环节。相反，笔尖在纸上划过留下的沙沙声，迫使我去思考，归纳。一笔一划之间，知识不再是高高在上，划过眼前的信息，而转化成了实体，逐渐内化成我的东西。这种真实，踏实的感觉，是手写笔在屏幕上无法企及的地方。</p>
+<p>不仅如此，无纸化学习的体验也比较一般。大学的很多课本没有电子版，还是需要我背不少的书。扫描的代价也很大，麻烦并且不够清晰。最后不得不背—既没有方便，同时也不便携，每天依旧要背着装满课本的背包去上课，根本不可能只带一个平板。</p>
+<p>书写体验更是一坨。为了在这块玻璃屏幕上好好写字不打滑，我给过许多尝试。买过许多替代笔尖，许多笔尖套，类纸膜等等。所需开销比一本一笔高的很多，也并不自如。更不用说其他—购买时候的价格，触控笔，笔记会员，云存储的服务，累积下来性价比也并不高。书写的反馈也很弱很弱。</p>
+<p>我并非否认无纸化学习，存在即合理。但我认为时至今日，他也不一定适用于每一个学习者。对我而言，纸，是思考的空间；笔，是理解的延申。退回传统，并非倒退，而是选择了一条适合我的路。</p>
 ]]></content>
       <categories>
-        <category>Linux</category>
+        <category>Article</category>
       </categories>
       <tags>
-        <tag>kde</tag>
+        <tag>article</tag>
       </tags>
   </entry>
   <entry>
-    <title>ArchLinux安装后指南</title>
-    <url>/posts/f48c939a.html</url>
-    <content><![CDATA[<h2 id="root登录"><a href="#root登录" class="headerlink" title="root登录"></a>root登录</h2><h4 id="联网-基于之前装的NetworkManager"><a href="#联网-基于之前装的NetworkManager" class="headerlink" title="联网,基于之前装的NetworkManager"></a>联网,基于之前装的NetworkManager</h4> <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">systemctl start NetworkManager #这里必须大写</span><br></pre></td></tr></table></figure>
-
-<h4 id="开机自启动"><a href="#开机自启动" class="headerlink" title="开机自启动"></a>开机自启动</h4> <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">systemctl enable NetworkManager</span><br></pre></td></tr></table></figure>
-
- <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">nmtui</span><br></pre></td></tr></table></figure>
-
-<h4 id="触摸板驱动"><a href="#触摸板驱动" class="headerlink" title="触摸板驱动"></a>触摸板驱动</h4> <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">pacman -S xf86-input-synaptics</span><br></pre></td></tr></table></figure>
-
-<h4 id="X11"><a href="#X11" class="headerlink" title="X11"></a>X11</h4> <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">pacman -S xorg</span><br></pre></td></tr></table></figure>
-
-<h4 id="Wayland"><a href="#Wayland" class="headerlink" title="Wayland"></a>Wayland</h4> <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">pacman -S wayland xorg-xwayland</span><br></pre></td></tr></table></figure>
-
+    <title>谈谈我和“荣格”对话之后，对MBTI的一些新认识</title>
+    <url>/posts/e850298b.html</url>
+    <content><![CDATA[<p>整理了一下我和“荣格”关于 MBTI、SBTI、八功能、INTP、INFP、Ti、Fi 的对话。</p>
+<p>感觉有些东西还是值得记录，所以写下来，分享一下感受</p>
 <blockquote>
-<p>NVIDIA 多装一个 <code>xorg-xrandr</code></p>
+<p><strong>不过这里要先交代一下</strong><br>这当然不是真的在和荣格本人对话。更准确地说，是我用了最近很火的女娲 skill，把荣格这个人物蒸馏出来，然后和这个被蒸馏出来的“荣格”在对话。</p>
+<p>我理解它更像一种基于人物材料、思维方式和表达习惯做出来的人格模拟。至于为什么我还是把它记成“和荣格的对话”，主要是为了阅读上更顺一点，但这个边界还是得先说清楚。</p>
 </blockquote>
-<h4 id="开源中文字体安装"><a href="#开源中文字体安装" class="headerlink" title="开源中文字体安装"></a>开源中文字体安装</h4> <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">pacman -S ttf-dejavu wqy-microhei wqy-zenhei</span><br></pre></td></tr></table></figure>
-
-<h4 id="安装sudo"><a href="#安装sudo" class="headerlink" title="安装sudo"></a>安装sudo</h4> <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">pacman -S sudo</span><br></pre></td></tr></table></figure>
-
-
-
-<h2 id="添加用户并且提权"><a href="#添加用户并且提权" class="headerlink" title="添加用户并且提权"></a>添加用户并且提权</h2><h4 id="添加用户"><a href="#添加用户" class="headerlink" title="添加用户"></a>添加用户</h4> <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">useradd -m -G wheel Bruno</span><br></pre></td></tr></table></figure>
-
-<h4 id="密码"><a href="#密码" class="headerlink" title="密码"></a>密码</h4> <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">passwd Bruno</span><br></pre></td></tr></table></figure>
-
-<p> <code>visudo</code> 或者 <code>nano /etc/sudoers</code></p>
-<blockquote>
-<p>找到#%wheel ALL&#x3D;(ALL)ALL 按X去掉# :wq 保存退出</p>
-</blockquote>
-<h4 id="重启"><a href="#重启" class="headerlink" title="重启"></a>重启</h4> <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">reboot</span><br></pre></td></tr></table></figure>
-
-<p><strong>重启进来用user登录</strong></p>
-<h4 id="intel核显驱动"><a href="#intel核显驱动" class="headerlink" title="intel核显驱动"></a>intel核显驱动</h4><p><strong>已经过时，不要装这个</strong></p>
-<blockquote>
-<p>xf86-video-intel 是 Intel 的老驱动，已多年不维护，主要为 老款 Intel HD Graphics（Sandy Bridge 及以前） 设计</p>
-</blockquote>
- <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">sudo pacman -S xf86-video-intel</span><br></pre></td></tr></table></figure>
-
-<p>开源驱动</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">sudo pacman -S mesa libva-intel-driver vulkan-intel</span><br></pre></td></tr></table></figure>
-
-<blockquote>
-<p>使用wayland的话推荐装</p>
-</blockquote>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">sudo pacman -S intel-media-driver</span><br></pre></td></tr></table></figure>
-
-
-
-<h2 id="安装桌面环境"><a href="#安装桌面环境" class="headerlink" title="安装桌面环境"></a>安装桌面环境</h2><blockquote>
-<p>本人是KDE的忠实教徒，如需其他桌面，请自行搜索</p>
-</blockquote>
-<h3 id="Plasma"><a href="#Plasma" class="headerlink" title="Plasma"></a>Plasma</h3> <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">sudo pacman -S plasma kde-applications</span><br></pre></td></tr></table></figure>
-
-<blockquote>
-<p>最小Plasma桌面 plasma-meta</p>
-</blockquote>
-<h4 id="锁屏"><a href="#锁屏" class="headerlink" title="锁屏"></a>锁屏</h4> <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">sudo pacman -S sddm</span><br></pre></td></tr></table></figure>
-
-<p>向 &#x2F;etc&#x2F;sddm.conf 中追加下面的内容。其中，QT_FONT_DPI 的值为你的 DPI 缩放数值 (计算方式是 96 乘以你的缩放比例，比如 150% 缩放则为 <code>144</code>)。QT_SCREEN_SCALE_FACTORS 的值为你需要的 DPI 缩放比例（比如，若为 150% 就直接填 <code>1.5</code>）,同时 sddm 登录界面不会自动将数字小键盘打开, sddm 的鼠标指针也可以更改一下</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">[General]</span><br><span class="line">GreeterEnvironment=QT_SCREEN_SCALE_FACTORS=1.5,QT_FONT_DPI=144</span><br><span class="line"></span><br><span class="line"># 打开数字小键盘</span><br><span class="line">Numlock=on</span><br><span class="line"></span><br><span class="line"># 修改鼠标指针，加入下面的设置</span><br><span class="line">[Theme]</span><br><span class="line">CursorTheme=breeze_cursors</span><br></pre></td></tr></table></figure>
-<blockquote>
-<p>修改完 HiDPI 设置之后可能需要重新启动系统。</p>
-</blockquote>
-<h4 id="开机自启动设置"><a href="#开机自启动设置" class="headerlink" title="开机自启动设置"></a>开机自启动设置</h4> <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">systemctl enable sddm</span><br></pre></td></tr></table></figure>
-
-<h4 id="笔记本电源管理"><a href="#笔记本电源管理" class="headerlink" title="笔记本电源管理"></a><strong>笔记本电源管理</strong></h4> <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">sudo pacman -S power-profiles-daemon</span><br></pre></td></tr></table></figure>
-<p> (需要启用 <code>power-profiles-daemon</code> 服务)</p>
-<h2 id="一些驱动"><a href="#一些驱动" class="headerlink" title="一些驱动"></a>一些驱动</h2><h4 id="音频"><a href="#音频" class="headerlink" title="音频"></a>音频</h4> <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">sudo pacman -S alsa-utils pipewire pipewire-alsa pipewire-pulse</span><br></pre></td></tr></table></figure>
-
-<blockquote>
-<p>有可能装完还是用不了，我这里为了方便，直接一站式，有可能需要装<code>sof-firmware</code>–开源音频驱动</p>
-</blockquote>
-<h4 id="中文输入法"><a href="#中文输入法" class="headerlink" title="中文输入法"></a>中文输入法</h4> <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">sudo pacman -S fcitx5 fcitx5-chinese-addons fcitx5-configtool fcitx5-gtk fcitx5-qt</span><br></pre></td></tr></table></figure>
-
-<h5 id="Wikipedia中文词库"><a href="#Wikipedia中文词库" class="headerlink" title="Wikipedia中文词库"></a>Wikipedia中文词库</h5> <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">sudo pacman -S fcitx5-pinyin-zhwiki</span><br></pre></td></tr></table></figure>
-
-<h5 id="搜狗拼音输入法的词库"><a href="#搜狗拼音输入法的词库" class="headerlink" title="搜狗拼音输入法的词库"></a>搜狗拼音输入法的词库</h5> <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">yay -S fcitx5-pinyin-sougou</span><br></pre></td></tr></table></figure>
-
-<p>编辑 <code>~/.xprofile</code> 和 <code>/etc/environment</code>文件</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line"></span><br><span class="line">export GTK_IM_MODULE=fcitx</span><br><span class="line"></span><br><span class="line">export QT_IM_MODULE=fcitx</span><br><span class="line"></span><br><span class="line">export XMODIFIERS=@im=fcitx</span><br><span class="line"></span><br></pre></td></tr></table></figure>
-
-<h5 id="fcitx5类似微软拼音的皮肤"><a href="#fcitx5类似微软拼音的皮肤" class="headerlink" title="fcitx5类似微软拼音的皮肤"></a>fcitx5类似微软拼音的皮肤</h5><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">sudo pacman -S fcitx5-material-color</span><br></pre></td></tr></table></figure>
-
-<h4 id="zsh"><a href="#zsh" class="headerlink" title="zsh"></a>zsh</h4><p>通过pacman安装zsh，然后将<a href="../../files/zshrc">此文件</a>的内容覆盖到~&#x2F;.zshrc中，完成配置。</p>
-<blockquote>
-<ul>
-<li>需要事先安装git命令</li>
-<li>使用<code>chsh -s /bin/zsh</code>来更改当前用户的默认终端</li>
-</ul>
-</blockquote>
-<p>ref:<a href="https://www.bwsl.wang/linux/34.html">Archlinux 安装笔记</a></p>
-<h4 id="rEFInd-–-多系统引导工具"><a href="#rEFInd-–-多系统引导工具" class="headerlink" title="rEFInd – 多系统引导工具"></a>rEFInd – 多系统引导工具</h4><p>安装 <code>refind</code>包</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">sudo pacman -S refind</span><br></pre></td></tr></table></figure>
-
-<p>执行安装命令:</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">refind-install</span><br></pre></td></tr></table></figure>
-<p>然后进入 <code>boot/EFI/refind</code> 将<a href="../../files/refind">此文件</a>中的内容覆盖 <code>refind.conf</code></p>
-<blockquote>
-<p>需要安装darkmini的refind主题才能正常使用，如果不想安装主题或者不想用darkmini，就把最后一行 <code>include themes/darkmini/theme-mini.conf</code> 注释掉或者修改成你想使用的主题</p>
-</blockquote>
-<p>ref: <a href="https://wiki.archlinuxcn.org/wiki/REFInd">rEFInd</a></p>
-<h2 id="ArchLinuxCN镜像源以及AUR"><a href="#ArchLinuxCN镜像源以及AUR" class="headerlink" title="ArchLinuxCN镜像源以及AUR"></a>ArchLinuxCN镜像源以及AUR</h2><p><strong>编辑&#x2F;etc&#x2F;pacman.conf</strong></p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">[archlinuxcn]</span><br><span class="line">Server = https://mirrors.cernet.edu.cn/archlinuxcn/$arch</span><br></pre></td></tr></table></figure>
-
-<p><strong>之后通过以下命令安装 archlinuxcn-keyring 包导入 GPG key</strong></p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">sudo pacman -Sy archlinuxcn-keyring</span><br></pre></td></tr></table></figure>
-
-<h3 id="安装AUR包管理器"><a href="#安装AUR包管理器" class="headerlink" title="安装AUR包管理器"></a>安装AUR包管理器</h3> <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">sudo pacman -Sy yay paru</span><br></pre></td></tr></table></figure>
-]]></content>
-      <categories>
-        <category>Linux</category>
-      </categories>
-      <tags>
-        <tag>linux</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>Switch-SteamLibrary</title>
-    <url>/posts/2a1b98b0.html</url>
-    <content><![CDATA[<h1 id="Switch-SteamLibrary"><a href="#Switch-SteamLibrary" class="headerlink" title="Switch-SteamLibrary"></a>Switch-SteamLibrary</h1><blockquote>
-<p>这是一个用于电脑中有多Linux系统，并且希望自己的游戏统一存放在NTFS格式盘的小脚本。它旨在可以让你的多Linux系统，包括Windows都可以调用一个同一个Steam游戏库的小脚本。</p>
-</blockquote>
-<h3 id="使用说明"><a href="#使用说明" class="headerlink" title="使用说明:"></a>使用说明:</h3><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">git clone https://github.com/k7tmiz/Switch-SteamLibrary.git</span><br></pre></td></tr></table></figure>
-
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">cd Switch-SteamLibrary</span><br></pre></td></tr></table></figure>
-
-<h4 id="使用文本编辑器进行编辑"><a href="#使用文本编辑器进行编辑" class="headerlink" title="使用文本编辑器进行编辑"></a>使用文本编辑器进行编辑</h4><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">sudo vim setup_steam_link.sh</span><br></pre></td></tr></table></figure>
-
-<p><strong>STEAM_DIR</strong>：代表你当前系统steam所在的地址  </p>
-<p><strong>SHARED_DIR</strong>：代表你想调用的游戏库地址  </p>
-<p><strong>只须调整这两个参数便可以正常使用该脚本</strong>  </p>
-<h4 id="提权"><a href="#提权" class="headerlink" title="提权"></a>提权</h4><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">chmod +x ./setup_steam_link.sh</span><br></pre></td></tr></table></figure>
-
-<h4 id="运行"><a href="#运行" class="headerlink" title="运行"></a>运行</h4><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">./setup_steam_link.sh</span><br></pre></td></tr></table></figure>
-
-<blockquote>
-<p>参考：<a href="https://github.com/ValveSoftware/Proton/wiki/Using-a-NTFS-disk-with-Linux-and-Windows">Proton-Wiki</a></p>
-</blockquote>
-]]></content>
-      <categories>
-        <category>Linux</category>
-      </categories>
-      <tags>
-        <tag>tech</tag>
-        <tag>steam</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>Archlinux安装指南</title>
-    <url>/posts/a907d758.html</url>
-    <content><![CDATA[<h2 id="初步配置"><a href="#初步配置" class="headerlink" title="初步配置"></a>初步配置</h2><h4 id="联网"><a href="#联网" class="headerlink" title="联网"></a>联网</h4> <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">dhcpcd/iwctl</span><br></pre></td></tr></table></figure>
-
-<blockquote>
-<p>iwctl:<br>device list<br>station ‘device’ scan<br>station ‘device’ get-networks<br>station ‘device’ connect ‘wlan’</p>
-</blockquote>
-<h4 id="更新ntp服务器"><a href="#更新ntp服务器" class="headerlink" title="更新ntp服务器"></a>更新ntp服务器</h4> <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">timdatectl set-ntp true</span><br></pre></td></tr></table></figure>
-
-<h2 id="分区及挂载"><a href="#分区及挂载" class="headerlink" title="分区及挂载"></a>分区及挂载</h2><blockquote>
-<p>此处演示p1:EFI p2:&#x2F;mnt p3:swap</p>
-</blockquote>
-<h4 id="查看目前磁盘，分区状况"><a href="#查看目前磁盘，分区状况" class="headerlink" title="查看目前磁盘，分区状况"></a>查看目前磁盘，分区状况</h4><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">lsblk</span><br></pre></td></tr></table></figure>
-
-<h4 id="分区"><a href="#分区" class="headerlink" title="分区"></a>分区</h4> <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">fdisk /dev/sdX / fdisk /dev/nvme0n1</span><br></pre></td></tr></table></figure>
-
-<blockquote>
-<p>m 查看命令<br>n 新建一个分区<br>g 转换GPT<br>t 更改分区类型：EFI:1  SWAP:19  Linux:20</p>
-</blockquote>
-<h4 id="格式化分区为FAT32格式"><a href="#格式化分区为FAT32格式" class="headerlink" title="格式化分区为FAT32格式"></a>格式化分区为FAT32格式</h4> <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">mkfs.fat -F32 /dev/nvme0n1p1</span><br></pre></td></tr></table></figure>
-
-<h4 id="格式化分区为EXT4格式"><a href="#格式化分区为EXT4格式" class="headerlink" title="格式化分区为EXT4格式"></a>格式化分区为EXT4格式</h4> <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">mkfs.ext4 /dev/nvme0n1p2</span><br></pre></td></tr></table></figure>
-
-<h4 id="格式化分区为SWAP格式"><a href="#格式化分区为SWAP格式" class="headerlink" title="格式化分区为SWAP格式"></a>格式化分区为SWAP格式</h4> <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">mkswap /dev/nvme0n1p3</span><br></pre></td></tr></table></figure>
-
-<h4 id="开启SWAP"><a href="#开启SWAP" class="headerlink" title="开启SWAP"></a>开启SWAP</h4> <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">swapon /dev/nvme0n1p3</span><br></pre></td></tr></table></figure>
-
-<h4 id="挂载根分区"><a href="#挂载根分区" class="headerlink" title="挂载根分区"></a>挂载根分区</h4> <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">mount /dev/nvme0n1p2 /mnt</span><br></pre></td></tr></table></figure>
-
-<h4 id="新建Boot文件夹"><a href="#新建Boot文件夹" class="headerlink" title="新建Boot文件夹"></a>新建Boot文件夹</h4> <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">mkdir /mnt/boot</span><br></pre></td></tr></table></figure>
-
-<h4 id="新建Home文件夹"><a href="#新建Home文件夹" class="headerlink" title="新建Home文件夹"></a>新建Home文件夹</h4> <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">mkdir /mnt/home</span><br></pre></td></tr></table></figure>
-
-<h4 id="挂载Boot分区"><a href="#挂载Boot分区" class="headerlink" title="挂载Boot分区"></a>挂载Boot分区</h4> <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">mount /dev/nvme0n1p1 /mnt/boot</span><br></pre></td></tr></table></figure>
-
-<blockquote>
-<p>如果有的话一个分区为了Home分区 <code>mount /dev/nvme0n1px /mnt/home</code></p>
-</blockquote>
-<h2 id="开始安装"><a href="#开始安装" class="headerlink" title="开始安装"></a>开始安装</h2><h4 id="编辑镜像源"><a href="#编辑镜像源" class="headerlink" title="编辑镜像源"></a>编辑镜像源</h4> <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">nano /etc/pacman.d/mirrorlist</span><br></pre></td></tr></table></figure>
-
-<h4 id="拉取镜像"><a href="#拉取镜像" class="headerlink" title="拉取镜像"></a>拉取镜像</h4> <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">pacstrap /mnt base base-devel linux linux-firmware vi nano</span><br></pre></td></tr></table></figure>
-
-<h4 id="更新分区表"><a href="#更新分区表" class="headerlink" title="更新分区表"></a>更新分区表</h4> <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">genfstab -U /mnt &gt;&gt; /mnt/etc/fstab</span><br></pre></td></tr></table></figure>
-
-<h4 id="检查分区表"><a href="#检查分区表" class="headerlink" title="检查分区表"></a>检查分区表</h4> <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">cat /mnt/etc/fstab</span><br></pre></td></tr></table></figure>
-
-<h4 id="下载基本软件"><a href="#下载基本软件" class="headerlink" title="下载基本软件"></a>下载基本软件</h4> <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">pacman -S vim networkmanager dhcpcd</span><br></pre></td></tr></table></figure>
-
-
-
-<h2 id="切换到本地"><a href="#切换到本地" class="headerlink" title="切换到本地"></a>切换到本地</h2> <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">arch-chroot /mnt</span><br></pre></td></tr></table></figure>
-
-<h4 id="更新本地时间"><a href="#更新本地时间" class="headerlink" title="更新本地时间"></a>更新本地时间</h4> <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">ln -sf /usr/share/zoneinfo/Asia/Shanghai /etc/localtime</span><br></pre></td></tr></table></figure>
-
- <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">hwclock --systohc</span><br></pre></td></tr></table></figure>
-
-<h4 id="编辑locale-gen"><a href="#编辑locale-gen" class="headerlink" title="编辑locale.gen"></a>编辑locale.gen</h4> <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">nano /etc/locale.gen</span><br></pre></td></tr></table></figure>
-
-<p><strong>找到 <code>en_US.UTF-8</code> 和 <code>zh_CN.UTF-8</code> 去掉前面的#</strong></p>
-<h4 id="更新"><a href="#更新" class="headerlink" title="更新"></a>更新</h4> <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">locale-gen</span><br></pre></td></tr></table></figure>
-
-<h4 id="编辑locale-conf文件"><a href="#编辑locale-conf文件" class="headerlink" title="编辑locale.conf文件"></a>编辑locale.conf文件</h4> <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">nano /etc/locale.conf</span><br></pre></td></tr></table></figure>
-<blockquote>
-<p>写入 <code>LANG=en_US.UTF-8</code></p>
-</blockquote>
-<h4 id="设置root密码"><a href="#设置root密码" class="headerlink" title="设置root密码"></a>设置root密码</h4> <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">passwd</span><br></pre></td></tr></table></figure>
-
-<blockquote>
-<p>不显示密码是正常情况</p>
-</blockquote>
-<h4 id="下载基本软件-1"><a href="#下载基本软件-1" class="headerlink" title="下载基本软件"></a>下载基本软件</h4> <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">pacman -S dialog wpa_supplicant ntfs-3g</span><br></pre></td></tr></table></figure>
-
-<h4 id="安装CPU驱动"><a href="#安装CPU驱动" class="headerlink" title="安装CPU驱动"></a>安装CPU驱动</h4><h5 id="intel"><a href="#intel" class="headerlink" title="intel"></a>intel</h5> <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">pacman -S intel-ucode</span><br></pre></td></tr></table></figure>
-
-<h5 id="amd"><a href="#amd" class="headerlink" title="amd"></a>amd</h5> <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">pacman -S amd-ucode</span><br></pre></td></tr></table></figure>
-
-
-
-<h2 id="安装引导"><a href="#安装引导" class="headerlink" title="安装引导"></a>安装引导</h2> <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">pacman -S grub efibootmgr</span><br></pre></td></tr></table></figure>
-
-<h4 id="多系统引导"><a href="#多系统引导" class="headerlink" title="多系统引导"></a>多系统引导</h4> <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">pacman -S os-prober</span><br></pre></td></tr></table></figure>
-
-<h4 id="UEFI引导"><a href="#UEFI引导" class="headerlink" title="UEFI引导"></a>UEFI引导</h4> <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">grub-install --target=x86_64-efi --efi-directory=/boot --bootloader=ArchLinux</span><br></pre></td></tr></table></figure>
-
-<h4 id="更新grub"><a href="#更新grub" class="headerlink" title="更新grub"></a>更新grub</h4> <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">grub-mkconfig -o /boot/grub/grub.cfg</span><br></pre></td></tr></table></figure>
-
-
-
-<h2 id="至此-安装结束"><a href="#至此-安装结束" class="headerlink" title="至此 安装结束"></a><strong>至此 安装结束</strong></h2><h4 id="退出"><a href="#退出" class="headerlink" title="退出"></a>退出</h4> <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">exit</span><br></pre></td></tr></table></figure>
-
-<h4 id="重启"><a href="#重启" class="headerlink" title="重启"></a>重启</h4> <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">reboot</span><br></pre></td></tr></table></figure>
-
-]]></content>
-      <categories>
-        <category>Linux</category>
-      </categories>
-      <tags>
-        <tag>linux</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>Linux使用Wayland协议下微信无法正常调用Fcitx5的中文输入法解决办法</title>
-    <url>/posts/ac1a683e.html</url>
-    <content><![CDATA[<h2 id="我的环境"><a href="#我的环境" class="headerlink" title="我的环境"></a>我的环境</h2><p>我在用ArchLinux的时候没有遇到这个问题，但是今天突发奇想，想在Fedora42+KDE+Wayland上打游戏的时候，发现自己的微信无法正常调用fcitx5的中文输入法，故来这里记录分享一下自己的经验</p>
-<p>废话不多说，直接上图！<br><img src="/../../images/Fcitx5wx/a.png"></p>
-<p>添加环境变量：</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">QT_SCALE_FACTOR=1.5 GTK_IM_MODULE=fcitx QT_IM_MODULE=fcitx</span><br></pre></td></tr></table></figure>
-
-<p>第一个是缩放，因为楼主的电脑是HiDPI屏幕，所以需要缩放1.5倍。后两个就是配置fcitx5的工具，亲测可用！</p>
-]]></content>
-      <categories>
-        <category>Linux</category>
-      </categories>
-      <tags>
-        <tag>tech</tag>
-        <tag>fcitx5</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>在Linux上优雅的使用Wemod</title>
-    <url>/posts/400b687c.html</url>
-    <content><![CDATA[<h2 id="引言"><a href="#引言" class="headerlink" title="引言"></a>引言</h2><p>最近在玩Escape the backroom,里边那个耐力真的很难受,所以开了个无限耐力的,但是我不想在windows下游玩,我就去找了一下linux下的wemod的替代品,结果找到了这个项目<a href="https://github.com/DeckCheatz/wemod-launcher">wemod-launcher</a>,现在想写一篇博客介绍一下怎么使用它</p>
-<h2 id="教程"><a href="#教程" class="headerlink" title="教程"></a>教程</h2><p>首先我们需要一个 <code>Python容器</code> ,在linux下我使用的是 <code>python-venv</code> 以下演示基于ArchLinux</p>
-<h4 id="1-先装所需的依赖包"><a href="#1-先装所需的依赖包" class="headerlink" title="1. 先装所需的依赖包"></a>1. 先装所需的依赖包</h4><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">sudo pacman -Sy tk</span><br></pre></td></tr></table></figure>
-
-<p>然后把项目拉到本地</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">git clone https://github.com/DeckCheatz/wemod-launcher.git</span><br></pre></td></tr></table></figure>
-
-<p>创建一个虚拟容器</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">python -m venv wemod-launcher</span><br></pre></td></tr></table></figure>
-
-<p>切换</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">source wemod-launcher/bin/activate.fish</span><br></pre></td></tr></table></figure>
-
-<blockquote>
-<p>因为我用的是fish所以这里用.fish,如果</p>
-</blockquote>
-<p>这时你的python容器和wemod容器在同一个文件夹中</p>
-<h4 id="2-GE-Proton"><a href="#2-GE-Proton" class="headerlink" title="2.  GE-Proton"></a>2.  GE-Proton</h4><p>建议使用GE-Proton,通过 <code>Protonup-qt</code> 来安装GE-Proton</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">yay -S protonup-qt</span><br></pre></td></tr></table></figure>
-
-<h3 id="3-重启"><a href="#3-重启" class="headerlink" title="3. 重启"></a>3. 重启</h3><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">reboot</span><br></pre></td></tr></table></figure>
-
-<h4 id="4-准备"><a href="#4-准备" class="headerlink" title="4. 准备"></a>4. 准备</h4><p>先查看 <code>wemod-launcher</code> 的目录</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">readlink -f wemod-launcher</span><br></pre></td></tr></table></figure>
-
-<p>改成可执行权限</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">chmod -R ug+x wemod-launcher</span><br></pre></td></tr></table></figure>
-
-<h4 id="5-更改设置"><a href="#5-更改设置" class="headerlink" title="5. 更改设置"></a>5. 更改设置</h4><ul>
-<li><p>在Steam库中,兼容性选项中,强制使用你刚才下载的GE-Proton版本</p>
-</li>
-<li><p>在 <code>Launch Options （启动选项 </code>） 下，输入 <code>{path/to/wemod-launcher}/wemod %command%</code></p>
-</li>
-</ul>
-<h4 id="6-开游戏"><a href="#6-开游戏" class="headerlink" title="6. 开游戏"></a>6. 开游戏</h4><ul>
-<li><p>如果 “copy prefix question” 出现并显示 <code>might work</code> ，请选择 “no”</p>
-</li>
-<li><p>如果它提到 <code>可能有效</code> （或更好），就可以直接安全地忽略所有 rundll32.exe 错误（通过单击 <code>no</code>）</p>
-</li>
-<li><p>选择 <code>Download</code> </p>
-</li>
-<li><p>选择 Yes&#x2F;Ok 直到不再显示窗口</p>
-</li>
-<li><p>可以安全地忽略所有 rundll32.exe 错误（通过单击 <code>no</code>）</p>
-</li>
-</ul>
-<blockquote>
-<p>Wemod应该能启动了</p>
-</blockquote>
-<h4 id="7-登录Wemod-仅一次"><a href="#7-登录Wemod-仅一次" class="headerlink" title="7. 登录Wemod (仅一次)"></a>7. 登录Wemod (仅一次)</h4><h4 id="现在你应该就可以正常使用你的Wemod来爽快的进行游戏了"><a href="#现在你应该就可以正常使用你的Wemod来爽快的进行游戏了" class="headerlink" title="现在你应该就可以正常使用你的Wemod来爽快的进行游戏了"></a>现在你应该就可以正常使用你的Wemod来爽快的进行游戏了</h4><blockquote>
-<p>遇到问题请自行查看: <a href="https://github.com/DeckCheatz/wemod-launcher/wiki/Config-Usage">Config Usage</a></p>
-</blockquote>
-]]></content>
-      <categories>
-        <category>Linux</category>
-      </categories>
-      <tags>
-        <tag>tech</tag>
-        <tag>gaming</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>KDE美化教程</title>
-    <url>/posts/a3d041ec.html</url>
-    <content><![CDATA[<h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>KDE是我接触Linux以来接触的较早，并且最多的一个桌面环境了。几乎每次安装所有系统，我都是首选KDE</p>
-<p>原因就在于其友好，强大，美观，操作逻辑简单。</p>
-<p>再离开Linux这一年，没想到已经更新到了KDE6，刚回归的时候也走了一些弯路，现在我将制作一个教程以便自己的使用，也欢迎大家参考！</p>
-<h2 id="效果"><a href="#效果" class="headerlink" title="效果"></a>效果</h2><p><img src="/../../images/KDE/a.png"></p>
-<p>插件极少，相对来讲确实有点macOS那个感觉？</p>
-<h2 id="教程"><a href="#教程" class="headerlink" title="教程"></a>教程</h2><h3 id="Dock"><a href="#Dock" class="headerlink" title="Dock"></a>Dock</h3><h4 id="底部dock"><a href="#底部dock" class="headerlink" title="底部dock"></a>底部dock</h4><p><img src="/../../images/KDE/b.png"></p>
-<p>启动器图标:<a href="https://github.com/JotaRandom/archlinux-artwork">archlinux-artwork</a></p>
-<h4 id="顶部应用程序菜单栏"><a href="#顶部应用程序菜单栏" class="headerlink" title="顶部应用程序菜单栏"></a>顶部应用程序菜单栏</h4><p><img src="/../../images/KDE/c.png"><br><strong>顶部按顺序</strong></p>
-<p>bar-全局菜单-间距-系统托盘-数字时钟-搜索-注销</p>
-<p>插件就两个，一个是 <code>Panel colorizer</code> 另一个是 <code>Application Title Bar</code> 都可以在KDE自带的官方插件商店找到</p>
-<h4 id="Panel-colorizer改底部dock-背景去掉"><a href="#Panel-colorizer改底部dock-背景去掉" class="headerlink" title="Panel colorizer改底部dock,背景去掉"></a>Panel colorizer改底部dock,背景去掉</h4><h4 id="Application-Title-Bar设置如下"><a href="#Application-Title-Bar设置如下" class="headerlink" title="Application Title Bar设置如下"></a>Application Title Bar设置如下</h4><p><img src="/../../images/KDE/d.png"><br><img src="/../../images/KDE/e.png"></p>
-<h3 id="系统配色"><a href="#系统配色" class="headerlink" title="系统配色"></a>系统配色</h3><p>就这个 <a href="http://github.com/vinceliuice/WhiteSur-kde">WhiteSur-kde</a></p>
-<p>系统设置中—颜色与主题</p>
-<ul>
-<li>全局主题我选的Breeze微风</li>
-<li>颜色和Plasma外观样式我选择的是WhiteSur-alt 苹果</li>
-</ul>
-<h3 id="特效"><a href="#特效" class="headerlink" title="特效"></a>特效</h3><p>系统设置中—窗口管理—桌面特效</p>
-<ul>
-<li>惯性晃动</li>
-<li>粉碎动画</li>
-<li>背景虚化<br><img src="/../../images/KDE/g.png"></li>
-<li>窗口透明度<blockquote>
-<p>这个之前调的时候好像有bug？反正我没动</p>
-</blockquote>
-</li>
-<li>最小过渡动画-神灯</li>
-<li>窗口后滑动效</li>
-</ul>
-<h3 id="终端"><a href="#终端" class="headerlink" title="终端"></a>终端</h3><p><img src="/../../images/KDE/h.png"></p>
-<p>终端字体：<a href="../../files/ttf.zip">点击下载</a></p>
-<p>ref: <a href="https://github.com/ryanoasis/nerd-fonts">nerd-fonts</a></p>
-<p>neofetch配置文件<a href="../../files/neofetch">点击下载</a><br>里边的内容替换 <code>~/.config/neofetch/config.conf</code><br><img src="/../../images/KDE/i.png"><br>ref: <a href="https://github.com/Chick2D/neofetch-themes">neofetch-themes</a></p>
-<h3 id="壁纸"><a href="#壁纸" class="headerlink" title="壁纸"></a>壁纸</h3><p>鄙人倒是收集了一些壁纸，可以直接clone下来</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">git clone https://github.com/k7tmiz/WallPaper.git</span><br></pre></td></tr></table></figure>
-
-<hr>
-<p>以后还能想起啥再补吧…</p>
-]]></content>
-      <categories>
-        <category>Linux</category>
-      </categories>
-      <tags>
-        <tag>kde</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>如何在Linux上优雅的使用小黄鸭</title>
-    <url>/posts/5982c65e.html</url>
-    <content><![CDATA[<h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>起因我在小黑盒看到了一个给SteamDeck开发的小黄鸭插件,然后我就想着Linux上面肯定也有</p>
-<p>插件:<a href="https://github.com/xXJSONDeruloXx/decky-lossless-scaling-vk">decky-lossless-scaling-vk</a></p>
-<p>我就去找了一下,真让我找到一个能在Linux上使用的小黄鸭插件,我立刻进行了尝试</p>
-<h2 id="教程"><a href="#教程" class="headerlink" title="教程"></a>教程</h2><p>就是<a href="https://github.com/PancakeTAS/lsfg-vk">lsfg-vk</a>项目</p>
-<p>这个项目把<a href="https://store.steampowered.com/app/993090/Lossless_Scaling/">Lossless Scaling</a>这个项目引入了Linux</p>
-<h4 id="安装-ArchLinux完全可用"><a href="#安装-ArchLinux完全可用" class="headerlink" title="安装 (ArchLinux完全可用)"></a>安装 (ArchLinux完全可用)</h4><p><strong>安装依赖</strong></p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">$ sudo pacman -S base-devel git clang llvm cmake ninja spirv-headers vulkan-headers vulkan-icd-loader</span><br></pre></td></tr></table></figure>
-
-<p><strong>脚本安装</strong></p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">curl -sSf https://pancake.gay/lsfg-vk.sh | sh</span><br></pre></td></tr></table></figure>
-
-<h4 id="Wiki"><a href="#Wiki" class="headerlink" title="Wiki"></a>Wiki</h4><p><a href="https://github.com/PancakeTAS/lsfg-vk/wiki">https://github.com/PancakeTAS/lsfg-vk/wiki</a></p>
-<blockquote>
-<p>如果提示你DLL文件有问题找不到,首先你得去Steam购买<a href="https://store.steampowered.com/app/993090/Lossless_Scaling/">Lossless Scaling</a>,其次你可以安装在本地,这样你就不需要去再配置,如果你不想安装在Steam安装的位置,也可以修改 <code>~/.config/lsfg-vk/conf.toml</code> 配置文件进行配置</p>
-</blockquote>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">version = 1</span><br><span class="line">[global]</span><br><span class="line"># override the location of Lossless Scaling</span><br><span class="line"># dll = &quot;/games/Lossless Scaling&quot;</span><br><span class="line"></span><br><span class="line"># [[game]] # example entry</span><br><span class="line"># exe = &quot;Game.exe&quot;</span><br><span class="line"># env = &quot;SteamDeck=0&quot;</span><br><span class="line">#</span><br><span class="line"># multiplier = 3</span><br><span class="line"># flow_scale = 0.7</span><br><span class="line"># performance_mode = true</span><br><span class="line"># hdr_mode = false</span><br><span class="line">#</span><br><span class="line"># experimental_present_mode = fifo</span><br><span class="line"># experimental_fps_limit = 48</span><br><span class="line"></span><br><span class="line">[[game]] # default vkcube entry</span><br><span class="line">exe = &quot;vkcube&quot;</span><br><span class="line"></span><br><span class="line">multiplier = 4</span><br><span class="line">performance_mode = true</span><br><span class="line"></span><br><span class="line">[[game]] # default benchmark entry</span><br><span class="line">exe = &quot;benchmark&quot;</span><br><span class="line"></span><br><span class="line">multiplier = 4</span><br><span class="line">performance_mode = false</span><br><span class="line"></span><br><span class="line">[[game]] # override Genshin Impact</span><br><span class="line">exe = &quot;Genshin&quot;</span><br><span class="line"></span><br><span class="line">multiplier = 3</span><br></pre></td></tr></table></figure>
-
-<table>
-<thead>
-<tr>
-<th align="center">Property</th>
-<th align="center">Recommended Value</th>
-<th align="center">Description</th>
-<th></th>
-</tr>
-</thead>
-<tbody><tr>
-<td align="center">dll</td>
-<td align="center">Path to <code>Lossless.dll</code> or empty</td>
-<td align="center">如果您未将 Lossless Scaling 安装到传统目录中，则可以使用此属性覆盖游戏文件中 <code>Lossless.dll</code> 文件的路径</td>
-<td></td>
-</tr>
-<tr>
-<td align="center">multiplier</td>
-<td align="center">(1, )2, 3, 4</td>
-<td align="center">将FPS 翻倍、三倍或四倍。想怎么高就怎么高。</td>
-<td></td>
-</tr>
-<tr>
-<td align="center">performance_mode</td>
-<td align="center">true<code>or</code>false</td>
-<td align="center">将帧生成模型切换为更轻的模型。这可以显著提高性能（速度在 2 到 8 倍之间，具体取决于分辨率）。质量略有下降</td>
-<td></td>
-</tr>
-<tr>
-<td align="center">hdr_mode</td>
-<td align="center">使用 HDR 时为 1</td>
-<td align="center">将着色器切换到 HDR 模式（不支持 scRGB）。不使用 HDR 时不要设置此标志</td>
-<td></td>
-</tr>
-</tbody></table>
-<h4 id="验证安装"><a href="#验证安装" class="headerlink" title="验证安装"></a>验证安装</h4><p>在没有 lsfg-vk 的情况下运行此程序，并在心中记下立方体旋转的速度：</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">$ DISABLE_LSFG=1 vkcube</span><br><span class="line"># (stop it with ctrl-c in the terminal, or Escape in the window)</span><br></pre></td></tr></table></figure>
-
-<p>接下来，再次运行此程序，看看立方体旋转速度是否变慢：</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">$ vkcube</span><br><span class="line"># (stop it with ctrl-c in the terminal, or Escape in the window)</span><br></pre></td></tr></table></figure>
-
-<blockquote>
-<p>默认配置允许在 vkcube 上生成 4 倍帧。如果多维数据集没有明显减慢速度，则表示您没有正确安装 lsfg-vk</p>
-</blockquote>
-<h4 id="使用方法"><a href="#使用方法" class="headerlink" title="使用方法"></a>使用方法</h4><p>在你需要使用的Steam游戏的启动选项上加上 <code>ENABLE_LSFG=1</code> </p>
-<p>例如: <code>ENABLE_LSFG=1 gamemoderun %command%</code> </p>
-]]></content>
-      <categories>
-        <category>Linux</category>
-      </categories>
-      <tags>
-        <tag>gaming</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>在Linux上优雅的使用Zotero</title>
-    <url>/posts/9ccc8650.html</url>
-    <content><![CDATA[<h2 id="引言"><a href="#引言" class="headerlink" title="引言"></a>引言</h2><p>由于我选的一个课需要我现在大一就写论文，我就在寻找在Linux上的文献管理方案。在gitee上找到了一个项目<a href="https://gitee.com/wangrui5015/Zotero-WPSJS">Zotero-WPSJS</a></p>
-<p>感谢大佬的付出</p>
-<h2 id="教程"><a href="#教程" class="headerlink" title="教程"></a>教程</h2><ul>
-<li>安装</li>
-<li>Clone项目</li>
-<li>安装插件</li>
-<li>Chrome插件(可选)</li>
-</ul>
-<h3 id="安装"><a href="#安装" class="headerlink" title="安装"></a>安装</h3><p>首先在你使用的发行版上安装Zotero</p>
-<p>Arch:</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">yay -S zotero-bin</span><br></pre></td></tr></table></figure>
-
-<p>Flatpak(没有尝试过，不确保可用):</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">flatpak install flathub org.zotero.Zotero</span><br></pre></td></tr></table></figure>
-
-<h3 id="Clone项目"><a href="#Clone项目" class="headerlink" title="Clone项目"></a>Clone项目</h3><p><a href="https://gitee.com/wangrui5015/Zotero-WPSJS">Zotero-WPSJS</a></p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">git clone https://gitee.com/wangrui5015/Zotero-WPSJS.git</span><br></pre></td></tr></table></figure>
-
-<p>挂载进目录，然后</p>
-<h3 id="安装插件"><a href="#安装插件" class="headerlink" title="安装插件"></a>安装插件</h3><p>安装</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">python install.py</span><br></pre></td></tr></table></figure>
-
-<p><img src="/../../images/Zotero/a.png"></p>
-<p><strong>WPS中的效果：</strong></p>
-<blockquote>
-<p>记得按提示给JS插件权限</p>
-</blockquote>
-<p><img src="/../../images/Zotero/b.png"></p>
-<h3 id="Chrome插件-可选"><a href="#Chrome插件-可选" class="headerlink" title="Chrome插件(可选)"></a>Chrome插件(可选)</h3><p><img src="/../../images/Zotero/c.png"></p>
-]]></content>
-      <categories>
-        <category>Linux</category>
-      </categories>
-      <tags>
-        <tag>tech</tag>
-        <tag>zotero</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>如何在Linux下优雅的使用网易云音乐</title>
-    <url>/posts/e85c1bad.html</url>
-    <content><![CDATA[<h2 id="目前我所知晓的方法有几种"><a href="#目前我所知晓的方法有几种" class="headerlink" title="目前我所知晓的方法有几种"></a>目前我所知晓的方法有几种</h2><ul>
-<li>网页端网易云</li>
-<li>用electron封装网页版</li>
-<li>第三方客户端(如yesplayer,splayer等)</li>
-<li>下载到本地用音乐播放器播放</li>
-<li>用wine安装Windows版本</li>
-</ul>
-<blockquote>
-<p>这里网页端的使用方法就不多赘述了，直接点击 <a href="https://music.163.com/">网易云音乐</a> 便可进入网页端</p>
-</blockquote>
-<h2 id="这里我们说说后几种方法"><a href="#这里我们说说后几种方法" class="headerlink" title="这里我们说说后几种方法"></a>这里我们说说后几种方法</h2><h3 id="首先用electron封装"><a href="#首先用electron封装" class="headerlink" title="首先用electron封装"></a>首先用electron封装</h3><p>不要害怕，我其实有写过一篇帖子来介绍怎么使用一个工具名叫 <code>Nativerfier</code> 的封装工具</p>
-<p>帖子如下： <a href="https://k7tmiz.com/posts/b56059f9.html">Nativefier 使用教程</a></p>
-<p>我没有尝试过把网易云网页版封装成electron程序，我其实更推荐后几种方案…</p>
-<h3 id="第三方客户端"><a href="#第三方客户端" class="headerlink" title="第三方客户端"></a>第三方客户端</h3><p>以Arch Linux为例 我推荐以下几个App(按顺序)：
-	</p>
+<p>我现在最直接的感受是，MBTI 当然可以聊，但人一旦太急着给自己定型，就很容易把工具用反。</p>
+<p>它本来只是地图。</p>
+<p>后来很多人把它活成了户口本。</p>
+<h2 id="说这么多，MBTI-有用吗？"><a href="#说这么多，MBTI-有用吗？" class="headerlink" title="说这么多，MBTI 有用吗？"></a>说这么多，MBTI 有用吗？</h2><p>说实话，我并不想走到另一边，变成那种一提 MBTI 就嫌弃的人。</p>
+<p>因为它确实蛮有意思的，而且我觉着还是有用的</p>
+<p>原因其实很简单。</p>
 <ol>
-<li><p>Splayer 项目地址：<a href="https://github.com/imsyy/SPlayer">Splayer</a></p>
- <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">yay -S splayer-git</span><br></pre></td></tr></table></figure></li>
+<li>它给了普通人一套更文明的语言，去描述人与人之间的差异。</li>
+<li>它让很多人第一次意识到，差异不一定是道德问题，也不一定是谁更高级。</li>
+<li>它在关系、自我观察、职业选择这些场景里，确实能提供一个粗略的参考。</li>
 </ol>
-<p>一款极其简约好用的音乐播放器，功能丰富操作简单直接，多系统可用，我就通过的AppImage来进行了安装，当然它也被收录到了AUR，我十分喜爱这款软件！</p>
-<ol start="2">
-<li>FeelUOwn 项目地址：<a href="https://github.com/feeluown/FeelUOwn">FeelUOwn</a></li>
-</ol>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">yay -S feeluown          # 安装稳定版，最新版的包名为 feeluown-git</span><br><span class="line">yay -S feeluown-netease  # 按需安装其它扩展</span><br><span class="line">yay -S feeluown-ytmusic</span><br><span class="line">yay -S feeluown-bilibili</span><br></pre></td></tr></table></figure>
-
-
-<p>一个稳定、用户友好以及高度可定制的音乐播放器。基于文本的歌单，方便与朋友分享、设备之间同步。一键安装，各流行平台均有打包（如 Arch Linux, Windows, macOS 等）但是在我的Arch上使用，会出现网易云无法正常登录的情况，我不知道是个例还是什么情况…但是我仍然认为他的可拓展性很强，值得一个第二<br>	<br>3. YesPlayMusic 项目地址：<a href="https://github.com/qier222/YesPlayMusic">YesPlayMusic</a></p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">yay -S yesplaymusic</span><br></pre></td></tr></table></figure>
-
-<p>高颜值的第三方网易云播放器，支持 Windows &#x2F; macOS &#x2F; Linux ，是我第一款开始使用的软件，问题是偶尔会掉线，然后颜值很高，很简约，但是作者似乎不咋打算更新新功能了，包会有点旧，介意的选前两个(我三个都要😋)</p>
-<hr>
-<h3 id="下载到本地然后用播放器不用过多赘述了"><a href="#下载到本地然后用播放器不用过多赘述了" class="headerlink" title="下载到本地然后用播放器不用过多赘述了"></a>下载到本地然后用播放器不用过多赘述了</h3><hr>
-<h3 id="接下来用讲讲如何wine安装Windows版本的网易云"><a href="#接下来用讲讲如何wine安装Windows版本的网易云" class="headerlink" title="接下来用讲讲如何wine安装Windows版本的网易云"></a>接下来用讲讲如何wine安装Windows版本的网易云</h3><h4 id="优势：体验完美，功能齐全，不用担心掉号，不用担心被检测第三方等等，还有HiDPI支持"><a href="#优势：体验完美，功能齐全，不用担心掉号，不用担心被检测第三方等等，还有HiDPI支持" class="headerlink" title="优势：体验完美，功能齐全，不用担心掉号，不用担心被检测第三方等等，还有HiDPI支持"></a>优势：体验完美，功能齐全，不用担心掉号，不用担心被检测第三方等等，还有HiDPI支持</h4><h4 id="劣势：配置麻烦，转译后可能会有一定的性能损耗"><a href="#劣势：配置麻烦，转译后可能会有一定的性能损耗" class="headerlink" title="劣势：配置麻烦，转译后可能会有一定的性能损耗"></a>劣势：配置麻烦，转译后可能会有一定的性能损耗</h4><hr>
-<h4 id="效果如下："><a href="#效果如下：" class="headerlink" title="效果如下："></a>效果如下：</h4><p><img src="/../../images/CloudMusicOnLinux/a.png"></p>
-<p>KDE的系统托盘也能正常识别使用</p>
-<p><img src="/../../images/CloudMusicOnLinux/b.png"></p>
-<h4 id="开始教学："><a href="#开始教学：" class="headerlink" title="开始教学："></a>开始教学：</h4><p>首先Arch的话通过AUR安装 <code>bottles</code> 这个包</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">yay -S bottles</span><br></pre></td></tr></table></figure>
-
-<p>Flatpak通过这个命令安装</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">flatpak install flathub com.usebottles.bottles</span><br></pre></td></tr></table></figure>
-
-<p>安装好以后打开它，等加载一会</p>
-<p>左上角➕号新建一个Bottle，名字随便写,类型选择游戏,运行器选择 <code>wine10</code></p>
-<p><img src="/../../images/c.png"></p>
-<p>点击运行可执行文件，选择<a href="https://music.163.com/#/download">官网直链下载</a>下载下来的exe文件</p>
-<p><img src="/../../images/CloudMusicOnLinux/d.png"></p>
-<p>安装后可以在下面直接打开,也可以添加快捷方式到应用程序菜单中</p>
-<p><img src="/../../images/CloudMusicOnLinux/e.png"></p>
-<h4 id="HiDPI"><a href="#HiDPI" class="headerlink" title="HiDPI"></a>HiDPI</h4><p>点击设置</p>
-<p><img src="/../../images/CloudMusicOnLinux/f.png"></p>
-<p>高级显示设置</p>
-<p><img src="/../../images/CloudMusicOnLinux/g.png"></p>
-<p>倍数用0.96乘你需要的,这里我需要150%,150x96%&#x3D;144</p>
-<p><img src="/../../images/CloudMusicOnLinux/h.png"></p>
-<p>ref： <a href="https://renil.cc/archives/47/">网易云音乐最新版 Wine方案 （网易云Beta）</a></p>
+<p>如果只把它当成一个入门工具，它没有什么问题</p>
+<p>问题出在很多人并不满足于把它当工具，大家更想从里面拿到一个结论、一个身份、一个能快速解释自己的说法。</p>
+<p>然后事情就开始变味了</p>
+<h2 id="真正危险的地方，不是分型不准"><a href="#真正危险的地方，不是分型不准" class="headerlink" title="真正危险的地方，不是分型不准"></a>真正危险的地方，不是分型不准</h2><p>对我来说，MBTI 最大的问题从来不是准不准。</p>
+<p>而是它太容易让人把“偏好”理解成“本质”。</p>
+<p>比如：</p>
 <blockquote>
-<p>完善于2025年7月29日</p>
+<ol>
+<li>我是 INTP，所以我这样很正常。</li>
+<li>我是 INFP，所以我没办法。</li>
+<li>我就是这种人，别要求我改。</li>
+</ol>
 </blockquote>
+<p>一旦走到这一步，类型就不是在帮人理解自己了，而是在帮人维护一个人格面具。</p>
+<p>这也是我这次重新整理这段对话时最在意的地方。</p>
+<p>荣格真正关心的，好像从来不是把人塞进四个字母里。他更关心的是，一个人的意识长期偏向哪一边，以及被压下去的那一边会怎么回来补偿你。</p>
+<p>这个视角一换，很多问题就不一样了</p>
+<p>你不再只是问：“我是什么型？” ，你开始问：“我被什么单一姿态困住了？”</p>
+<h2 id="关于-SBTI，我更愿意把它当文化现象看"><a href="#关于-SBTI，我更愿意把它当文化现象看" class="headerlink" title="关于 SBTI，我更愿意把它当文化现象看"></a>关于 SBTI，我更愿意把它当文化现象看</h2><p>这两年中文互联网很喜欢把人格系统继续本土化、娱乐化、梗化。</p>
+<p>如果放在这个语境里看，SBTI 的流行其实一点也不奇怪。</p>
+<p>它背后至少有几件事情是真的。</p>
+<ol>
+<li>大家确实需要一种低成本的身份语言，快速辨认自己和别人。</li>
+<li>严肃的心理学概念一旦进入大众传播，几乎一定会变成模因。</li>
+<li>年轻人也不只是想做测试，很多时候是在借这些标签找同类、找语感、找自己的叙事位置。</li>
+</ol>
+<p>所以我现在不太会把 SBTI 当成什么更先进的人格工具。</p>
+<p>我更愿意把它理解成一种时代情绪，它很有生命力，但它离真正的心理理解，可能反而更远了。</p>
+<p>因为当类型变成梗，人就更容易开始表演那个标签，而不是观察自己。</p>
+<h2 id="比起你的类型，我现在更想了解“盲点”"><a href="#比起你的类型，我现在更想了解“盲点”" class="headerlink" title="比起你的类型，我现在更想了解“盲点”"></a>比起你的类型，我现在更想了解“盲点”</h2><p>这也是我这次最大的收获。以前我也很关心类型本身，尤其是高中的时候，确实对这套东西很痴迷。</p>
+<p>我看过很多相关讨论，也买过荣格那本后期整理出版的《红书》。但说实话，我并没有看懂。</p>
+<p>后来我慢慢发现一件事情。一个人一旦学会了很多名字，有时候反而更难直接经验自己。</p>
+<p>因为名字太多了，经验反而被遮住了</p>
+<p>所以现在比起问：</p>
+<ol>
+<li>我到底是 INTP 还是 INFP。</li>
+<li>我到底是 Ti 高还是 Fi 高。</li>
+<li>我是不是非典型。</li>
+</ol>
+<p>我更想问这些问题：</p>
+<ol>
+<li>我最容易认同的是哪一部分自己。</li>
+<li>我最不愿承认的是哪一部分自己。</li>
+<li>我在哪类问题上显得成熟。</li>
+<li>我又总是在哪类问题上特别幼稚、失控、过度防御。</li>
+</ol>
+<p>这个问题对我来说，比四个字母重要得多</p>
+<h2 id="INTP-还是-INFP？"><a href="#INTP-还是-INFP？" class="headerlink" title="INTP 还是 INFP？"></a>INTP 还是 INFP？</h2><p>这部分其实也很有意思。我以前一直觉得自己最接近 INTP。因为我确实很依赖分析，也喜欢拆结构，天然会先去想一件事在逻辑上成不成立。</p>
+<p>但与此同时，我对 Fi 这套东西又一直很有好感。我也做过不少测试，Fi 分数不低，身边也有很多 INFP 朋友，所以我很长时间都觉得自己像个“非典型 INTP”。</p>
+<p>但我现在对这个问题的看法变了。</p>
+<p>我觉得真正值得分辨的，不是“我像不像两个类型的混合体”，而是：在关键时刻，到底是谁在拍板，这是两回事。</p>
+<p>一个人当然可以同时有很强的分析能力，也有很强的价值敏感度，一个人也完全可能既珍惜逻辑，又珍惜真实。</p>
+<p>但真正做决定的时候，通常总有一个东西更像 <strong>“母语”</strong>，也就是说，你总会有一个更自然的第一反应</p>
+<h2 id="Ti-和-Fi-其实很像，但它们不是同一个法庭"><a href="#Ti-和-Fi-其实很像，但它们不是同一个法庭" class="headerlink" title="Ti 和 Fi 其实很像，但它们不是同一个法庭"></a>Ti 和 Fi 其实很像，但它们不是同一个法庭</h2><p>这是我这次觉得最值得反复想的一点。</p>
+<p>以前我会觉得，Ti 和 Fi 好像都在追求真理，只是一个更偏逻辑，一个更偏内心。现在我会说，这个理解不算错，但还不够准确。</p>
+<p>Ti 在乎的，是这个东西在结构上对不对，定义准不准，逻辑顺不顺，概念有没有被偷换。它想守住的是一种形式上的真实。</p>
+<p>Fi 在乎的，是这件事有没有违背内在最深的价值。它是不是失真，是不是背叛了什么，是不是碰到了自己不能轻易出卖的那一部分。它想守住的是一种价值上的真实。</p>
+<p>所以它们确实都在追求真，但不是在<strong>同一个法庭</strong>里审案，这也是为什么很多人会觉得自己 Ti 和 Fi 都很高。</p>
+<p>我现在觉得，“双强”是可能的，“双主导”通常不是一个意思。不是说一个人不能同时发展两边，而是人格总得有中心，意识总得有偏向</p>
+<p>你可以同时会两种语言，但受伤、争吵、慌乱、做重大决定的时候，往往还是有一种先冒出来</p>
+<p>因为那个更像你的母语。</p>
+<h2 id="所以我现在还在不在乎类型"><a href="#所以我现在还在不在乎类型" class="headerlink" title="所以我现在还在不在乎类型"></a>所以我现在还在不在乎类型</h2><p>是不是因为我突然不在乎类型了？</p>
+<p>恰恰相反，是因为我觉得它真正有价值的部分，不在于给我一个漂亮的身份，而在于逼我去看自己的结构和代价。</p>
+<p>比如：</p>
+<ol>
+<li>我是不是太依赖分析，以至于把理解当成了参与的替代品？</li>
+<li>我是不是很会讲道理，但在关系里其实并不擅长承认受伤？</li>
+<li>我对真实性、价值感和内在边界的重视，到底是我稳定的中心，还是某种很有分量但还不够成熟的地下部分？</li>
+</ol>
+<p>这些问题都比“我到底是哪个四字母”更难，但也更诚实。</p>
+<h2 id="结语"><a href="#结语" class="headerlink" title="结语"></a>结语</h2><p>如果我接下来还想借类型学理解自己，我大概不会再反复去做测试了，我只会看三件事</p>
+<ol>
+<li>受伤的时候，我第一反应更像“这不成立”，还是“这伤到我了”。</li>
+<li>做重大决定的时候，我最后拍板更依赖逻辑一致，还是内在价值。</li>
+<li>冲突来的时候，我更容易进入解释，还是更容易进入沉默和抽离。</li>
+</ol>
+<p>因为这些瞬间，比平时自我介绍时说出来的类型诚实得多。</p>
+<p>所以我现在还是觉得，MBTI 可以用，但最好只把它用到“帮助理解”这一步，别再往前玩成你的“固定身份”。</p>
+<p>对我来说，类型学真正值得保留的部分，不是它能告诉我我是个什么人，而是它会逼我承认：为了成为现在这个我，我到底牺牲了什么样的完整性</p>
+<p>这才是我现在更在意的事</p>
 ]]></content>
       <categories>
-        <category>Linux</category>
+        <category>Article</category>
       </categories>
       <tags>
-        <tag>tech</tag>
+        <tag>mbti</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>高考一年后有感</title>
+    <url>/posts/e74fd7e6.html</url>
+    <content><![CDATA[<h2 id="防喷设置"><a href="#防喷设置" class="headerlink" title="防喷设置"></a>防喷设置</h2><p>鄙人的文笔不是十分优秀，博客只是写给自己看的…</p>
+<h2 id="回忆"><a href="#回忆" class="headerlink" title="回忆"></a>回忆</h2><p>今天是2025年5月29号，翻开回忆角落，疲惫的生活…</p>
+<p>打开自己的相册，看到了5月29号当天自己相册的内容</p>
+<ul>
+<li>凌晨的我对着一根笔拍了一张照，照片中的笔芯用胶带裹上作为标记，其展示出了当时我一支笔狠狠学一天能用多少。高三那会的我确实很喜欢买各种各样的笔</li>
+<li>晚上9：25,一张照片关于我们高中语文年级组汇编的高三语文试题本，封面被我很好的朋友用各种各样颜色的笔，大大小小写满了我的名字…就不放出来了，保护自己的隐私</li>
+</ul>
+<p>其实现在的我已经想不起什么高中的很多事情了，能记起的只有回忆起来的美好瞬间和高三最后那段时间自己的努力。</p>
+<p>庆幸的是，即使我考到了四川，我和曾经的好友，仍然保持着联系。</p>
+<p>真要我说的话，谁又会没点遗憾呢… 走曲</p>
+<iframe frameborder="no" border="0" marginwidth="0" marginheight="0" width=330 height=86 src="//music.163.com/outchain/player?type=2&id=2144209098&auto=0&height=66"></iframe>
+
+<p>我写这篇的时候距离25年高考还有不到九天，这一年过的真的挺快的，我也适应了很多，成长了许多…</p>
+<p>真要说考出北京有什么好处，我想可能是周围并没有那么多你熟悉的同学，或许对于我来讲，平常做事不必太束手束脚了。谁都不欠谁的。</p>
+<p>没想到时间过的这么快，我马上都大二了…今日清理相册，指尖触到一张模糊的照片——是当年高考的准考证提示。想来是当时太过激动，镜头都不由得晃动。此刻再看，那股回忆竟压得我心口沉甸甸…</p>
+<p>我的记忆瞬间被拉回：五六月的北京，天气很好。我们即将要面临高考，无心顾暇。我埋首于书山题海，只觉时间粘滞如蜜糖，缓慢得令人窒息。桌上那块橡皮，不知何时已被时光悄然啃噬，磨成了细碎的一小粒，散落如微茫的雪。那时心中焦灼翻腾，唯一的念头便是挣脱这千篇一律的煎熬，去远方，去瞧瞧大海的模样。</p>
+<p>而当时间终于走完了刻度，24年6月11日的凌晨，我与两位挚友并肩站在渤海边。海风裹挟着咸腥扑面而来，我们静默着，看那轮红日磅礴跃出海平线，将天空与海水一同点燃。那一刻，才猛地惊觉：一切，真的结束了…</p>
+<p>那段当时只道是寻常的朝暮，竟如此清晰地烙印在心底——那书页翻动的窸窣，笔尖摩擦的沙沙，连同那粒橡皮的碎屑，原来都是青春自身投下的浓重侧影，已沉沉地、永远地锚定在那里。</p>
+<p>人生最是奇诡：曾日夜渴盼挣脱的樊笼，到头来竟成了灵魂归途最清晰的坐标；那些当时以为冗长无尽的煎熬，如今却化作心上最隽永的印痕——如同铅笔在纸面深深刻下的字迹，时光流转，反被岁月擦得愈发清晰、透亮…</p>
+<p>加油2025年高考的同学，前程似锦，不留遗憾</p>
+<hr>
+<p>拍摄于2024.6.6日12：59</p>
+<p><img src="/../../images/Gaokao/a.png" alt="2024.6.6" title="2024.6.6"></p>
+<p>拍摄于2024.6.10日晚21:02</p>
+<blockquote>
+<p>我们仨一拍脑门，高考完当天晚上就到了天津的滨海新区，准备第二天看日出</p>
+</blockquote>
+<p><img src="/../../images/Gaokao/b.png"></p>
+]]></content>
+      <categories>
+        <category>Article</category>
+      </categories>
+      <tags>
+        <tag>article</tag>
       </tags>
   </entry>
   <entry>
@@ -613,9 +174,9 @@
 <p>响一声后适当闭眼休息十秒</p>
 <p>然后再继续学习，循环往复…</p>
 <h2 id="音频"><a href="#音频" class="headerlink" title="音频"></a>音频</h2><p>由于音频文件太大，本座决定把bilibili视频直接搬过来…嘻嘻</p>
-<style>.bbplayer{width: 100%; max-width: 850px; margin: auto}</style><div class="bbplayer"><iframe class="bbplayer" id="mmedia-TRruPsmOlLOplIql" src="https://player.bilibili.com/player.html?bvid=BV1X9Lmz1EEr&page=1&high_quality=1&danmaku=true&autoplay=0" allowfullscreen="allowfullscreen" scrolling="no" border="0" frameborder="0" framespacing="0" sandbox="allow-top-navigation allow-same-origin allow-forms allow-scripts allow-popups"></iframe></div><script> document.getElementById("mmedia-TRruPsmOlLOplIql").style.height=document.getElementById("mmedia-TRruPsmOlLOplIql").scrollWidth*0.76+"px";
+<style>.bbplayer{width: 100%; max-width: 850px; margin: auto}</style><div class="bbplayer"><iframe class="bbplayer" id="mmedia-hUlElTqjwVBfnOxK" src="https://player.bilibili.com/player.html?bvid=BV1X9Lmz1EEr&page=1&high_quality=1&danmaku=true&autoplay=0" allowfullscreen="allowfullscreen" scrolling="no" border="0" frameborder="0" framespacing="0" sandbox="allow-top-navigation allow-same-origin allow-forms allow-scripts allow-popups"></iframe></div><script> document.getElementById("mmedia-hUlElTqjwVBfnOxK").style.height=document.getElementById("mmedia-hUlElTqjwVBfnOxK").scrollWidth*0.76+"px";
     window.onresize = function(){
-      document.getElementById("mmedia-TRruPsmOlLOplIql").style.height=document.getElementById("mmedia-TRruPsmOlLOplIql").scrollWidth*0.76+"px";
+      document.getElementById("mmedia-hUlElTqjwVBfnOxK").style.height=document.getElementById("mmedia-hUlElTqjwVBfnOxK").scrollWidth*0.76+"px";
     }; </script>
 
 
@@ -875,353 +436,6 @@
       </categories>
       <tags>
         <tag>spanish</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>我与计算机的故事</title>
-    <url>/posts/d773eb13.html</url>
-    <content><![CDATA[<p>我是一个行走在文理边界上的旅人，心中始终燃烧着对计算机世界的恒久热爱。</p>
-<p>我的故事，始于北京的家中。</p>
-<p>父母工作繁忙，陪伴我成长的，是家里那两台早早备下的电脑。或许这算得上一种时代的馈赠，让我在懵懂的年纪便与数字世界结缘。那时的热爱简单而纯粹——查资料、玩游戏、折腾软件。至于服务器、Linux、编程这些更深的概念，还远在认知的地平线之外。</p>
-<p>直到初中。</p>
-<p>某一天，我在视频中第一次看见了 Linux 的世界。那种与 Windows 完全不同的系统结构与操作方式，让我产生了一种难以言说的好奇。像是无意间推开了一扇门，我开始试着迈进去看看。</p>
-<p>我安装的第一个 Linux 发行版，是 <strong>Deepin</strong>。</p>
-<p>大约是在 <strong>2018 年，Deepin 15 的时代</strong>。那时的 DDE 桌面还没有如今这般复杂，界面简洁，风格优雅。直到今天，我依然会偶尔关注 Deepin 的更新，比如现在的 <strong>Deepin 25</strong>。看着它一点点变化，总会生出一种奇妙的感慨。</p>
-<p>不过 Deepin 并没有成为终点。</p>
-<p>很快，我被 <strong>Arch Linux</strong> 的理念吸引了。</p>
-<p>“简单、现代、实用。”</p>
-<p>那种几乎带着一点极客气质的系统哲学，在当时的我看来格外迷人。不过第一次接触 Arch，我多少还是有些谨慎，于是选择了基于 Arch 的发行版 <strong>Manjaro + KDE</strong> 作为过渡。</p>
-<p>也正是在那段时间，我和 <strong>KDE Plasma</strong> 结下了某种长期的缘分。</p>
-<p>从那次与 Manjaro 的邂逅开始，KDE 就像一位默契的老朋友。无论我后来换过多少发行版，它总会在某个时刻重新出现。</p>
-<p>至于后来究竟是因为什么最终真正投入 Arch Linux 的怀抱——</p>
-<p>是 Arch 那极具设计感的图标？<br>还是当年 Manjaro 偶尔出现的“滚挂”风波？</p>
-<p>如今已经有些记不清了。</p>
-<p>总之，从那之后，<strong>Arch Linux 逐渐成为了我的主力系统</strong>。</p>
-<p>那是一段相当狂热的时期。我开始不断尝试各种 Linux 发行版：</p>
-<ul>
-<li>Kali</li>
-<li>elementaryOS</li>
-<li>PopOS</li>
-<li>FydeOS</li>
-<li>等等等等……</li>
-</ul>
-<p>至于许多发行版例如 <strong>Linux Mint</strong>，它们只在虚拟机中短暂地停留过一段时间。</p>
-<p>如今再回头看，我已记不起我到底重装过几次系统，用过多少个发行版。</p>
-<p>但也是因为在那个阶段，我的兴趣逐渐向更深处延伸。</p>
-<p>我开始接触 <strong>服务器</strong> 与 <strong>编程</strong>。</p>
-<p>初中时期，我学习了 <strong>C++</strong>。<br>而在 <strong>初三毕业的那个暑假</strong>，我又拥抱了 <strong>Python</strong>。</p>
-<p>服务器系统方面，我曾经非常喜欢 <strong>CentOS 7</strong>。<br>后来随着它的发展路线发生变化，我逐渐转向 <strong>Debian</strong>。</p>
-<p>从 <strong>Debian 9 到 Debian 12</strong>，我几乎都亲身经历过。</p>
-<p>进入高中之后，生活节奏开始改变。</p>
-<p>疫情时代的网课需求突然增加，而 Linux 对腾讯会议等工具的支持当时还不够完善。再加上学业压力逐渐加重，可以自由折腾系统的时间越来越少。</p>
-<p>但那份热爱始终没有真正消失。</p>
-<p>那台老旧的电脑上，依旧保持着<strong>Arch Linux 与 Windows 双系统</strong>。我仍然会在某个闲暇的夜晚，打开终端，敲下那条熟悉的命令：</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">sudo pacman -Syu</span><br></pre></td></tr></table></figure>
-
-<p>有趣的是，一直到高三毕业，这个系统竟然从未真正“滚挂”。<br>它安静而稳定地陪伴了我整整三年。</p>
-<p>大学开始之后，新电脑到手。</p>
-<p>那时候电脑的主要用途变成了游戏，再加上我是文科生，于是 <strong>Windows 再次成为主角</strong>。那段时间里，我几乎很少再折腾系统。</p>
-<p>直到某一天。</p>
-<p>Windows 在一次关机之后并没有真正休眠，而是在背包里“空转”了整整一个月。等我再次打开电脑时，屏幕上只剩下一片花屏。</p>
-<p>进入 <strong>PE 环境</strong> 排查之后确认是系统问题，仅仅是官方驱动的安装与调试，就花费了整整一天。</p>
-<p>这次并不愉快的经历，加上 Windows 的强制更新、“假休眠”导致的风扇狂转，以及各种我被当作“宝宝”一样过度保护的设计——</p>
-<p>终于再次唤醒了我对 <strong>Linux 开源，自由精神</strong>的怀念。</p>
-<p>于是行动变得异常迅速。</p>
-<p>我买了一块新的硬盘。</p>
-<p><strong>十分钟之后，Arch Linux 安装完成。</strong></p>
-<p>那种熟悉的感觉几乎是瞬间回来了。</p>
-<p>不过世界也已经改变。</p>
-<p>KDE 完成了重要的版本演进；<br>Steam 正在重新塑造 Linux 游戏生态；<br>许多新的工具与技术不断出现。</p>
-<p>曾经积累的很多经验，已经不再完全适用。</p>
-<p>但这并没有让我沮丧，反而重新点燃了探索的欲望。</p>
-<p>再次深入之后，我发现整个生态早已不同：</p>
-<ul>
-<li>原生 Linux 版微信不再只是梦想</li>
-<li>QQ 也开始认真对待 Linux 用户</li>
-<li>Valve 通过 <strong>SteamDeck（搭载 Arch 系 SteamOS）</strong> 与 <strong>Proton</strong> 极大推动了 Linux 游戏生态</li>
-<li>UOS 在政企领域的推广，也让国内 Linux 用户整体受益</li>
-</ul>
-<p>如今，在 Linux 上畅玩游戏，早已不再是一件需要自嘲的事情。</p>
-<p>这也让我重新燃起了体验不同发行版的兴趣：</p>
-<ul>
-<li>openSUSE Tumbleweed 的优雅滚动</li>
-<li>Ubuntu 的庞大生态</li>
-<li>Fedora 的前沿特性</li>
-<li>openSUSE Leap 的稳健</li>
-<li>Debian 12 的纯粹</li>
-<li>NixOS 那近乎革命性的理念</li>
-</ul>
-<p>有趣的是，尽管我长期管理 <strong>Debian &#x2F; Ubuntu 服务器</strong>，桌面端却始终没有真正深入使用过原生 Debian。</p>
-<hr>
-<h2 id="我的设备"><a href="#我的设备" class="headerlink" title="我的设备"></a>我的设备</h2><p>如今，我的数字世界由两台电脑组成。</p>
-<p><strong>轻薄本</strong></p>
-<ul>
-<li>MacBook Air（主力）</li>
-</ul>
-<p><strong>游戏本</strong></p>
-<ul>
-<li>Arch Linux（主力系统）</li>
-<li>Fedora 43</li>
-<li>Windows 11（备用）</li>
-</ul>
-<p>相比过去动辄四五个系统的年代，现在的设备已经经历了一轮彻底的优化。系统数量减少了，但使用体验反而更加从容。</p>
-<p>或许，这正是折腾多年之后的一种平衡。</p>
-<hr>
-<h2 id="更新记录"><a href="#更新记录" class="headerlink" title="更新记录"></a>更新记录</h2><p>本文最初完善于 <strong>2025 年 6 月 25 日</strong>。</p>
-<p><strong>2025 年 7 月 20 日</strong>，游戏本上的 <strong>openSUSE Tumbleweed</strong> 在一次 <code>zypper dup</code> 更新中因为驱动问题“壮烈牺牲”。借此机会，我也重新审视了自己的系统结构，并将系统数量精简为三个：</p>
-<ul>
-<li>Arch Linux</li>
-<li>Fedora</li>
-<li>Windows 11</li>
-</ul>
-<p><strong>2025年8月13日</strong>，我换了一台轻薄本机械革命无界 14X Pro 2025 AI9 H365 32G+1T的最高配版本，遗憾的是其BIOS并不完善，没有做对Linux的支持，导致无线网卡无法正常在Linux环境下驱动。被迫在用Windows 11。这时候也把之前的洋垃圾轻薄本卖掉了。</p>
-<p><strong>2026年3月6日</strong>，通过国补以及以旧换新补贴，机械革命正式退役，换成了MacBook Air。</p>
-<p>折腾仍在继续，但设备与系统组合，也逐渐走向稳定。</p>
-]]></content>
-      <categories>
-        <category>Article</category>
-      </categories>
-      <tags>
-        <tag>article</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>谈谈我为什么放弃了无纸化学习</title>
-    <url>/posts/4fa1af2a.html</url>
-    <content><![CDATA[<p>如标题所见，我最终还是放弃了无纸化学习。这个决定并非一时兴起，而是经历了反复尝试与深刻反思之后的结果。很多人称赞数字化工具的便捷与环保，我也曾满怀期待地拥抱这一切，却发现它并不如想象中那般适合我。原因很多，听我一一道来。</p>
-<p>作为24年高考生，我高考结束以后便在网络上搜寻大学的高效率学习模式，然而作为一名文科生，电脑的使用率较低，而平板和手写笔成为了我的首选。</p>
-<p>刚进入大学的前两个星期，大约是新鲜期，那时候基本上使用率比较高，原因或许是内容强度不高，记忆难度小。直到大一上学期过完，回到学校以后，情况开始有所改变。</p>
-<p>大一下的内容强度逐渐上升，而我逐渐发现，使用平板的学习效率不升反降。电子产品给我这种不太自律的人来讲带来的干扰远高于帮助—消息通知，翻译时候的懒惰，甚至只是搜索一个东西，我的思绪就已经抽离出课堂了。而在纸上书写时，没有那么多顾虑，没有那么多干扰，注意力更持久。我逐渐明白，无纸化学习并不适合每一个人。真正的”高效率”学习不是看书时有多方便，而是看书的时候能看多久，能学进去多少。</p>
-<p>更重要的是，无纸化学习的过程让我的学习开始“走马观花”。这种虚拟的数字化“纸笔”并没有真实的书写触感，在屏幕上划重点，复制粘贴，直接截屏等操作，看似方便，实则丧失了主动吸纳的环节。相反，笔尖在纸上划过留下的沙沙声，迫使我去思考，归纳。一笔一划之间，知识不再是高高在上，划过眼前的信息，而转化成了实体，逐渐内化成我的东西。这种真实，踏实的感觉，是手写笔在屏幕上无法企及的地方。</p>
-<p>不仅如此，无纸化学习的体验也比较一般。大学的很多课本没有电子版，还是需要我背不少的书。扫描的代价也很大，麻烦并且不够清晰。最后不得不背—既没有方便，同时也不便携，每天依旧要背着装满课本的背包去上课，根本不可能只带一个平板。</p>
-<p>书写体验更是一坨。为了在这块玻璃屏幕上好好写字不打滑，我给过许多尝试。买过许多替代笔尖，许多笔尖套，类纸膜等等。所需开销比一本一笔高的很多，也并不自如。更不用说其他—购买时候的价格，触控笔，笔记会员，云存储的服务，累积下来性价比也并不高。书写的反馈也很弱很弱。</p>
-<p>我并非否认无纸化学习，存在即合理。但我认为时至今日，他也不一定适用于每一个学习者。对我而言，纸，是思考的空间；笔，是理解的延申。退回传统，并非倒退，而是选择了一条适合我的路。</p>
-]]></content>
-      <categories>
-        <category>Article</category>
-      </categories>
-      <tags>
-        <tag>article</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>谈谈我为什么开始拥抱苹果</title>
-    <url>/posts/fbd23e1d.html</url>
-    <content><![CDATA[<p>如标题所见，我放弃了所谓“开放”的安卓阵营，也逐渐离开了那个我非常熟悉的 Windows 世界。与此同时，我还买了 <strong>AirPods Pro 3</strong>，甚至一度认真考虑过 <strong>Apple Watch</strong>。</p>
-<p>听到这里，很多人第一反应大概都是：这人是不是疯了</p>
-<p>毕竟在不少人的理解里，苹果生态就是一套“消费陷阱”，一旦进去就很难出来。</p>
-<p>但事情其实没那么复杂。</p>
-<p>这只是我在不断尝试之后，慢慢找到的一套 <strong>更适合自己的工具组合</strong>。</p>
-<h2 id="我不是一开始就站在苹果这边"><a href="#我不是一开始就站在苹果这边" class="headerlink" title="我不是一开始就站在苹果这边"></a>我不是一开始就站在苹果这边</h2><p>在真正转向 iPhone 之前，我其实换过很多安卓手机。</p>
-<p>最早用过的是 <strong>Redmi K30 至尊纪念版</strong>，那台手机是我把当年的 iPad 卖掉之后换来的。当时真的觉得很离谱，这种配置居然只要 1999。</p>
-<p>后来高中时期，我的主力机变成了 <strong>小米 10 Pro</strong>。这台手机陪我走过了整个高中，到现在它还躺在桌子上当热点机用。</p>
-<p>那时候我几乎把所有时间都花在折腾系统上：</p>
-<ul>
-<li>Root</li>
-<li>模块</li>
-<li>调度</li>
-<li>超频</li>
-<li>各种 Magisk 模块</li>
-</ul>
-<p>每天最期待的一件事，就是看看小米有没有推新的系统更新。</p>
-<p>高考结束之后，我又换了 <strong>iQOO 12 Pro 16+1T（5599）</strong>。当时我对它的评价只有一句话：最水桶的一台旗舰。没有明显短板，什么都不差。</p>
-<p>后来在暑假快结束的时候，我本来只想买一台两千块左右的备用机，结果预算一路加到四千，最后买了 <strong>OPPO Find X7 Ultra 12+256</strong>。我非常喜欢这台手机，也带着它去了不少地方。现在回头看，我博客里很多照片其实都还带着哈苏水印。</p>
-<p>再后来，2024 年 10 月，我在一节水课上看了 <strong>真我发布会</strong>，结果又没忍住，买了一台 <strong>真我 GT7 Pro</strong>。</p>
-<p>原因其实很简单：</p>
-<ul>
-<li>骁龙 8 至尊版</li>
-<li>6500mAh 电池</li>
-</ul>
-<p>当时真的会觉得，这手机太猛了</p>
-<h2 id="为什么最后还是买了-iPhone"><a href="#为什么最后还是买了-iPhone" class="headerlink" title="为什么最后还是买了 iPhone"></a>为什么最后还是买了 iPhone</h2><p>这种状态一直持续到 <strong>2025 年 9 月</strong>。</p>
-<p>那时候我把 <strong>Find X7 Ultra</strong> 卖掉了，因为我看到了 <strong>iPhone 17 Pro</strong> 的评测。说实话，当时真的很心动，于是我干了一件挺冲动的事情：直接下单。</p>
-<p>我 8099 买的，原价 8999。</p>
-<p>当时想法也很简单：</p>
-<blockquote>
-<p>不喜欢就转手卖掉</p>
-</blockquote>
-<p>但 2025 年 10 月 1 日到手之后，我发现自己根本不想卖了。</p>
-<p>不是因为苹果多有面子，也不是因为什么品牌滤镜，而是因为一件很具体的事情：<strong>体验很统一</strong>。</p>
-<p>再加上一个现实问题，安卓这些年最核心的优势，其实已经没有以前那么成立了。</p>
-<p>以前大家说安卓，核心关键词总是“开放”。但现在：</p>
-<ul>
-<li>Bootloader 越来越难解锁</li>
-<li>Root 环境越来越难维护</li>
-<li>权限越来越封闭</li>
-</ul>
-<p>既然两个系统都在变封闭，那事情对我来说就很简单了。</p>
-<p>我选体验更好的那个</p>
-<p>更何况现在安卓旗舰也越来越贵，很多机器动不动就是七八千，价格和 iPhone 其实已经差不多。既然如此，那我为什么不选一个更省心的？</p>
-<p>更重要的是，我现在已经没有那么多时间了。</p>
-<p>我不再想把所有设备都变成一个长期维护项目。我希望它们稳定、好用，不需要我每天去照顾。我希望它们只是工具，而不是玩具。</p>
-<h2 id="为什么后来又买了-MacBook-Air"><a href="#为什么后来又买了-MacBook-Air" class="headerlink" title="为什么后来又买了 MacBook Air"></a>为什么后来又买了 MacBook Air</h2><p>其实一开始，我并没有打算买 MacBook。</p>
-<p>当我第一次意识到自己可能需要一台轻薄本的时候，我最先体验的其实是 Windows 阵营的机器。我买了一台机械革命 <strong>无界 14X Pro 2025</strong>，配置是 <strong>32G + 1T，AI9 H365 处理器</strong>。</p>
-<p>从参数上看，这台机器当时真的很诱人：</p>
-<ul>
-<li>2.8K 分辨率屏幕</li>
-<li>120Hz 高刷</li>
-<li>99Wh 大电池</li>
-<li>很丰富的接口</li>
-</ul>
-<p>这些配置几乎把我对一台轻薄本的幻想都满足了。</p>
-<p>反观当时的 <strong>MacBook Air</strong>，只有 60Hz 屏幕，电池容量看起来也不算大，价格还更贵。从参数表上看，几乎没有任何优势，所以当时的我几乎没有犹豫，直接选了 Windows 轻薄本。</p>
-<p>而且还有一个很现实的原因：那时候我根本没想到，几个月以后我会换成 iPhone。如果当时就知道后面会换苹果手机，我的选择可能也会不一样。</p>
-<p>但真正用了一段时间之后，我才慢慢意识到一个问题。</p>
-<p>参数很好看，体验却没有想象中那么好。</p>
-<p>尤其是在不插电的时候，问题会变得特别明显。虽然这台机器的续航确实不短，但系统会明显变慢，打字会卡，看视频也会卡。更离谱的是那块 120Hz 的屏幕，一旦离电，高刷就会变得很不稳定，再加上 Windows 自己的动态刷新率策略，很多时候其实一直都只是在 60Hz 运行。</p>
-<p>但问题是，我买的是轻薄本。</p>
-<p>轻薄本的意义本来就是带出去用的，不是一直插着电当台式机。结果一离电，体验就明显下降，那种卡卡的感觉真的很难受。</p>
-<p>还有一个原因，虽然不是主要原因，但它确实一直在消耗我对这台机器的耐心。</p>
-<p>我其实很早就对这台机械革命有点不爽了。后来装上 Linux 之后才发现，它的 BIOS 根本没做完整，导致 <strong>Wi-Fi 模块在 Linux 下是被硬件屏蔽的状态</strong>，系统里直接显示的是 <em>Hardware block</em>，也就是说 Wi-Fi 根本用不了。</p>
-<p>而我又很不喜欢在 Windows 下面配开发环境。像 git 这些东西，在 Windows 里总让我觉得很别扭：软件装到哪里不清楚，环境变量一堆，卸载还经常卸不干净，有些程序甚至会在后台偷偷吃电。</p>
-<p>结果就是，我本来想用 Linux 学习、写博客，最后却被迫在 Windows 下面硬撑了四五个月。那段时间真的很难受。</p>
-<p>再加上那台机器的键盘手感也很一般，打字时间一长就很累，博客也因此停更了一段时间。后来我实在受不了了，刚好赶上国补和以旧换新补贴，价格也合适，就在 <strong>M5 Air</strong> 发布的前一天入手了 <strong>M4 的 MacBook Air</strong>。</p>
-<p>真正用上之后，我反而慢慢理解了一件事情：苹果做的其实就是一台电脑。</p>
-<p>一台很纯粹的笔记本电脑，没有太多花里胡哨的东西，做工好，性能稳定，续航长，软件生态成熟。</p>
-<p>但最重要的一点其实是 <strong>离电性能</strong>。</p>
-<p>苹果自己做芯片、做系统、做整机，所以整机体验会非常统一。MacBook Air 甚至完全没有风扇，这意味着日常使用几乎是无声的。再加上键盘手感很好，合上盖子就睡眠，需要的时候再打开，整个使用逻辑都很顺。</p>
-<p>还有一点我很喜欢。macOS 的底层是 <strong>Unix</strong>，很多命令、工具和逻辑其实都和 Linux 很接近，这种熟悉感会让我非常安心。</p>
-<h2 id="AirPods-Pro-3-对我来说值在哪里"><a href="#AirPods-Pro-3-对我来说值在哪里" class="headerlink" title="AirPods Pro 3 对我来说值在哪里"></a>AirPods Pro 3 对我来说值在哪里</h2><p>至于为什么买 <strong>AirPods Pro 3</strong>，原因其实也很简单。</p>
-<p>我后来发现一件事情，蓝牙耳机谈音质，对我这种木耳来说基本就是扯淡。我根本分辨不出什么高低频、解析力、声场这种差别，但有一个东西我能非常明确地感知到：<strong>降噪</strong>。</p>
-<p>AirPods Pro 的降噪就是那种一耳朵差距。打开的那一瞬间，整个世界都会安静下来。</p>
-<p>这种体验对我来说非常重要，因为安静就意味着我更容易专注，也更容易进入状态。</p>
-<p>再加上它的通透模式、自适应降噪、空间音频，以及苹果的查找功能，这些东西都让我很惊艳。</p>
-<p>当然，我用的是 iPhone，AirPods 的连接体验确实也很方便。</p>
-<p>但说实话，这不是我留下它的主要原因。</p>
-<p>真正让我留下它的，还是降噪</p>
-<h2 id="为什么最后没买-Apple-Watch"><a href="#为什么最后没买-Apple-Watch" class="headerlink" title="为什么最后没买 Apple Watch"></a>为什么最后没买 Apple Watch</h2><p>很多人会觉得，既然我已经有了 iPhone、MacBook 和 AirPods，为什么不顺便再买一块 <strong>Apple Watch</strong>？</p>
-<p>其实我想买 Apple Watch 的原因，不是生态，而是我有健身的习惯，而且我离家 <strong>1500km</strong>。我希望自己有一套更准确的健康数据，比如心率、运动记录、健康监测。</p>
-<p>这不仅是对自己负责，也是让家人放心。</p>
-<p>但我最后没有买。</p>
-<p>原因也很简单：续航太短。</p>
-<p>Apple Watch 基本就是一天一充，而且国行版本还砍掉了快充。于是事情就变成了，充得慢，续航又短，这一点非常直接地抑制了我的购买欲。</p>
-<p>如果未来续航能解决，我大概率还是会买。</p>
-<h2 id="我不太相信“生态”这套说法"><a href="#我不太相信“生态”这套说法" class="headerlink" title="我不太相信“生态”这套说法"></a>我不太相信“生态”这套说法</h2><p>其实很多人一谈苹果就会提“生态”。</p>
-<p>但对我来说，这一直有点像个伪命题。</p>
-<p>因为我从来不在乎什么软件生态、硬件生态、全家桶这种说法。</p>
-<p>我只在乎一件事：体验。</p>
-<p>一个产品好用，我就用。不好用，我就换掉。</p>
-<p>就这么简单。</p>
-<p>没有信仰，也没有阵营。</p>
-<h2 id="写在最后"><a href="#写在最后" class="headerlink" title="写在最后"></a>写在最后</h2><p>现在的我，其实已经不像以前那样喜欢折腾了。</p>
-<p>以前我希望每一个设备到手都被我自定义一遍，希望每一个设备都完全掌控在自己手里。</p>
-<p>但现在我更希望 <strong>工具只是工具</strong>。</p>
-<p>设备不需要证明什么，只要它稳定、好用、不打扰我，那它就是一个好产品。</p>
-<p>至于它是不是苹果，其实并不重要。</p>
-]]></content>
-      <categories>
-        <category>Article</category>
-      </categories>
-      <tags>
-        <tag>article</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>谈谈我和“荣格”对话之后，对MBTI的一些新认识</title>
-    <url>/posts/e850298b.html</url>
-    <content><![CDATA[<p>整理了一下我和“荣格”关于 MBTI、SBTI、八功能、INTP、INFP、Ti、Fi 的对话。</p>
-<p>感觉有些东西还是值得记录，所以写下来，分享一下感受</p>
-<blockquote>
-<p><strong>不过这里要先交代一下</strong><br>这当然不是真的在和荣格本人对话。更准确地说，是我用了最近很火的女娲 skill，把荣格这个人物蒸馏出来，然后和这个被蒸馏出来的“荣格”在对话。</p>
-<p>我理解它更像一种基于人物材料、思维方式和表达习惯做出来的人格模拟。至于为什么我还是把它记成“和荣格的对话”，主要是为了阅读上更顺一点，但这个边界还是得先说清楚。</p>
-</blockquote>
-<p>我现在最直接的感受是，MBTI 当然可以聊，但人一旦太急着给自己定型，就很容易把工具用反。</p>
-<p>它本来只是地图。</p>
-<p>后来很多人把它活成了户口本。</p>
-<h2 id="说这么多，MBTI-有用吗？"><a href="#说这么多，MBTI-有用吗？" class="headerlink" title="说这么多，MBTI 有用吗？"></a>说这么多，MBTI 有用吗？</h2><p>说实话，我并不想走到另一边，变成那种一提 MBTI 就嫌弃的人。</p>
-<p>因为它确实蛮有意思的，而且我觉着还是有用的</p>
-<p>原因其实很简单。</p>
-<ol>
-<li>它给了普通人一套更文明的语言，去描述人与人之间的差异。</li>
-<li>它让很多人第一次意识到，差异不一定是道德问题，也不一定是谁更高级。</li>
-<li>它在关系、自我观察、职业选择这些场景里，确实能提供一个粗略的参考。</li>
-</ol>
-<p>如果只把它当成一个入门工具，它没有什么问题</p>
-<p>问题出在很多人并不满足于把它当工具，大家更想从里面拿到一个结论、一个身份、一个能快速解释自己的说法。</p>
-<p>然后事情就开始变味了</p>
-<h2 id="真正危险的地方，不是分型不准"><a href="#真正危险的地方，不是分型不准" class="headerlink" title="真正危险的地方，不是分型不准"></a>真正危险的地方，不是分型不准</h2><p>对我来说，MBTI 最大的问题从来不是准不准。</p>
-<p>而是它太容易让人把“偏好”理解成“本质”。</p>
-<p>比如：</p>
-<blockquote>
-<ol>
-<li>我是 INTP，所以我这样很正常。</li>
-<li>我是 INFP，所以我没办法。</li>
-<li>我就是这种人，别要求我改。</li>
-</ol>
-</blockquote>
-<p>一旦走到这一步，类型就不是在帮人理解自己了，而是在帮人维护一个人格面具。</p>
-<p>这也是我这次重新整理这段对话时最在意的地方。</p>
-<p>荣格真正关心的，好像从来不是把人塞进四个字母里。他更关心的是，一个人的意识长期偏向哪一边，以及被压下去的那一边会怎么回来补偿你。</p>
-<p>这个视角一换，很多问题就不一样了</p>
-<p>你不再只是问：“我是什么型？” ，你开始问：“我被什么单一姿态困住了？”</p>
-<h2 id="关于-SBTI，我更愿意把它当文化现象看"><a href="#关于-SBTI，我更愿意把它当文化现象看" class="headerlink" title="关于 SBTI，我更愿意把它当文化现象看"></a>关于 SBTI，我更愿意把它当文化现象看</h2><p>这两年中文互联网很喜欢把人格系统继续本土化、娱乐化、梗化。</p>
-<p>如果放在这个语境里看，SBTI 的流行其实一点也不奇怪。</p>
-<p>它背后至少有几件事情是真的。</p>
-<ol>
-<li>大家确实需要一种低成本的身份语言，快速辨认自己和别人。</li>
-<li>严肃的心理学概念一旦进入大众传播，几乎一定会变成模因。</li>
-<li>年轻人也不只是想做测试，很多时候是在借这些标签找同类、找语感、找自己的叙事位置。</li>
-</ol>
-<p>所以我现在不太会把 SBTI 当成什么更先进的人格工具。</p>
-<p>我更愿意把它理解成一种时代情绪，它很有生命力，但它离真正的心理理解，可能反而更远了。</p>
-<p>因为当类型变成梗，人就更容易开始表演那个标签，而不是观察自己。</p>
-<h2 id="比起你的类型，我现在更想了解“盲点”"><a href="#比起你的类型，我现在更想了解“盲点”" class="headerlink" title="比起你的类型，我现在更想了解“盲点”"></a>比起你的类型，我现在更想了解“盲点”</h2><p>这也是我这次最大的收获。以前我也很关心类型本身，尤其是高中的时候，确实对这套东西很痴迷。</p>
-<p>我看过很多相关讨论，也买过荣格那本后期整理出版的《红书》。但说实话，我并没有看懂。</p>
-<p>后来我慢慢发现一件事情。一个人一旦学会了很多名字，有时候反而更难直接经验自己。</p>
-<p>因为名字太多了，经验反而被遮住了</p>
-<p>所以现在比起问：</p>
-<ol>
-<li>我到底是 INTP 还是 INFP。</li>
-<li>我到底是 Ti 高还是 Fi 高。</li>
-<li>我是不是非典型。</li>
-</ol>
-<p>我更想问这些问题：</p>
-<ol>
-<li>我最容易认同的是哪一部分自己。</li>
-<li>我最不愿承认的是哪一部分自己。</li>
-<li>我在哪类问题上显得成熟。</li>
-<li>我又总是在哪类问题上特别幼稚、失控、过度防御。</li>
-</ol>
-<p>这个问题对我来说，比四个字母重要得多</p>
-<h2 id="INTP-还是-INFP？"><a href="#INTP-还是-INFP？" class="headerlink" title="INTP 还是 INFP？"></a>INTP 还是 INFP？</h2><p>这部分其实也很有意思。我以前一直觉得自己最接近 INTP。因为我确实很依赖分析，也喜欢拆结构，天然会先去想一件事在逻辑上成不成立。</p>
-<p>但与此同时，我对 Fi 这套东西又一直很有好感。我也做过不少测试，Fi 分数不低，身边也有很多 INFP 朋友，所以我很长时间都觉得自己像个“非典型 INTP”。</p>
-<p>但我现在对这个问题的看法变了。</p>
-<p>我觉得真正值得分辨的，不是“我像不像两个类型的混合体”，而是：在关键时刻，到底是谁在拍板，这是两回事。</p>
-<p>一个人当然可以同时有很强的分析能力，也有很强的价值敏感度，一个人也完全可能既珍惜逻辑，又珍惜真实。</p>
-<p>但真正做决定的时候，通常总有一个东西更像 <strong>“母语”</strong>，也就是说，你总会有一个更自然的第一反应</p>
-<h2 id="Ti-和-Fi-其实很像，但它们不是同一个法庭"><a href="#Ti-和-Fi-其实很像，但它们不是同一个法庭" class="headerlink" title="Ti 和 Fi 其实很像，但它们不是同一个法庭"></a>Ti 和 Fi 其实很像，但它们不是同一个法庭</h2><p>这是我这次觉得最值得反复想的一点。</p>
-<p>以前我会觉得，Ti 和 Fi 好像都在追求真理，只是一个更偏逻辑，一个更偏内心。现在我会说，这个理解不算错，但还不够准确。</p>
-<p>Ti 在乎的，是这个东西在结构上对不对，定义准不准，逻辑顺不顺，概念有没有被偷换。它想守住的是一种形式上的真实。</p>
-<p>Fi 在乎的，是这件事有没有违背内在最深的价值。它是不是失真，是不是背叛了什么，是不是碰到了自己不能轻易出卖的那一部分。它想守住的是一种价值上的真实。</p>
-<p>所以它们确实都在追求真，但不是在<strong>同一个法庭</strong>里审案，这也是为什么很多人会觉得自己 Ti 和 Fi 都很高。</p>
-<p>我现在觉得，“双强”是可能的，“双主导”通常不是一个意思。不是说一个人不能同时发展两边，而是人格总得有中心，意识总得有偏向</p>
-<p>你可以同时会两种语言，但受伤、争吵、慌乱、做重大决定的时候，往往还是有一种先冒出来</p>
-<p>因为那个更像你的母语。</p>
-<h2 id="所以我现在还在不在乎类型"><a href="#所以我现在还在不在乎类型" class="headerlink" title="所以我现在还在不在乎类型"></a>所以我现在还在不在乎类型</h2><p>是不是因为我突然不在乎类型了？</p>
-<p>恰恰相反，是因为我觉得它真正有价值的部分，不在于给我一个漂亮的身份，而在于逼我去看自己的结构和代价。</p>
-<p>比如：</p>
-<ol>
-<li>我是不是太依赖分析，以至于把理解当成了参与的替代品？</li>
-<li>我是不是很会讲道理，但在关系里其实并不擅长承认受伤？</li>
-<li>我对真实性、价值感和内在边界的重视，到底是我稳定的中心，还是某种很有分量但还不够成熟的地下部分？</li>
-</ol>
-<p>这些问题都比“我到底是哪个四字母”更难，但也更诚实。</p>
-<h2 id="结语"><a href="#结语" class="headerlink" title="结语"></a>结语</h2><p>如果我接下来还想借类型学理解自己，我大概不会再反复去做测试了，我只会看三件事</p>
-<ol>
-<li>受伤的时候，我第一反应更像“这不成立”，还是“这伤到我了”。</li>
-<li>做重大决定的时候，我最后拍板更依赖逻辑一致，还是内在价值。</li>
-<li>冲突来的时候，我更容易进入解释，还是更容易进入沉默和抽离。</li>
-</ol>
-<p>因为这些瞬间，比平时自我介绍时说出来的类型诚实得多。</p>
-<p>所以我现在还是觉得，MBTI 可以用，但最好只把它用到“帮助理解”这一步，别再往前玩成你的“固定身份”。</p>
-<p>对我来说，类型学真正值得保留的部分，不是它能告诉我我是个什么人，而是它会逼我承认：为了成为现在这个我，我到底牺牲了什么样的完整性</p>
-<p>这才是我现在更在意的事</p>
-]]></content>
-      <categories>
-        <category>Article</category>
-      </categories>
-      <tags>
-        <tag>mbti</tag>
       </tags>
   </entry>
   <entry>
@@ -1700,42 +914,535 @@
       </tags>
   </entry>
   <entry>
-    <title>高考一年后有感</title>
-    <url>/posts/e74fd7e6.html</url>
-    <content><![CDATA[<h2 id="防喷设置"><a href="#防喷设置" class="headerlink" title="防喷设置"></a>防喷设置</h2><p>鄙人的文笔不是十分优秀，博客只是写给自己看的…</p>
-<h2 id="回忆"><a href="#回忆" class="headerlink" title="回忆"></a>回忆</h2><p>今天是2025年5月29号，翻开回忆角落，疲惫的生活…</p>
-<p>打开自己的相册，看到了5月29号当天自己相册的内容</p>
-<ul>
-<li>凌晨的我对着一根笔拍了一张照，照片中的笔芯用胶带裹上作为标记，其展示出了当时我一支笔狠狠学一天能用多少。高三那会的我确实很喜欢买各种各样的笔</li>
-<li>晚上9：25,一张照片关于我们高中语文年级组汇编的高三语文试题本，封面被我很好的朋友用各种各样颜色的笔，大大小小写满了我的名字…就不放出来了，保护自己的隐私</li>
-</ul>
-<p>其实现在的我已经想不起什么高中的很多事情了，能记起的只有回忆起来的美好瞬间和高三最后那段时间自己的努力。</p>
-<p>庆幸的是，即使我考到了四川，我和曾经的好友，仍然保持着联系。</p>
-<p>真要我说的话，谁又会没点遗憾呢… 走曲</p>
-<iframe frameborder="no" border="0" marginwidth="0" marginheight="0" width=330 height=86 src="//music.163.com/outchain/player?type=2&id=2144209098&auto=0&height=66"></iframe>
+    <title>ArchLinux安装后指南</title>
+    <url>/posts/f48c939a.html</url>
+    <content><![CDATA[<h2 id="root登录"><a href="#root登录" class="headerlink" title="root登录"></a>root登录</h2><h4 id="联网-基于之前装的NetworkManager"><a href="#联网-基于之前装的NetworkManager" class="headerlink" title="联网,基于之前装的NetworkManager"></a>联网,基于之前装的NetworkManager</h4> <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">systemctl start NetworkManager #这里必须大写</span><br></pre></td></tr></table></figure>
 
-<p>我写这篇的时候距离25年高考还有不到九天，这一年过的真的挺快的，我也适应了很多，成长了许多…</p>
-<p>真要说考出北京有什么好处，我想可能是周围并没有那么多你熟悉的同学，或许对于我来讲，平常做事不必太束手束脚了。谁都不欠谁的。</p>
-<p>没想到时间过的这么快，我马上都大二了…今日清理相册，指尖触到一张模糊的照片——是当年高考的准考证提示。想来是当时太过激动，镜头都不由得晃动。此刻再看，那股回忆竟压得我心口沉甸甸…</p>
-<p>我的记忆瞬间被拉回：五六月的北京，天气很好。我们即将要面临高考，无心顾暇。我埋首于书山题海，只觉时间粘滞如蜜糖，缓慢得令人窒息。桌上那块橡皮，不知何时已被时光悄然啃噬，磨成了细碎的一小粒，散落如微茫的雪。那时心中焦灼翻腾，唯一的念头便是挣脱这千篇一律的煎熬，去远方，去瞧瞧大海的模样。</p>
-<p>而当时间终于走完了刻度，24年6月11日的凌晨，我与两位挚友并肩站在渤海边。海风裹挟着咸腥扑面而来，我们静默着，看那轮红日磅礴跃出海平线，将天空与海水一同点燃。那一刻，才猛地惊觉：一切，真的结束了…</p>
-<p>那段当时只道是寻常的朝暮，竟如此清晰地烙印在心底——那书页翻动的窸窣，笔尖摩擦的沙沙，连同那粒橡皮的碎屑，原来都是青春自身投下的浓重侧影，已沉沉地、永远地锚定在那里。</p>
-<p>人生最是奇诡：曾日夜渴盼挣脱的樊笼，到头来竟成了灵魂归途最清晰的坐标；那些当时以为冗长无尽的煎熬，如今却化作心上最隽永的印痕——如同铅笔在纸面深深刻下的字迹，时光流转，反被岁月擦得愈发清晰、透亮…</p>
-<p>加油2025年高考的同学，前程似锦，不留遗憾</p>
-<hr>
-<p>拍摄于2024.6.6日12：59</p>
-<p><img src="/../../images/Gaokao/a.png" alt="2024.6.6" title="2024.6.6"></p>
-<p>拍摄于2024.6.10日晚21:02</p>
+<h4 id="开机自启动"><a href="#开机自启动" class="headerlink" title="开机自启动"></a>开机自启动</h4> <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">systemctl enable NetworkManager</span><br></pre></td></tr></table></figure>
+
+ <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">nmtui</span><br></pre></td></tr></table></figure>
+
+<h4 id="触摸板驱动"><a href="#触摸板驱动" class="headerlink" title="触摸板驱动"></a>触摸板驱动</h4> <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">pacman -S xf86-input-synaptics</span><br></pre></td></tr></table></figure>
+
+<h4 id="X11"><a href="#X11" class="headerlink" title="X11"></a>X11</h4> <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">pacman -S xorg</span><br></pre></td></tr></table></figure>
+
+<h4 id="Wayland"><a href="#Wayland" class="headerlink" title="Wayland"></a>Wayland</h4> <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">pacman -S wayland xorg-xwayland</span><br></pre></td></tr></table></figure>
+
 <blockquote>
-<p>我们仨一拍脑门，高考完当天晚上就到了天津的滨海新区，准备第二天看日出</p>
+<p>NVIDIA 多装一个 <code>xorg-xrandr</code></p>
 </blockquote>
-<p><img src="/../../images/Gaokao/b.png"></p>
+<h4 id="开源中文字体安装"><a href="#开源中文字体安装" class="headerlink" title="开源中文字体安装"></a>开源中文字体安装</h4> <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">pacman -S ttf-dejavu wqy-microhei wqy-zenhei</span><br></pre></td></tr></table></figure>
+
+<h4 id="安装sudo"><a href="#安装sudo" class="headerlink" title="安装sudo"></a>安装sudo</h4> <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">pacman -S sudo</span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="添加用户并且提权"><a href="#添加用户并且提权" class="headerlink" title="添加用户并且提权"></a>添加用户并且提权</h2><h4 id="添加用户"><a href="#添加用户" class="headerlink" title="添加用户"></a>添加用户</h4> <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">useradd -m -G wheel Bruno</span><br></pre></td></tr></table></figure>
+
+<h4 id="密码"><a href="#密码" class="headerlink" title="密码"></a>密码</h4> <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">passwd Bruno</span><br></pre></td></tr></table></figure>
+
+<p> <code>visudo</code> 或者 <code>nano /etc/sudoers</code></p>
+<blockquote>
+<p>找到#%wheel ALL&#x3D;(ALL)ALL 按X去掉# :wq 保存退出</p>
+</blockquote>
+<h4 id="重启"><a href="#重启" class="headerlink" title="重启"></a>重启</h4> <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">reboot</span><br></pre></td></tr></table></figure>
+
+<p><strong>重启进来用user登录</strong></p>
+<h4 id="intel核显驱动"><a href="#intel核显驱动" class="headerlink" title="intel核显驱动"></a>intel核显驱动</h4><p><strong>已经过时，不要装这个</strong></p>
+<blockquote>
+<p>xf86-video-intel 是 Intel 的老驱动，已多年不维护，主要为 老款 Intel HD Graphics（Sandy Bridge 及以前） 设计</p>
+</blockquote>
+ <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">sudo pacman -S xf86-video-intel</span><br></pre></td></tr></table></figure>
+
+<p>开源驱动</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">sudo pacman -S mesa libva-intel-driver vulkan-intel</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>使用wayland的话推荐装</p>
+</blockquote>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">sudo pacman -S intel-media-driver</span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="安装桌面环境"><a href="#安装桌面环境" class="headerlink" title="安装桌面环境"></a>安装桌面环境</h2><blockquote>
+<p>本人是KDE的忠实教徒，如需其他桌面，请自行搜索</p>
+</blockquote>
+<h3 id="Plasma"><a href="#Plasma" class="headerlink" title="Plasma"></a>Plasma</h3> <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">sudo pacman -S plasma kde-applications</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>最小Plasma桌面 plasma-meta</p>
+</blockquote>
+<h4 id="锁屏"><a href="#锁屏" class="headerlink" title="锁屏"></a>锁屏</h4> <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">sudo pacman -S sddm</span><br></pre></td></tr></table></figure>
+
+<p>向 &#x2F;etc&#x2F;sddm.conf 中追加下面的内容。其中，QT_FONT_DPI 的值为你的 DPI 缩放数值 (计算方式是 96 乘以你的缩放比例，比如 150% 缩放则为 <code>144</code>)。QT_SCREEN_SCALE_FACTORS 的值为你需要的 DPI 缩放比例（比如，若为 150% 就直接填 <code>1.5</code>）,同时 sddm 登录界面不会自动将数字小键盘打开, sddm 的鼠标指针也可以更改一下</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">[General]</span><br><span class="line">GreeterEnvironment=QT_SCREEN_SCALE_FACTORS=1.5,QT_FONT_DPI=144</span><br><span class="line"></span><br><span class="line"># 打开数字小键盘</span><br><span class="line">Numlock=on</span><br><span class="line"></span><br><span class="line"># 修改鼠标指针，加入下面的设置</span><br><span class="line">[Theme]</span><br><span class="line">CursorTheme=breeze_cursors</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>修改完 HiDPI 设置之后可能需要重新启动系统。</p>
+</blockquote>
+<h4 id="开机自启动设置"><a href="#开机自启动设置" class="headerlink" title="开机自启动设置"></a>开机自启动设置</h4> <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">systemctl enable sddm</span><br></pre></td></tr></table></figure>
+
+<h4 id="笔记本电源管理"><a href="#笔记本电源管理" class="headerlink" title="笔记本电源管理"></a><strong>笔记本电源管理</strong></h4> <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">sudo pacman -S power-profiles-daemon</span><br></pre></td></tr></table></figure>
+<p> (需要启用 <code>power-profiles-daemon</code> 服务)</p>
+<h2 id="一些驱动"><a href="#一些驱动" class="headerlink" title="一些驱动"></a>一些驱动</h2><h4 id="音频"><a href="#音频" class="headerlink" title="音频"></a>音频</h4> <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">sudo pacman -S alsa-utils pipewire pipewire-alsa pipewire-pulse</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>有可能装完还是用不了，我这里为了方便，直接一站式，有可能需要装<code>sof-firmware</code>–开源音频驱动</p>
+</blockquote>
+<h4 id="中文输入法"><a href="#中文输入法" class="headerlink" title="中文输入法"></a>中文输入法</h4> <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">sudo pacman -S fcitx5 fcitx5-chinese-addons fcitx5-configtool fcitx5-gtk fcitx5-qt</span><br></pre></td></tr></table></figure>
+
+<h5 id="Wikipedia中文词库"><a href="#Wikipedia中文词库" class="headerlink" title="Wikipedia中文词库"></a>Wikipedia中文词库</h5> <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">sudo pacman -S fcitx5-pinyin-zhwiki</span><br></pre></td></tr></table></figure>
+
+<h5 id="搜狗拼音输入法的词库"><a href="#搜狗拼音输入法的词库" class="headerlink" title="搜狗拼音输入法的词库"></a>搜狗拼音输入法的词库</h5> <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">yay -S fcitx5-pinyin-sougou</span><br></pre></td></tr></table></figure>
+
+<p>编辑 <code>~/.xprofile</code> 和 <code>/etc/environment</code>文件</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line"></span><br><span class="line">export GTK_IM_MODULE=fcitx</span><br><span class="line"></span><br><span class="line">export QT_IM_MODULE=fcitx</span><br><span class="line"></span><br><span class="line">export XMODIFIERS=@im=fcitx</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<h5 id="fcitx5类似微软拼音的皮肤"><a href="#fcitx5类似微软拼音的皮肤" class="headerlink" title="fcitx5类似微软拼音的皮肤"></a>fcitx5类似微软拼音的皮肤</h5><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">sudo pacman -S fcitx5-material-color</span><br></pre></td></tr></table></figure>
+
+<h4 id="zsh"><a href="#zsh" class="headerlink" title="zsh"></a>zsh</h4><p>通过pacman安装zsh，然后将<a href="../../files/zshrc">此文件</a>的内容覆盖到~&#x2F;.zshrc中，完成配置。</p>
+<blockquote>
+<ul>
+<li>需要事先安装git命令</li>
+<li>使用<code>chsh -s /bin/zsh</code>来更改当前用户的默认终端</li>
+</ul>
+</blockquote>
+<p>ref:<a href="https://www.bwsl.wang/linux/34.html">Archlinux 安装笔记</a></p>
+<h4 id="rEFInd-–-多系统引导工具"><a href="#rEFInd-–-多系统引导工具" class="headerlink" title="rEFInd – 多系统引导工具"></a>rEFInd – 多系统引导工具</h4><p>安装 <code>refind</code>包</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">sudo pacman -S refind</span><br></pre></td></tr></table></figure>
+
+<p>执行安装命令:</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">refind-install</span><br></pre></td></tr></table></figure>
+<p>然后进入 <code>boot/EFI/refind</code> 将<a href="../../files/refind">此文件</a>中的内容覆盖 <code>refind.conf</code></p>
+<blockquote>
+<p>需要安装darkmini的refind主题才能正常使用，如果不想安装主题或者不想用darkmini，就把最后一行 <code>include themes/darkmini/theme-mini.conf</code> 注释掉或者修改成你想使用的主题</p>
+</blockquote>
+<p>ref: <a href="https://wiki.archlinuxcn.org/wiki/REFInd">rEFInd</a></p>
+<h2 id="ArchLinuxCN镜像源以及AUR"><a href="#ArchLinuxCN镜像源以及AUR" class="headerlink" title="ArchLinuxCN镜像源以及AUR"></a>ArchLinuxCN镜像源以及AUR</h2><p><strong>编辑&#x2F;etc&#x2F;pacman.conf</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">[archlinuxcn]</span><br><span class="line">Server = https://mirrors.cernet.edu.cn/archlinuxcn/$arch</span><br></pre></td></tr></table></figure>
+
+<p><strong>之后通过以下命令安装 archlinuxcn-keyring 包导入 GPG key</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">sudo pacman -Sy archlinuxcn-keyring</span><br></pre></td></tr></table></figure>
+
+<h3 id="安装AUR包管理器"><a href="#安装AUR包管理器" class="headerlink" title="安装AUR包管理器"></a>安装AUR包管理器</h3> <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">sudo pacman -Sy yay paru</span><br></pre></td></tr></table></figure>
 ]]></content>
       <categories>
-        <category>Article</category>
+        <category>Linux</category>
       </categories>
       <tags>
-        <tag>article</tag>
+        <tag>linux</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>KDE崩溃了怎么办</title>
+    <url>/posts/fff51a63.html</url>
+    <content><![CDATA[<h2 id="起因"><a href="#起因" class="headerlink" title="起因"></a>起因</h2><p>因为这个Wallpaper Engine暂时没有适配Linux端，所以我就一直在用这个第三方的插件</p>
+<blockquote>
+<p>因为SteamOS也是基于ArchLinux的，那我用Arch的，拿儿子点东西不过分哈</p>
+</blockquote>
+<p>ref： <a href="https://github.com/slynobody/SteamOS-wallpaper-engine-kde-plugin?tab=readme-ov-file">SteamOS-wallpaper-engine-kde-plugin</a></p>
+<p>然后有的壁纸用了会崩溃死机，以下几条命令或许能帮到你</p>
+<blockquote>
+<p>我已经全面迁移到了Wayland环境，如果用X11,请自行类比或退出自行搜索哈</p>
+</blockquote>
+<h2 id="开始"><a href="#开始" class="headerlink" title="开始"></a>开始</h2><h4 id="重启kwin"><a href="#重启kwin" class="headerlink" title="重启kwin"></a>重启kwin</h4><p>KDE桌面按下 <code>Alt+Space</code> 输入：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">kwin_wayland --replace</span><br></pre></td></tr></table></figure>
+
+<p>kwin就会重启，这时百分之八十的问题都能解决掉</p>
+<h4 id="还是不行？Plasma-Shell崩溃了？？"><a href="#还是不行？Plasma-Shell崩溃了？？" class="headerlink" title="还是不行？Plasma Shell崩溃了？？"></a>还是不行？Plasma Shell崩溃了？？</h4><p>如果在KDE桌面可以通过快捷键 <code>Ctrl+Alt+T</code> 快速打开 <code>Konsole</code></p>
+<p>或者 <code>Alt+Space</code> 然后搜索 <code>Konsole</code> 打开也可以</p>
+<p>以下命令重启 <code>plasmashell</code></p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">kstart5 plasmashell</span><br></pre></td></tr></table></figure>
+
+<p>有挂起的进程就先 <code>kill</code> 掉，再重启：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">killall plasmashell &amp;&amp; kstart5 plasmashell</span><br></pre></td></tr></table></figure>
+
+<h4 id="KDE小组件崩溃了？"><a href="#KDE小组件崩溃了？" class="headerlink" title="KDE小组件崩溃了？"></a>KDE小组件崩溃了？</h4><p>重启解决百分之九十九的问题</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">killall plasmashell &amp;&amp; kstart5 plasmashell</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">reboot</span><br></pre></td></tr></table></figure>
+
+<p><strong>以上方法简单粗暴，懵逼不伤脑</strong></p>
+<p><strong>祝好运</strong></p>
+]]></content>
+      <categories>
+        <category>Linux</category>
+      </categories>
+      <tags>
+        <tag>kde</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Archlinux安装指南</title>
+    <url>/posts/a907d758.html</url>
+    <content><![CDATA[<h2 id="初步配置"><a href="#初步配置" class="headerlink" title="初步配置"></a>初步配置</h2><h4 id="联网"><a href="#联网" class="headerlink" title="联网"></a>联网</h4> <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">dhcpcd/iwctl</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>iwctl:<br>device list<br>station ‘device’ scan<br>station ‘device’ get-networks<br>station ‘device’ connect ‘wlan’</p>
+</blockquote>
+<h4 id="更新ntp服务器"><a href="#更新ntp服务器" class="headerlink" title="更新ntp服务器"></a>更新ntp服务器</h4> <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">timdatectl set-ntp true</span><br></pre></td></tr></table></figure>
+
+<h2 id="分区及挂载"><a href="#分区及挂载" class="headerlink" title="分区及挂载"></a>分区及挂载</h2><blockquote>
+<p>此处演示p1:EFI p2:&#x2F;mnt p3:swap</p>
+</blockquote>
+<h4 id="查看目前磁盘，分区状况"><a href="#查看目前磁盘，分区状况" class="headerlink" title="查看目前磁盘，分区状况"></a>查看目前磁盘，分区状况</h4><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">lsblk</span><br></pre></td></tr></table></figure>
+
+<h4 id="分区"><a href="#分区" class="headerlink" title="分区"></a>分区</h4> <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">fdisk /dev/sdX / fdisk /dev/nvme0n1</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>m 查看命令<br>n 新建一个分区<br>g 转换GPT<br>t 更改分区类型：EFI:1  SWAP:19  Linux:20</p>
+</blockquote>
+<h4 id="格式化分区为FAT32格式"><a href="#格式化分区为FAT32格式" class="headerlink" title="格式化分区为FAT32格式"></a>格式化分区为FAT32格式</h4> <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">mkfs.fat -F32 /dev/nvme0n1p1</span><br></pre></td></tr></table></figure>
+
+<h4 id="格式化分区为EXT4格式"><a href="#格式化分区为EXT4格式" class="headerlink" title="格式化分区为EXT4格式"></a>格式化分区为EXT4格式</h4> <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">mkfs.ext4 /dev/nvme0n1p2</span><br></pre></td></tr></table></figure>
+
+<h4 id="格式化分区为SWAP格式"><a href="#格式化分区为SWAP格式" class="headerlink" title="格式化分区为SWAP格式"></a>格式化分区为SWAP格式</h4> <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">mkswap /dev/nvme0n1p3</span><br></pre></td></tr></table></figure>
+
+<h4 id="开启SWAP"><a href="#开启SWAP" class="headerlink" title="开启SWAP"></a>开启SWAP</h4> <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">swapon /dev/nvme0n1p3</span><br></pre></td></tr></table></figure>
+
+<h4 id="挂载根分区"><a href="#挂载根分区" class="headerlink" title="挂载根分区"></a>挂载根分区</h4> <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">mount /dev/nvme0n1p2 /mnt</span><br></pre></td></tr></table></figure>
+
+<h4 id="新建Boot文件夹"><a href="#新建Boot文件夹" class="headerlink" title="新建Boot文件夹"></a>新建Boot文件夹</h4> <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">mkdir /mnt/boot</span><br></pre></td></tr></table></figure>
+
+<h4 id="新建Home文件夹"><a href="#新建Home文件夹" class="headerlink" title="新建Home文件夹"></a>新建Home文件夹</h4> <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">mkdir /mnt/home</span><br></pre></td></tr></table></figure>
+
+<h4 id="挂载Boot分区"><a href="#挂载Boot分区" class="headerlink" title="挂载Boot分区"></a>挂载Boot分区</h4> <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">mount /dev/nvme0n1p1 /mnt/boot</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>如果有的话一个分区为了Home分区 <code>mount /dev/nvme0n1px /mnt/home</code></p>
+</blockquote>
+<h2 id="开始安装"><a href="#开始安装" class="headerlink" title="开始安装"></a>开始安装</h2><h4 id="编辑镜像源"><a href="#编辑镜像源" class="headerlink" title="编辑镜像源"></a>编辑镜像源</h4> <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">nano /etc/pacman.d/mirrorlist</span><br></pre></td></tr></table></figure>
+
+<h4 id="拉取镜像"><a href="#拉取镜像" class="headerlink" title="拉取镜像"></a>拉取镜像</h4> <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">pacstrap /mnt base base-devel linux linux-firmware vi nano</span><br></pre></td></tr></table></figure>
+
+<h4 id="更新分区表"><a href="#更新分区表" class="headerlink" title="更新分区表"></a>更新分区表</h4> <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">genfstab -U /mnt &gt;&gt; /mnt/etc/fstab</span><br></pre></td></tr></table></figure>
+
+<h4 id="检查分区表"><a href="#检查分区表" class="headerlink" title="检查分区表"></a>检查分区表</h4> <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">cat /mnt/etc/fstab</span><br></pre></td></tr></table></figure>
+
+<h4 id="下载基本软件"><a href="#下载基本软件" class="headerlink" title="下载基本软件"></a>下载基本软件</h4> <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">pacman -S vim networkmanager dhcpcd</span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="切换到本地"><a href="#切换到本地" class="headerlink" title="切换到本地"></a>切换到本地</h2> <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">arch-chroot /mnt</span><br></pre></td></tr></table></figure>
+
+<h4 id="更新本地时间"><a href="#更新本地时间" class="headerlink" title="更新本地时间"></a>更新本地时间</h4> <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">ln -sf /usr/share/zoneinfo/Asia/Shanghai /etc/localtime</span><br></pre></td></tr></table></figure>
+
+ <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">hwclock --systohc</span><br></pre></td></tr></table></figure>
+
+<h4 id="编辑locale-gen"><a href="#编辑locale-gen" class="headerlink" title="编辑locale.gen"></a>编辑locale.gen</h4> <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">nano /etc/locale.gen</span><br></pre></td></tr></table></figure>
+
+<p><strong>找到 <code>en_US.UTF-8</code> 和 <code>zh_CN.UTF-8</code> 去掉前面的#</strong></p>
+<h4 id="更新"><a href="#更新" class="headerlink" title="更新"></a>更新</h4> <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">locale-gen</span><br></pre></td></tr></table></figure>
+
+<h4 id="编辑locale-conf文件"><a href="#编辑locale-conf文件" class="headerlink" title="编辑locale.conf文件"></a>编辑locale.conf文件</h4> <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">nano /etc/locale.conf</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>写入 <code>LANG=en_US.UTF-8</code></p>
+</blockquote>
+<h4 id="设置root密码"><a href="#设置root密码" class="headerlink" title="设置root密码"></a>设置root密码</h4> <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">passwd</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>不显示密码是正常情况</p>
+</blockquote>
+<h4 id="下载基本软件-1"><a href="#下载基本软件-1" class="headerlink" title="下载基本软件"></a>下载基本软件</h4> <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">pacman -S dialog wpa_supplicant ntfs-3g</span><br></pre></td></tr></table></figure>
+
+<h4 id="安装CPU驱动"><a href="#安装CPU驱动" class="headerlink" title="安装CPU驱动"></a>安装CPU驱动</h4><h5 id="intel"><a href="#intel" class="headerlink" title="intel"></a>intel</h5> <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">pacman -S intel-ucode</span><br></pre></td></tr></table></figure>
+
+<h5 id="amd"><a href="#amd" class="headerlink" title="amd"></a>amd</h5> <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">pacman -S amd-ucode</span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="安装引导"><a href="#安装引导" class="headerlink" title="安装引导"></a>安装引导</h2> <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">pacman -S grub efibootmgr</span><br></pre></td></tr></table></figure>
+
+<h4 id="多系统引导"><a href="#多系统引导" class="headerlink" title="多系统引导"></a>多系统引导</h4> <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">pacman -S os-prober</span><br></pre></td></tr></table></figure>
+
+<h4 id="UEFI引导"><a href="#UEFI引导" class="headerlink" title="UEFI引导"></a>UEFI引导</h4> <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">grub-install --target=x86_64-efi --efi-directory=/boot --bootloader=ArchLinux</span><br></pre></td></tr></table></figure>
+
+<h4 id="更新grub"><a href="#更新grub" class="headerlink" title="更新grub"></a>更新grub</h4> <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">grub-mkconfig -o /boot/grub/grub.cfg</span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="至此-安装结束"><a href="#至此-安装结束" class="headerlink" title="至此 安装结束"></a><strong>至此 安装结束</strong></h2><h4 id="退出"><a href="#退出" class="headerlink" title="退出"></a>退出</h4> <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">exit</span><br></pre></td></tr></table></figure>
+
+<h4 id="重启"><a href="#重启" class="headerlink" title="重启"></a>重启</h4> <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">reboot</span><br></pre></td></tr></table></figure>
+
+]]></content>
+      <categories>
+        <category>Linux</category>
+      </categories>
+      <tags>
+        <tag>linux</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>KDE美化教程</title>
+    <url>/posts/a3d041ec.html</url>
+    <content><![CDATA[<h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>KDE是我接触Linux以来接触的较早，并且最多的一个桌面环境了。几乎每次安装所有系统，我都是首选KDE</p>
+<p>原因就在于其友好，强大，美观，操作逻辑简单。</p>
+<p>再离开Linux这一年，没想到已经更新到了KDE6，刚回归的时候也走了一些弯路，现在我将制作一个教程以便自己的使用，也欢迎大家参考！</p>
+<h2 id="效果"><a href="#效果" class="headerlink" title="效果"></a>效果</h2><p><img src="/../../images/KDE/a.png"></p>
+<p>插件极少，相对来讲确实有点macOS那个感觉？</p>
+<h2 id="教程"><a href="#教程" class="headerlink" title="教程"></a>教程</h2><h3 id="Dock"><a href="#Dock" class="headerlink" title="Dock"></a>Dock</h3><h4 id="底部dock"><a href="#底部dock" class="headerlink" title="底部dock"></a>底部dock</h4><p><img src="/../../images/KDE/b.png"></p>
+<p>启动器图标:<a href="https://github.com/JotaRandom/archlinux-artwork">archlinux-artwork</a></p>
+<h4 id="顶部应用程序菜单栏"><a href="#顶部应用程序菜单栏" class="headerlink" title="顶部应用程序菜单栏"></a>顶部应用程序菜单栏</h4><p><img src="/../../images/KDE/c.png"><br><strong>顶部按顺序</strong></p>
+<p>bar-全局菜单-间距-系统托盘-数字时钟-搜索-注销</p>
+<p>插件就两个，一个是 <code>Panel colorizer</code> 另一个是 <code>Application Title Bar</code> 都可以在KDE自带的官方插件商店找到</p>
+<h4 id="Panel-colorizer改底部dock-背景去掉"><a href="#Panel-colorizer改底部dock-背景去掉" class="headerlink" title="Panel colorizer改底部dock,背景去掉"></a>Panel colorizer改底部dock,背景去掉</h4><h4 id="Application-Title-Bar设置如下"><a href="#Application-Title-Bar设置如下" class="headerlink" title="Application Title Bar设置如下"></a>Application Title Bar设置如下</h4><p><img src="/../../images/KDE/d.png"><br><img src="/../../images/KDE/e.png"></p>
+<h3 id="系统配色"><a href="#系统配色" class="headerlink" title="系统配色"></a>系统配色</h3><p>就这个 <a href="http://github.com/vinceliuice/WhiteSur-kde">WhiteSur-kde</a></p>
+<p>系统设置中—颜色与主题</p>
+<ul>
+<li>全局主题我选的Breeze微风</li>
+<li>颜色和Plasma外观样式我选择的是WhiteSur-alt 苹果</li>
+</ul>
+<h3 id="特效"><a href="#特效" class="headerlink" title="特效"></a>特效</h3><p>系统设置中—窗口管理—桌面特效</p>
+<ul>
+<li>惯性晃动</li>
+<li>粉碎动画</li>
+<li>背景虚化<br><img src="/../../images/KDE/g.png"></li>
+<li>窗口透明度<blockquote>
+<p>这个之前调的时候好像有bug？反正我没动</p>
+</blockquote>
+</li>
+<li>最小过渡动画-神灯</li>
+<li>窗口后滑动效</li>
+</ul>
+<h3 id="终端"><a href="#终端" class="headerlink" title="终端"></a>终端</h3><p><img src="/../../images/KDE/h.png"></p>
+<p>终端字体：<a href="../../files/ttf.zip">点击下载</a></p>
+<p>ref: <a href="https://github.com/ryanoasis/nerd-fonts">nerd-fonts</a></p>
+<p>neofetch配置文件<a href="../../files/neofetch">点击下载</a><br>里边的内容替换 <code>~/.config/neofetch/config.conf</code><br><img src="/../../images/KDE/i.png"><br>ref: <a href="https://github.com/Chick2D/neofetch-themes">neofetch-themes</a></p>
+<h3 id="壁纸"><a href="#壁纸" class="headerlink" title="壁纸"></a>壁纸</h3><p>鄙人倒是收集了一些壁纸，可以直接clone下来</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">git clone https://github.com/k7tmiz/WallPaper.git</span><br></pre></td></tr></table></figure>
+
+<hr>
+<p>以后还能想起啥再补吧…</p>
+]]></content>
+      <categories>
+        <category>Linux</category>
+      </categories>
+      <tags>
+        <tag>kde</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Switch-SteamLibrary</title>
+    <url>/posts/2a1b98b0.html</url>
+    <content><![CDATA[<h1 id="Switch-SteamLibrary"><a href="#Switch-SteamLibrary" class="headerlink" title="Switch-SteamLibrary"></a>Switch-SteamLibrary</h1><blockquote>
+<p>这是一个用于电脑中有多Linux系统，并且希望自己的游戏统一存放在NTFS格式盘的小脚本。它旨在可以让你的多Linux系统，包括Windows都可以调用一个同一个Steam游戏库的小脚本。</p>
+</blockquote>
+<h3 id="使用说明"><a href="#使用说明" class="headerlink" title="使用说明:"></a>使用说明:</h3><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">git clone https://github.com/k7tmiz/Switch-SteamLibrary.git</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">cd Switch-SteamLibrary</span><br></pre></td></tr></table></figure>
+
+<h4 id="使用文本编辑器进行编辑"><a href="#使用文本编辑器进行编辑" class="headerlink" title="使用文本编辑器进行编辑"></a>使用文本编辑器进行编辑</h4><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">sudo vim setup_steam_link.sh</span><br></pre></td></tr></table></figure>
+
+<p><strong>STEAM_DIR</strong>：代表你当前系统steam所在的地址  </p>
+<p><strong>SHARED_DIR</strong>：代表你想调用的游戏库地址  </p>
+<p><strong>只须调整这两个参数便可以正常使用该脚本</strong>  </p>
+<h4 id="提权"><a href="#提权" class="headerlink" title="提权"></a>提权</h4><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">chmod +x ./setup_steam_link.sh</span><br></pre></td></tr></table></figure>
+
+<h4 id="运行"><a href="#运行" class="headerlink" title="运行"></a>运行</h4><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">./setup_steam_link.sh</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>参考：<a href="https://github.com/ValveSoftware/Proton/wiki/Using-a-NTFS-disk-with-Linux-and-Windows">Proton-Wiki</a></p>
+</blockquote>
+]]></content>
+      <categories>
+        <category>Linux</category>
+      </categories>
+      <tags>
+        <tag>tech</tag>
+        <tag>steam</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Linux使用Wayland协议下微信无法正常调用Fcitx5的中文输入法解决办法</title>
+    <url>/posts/ac1a683e.html</url>
+    <content><![CDATA[<h2 id="我的环境"><a href="#我的环境" class="headerlink" title="我的环境"></a>我的环境</h2><p>我在用ArchLinux的时候没有遇到这个问题，但是今天突发奇想，想在Fedora42+KDE+Wayland上打游戏的时候，发现自己的微信无法正常调用fcitx5的中文输入法，故来这里记录分享一下自己的经验</p>
+<p>废话不多说，直接上图！<br><img src="/../../images/Fcitx5wx/a.png"></p>
+<p>添加环境变量：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">QT_SCALE_FACTOR=1.5 GTK_IM_MODULE=fcitx QT_IM_MODULE=fcitx</span><br></pre></td></tr></table></figure>
+
+<p>第一个是缩放，因为楼主的电脑是HiDPI屏幕，所以需要缩放1.5倍。后两个就是配置fcitx5的工具，亲测可用！</p>
+]]></content>
+      <categories>
+        <category>Linux</category>
+      </categories>
+      <tags>
+        <tag>tech</tag>
+        <tag>fcitx5</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>在Linux上优雅的使用Wemod</title>
+    <url>/posts/400b687c.html</url>
+    <content><![CDATA[<h2 id="引言"><a href="#引言" class="headerlink" title="引言"></a>引言</h2><p>最近在玩Escape the backroom,里边那个耐力真的很难受,所以开了个无限耐力的,但是我不想在windows下游玩,我就去找了一下linux下的wemod的替代品,结果找到了这个项目<a href="https://github.com/DeckCheatz/wemod-launcher">wemod-launcher</a>,现在想写一篇博客介绍一下怎么使用它</p>
+<h2 id="教程"><a href="#教程" class="headerlink" title="教程"></a>教程</h2><p>首先我们需要一个 <code>Python容器</code> ,在linux下我使用的是 <code>python-venv</code> 以下演示基于ArchLinux</p>
+<h4 id="1-先装所需的依赖包"><a href="#1-先装所需的依赖包" class="headerlink" title="1. 先装所需的依赖包"></a>1. 先装所需的依赖包</h4><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">sudo pacman -Sy tk</span><br></pre></td></tr></table></figure>
+
+<p>然后把项目拉到本地</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">git clone https://github.com/DeckCheatz/wemod-launcher.git</span><br></pre></td></tr></table></figure>
+
+<p>创建一个虚拟容器</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">python -m venv wemod-launcher</span><br></pre></td></tr></table></figure>
+
+<p>切换</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">source wemod-launcher/bin/activate.fish</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>因为我用的是fish所以这里用.fish,如果</p>
+</blockquote>
+<p>这时你的python容器和wemod容器在同一个文件夹中</p>
+<h4 id="2-GE-Proton"><a href="#2-GE-Proton" class="headerlink" title="2.  GE-Proton"></a>2.  GE-Proton</h4><p>建议使用GE-Proton,通过 <code>Protonup-qt</code> 来安装GE-Proton</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">yay -S protonup-qt</span><br></pre></td></tr></table></figure>
+
+<h3 id="3-重启"><a href="#3-重启" class="headerlink" title="3. 重启"></a>3. 重启</h3><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">reboot</span><br></pre></td></tr></table></figure>
+
+<h4 id="4-准备"><a href="#4-准备" class="headerlink" title="4. 准备"></a>4. 准备</h4><p>先查看 <code>wemod-launcher</code> 的目录</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">readlink -f wemod-launcher</span><br></pre></td></tr></table></figure>
+
+<p>改成可执行权限</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">chmod -R ug+x wemod-launcher</span><br></pre></td></tr></table></figure>
+
+<h4 id="5-更改设置"><a href="#5-更改设置" class="headerlink" title="5. 更改设置"></a>5. 更改设置</h4><ul>
+<li><p>在Steam库中,兼容性选项中,强制使用你刚才下载的GE-Proton版本</p>
+</li>
+<li><p>在 <code>Launch Options （启动选项 </code>） 下，输入 <code>{path/to/wemod-launcher}/wemod %command%</code></p>
+</li>
+</ul>
+<h4 id="6-开游戏"><a href="#6-开游戏" class="headerlink" title="6. 开游戏"></a>6. 开游戏</h4><ul>
+<li><p>如果 “copy prefix question” 出现并显示 <code>might work</code> ，请选择 “no”</p>
+</li>
+<li><p>如果它提到 <code>可能有效</code> （或更好），就可以直接安全地忽略所有 rundll32.exe 错误（通过单击 <code>no</code>）</p>
+</li>
+<li><p>选择 <code>Download</code> </p>
+</li>
+<li><p>选择 Yes&#x2F;Ok 直到不再显示窗口</p>
+</li>
+<li><p>可以安全地忽略所有 rundll32.exe 错误（通过单击 <code>no</code>）</p>
+</li>
+</ul>
+<blockquote>
+<p>Wemod应该能启动了</p>
+</blockquote>
+<h4 id="7-登录Wemod-仅一次"><a href="#7-登录Wemod-仅一次" class="headerlink" title="7. 登录Wemod (仅一次)"></a>7. 登录Wemod (仅一次)</h4><h4 id="现在你应该就可以正常使用你的Wemod来爽快的进行游戏了"><a href="#现在你应该就可以正常使用你的Wemod来爽快的进行游戏了" class="headerlink" title="现在你应该就可以正常使用你的Wemod来爽快的进行游戏了"></a>现在你应该就可以正常使用你的Wemod来爽快的进行游戏了</h4><blockquote>
+<p>遇到问题请自行查看: <a href="https://github.com/DeckCheatz/wemod-launcher/wiki/Config-Usage">Config Usage</a></p>
+</blockquote>
+]]></content>
+      <categories>
+        <category>Linux</category>
+      </categories>
+      <tags>
+        <tag>tech</tag>
+        <tag>gaming</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>在Linux上优雅的使用Zotero</title>
+    <url>/posts/9ccc8650.html</url>
+    <content><![CDATA[<h2 id="引言"><a href="#引言" class="headerlink" title="引言"></a>引言</h2><p>由于我选的一个课需要我现在大一就写论文，我就在寻找在Linux上的文献管理方案。在gitee上找到了一个项目<a href="https://gitee.com/wangrui5015/Zotero-WPSJS">Zotero-WPSJS</a></p>
+<p>感谢大佬的付出</p>
+<h2 id="教程"><a href="#教程" class="headerlink" title="教程"></a>教程</h2><ul>
+<li>安装</li>
+<li>Clone项目</li>
+<li>安装插件</li>
+<li>Chrome插件(可选)</li>
+</ul>
+<h3 id="安装"><a href="#安装" class="headerlink" title="安装"></a>安装</h3><p>首先在你使用的发行版上安装Zotero</p>
+<p>Arch:</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">yay -S zotero-bin</span><br></pre></td></tr></table></figure>
+
+<p>Flatpak(没有尝试过，不确保可用):</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">flatpak install flathub org.zotero.Zotero</span><br></pre></td></tr></table></figure>
+
+<h3 id="Clone项目"><a href="#Clone项目" class="headerlink" title="Clone项目"></a>Clone项目</h3><p><a href="https://gitee.com/wangrui5015/Zotero-WPSJS">Zotero-WPSJS</a></p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">git clone https://gitee.com/wangrui5015/Zotero-WPSJS.git</span><br></pre></td></tr></table></figure>
+
+<p>挂载进目录，然后</p>
+<h3 id="安装插件"><a href="#安装插件" class="headerlink" title="安装插件"></a>安装插件</h3><p>安装</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">python install.py</span><br></pre></td></tr></table></figure>
+
+<p><img src="/../../images/Zotero/a.png"></p>
+<p><strong>WPS中的效果：</strong></p>
+<blockquote>
+<p>记得按提示给JS插件权限</p>
+</blockquote>
+<p><img src="/../../images/Zotero/b.png"></p>
+<h3 id="Chrome插件-可选"><a href="#Chrome插件-可选" class="headerlink" title="Chrome插件(可选)"></a>Chrome插件(可选)</h3><p><img src="/../../images/Zotero/c.png"></p>
+]]></content>
+      <categories>
+        <category>Linux</category>
+      </categories>
+      <tags>
+        <tag>tech</tag>
+        <tag>zotero</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>如何在Linux下优雅的使用网易云音乐</title>
+    <url>/posts/e85c1bad.html</url>
+    <content><![CDATA[<h2 id="目前我所知晓的方法有几种"><a href="#目前我所知晓的方法有几种" class="headerlink" title="目前我所知晓的方法有几种"></a>目前我所知晓的方法有几种</h2><ul>
+<li>网页端网易云</li>
+<li>用electron封装网页版</li>
+<li>第三方客户端(如yesplayer,splayer等)</li>
+<li>下载到本地用音乐播放器播放</li>
+<li>用wine安装Windows版本</li>
+</ul>
+<blockquote>
+<p>这里网页端的使用方法就不多赘述了，直接点击 <a href="https://music.163.com/">网易云音乐</a> 便可进入网页端</p>
+</blockquote>
+<h2 id="这里我们说说后几种方法"><a href="#这里我们说说后几种方法" class="headerlink" title="这里我们说说后几种方法"></a>这里我们说说后几种方法</h2><h3 id="首先用electron封装"><a href="#首先用electron封装" class="headerlink" title="首先用electron封装"></a>首先用electron封装</h3><p>不要害怕，我其实有写过一篇帖子来介绍怎么使用一个工具名叫 <code>Nativerfier</code> 的封装工具</p>
+<p>帖子如下： <a href="https://k7tmiz.com/posts/b56059f9.html">Nativefier 使用教程</a></p>
+<p>我没有尝试过把网易云网页版封装成electron程序，我其实更推荐后几种方案…</p>
+<h3 id="第三方客户端"><a href="#第三方客户端" class="headerlink" title="第三方客户端"></a>第三方客户端</h3><p>以Arch Linux为例 我推荐以下几个App(按顺序)：
+	</p>
+<ol>
+<li><p>Splayer 项目地址：<a href="https://github.com/imsyy/SPlayer">Splayer</a></p>
+ <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">yay -S splayer-git</span><br></pre></td></tr></table></figure></li>
+</ol>
+<p>一款极其简约好用的音乐播放器，功能丰富操作简单直接，多系统可用，我就通过的AppImage来进行了安装，当然它也被收录到了AUR，我十分喜爱这款软件！</p>
+<ol start="2">
+<li>FeelUOwn 项目地址：<a href="https://github.com/feeluown/FeelUOwn">FeelUOwn</a></li>
+</ol>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">yay -S feeluown          # 安装稳定版，最新版的包名为 feeluown-git</span><br><span class="line">yay -S feeluown-netease  # 按需安装其它扩展</span><br><span class="line">yay -S feeluown-ytmusic</span><br><span class="line">yay -S feeluown-bilibili</span><br></pre></td></tr></table></figure>
+
+
+<p>一个稳定、用户友好以及高度可定制的音乐播放器。基于文本的歌单，方便与朋友分享、设备之间同步。一键安装，各流行平台均有打包（如 Arch Linux, Windows, macOS 等）但是在我的Arch上使用，会出现网易云无法正常登录的情况，我不知道是个例还是什么情况…但是我仍然认为他的可拓展性很强，值得一个第二<br>	<br>3. YesPlayMusic 项目地址：<a href="https://github.com/qier222/YesPlayMusic">YesPlayMusic</a></p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">yay -S yesplaymusic</span><br></pre></td></tr></table></figure>
+
+<p>高颜值的第三方网易云播放器，支持 Windows &#x2F; macOS &#x2F; Linux ，是我第一款开始使用的软件，问题是偶尔会掉线，然后颜值很高，很简约，但是作者似乎不咋打算更新新功能了，包会有点旧，介意的选前两个(我三个都要😋)</p>
+<hr>
+<h3 id="下载到本地然后用播放器不用过多赘述了"><a href="#下载到本地然后用播放器不用过多赘述了" class="headerlink" title="下载到本地然后用播放器不用过多赘述了"></a>下载到本地然后用播放器不用过多赘述了</h3><hr>
+<h3 id="接下来用讲讲如何wine安装Windows版本的网易云"><a href="#接下来用讲讲如何wine安装Windows版本的网易云" class="headerlink" title="接下来用讲讲如何wine安装Windows版本的网易云"></a>接下来用讲讲如何wine安装Windows版本的网易云</h3><h4 id="优势：体验完美，功能齐全，不用担心掉号，不用担心被检测第三方等等，还有HiDPI支持"><a href="#优势：体验完美，功能齐全，不用担心掉号，不用担心被检测第三方等等，还有HiDPI支持" class="headerlink" title="优势：体验完美，功能齐全，不用担心掉号，不用担心被检测第三方等等，还有HiDPI支持"></a>优势：体验完美，功能齐全，不用担心掉号，不用担心被检测第三方等等，还有HiDPI支持</h4><h4 id="劣势：配置麻烦，转译后可能会有一定的性能损耗"><a href="#劣势：配置麻烦，转译后可能会有一定的性能损耗" class="headerlink" title="劣势：配置麻烦，转译后可能会有一定的性能损耗"></a>劣势：配置麻烦，转译后可能会有一定的性能损耗</h4><hr>
+<h4 id="效果如下："><a href="#效果如下：" class="headerlink" title="效果如下："></a>效果如下：</h4><p><img src="/../../images/CloudMusicOnLinux/a.png"></p>
+<p>KDE的系统托盘也能正常识别使用</p>
+<p><img src="/../../images/CloudMusicOnLinux/b.png"></p>
+<h4 id="开始教学："><a href="#开始教学：" class="headerlink" title="开始教学："></a>开始教学：</h4><p>首先Arch的话通过AUR安装 <code>bottles</code> 这个包</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">yay -S bottles</span><br></pre></td></tr></table></figure>
+
+<p>Flatpak通过这个命令安装</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">flatpak install flathub com.usebottles.bottles</span><br></pre></td></tr></table></figure>
+
+<p>安装好以后打开它，等加载一会</p>
+<p>左上角➕号新建一个Bottle，名字随便写,类型选择游戏,运行器选择 <code>wine10</code></p>
+<p><img src="/../../images/c.png"></p>
+<p>点击运行可执行文件，选择<a href="https://music.163.com/#/download">官网直链下载</a>下载下来的exe文件</p>
+<p><img src="/../../images/CloudMusicOnLinux/d.png"></p>
+<p>安装后可以在下面直接打开,也可以添加快捷方式到应用程序菜单中</p>
+<p><img src="/../../images/CloudMusicOnLinux/e.png"></p>
+<h4 id="HiDPI"><a href="#HiDPI" class="headerlink" title="HiDPI"></a>HiDPI</h4><p>点击设置</p>
+<p><img src="/../../images/CloudMusicOnLinux/f.png"></p>
+<p>高级显示设置</p>
+<p><img src="/../../images/CloudMusicOnLinux/g.png"></p>
+<p>倍数用0.96乘你需要的,这里我需要150%,150x96%&#x3D;144</p>
+<p><img src="/../../images/CloudMusicOnLinux/h.png"></p>
+<p>ref： <a href="https://renil.cc/archives/47/">网易云音乐最新版 Wine方案 （网易云Beta）</a></p>
+<blockquote>
+<p>完善于2025年7月29日</p>
+</blockquote>
+]]></content>
+      <categories>
+        <category>Linux</category>
+      </categories>
+      <tags>
+        <tag>tech</tag>
       </tags>
   </entry>
   <entry>
@@ -1854,6 +1561,226 @@
       </tags>
   </entry>
   <entry>
+    <title>我与计算机的故事</title>
+    <url>/posts/d773eb13.html</url>
+    <content><![CDATA[<p>我是一个行走在文理边界上的旅人，心中始终燃烧着对计算机世界的恒久热爱。</p>
+<p>我的故事，始于北京的家中。</p>
+<p>父母工作繁忙，陪伴我成长的，是家里那两台早早备下的电脑。或许这算得上一种时代的馈赠，让我在懵懂的年纪便与数字世界结缘。那时的热爱简单而纯粹——查资料、玩游戏、折腾软件。至于服务器、Linux、编程这些更深的概念，还远在认知的地平线之外。</p>
+<p>直到初中。</p>
+<p>某一天，我在视频中第一次看见了 Linux 的世界。那种与 Windows 完全不同的系统结构与操作方式，让我产生了一种难以言说的好奇。像是无意间推开了一扇门，我开始试着迈进去看看。</p>
+<p>我安装的第一个 Linux 发行版，是 <strong>Deepin</strong>。</p>
+<p>大约是在 <strong>2018 年，Deepin 15 的时代</strong>。那时的 DDE 桌面还没有如今这般复杂，界面简洁，风格优雅。直到今天，我依然会偶尔关注 Deepin 的更新，比如现在的 <strong>Deepin 25</strong>。看着它一点点变化，总会生出一种奇妙的感慨。</p>
+<p>不过 Deepin 并没有成为终点。</p>
+<p>很快，我被 <strong>Arch Linux</strong> 的理念吸引了。</p>
+<p>“简单、现代、实用。”</p>
+<p>那种几乎带着一点极客气质的系统哲学，在当时的我看来格外迷人。不过第一次接触 Arch，我多少还是有些谨慎，于是选择了基于 Arch 的发行版 <strong>Manjaro + KDE</strong> 作为过渡。</p>
+<p>也正是在那段时间，我和 <strong>KDE Plasma</strong> 结下了某种长期的缘分。</p>
+<p>从那次与 Manjaro 的邂逅开始，KDE 就像一位默契的老朋友。无论我后来换过多少发行版，它总会在某个时刻重新出现。</p>
+<p>至于后来究竟是因为什么最终真正投入 Arch Linux 的怀抱——</p>
+<p>是 Arch 那极具设计感的图标？<br>还是当年 Manjaro 偶尔出现的“滚挂”风波？</p>
+<p>如今已经有些记不清了。</p>
+<p>总之，从那之后，<strong>Arch Linux 逐渐成为了我的主力系统</strong>。</p>
+<p>那是一段相当狂热的时期。我开始不断尝试各种 Linux 发行版：</p>
+<ul>
+<li>Kali</li>
+<li>elementaryOS</li>
+<li>PopOS</li>
+<li>FydeOS</li>
+<li>等等等等……</li>
+</ul>
+<p>至于许多发行版例如 <strong>Linux Mint</strong>，它们只在虚拟机中短暂地停留过一段时间。</p>
+<p>如今再回头看，我已记不起我到底重装过几次系统，用过多少个发行版。</p>
+<p>但也是因为在那个阶段，我的兴趣逐渐向更深处延伸。</p>
+<p>我开始接触 <strong>服务器</strong> 与 <strong>编程</strong>。</p>
+<p>初中时期，我学习了 <strong>C++</strong>。<br>而在 <strong>初三毕业的那个暑假</strong>，我又拥抱了 <strong>Python</strong>。</p>
+<p>服务器系统方面，我曾经非常喜欢 <strong>CentOS 7</strong>。<br>后来随着它的发展路线发生变化，我逐渐转向 <strong>Debian</strong>。</p>
+<p>从 <strong>Debian 9 到 Debian 12</strong>，我几乎都亲身经历过。</p>
+<p>进入高中之后，生活节奏开始改变。</p>
+<p>疫情时代的网课需求突然增加，而 Linux 对腾讯会议等工具的支持当时还不够完善。再加上学业压力逐渐加重，可以自由折腾系统的时间越来越少。</p>
+<p>但那份热爱始终没有真正消失。</p>
+<p>那台老旧的电脑上，依旧保持着<strong>Arch Linux 与 Windows 双系统</strong>。我仍然会在某个闲暇的夜晚，打开终端，敲下那条熟悉的命令：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">sudo pacman -Syu</span><br></pre></td></tr></table></figure>
+
+<p>有趣的是，一直到高三毕业，这个系统竟然从未真正“滚挂”。<br>它安静而稳定地陪伴了我整整三年。</p>
+<p>大学开始之后，新电脑到手。</p>
+<p>那时候电脑的主要用途变成了游戏，再加上我是文科生，于是 <strong>Windows 再次成为主角</strong>。那段时间里，我几乎很少再折腾系统。</p>
+<p>直到某一天。</p>
+<p>Windows 在一次关机之后并没有真正休眠，而是在背包里“空转”了整整一个月。等我再次打开电脑时，屏幕上只剩下一片花屏。</p>
+<p>进入 <strong>PE 环境</strong> 排查之后确认是系统问题，仅仅是官方驱动的安装与调试，就花费了整整一天。</p>
+<p>这次并不愉快的经历，加上 Windows 的强制更新、“假休眠”导致的风扇狂转，以及各种我被当作“宝宝”一样过度保护的设计——</p>
+<p>终于再次唤醒了我对 <strong>Linux 开源，自由精神</strong>的怀念。</p>
+<p>于是行动变得异常迅速。</p>
+<p>我买了一块新的硬盘。</p>
+<p><strong>十分钟之后，Arch Linux 安装完成。</strong></p>
+<p>那种熟悉的感觉几乎是瞬间回来了。</p>
+<p>不过世界也已经改变。</p>
+<p>KDE 完成了重要的版本演进；<br>Steam 正在重新塑造 Linux 游戏生态；<br>许多新的工具与技术不断出现。</p>
+<p>曾经积累的很多经验，已经不再完全适用。</p>
+<p>但这并没有让我沮丧，反而重新点燃了探索的欲望。</p>
+<p>再次深入之后，我发现整个生态早已不同：</p>
+<ul>
+<li>原生 Linux 版微信不再只是梦想</li>
+<li>QQ 也开始认真对待 Linux 用户</li>
+<li>Valve 通过 <strong>SteamDeck（搭载 Arch 系 SteamOS）</strong> 与 <strong>Proton</strong> 极大推动了 Linux 游戏生态</li>
+<li>UOS 在政企领域的推广，也让国内 Linux 用户整体受益</li>
+</ul>
+<p>如今，在 Linux 上畅玩游戏，早已不再是一件需要自嘲的事情。</p>
+<p>这也让我重新燃起了体验不同发行版的兴趣：</p>
+<ul>
+<li>openSUSE Tumbleweed 的优雅滚动</li>
+<li>Ubuntu 的庞大生态</li>
+<li>Fedora 的前沿特性</li>
+<li>openSUSE Leap 的稳健</li>
+<li>Debian 12 的纯粹</li>
+<li>NixOS 那近乎革命性的理念</li>
+</ul>
+<p>有趣的是，尽管我长期管理 <strong>Debian &#x2F; Ubuntu 服务器</strong>，桌面端却始终没有真正深入使用过原生 Debian。</p>
+<hr>
+<h2 id="我的设备"><a href="#我的设备" class="headerlink" title="我的设备"></a>我的设备</h2><p>如今，我的数字世界由两台电脑组成。</p>
+<p><strong>轻薄本</strong></p>
+<ul>
+<li>MacBook Air（主力）</li>
+</ul>
+<p><strong>游戏本</strong></p>
+<ul>
+<li>Arch Linux（主力系统）</li>
+<li>Fedora 43</li>
+<li>Windows 11（备用）</li>
+</ul>
+<p>相比过去动辄四五个系统的年代，现在的设备已经经历了一轮彻底的优化。系统数量减少了，但使用体验反而更加从容。</p>
+<p>或许，这正是折腾多年之后的一种平衡。</p>
+<hr>
+<h2 id="更新记录"><a href="#更新记录" class="headerlink" title="更新记录"></a>更新记录</h2><p>本文最初完善于 <strong>2025 年 6 月 25 日</strong>。</p>
+<p><strong>2025 年 7 月 20 日</strong>，游戏本上的 <strong>openSUSE Tumbleweed</strong> 在一次 <code>zypper dup</code> 更新中因为驱动问题“壮烈牺牲”。借此机会，我也重新审视了自己的系统结构，并将系统数量精简为三个：</p>
+<ul>
+<li>Arch Linux</li>
+<li>Fedora</li>
+<li>Windows 11</li>
+</ul>
+<p><strong>2025年8月13日</strong>，我换了一台轻薄本机械革命无界 14X Pro 2025 AI9 H365 32G+1T的最高配版本，遗憾的是其BIOS并不完善，没有做对Linux的支持，导致无线网卡无法正常在Linux环境下驱动。被迫在用Windows 11。这时候也把之前的洋垃圾轻薄本卖掉了。</p>
+<p><strong>2026年3月6日</strong>，通过国补以及以旧换新补贴，机械革命正式退役，换成了MacBook Air。</p>
+<p>折腾仍在继续，但设备与系统组合，也逐渐走向稳定。</p>
+]]></content>
+      <categories>
+        <category>Article</category>
+      </categories>
+      <tags>
+        <tag>article</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>谈谈我为什么开始拥抱苹果</title>
+    <url>/posts/fbd23e1d.html</url>
+    <content><![CDATA[<p>如标题所见，我放弃了所谓“开放”的安卓阵营，也逐渐离开了那个我非常熟悉的 Windows 世界。与此同时，我还买了 <strong>AirPods Pro 3</strong>，甚至一度认真考虑过 <strong>Apple Watch</strong>。</p>
+<p>听到这里，很多人第一反应大概都是：这人是不是疯了</p>
+<p>毕竟在不少人的理解里，苹果生态就是一套“消费陷阱”，一旦进去就很难出来。</p>
+<p>但事情其实没那么复杂。</p>
+<p>这只是我在不断尝试之后，慢慢找到的一套 <strong>更适合自己的工具组合</strong>。</p>
+<h2 id="我不是一开始就站在苹果这边"><a href="#我不是一开始就站在苹果这边" class="headerlink" title="我不是一开始就站在苹果这边"></a>我不是一开始就站在苹果这边</h2><p>在真正转向 iPhone 之前，我其实换过很多安卓手机。</p>
+<p>最早用过的是 <strong>Redmi K30 至尊纪念版</strong>，那台手机是我把当年的 iPad 卖掉之后换来的。当时真的觉得很离谱，这种配置居然只要 1999。</p>
+<p>后来高中时期，我的主力机变成了 <strong>小米 10 Pro</strong>。这台手机陪我走过了整个高中，到现在它还躺在桌子上当热点机用。</p>
+<p>那时候我几乎把所有时间都花在折腾系统上：</p>
+<ul>
+<li>Root</li>
+<li>模块</li>
+<li>调度</li>
+<li>超频</li>
+<li>各种 Magisk 模块</li>
+</ul>
+<p>每天最期待的一件事，就是看看小米有没有推新的系统更新。</p>
+<p>高考结束之后，我又换了 <strong>iQOO 12 Pro 16+1T（5599）</strong>。当时我对它的评价只有一句话：最水桶的一台旗舰。没有明显短板，什么都不差。</p>
+<p>后来在暑假快结束的时候，我本来只想买一台两千块左右的备用机，结果预算一路加到四千，最后买了 <strong>OPPO Find X7 Ultra 12+256</strong>。我非常喜欢这台手机，也带着它去了不少地方。现在回头看，我博客里很多照片其实都还带着哈苏水印。</p>
+<p>再后来，2024 年 10 月，我在一节水课上看了 <strong>真我发布会</strong>，结果又没忍住，买了一台 <strong>真我 GT7 Pro</strong>。</p>
+<p>原因其实很简单：</p>
+<ul>
+<li>骁龙 8 至尊版</li>
+<li>6500mAh 电池</li>
+</ul>
+<p>当时真的会觉得，这手机太猛了</p>
+<h2 id="为什么最后还是买了-iPhone"><a href="#为什么最后还是买了-iPhone" class="headerlink" title="为什么最后还是买了 iPhone"></a>为什么最后还是买了 iPhone</h2><p>这种状态一直持续到 <strong>2025 年 9 月</strong>。</p>
+<p>那时候我把 <strong>Find X7 Ultra</strong> 卖掉了，因为我看到了 <strong>iPhone 17 Pro</strong> 的评测。说实话，当时真的很心动，于是我干了一件挺冲动的事情：直接下单。</p>
+<p>我 8099 买的，原价 8999。</p>
+<p>当时想法也很简单：</p>
+<blockquote>
+<p>不喜欢就转手卖掉</p>
+</blockquote>
+<p>但 2025 年 10 月 1 日到手之后，我发现自己根本不想卖了。</p>
+<p>不是因为苹果多有面子，也不是因为什么品牌滤镜，而是因为一件很具体的事情：<strong>体验很统一</strong>。</p>
+<p>再加上一个现实问题，安卓这些年最核心的优势，其实已经没有以前那么成立了。</p>
+<p>以前大家说安卓，核心关键词总是“开放”。但现在：</p>
+<ul>
+<li>Bootloader 越来越难解锁</li>
+<li>Root 环境越来越难维护</li>
+<li>权限越来越封闭</li>
+</ul>
+<p>既然两个系统都在变封闭，那事情对我来说就很简单了。</p>
+<p>我选体验更好的那个</p>
+<p>更何况现在安卓旗舰也越来越贵，很多机器动不动就是七八千，价格和 iPhone 其实已经差不多。既然如此，那我为什么不选一个更省心的？</p>
+<p>更重要的是，我现在已经没有那么多时间了。</p>
+<p>我不再想把所有设备都变成一个长期维护项目。我希望它们稳定、好用，不需要我每天去照顾。我希望它们只是工具，而不是玩具。</p>
+<h2 id="为什么后来又买了-MacBook-Air"><a href="#为什么后来又买了-MacBook-Air" class="headerlink" title="为什么后来又买了 MacBook Air"></a>为什么后来又买了 MacBook Air</h2><p>其实一开始，我并没有打算买 MacBook。</p>
+<p>当我第一次意识到自己可能需要一台轻薄本的时候，我最先体验的其实是 Windows 阵营的机器。我买了一台机械革命 <strong>无界 14X Pro 2025</strong>，配置是 <strong>32G + 1T，AI9 H365 处理器</strong>。</p>
+<p>从参数上看，这台机器当时真的很诱人：</p>
+<ul>
+<li>2.8K 分辨率屏幕</li>
+<li>120Hz 高刷</li>
+<li>99Wh 大电池</li>
+<li>很丰富的接口</li>
+</ul>
+<p>这些配置几乎把我对一台轻薄本的幻想都满足了。</p>
+<p>反观当时的 <strong>MacBook Air</strong>，只有 60Hz 屏幕，电池容量看起来也不算大，价格还更贵。从参数表上看，几乎没有任何优势，所以当时的我几乎没有犹豫，直接选了 Windows 轻薄本。</p>
+<p>而且还有一个很现实的原因：那时候我根本没想到，几个月以后我会换成 iPhone。如果当时就知道后面会换苹果手机，我的选择可能也会不一样。</p>
+<p>但真正用了一段时间之后，我才慢慢意识到一个问题。</p>
+<p>参数很好看，体验却没有想象中那么好。</p>
+<p>尤其是在不插电的时候，问题会变得特别明显。虽然这台机器的续航确实不短，但系统会明显变慢，打字会卡，看视频也会卡。更离谱的是那块 120Hz 的屏幕，一旦离电，高刷就会变得很不稳定，再加上 Windows 自己的动态刷新率策略，很多时候其实一直都只是在 60Hz 运行。</p>
+<p>但问题是，我买的是轻薄本。</p>
+<p>轻薄本的意义本来就是带出去用的，不是一直插着电当台式机。结果一离电，体验就明显下降，那种卡卡的感觉真的很难受。</p>
+<p>还有一个原因，虽然不是主要原因，但它确实一直在消耗我对这台机器的耐心。</p>
+<p>我其实很早就对这台机械革命有点不爽了。后来装上 Linux 之后才发现，它的 BIOS 根本没做完整，导致 <strong>Wi-Fi 模块在 Linux 下是被硬件屏蔽的状态</strong>，系统里直接显示的是 <em>Hardware block</em>，也就是说 Wi-Fi 根本用不了。</p>
+<p>而我又很不喜欢在 Windows 下面配开发环境。像 git 这些东西，在 Windows 里总让我觉得很别扭：软件装到哪里不清楚，环境变量一堆，卸载还经常卸不干净，有些程序甚至会在后台偷偷吃电。</p>
+<p>结果就是，我本来想用 Linux 学习、写博客，最后却被迫在 Windows 下面硬撑了四五个月。那段时间真的很难受。</p>
+<p>再加上那台机器的键盘手感也很一般，打字时间一长就很累，博客也因此停更了一段时间。后来我实在受不了了，刚好赶上国补和以旧换新补贴，价格也合适，就在 <strong>M5 Air</strong> 发布的前一天入手了 <strong>M4 的 MacBook Air</strong>。</p>
+<p>真正用上之后，我反而慢慢理解了一件事情：苹果做的其实就是一台电脑。</p>
+<p>一台很纯粹的笔记本电脑，没有太多花里胡哨的东西，做工好，性能稳定，续航长，软件生态成熟。</p>
+<p>但最重要的一点其实是 <strong>离电性能</strong>。</p>
+<p>苹果自己做芯片、做系统、做整机，所以整机体验会非常统一。MacBook Air 甚至完全没有风扇，这意味着日常使用几乎是无声的。再加上键盘手感很好，合上盖子就睡眠，需要的时候再打开，整个使用逻辑都很顺。</p>
+<p>还有一点我很喜欢。macOS 的底层是 <strong>Unix</strong>，很多命令、工具和逻辑其实都和 Linux 很接近，这种熟悉感会让我非常安心。</p>
+<h2 id="AirPods-Pro-3-对我来说值在哪里"><a href="#AirPods-Pro-3-对我来说值在哪里" class="headerlink" title="AirPods Pro 3 对我来说值在哪里"></a>AirPods Pro 3 对我来说值在哪里</h2><p>至于为什么买 <strong>AirPods Pro 3</strong>，原因其实也很简单。</p>
+<p>我后来发现一件事情，蓝牙耳机谈音质，对我这种木耳来说基本就是扯淡。我根本分辨不出什么高低频、解析力、声场这种差别，但有一个东西我能非常明确地感知到：<strong>降噪</strong>。</p>
+<p>AirPods Pro 的降噪就是那种一耳朵差距。打开的那一瞬间，整个世界都会安静下来。</p>
+<p>这种体验对我来说非常重要，因为安静就意味着我更容易专注，也更容易进入状态。</p>
+<p>再加上它的通透模式、自适应降噪、空间音频，以及苹果的查找功能，这些东西都让我很惊艳。</p>
+<p>当然，我用的是 iPhone，AirPods 的连接体验确实也很方便。</p>
+<p>但说实话，这不是我留下它的主要原因。</p>
+<p>真正让我留下它的，还是降噪</p>
+<h2 id="为什么最后没买-Apple-Watch"><a href="#为什么最后没买-Apple-Watch" class="headerlink" title="为什么最后没买 Apple Watch"></a>为什么最后没买 Apple Watch</h2><p>很多人会觉得，既然我已经有了 iPhone、MacBook 和 AirPods，为什么不顺便再买一块 <strong>Apple Watch</strong>？</p>
+<p>其实我想买 Apple Watch 的原因，不是生态，而是我有健身的习惯，而且我离家 <strong>1500km</strong>。我希望自己有一套更准确的健康数据，比如心率、运动记录、健康监测。</p>
+<p>这不仅是对自己负责，也是让家人放心。</p>
+<p>但我最后没有买。</p>
+<p>原因也很简单：续航太短。</p>
+<p>Apple Watch 基本就是一天一充，而且国行版本还砍掉了快充。于是事情就变成了，充得慢，续航又短，这一点非常直接地抑制了我的购买欲。</p>
+<p>如果未来续航能解决，我大概率还是会买。</p>
+<h2 id="我不太相信“生态”这套说法"><a href="#我不太相信“生态”这套说法" class="headerlink" title="我不太相信“生态”这套说法"></a>我不太相信“生态”这套说法</h2><p>其实很多人一谈苹果就会提“生态”。</p>
+<p>但对我来说，这一直有点像个伪命题。</p>
+<p>因为我从来不在乎什么软件生态、硬件生态、全家桶这种说法。</p>
+<p>我只在乎一件事：体验。</p>
+<p>一个产品好用，我就用。不好用，我就换掉。</p>
+<p>就这么简单。</p>
+<p>没有信仰，也没有阵营。</p>
+<h2 id="写在最后"><a href="#写在最后" class="headerlink" title="写在最后"></a>写在最后</h2><p>现在的我，其实已经不像以前那样喜欢折腾了。</p>
+<p>以前我希望每一个设备到手都被我自定义一遍，希望每一个设备都完全掌控在自己手里。</p>
+<p>但现在我更希望 <strong>工具只是工具</strong>。</p>
+<p>设备不需要证明什么，只要它稳定、好用、不打扰我，那它就是一个好产品。</p>
+<p>至于它是不是苹果，其实并不重要。</p>
+]]></content>
+      <categories>
+        <category>Article</category>
+      </categories>
+      <tags>
+        <tag>article</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>MSI-PERKEYRGB</title>
     <url>/posts/5a88bde.html</url>
     <content><![CDATA[<h1 id="MSI-PERKEYRGB"><a href="#MSI-PERKEYRGB" class="headerlink" title="MSI-PERKEYRGB"></a>MSI-PERKEYRGB</h1><blockquote>
@@ -1887,38 +1814,76 @@
       </tags>
   </entry>
   <entry>
-    <title>Nativefier 使用教程</title>
-    <url>/posts/b56059f9.html</url>
-    <content><![CDATA[<h1 id="Nativefier-使用教程"><a href="#Nativefier-使用教程" class="headerlink" title="Nativefier 使用教程"></a>Nativefier 使用教程</h1><h4 id="基于electron的打包软件"><a href="#基于electron的打包软件" class="headerlink" title="基于electron的打包软件"></a>基于electron的打包软件</h4><h5 id="nativefier-n-p-—-arch-—-weight-—-height"><a href="#nativefier-n-p-—-arch-—-weight-—-height" class="headerlink" title="nativefier -n &lt;打包后的应用名称&gt; -p &lt;程序兼容的平台&gt; —-arch &lt;架构&gt; —- weight &lt;窗口宽度&gt; —-height &lt;窗口高度&gt; &lt;网页URL&gt;"></a>nativefier -n &lt;打包后的应用名称&gt; -p &lt;程序兼容的平台&gt; —-arch &lt;架构&gt; —- weight &lt;窗口宽度&gt; —-height &lt;窗口高度&gt; &lt;网页URL&gt;</h5><h4 id="实例（Eshelper）"><a href="#实例（Eshelper）" class="headerlink" title="实例（Eshelper）"></a>实例（Eshelper）</h4><p>nativefier -n Eshelper -p linux –arch x64 –width 1024 –height 768 –tray<br>--disable-dev-tools <a href="https://www.esdict.cn/">https://www.esdict.cn/</a></p>
-<p>#如果想让程序可以后台运行，可以增加参数——tray</p>
-<p>#如果不想在使用时可以调出chrome的开发者工具，可以增加参数——disable-dev-tools</p>
-<p>#如果想控制程序在同一时间只能运行一个实例，则增加参数——single-instance</p>
-<h4 id="desktop文件（Linux下启动文件）"><a href="#desktop文件（Linux下启动文件）" class="headerlink" title=".desktop文件（Linux下启动文件）"></a>.desktop文件（Linux下启动文件）</h4><p>[Desktop Entry]</p>
-<p># type关键字如上所述</p>
-<p>Type&#x3D;Application</p>
-<p># 本文件所遵循的桌面项规范版本</p>
-<p>Version&#x3D;1.0</p>
-<p># 应用程序的名称</p>
-<p>Name&#x3D;jMemorize</p>
-<p># 显示为工具提示的注释</p>
-<p>Comment&#x3D;Flash card based learning tool</p>
-<p># 可执行文件所在的目录</p>
-<p>Path&#x3D;&#x2F;opt&#x2F;jmemorise</p>
-<p># 可执行文件，可以带参</p>
-<p>Exec&#x3D;jmemorize</p>
-<p># 图标名称</p>
-<p>Icon&#x3D;jmemorize</p>
-<p># 应用程序是否需要运行在终端中</p>
-<p>Terminal&#x3D;false</p>
-<p># 本桌面项将显示在哪些分类中</p>
-<p>Categories&#x3D;Education;Languages;Java;</p>
-<h4 id="desktop文件存放位置"><a href="#desktop文件存放位置" class="headerlink" title=".desktop文件存放位置"></a>.desktop文件存放位置</h4><p>&#x2F;usr&#x2F;share&#x2F;applications&#x2F;</p>
+    <title>如何在Linux上优雅的使用小黄鸭</title>
+    <url>/posts/5982c65e.html</url>
+    <content><![CDATA[<h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>起因我在小黑盒看到了一个给SteamDeck开发的小黄鸭插件,然后我就想着Linux上面肯定也有</p>
+<p>插件:<a href="https://github.com/xXJSONDeruloXx/decky-lossless-scaling-vk">decky-lossless-scaling-vk</a></p>
+<p>我就去找了一下,真让我找到一个能在Linux上使用的小黄鸭插件,我立刻进行了尝试</p>
+<h2 id="教程"><a href="#教程" class="headerlink" title="教程"></a>教程</h2><p>就是<a href="https://github.com/PancakeTAS/lsfg-vk">lsfg-vk</a>项目</p>
+<p>这个项目把<a href="https://store.steampowered.com/app/993090/Lossless_Scaling/">Lossless Scaling</a>这个项目引入了Linux</p>
+<h4 id="安装-ArchLinux完全可用"><a href="#安装-ArchLinux完全可用" class="headerlink" title="安装 (ArchLinux完全可用)"></a>安装 (ArchLinux完全可用)</h4><p><strong>安装依赖</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">$ sudo pacman -S base-devel git clang llvm cmake ninja spirv-headers vulkan-headers vulkan-icd-loader</span><br></pre></td></tr></table></figure>
+
+<p><strong>脚本安装</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">curl -sSf https://pancake.gay/lsfg-vk.sh | sh</span><br></pre></td></tr></table></figure>
+
+<h4 id="Wiki"><a href="#Wiki" class="headerlink" title="Wiki"></a>Wiki</h4><p><a href="https://github.com/PancakeTAS/lsfg-vk/wiki">https://github.com/PancakeTAS/lsfg-vk/wiki</a></p>
+<blockquote>
+<p>如果提示你DLL文件有问题找不到,首先你得去Steam购买<a href="https://store.steampowered.com/app/993090/Lossless_Scaling/">Lossless Scaling</a>,其次你可以安装在本地,这样你就不需要去再配置,如果你不想安装在Steam安装的位置,也可以修改 <code>~/.config/lsfg-vk/conf.toml</code> 配置文件进行配置</p>
+</blockquote>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">version = 1</span><br><span class="line">[global]</span><br><span class="line"># override the location of Lossless Scaling</span><br><span class="line"># dll = &quot;/games/Lossless Scaling&quot;</span><br><span class="line"></span><br><span class="line"># [[game]] # example entry</span><br><span class="line"># exe = &quot;Game.exe&quot;</span><br><span class="line"># env = &quot;SteamDeck=0&quot;</span><br><span class="line">#</span><br><span class="line"># multiplier = 3</span><br><span class="line"># flow_scale = 0.7</span><br><span class="line"># performance_mode = true</span><br><span class="line"># hdr_mode = false</span><br><span class="line">#</span><br><span class="line"># experimental_present_mode = fifo</span><br><span class="line"># experimental_fps_limit = 48</span><br><span class="line"></span><br><span class="line">[[game]] # default vkcube entry</span><br><span class="line">exe = &quot;vkcube&quot;</span><br><span class="line"></span><br><span class="line">multiplier = 4</span><br><span class="line">performance_mode = true</span><br><span class="line"></span><br><span class="line">[[game]] # default benchmark entry</span><br><span class="line">exe = &quot;benchmark&quot;</span><br><span class="line"></span><br><span class="line">multiplier = 4</span><br><span class="line">performance_mode = false</span><br><span class="line"></span><br><span class="line">[[game]] # override Genshin Impact</span><br><span class="line">exe = &quot;Genshin&quot;</span><br><span class="line"></span><br><span class="line">multiplier = 3</span><br></pre></td></tr></table></figure>
+
+<table>
+<thead>
+<tr>
+<th align="center">Property</th>
+<th align="center">Recommended Value</th>
+<th align="center">Description</th>
+<th></th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">dll</td>
+<td align="center">Path to <code>Lossless.dll</code> or empty</td>
+<td align="center">如果您未将 Lossless Scaling 安装到传统目录中，则可以使用此属性覆盖游戏文件中 <code>Lossless.dll</code> 文件的路径</td>
+<td></td>
+</tr>
+<tr>
+<td align="center">multiplier</td>
+<td align="center">(1, )2, 3, 4</td>
+<td align="center">将FPS 翻倍、三倍或四倍。想怎么高就怎么高。</td>
+<td></td>
+</tr>
+<tr>
+<td align="center">performance_mode</td>
+<td align="center">true<code>or</code>false</td>
+<td align="center">将帧生成模型切换为更轻的模型。这可以显著提高性能（速度在 2 到 8 倍之间，具体取决于分辨率）。质量略有下降</td>
+<td></td>
+</tr>
+<tr>
+<td align="center">hdr_mode</td>
+<td align="center">使用 HDR 时为 1</td>
+<td align="center">将着色器切换到 HDR 模式（不支持 scRGB）。不使用 HDR 时不要设置此标志</td>
+<td></td>
+</tr>
+</tbody></table>
+<h4 id="验证安装"><a href="#验证安装" class="headerlink" title="验证安装"></a>验证安装</h4><p>在没有 lsfg-vk 的情况下运行此程序，并在心中记下立方体旋转的速度：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">$ DISABLE_LSFG=1 vkcube</span><br><span class="line"># (stop it with ctrl-c in the terminal, or Escape in the window)</span><br></pre></td></tr></table></figure>
+
+<p>接下来，再次运行此程序，看看立方体旋转速度是否变慢：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">$ vkcube</span><br><span class="line"># (stop it with ctrl-c in the terminal, or Escape in the window)</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>默认配置允许在 vkcube 上生成 4 倍帧。如果多维数据集没有明显减慢速度，则表示您没有正确安装 lsfg-vk</p>
+</blockquote>
+<h4 id="使用方法"><a href="#使用方法" class="headerlink" title="使用方法"></a>使用方法</h4><p>在你需要使用的Steam游戏的启动选项上加上 <code>ENABLE_LSFG=1</code> </p>
+<p>例如: <code>ENABLE_LSFG=1 gamemoderun %command%</code> </p>
 ]]></content>
       <categories>
-        <category>Tech</category>
+        <category>Linux</category>
       </categories>
       <tags>
-        <tag>tech</tag>
+        <tag>gaming</tag>
       </tags>
   </entry>
   <entry>
@@ -2132,8 +2097,99 @@
       </tags>
   </entry>
   <entry>
+    <title>Nativefier 使用教程</title>
+    <url>/posts/b56059f9.html</url>
+    <content><![CDATA[<h1 id="Nativefier-使用教程"><a href="#Nativefier-使用教程" class="headerlink" title="Nativefier 使用教程"></a>Nativefier 使用教程</h1><h4 id="基于electron的打包软件"><a href="#基于electron的打包软件" class="headerlink" title="基于electron的打包软件"></a>基于electron的打包软件</h4><h5 id="nativefier-n-p-—-arch-—-weight-—-height"><a href="#nativefier-n-p-—-arch-—-weight-—-height" class="headerlink" title="nativefier -n &lt;打包后的应用名称&gt; -p &lt;程序兼容的平台&gt; —-arch &lt;架构&gt; —- weight &lt;窗口宽度&gt; —-height &lt;窗口高度&gt; &lt;网页URL&gt;"></a>nativefier -n &lt;打包后的应用名称&gt; -p &lt;程序兼容的平台&gt; —-arch &lt;架构&gt; —- weight &lt;窗口宽度&gt; —-height &lt;窗口高度&gt; &lt;网页URL&gt;</h5><h4 id="实例（Eshelper）"><a href="#实例（Eshelper）" class="headerlink" title="实例（Eshelper）"></a>实例（Eshelper）</h4><p>nativefier -n Eshelper -p linux –arch x64 –width 1024 –height 768 –tray<br>--disable-dev-tools <a href="https://www.esdict.cn/">https://www.esdict.cn/</a></p>
+<p>#如果想让程序可以后台运行，可以增加参数——tray</p>
+<p>#如果不想在使用时可以调出chrome的开发者工具，可以增加参数——disable-dev-tools</p>
+<p>#如果想控制程序在同一时间只能运行一个实例，则增加参数——single-instance</p>
+<h4 id="desktop文件（Linux下启动文件）"><a href="#desktop文件（Linux下启动文件）" class="headerlink" title=".desktop文件（Linux下启动文件）"></a>.desktop文件（Linux下启动文件）</h4><p>[Desktop Entry]</p>
+<p># type关键字如上所述</p>
+<p>Type&#x3D;Application</p>
+<p># 本文件所遵循的桌面项规范版本</p>
+<p>Version&#x3D;1.0</p>
+<p># 应用程序的名称</p>
+<p>Name&#x3D;jMemorize</p>
+<p># 显示为工具提示的注释</p>
+<p>Comment&#x3D;Flash card based learning tool</p>
+<p># 可执行文件所在的目录</p>
+<p>Path&#x3D;&#x2F;opt&#x2F;jmemorise</p>
+<p># 可执行文件，可以带参</p>
+<p>Exec&#x3D;jmemorize</p>
+<p># 图标名称</p>
+<p>Icon&#x3D;jmemorize</p>
+<p># 应用程序是否需要运行在终端中</p>
+<p>Terminal&#x3D;false</p>
+<p># 本桌面项将显示在哪些分类中</p>
+<p>Categories&#x3D;Education;Languages;Java;</p>
+<h4 id="desktop文件存放位置"><a href="#desktop文件存放位置" class="headerlink" title=".desktop文件存放位置"></a>.desktop文件存放位置</h4><p>&#x2F;usr&#x2F;share&#x2F;applications&#x2F;</p>
+]]></content>
+      <categories>
+        <category>Tech</category>
+      </categories>
+      <tags>
+        <tag>tech</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>关于Spotify桌面端的美化</title>
+    <url>/posts/4795de82.html</url>
+    <content><![CDATA[<h2 id="简单的开头：为什么我切换到了Spotify"><a href="#简单的开头：为什么我切换到了Spotify" class="headerlink" title="简单的开头：为什么我切换到了Spotify"></a>简单的开头：为什么我切换到了Spotify</h2><p>前两天，我收到了一条短信<br><img src="/../../images/Spicetify/a.png"></p>
+<p>由于Linux端的网易云已经年久失修，最新的一个官方包大概是七八年前维护的，无论是功能性还是美观度都无法支撑我继续使用。wine模拟出的官方版有时候占用也比较高，Splayer就成为了我的首选。</p>
+<p>据说是因为这个 <code>听歌打卡</code> 的功能，但我也不好说到底是不是这个原因…<br><img src="/../../images/Spicetify/c.png"></p>
+<p>于是我就投入了Spotify的怀抱</p>
+<p>其实很早之前就在用mod版本，但是经过这么一出，没忍住直接冲了年会员<br><img src="/../../images/Spicetify/b.png"></p>
+<p>而且Spotify的推荐算法简直无敌，歌库也很全，多端同步也超级无敌，一年价格也能接受，Linux端也有很多东西可玩，那我就来了</p>
+<h2 id="安装Spotify"><a href="#安装Spotify" class="headerlink" title="安装Spotify"></a>安装Spotify</h2><h3 id="ArchLinux"><a href="#ArchLinux" class="headerlink" title="ArchLinux"></a>ArchLinux</h3><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">sudo pacman -S spotify-launcher</span><br></pre></td></tr></table></figure>
+
+<h3 id="Flatpak"><a href="#Flatpak" class="headerlink" title="Flatpak"></a>Flatpak</h3><p><a href="https://flathub.org/apps/com.spotify.Client">Spotify</a></p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">flatpak install flathub com.spotify.Client</span><br></pre></td></tr></table></figure>
+
+
+<h2 id="Spicetify插件"><a href="#Spicetify插件" class="headerlink" title="Spicetify插件"></a>Spicetify插件</h2><p>原生的Linux版本的Spotify也太丑了…</p>
+<p>于是我就去网上找类似的插件，意图稍微的美化一下</p>
+<p>官网：<a href="https://spicetify.app/">Spicetify</a></p>
+<h3 id="安装"><a href="#安装" class="headerlink" title="安装"></a>安装</h3><p>由于我是Linux端，所以直接：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">curl -fsSL https://raw.githubusercontent.com/spicetify/cli/main/install.sh | sh</span><br></pre></td></tr></table></figure>
+
+<p>问你要不要安装 <code>Marketplace</code> 直接Y</p>
+<p>然后安完了应该是提示你</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">spicetify backup apply</span><br></pre></td></tr></table></figure>
+
+<p>这里<strong>Flatpak</strong>版本还要多一步加权限，否则 <code>spicetify backup apply</code> 会运行失败</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">sudo chmod a+wr /var/lib/flatpak/app/com.spotify.Client/x86_64/stable/active/files/extra/share/spotify/</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">sudo chmod a+wr /var/lib/flatpak/app/com.spotify.Client/x86_64/stable/active/files/extra/share/spotify/Apps -R</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>还有可能会提示你 <code>spotify_path</code> 或者 <code>prefs_path</code> 有问题，你只需按照它的提示找到那个 <code>~/.config/spicetify/config-xpui.ini</code> 文件然后修改即可</p>
+</blockquote>
+<p>参考：<a href="https://spicetify.app/docs/advanced-usage/installation/">Installation</a></p>
+<p>至此应该就是安好了</p>
+<h3 id="美化"><a href="#美化" class="headerlink" title="美化"></a>美化</h3><p>进来点上面的购物车按钮，安装以下几个：</p>
+<p>扩展我只装了这个</p>
+<p><img src="/../../images/Spicetify/d.png"></p>
+<p>装别的主题之前似乎都得装这个…</p>
+<p><img src="/../../images/Spicetify/e.png"></p>
+<p>然后我用的这个 <code>Lucid</code></p>
+<p><img src="/../../images/Spicetify/f.png"></p>
+<p>最后就这两个小东西</p>
+<p><img src="/../../images/Spicetify/g.png"></p>
+<hr>
+<h2 id="效果"><a href="#效果" class="headerlink" title="效果"></a>效果</h2><p><img src="/../../images/Spicetify/h.png"></p>
+<p><img src="/../../images/Spicetify/i.png"></p>
+]]></content>
+      <categories>
+        <category>Tech</category>
+      </categories>
+      <tags>
+        <tag>linux</tag>
+        <tag>spotify</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>其实是献给自己的Hexo教程 2</title>
-    <url>/posts/null.html</url>
+    <url>/posts/Infinity.html</url>
     <content><![CDATA[<h1 id="使用git分支保存Hexo源码到Github"><a href="#使用git分支保存Hexo源码到Github" class="headerlink" title="使用git分支保存Hexo源码到Github"></a>使用git分支保存Hexo源码到Github</h1><p>引言：最开始想弄这个主要是因为我有多系统，多台设备，每次都要把整个文件夹进行压缩备份到U盘，效率低且不够优雅，偶然搜索到两篇帖子，助我解决了这一大难题，这里感谢<a href="https://zhuanlan.zhihu.com/p/71544809">使用git分支保存hexo博客源码到github</a> 和 <a href="https://www.cnblogs.com/eidolonw/p/13066869.html">hexo源码上传到GitHub</a> 这两篇帖子的编写者！</p>
 <p>那么，教程开始</p>
 <h2 id="教程"><a href="#教程" class="headerlink" title="教程"></a>教程</h2><h3 id="1-如图："><a href="#1-如图：" class="headerlink" title="1. 如图："></a>1. 如图：</h3><p><img src="/../../images/Hexo/b.png" alt="如图" title="如图"></p>
@@ -2339,62 +2395,6 @@
       </categories>
       <tags>
         <tag>travel</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>关于Spotify桌面端的美化</title>
-    <url>/posts/4795de82.html</url>
-    <content><![CDATA[<h2 id="简单的开头：为什么我切换到了Spotify"><a href="#简单的开头：为什么我切换到了Spotify" class="headerlink" title="简单的开头：为什么我切换到了Spotify"></a>简单的开头：为什么我切换到了Spotify</h2><p>前两天，我收到了一条短信<br><img src="/../../images/Spicetify/a.png"></p>
-<p>由于Linux端的网易云已经年久失修，最新的一个官方包大概是七八年前维护的，无论是功能性还是美观度都无法支撑我继续使用。wine模拟出的官方版有时候占用也比较高，Splayer就成为了我的首选。</p>
-<p>据说是因为这个 <code>听歌打卡</code> 的功能，但我也不好说到底是不是这个原因…<br><img src="/../../images/Spicetify/c.png"></p>
-<p>于是我就投入了Spotify的怀抱</p>
-<p>其实很早之前就在用mod版本，但是经过这么一出，没忍住直接冲了年会员<br><img src="/../../images/Spicetify/b.png"></p>
-<p>而且Spotify的推荐算法简直无敌，歌库也很全，多端同步也超级无敌，一年价格也能接受，Linux端也有很多东西可玩，那我就来了</p>
-<h2 id="安装Spotify"><a href="#安装Spotify" class="headerlink" title="安装Spotify"></a>安装Spotify</h2><h3 id="ArchLinux"><a href="#ArchLinux" class="headerlink" title="ArchLinux"></a>ArchLinux</h3><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">sudo pacman -S spotify-launcher</span><br></pre></td></tr></table></figure>
-
-<h3 id="Flatpak"><a href="#Flatpak" class="headerlink" title="Flatpak"></a>Flatpak</h3><p><a href="https://flathub.org/apps/com.spotify.Client">Spotify</a></p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">flatpak install flathub com.spotify.Client</span><br></pre></td></tr></table></figure>
-
-
-<h2 id="Spicetify插件"><a href="#Spicetify插件" class="headerlink" title="Spicetify插件"></a>Spicetify插件</h2><p>原生的Linux版本的Spotify也太丑了…</p>
-<p>于是我就去网上找类似的插件，意图稍微的美化一下</p>
-<p>官网：<a href="https://spicetify.app/">Spicetify</a></p>
-<h3 id="安装"><a href="#安装" class="headerlink" title="安装"></a>安装</h3><p>由于我是Linux端，所以直接：</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">curl -fsSL https://raw.githubusercontent.com/spicetify/cli/main/install.sh | sh</span><br></pre></td></tr></table></figure>
-
-<p>问你要不要安装 <code>Marketplace</code> 直接Y</p>
-<p>然后安完了应该是提示你</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">spicetify backup apply</span><br></pre></td></tr></table></figure>
-
-<p>这里<strong>Flatpak</strong>版本还要多一步加权限，否则 <code>spicetify backup apply</code> 会运行失败</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">sudo chmod a+wr /var/lib/flatpak/app/com.spotify.Client/x86_64/stable/active/files/extra/share/spotify/</span><br></pre></td></tr></table></figure>
-
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">sudo chmod a+wr /var/lib/flatpak/app/com.spotify.Client/x86_64/stable/active/files/extra/share/spotify/Apps -R</span><br></pre></td></tr></table></figure>
-
-<blockquote>
-<p>还有可能会提示你 <code>spotify_path</code> 或者 <code>prefs_path</code> 有问题，你只需按照它的提示找到那个 <code>~/.config/spicetify/config-xpui.ini</code> 文件然后修改即可</p>
-</blockquote>
-<p>参考：<a href="https://spicetify.app/docs/advanced-usage/installation/">Installation</a></p>
-<p>至此应该就是安好了</p>
-<h3 id="美化"><a href="#美化" class="headerlink" title="美化"></a>美化</h3><p>进来点上面的购物车按钮，安装以下几个：</p>
-<p>扩展我只装了这个</p>
-<p><img src="/../../images/Spicetify/d.png"></p>
-<p>装别的主题之前似乎都得装这个…</p>
-<p><img src="/../../images/Spicetify/e.png"></p>
-<p>然后我用的这个 <code>Lucid</code></p>
-<p><img src="/../../images/Spicetify/f.png"></p>
-<p>最后就这两个小东西</p>
-<p><img src="/../../images/Spicetify/g.png"></p>
-<hr>
-<h2 id="效果"><a href="#效果" class="headerlink" title="效果"></a>效果</h2><p><img src="/../../images/Spicetify/h.png"></p>
-<p><img src="/../../images/Spicetify/i.png"></p>
-]]></content>
-      <categories>
-        <category>Tech</category>
-      </categories>
-      <tags>
-        <tag>linux</tag>
-        <tag>spotify</tag>
       </tags>
   </entry>
 </search>

@@ -1081,6 +1081,448 @@ body.theme-dark .paper {
   min-width: 0;
 }
 
+/* Update information card */
+#updateModal {
+  padding: max(16px, env(safe-area-inset-top)) max(16px, env(safe-area-inset-right))
+    max(16px, env(safe-area-inset-bottom)) max(16px, env(safe-area-inset-left));
+}
+
+#updateModal .update-card {
+  width: min(calc(100vw - 32px), 452px);
+  max-width: 452px;
+  max-height: min(86dvh, 640px);
+  border-color: var(--border);
+  background: var(--card);
+  color: var(--text);
+  box-shadow: var(--shadowModal);
+}
+
+#updateModal .update-header {
+  padding: 16px;
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  align-items: start;
+  gap: 11px;
+  border-bottom: 1px solid var(--border2);
+}
+
+#updateModal .update-icon {
+  width: 36px;
+  height: 36px;
+  display: grid;
+  place-items: center;
+  border: 1px solid color-mix(in srgb, var(--accent) 18%, var(--border));
+  border-radius: 11px;
+  background: color-mix(in srgb, var(--accent) 10%, var(--card2));
+  color: var(--accent);
+  font-size: 19px;
+  font-weight: 800;
+  line-height: 1;
+}
+
+#updateModal .update-heading {
+  min-width: 0;
+  display: grid;
+  gap: 3px;
+}
+
+#updateModal .update-heading h2 {
+  margin: 0;
+  color: var(--text);
+  font-size: 17px;
+  line-height: 1.25;
+}
+
+#updateModal .update-subtitle {
+  margin: 0;
+  color: var(--muted);
+  font-size: 12px;
+  line-height: 1.45;
+}
+
+#updateModal .update-close {
+  min-width: 0;
+  padding: 7px 8px;
+  border-color: color-mix(in srgb, var(--border3) 76%, var(--card));
+  color: var(--muted);
+  font-size: 12px;
+}
+
+#updateModal .update-close:hover {
+  background: var(--surfaceHover);
+  color: var(--text);
+}
+
+#updateModal .update-content {
+  min-width: 0;
+  padding: 14px 16px;
+  overflow: auto;
+  display: grid;
+  gap: 13px;
+}
+
+#updateModal .update-version-row {
+  min-width: 0;
+  padding: 9px 10px;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
+  align-items: center;
+  gap: 9px;
+  border: 1px solid var(--border2);
+  border-radius: 11px;
+  background: var(--card2);
+  font-size: 13px;
+  font-variant-numeric: tabular-nums;
+}
+
+#updateModal .update-version-current {
+  min-width: 0;
+  justify-self: end;
+  color: var(--muted);
+  overflow-wrap: anywhere;
+}
+
+#updateModal .update-version-arrow {
+  color: var(--muted);
+}
+
+#updateModal .update-version-latest {
+  min-width: 0;
+  justify-self: start;
+  padding: 4px 8px;
+  border-radius: 999px;
+  background: var(--accent);
+  color: var(--accentText);
+  font-size: 12px;
+  font-weight: 800;
+  overflow-wrap: anywhere;
+}
+
+#updateModal .update-notes {
+  min-width: 0;
+  display: grid;
+  gap: 7px;
+}
+
+#updateModal .update-notes h3 {
+  margin: 0;
+  color: var(--text);
+  font-size: 13px;
+  line-height: 1.3;
+}
+
+#updateModal .update-note-list {
+  margin: 0;
+  padding-left: 19px;
+  display: grid;
+  gap: 5px;
+  color: var(--text);
+  font-size: 13px;
+  line-height: 1.45;
+}
+
+#updateModal .update-note-list li {
+  padding-left: 2px;
+  overflow-wrap: anywhere;
+}
+
+#updateModal .update-note-list li::marker {
+  color: var(--muted);
+}
+
+#updateModal .update-asset {
+  min-width: 0;
+  padding: 9px 10px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  border: 1px solid var(--border2);
+  border-radius: 11px;
+  background: var(--card2);
+}
+
+#updateModal .update-asset-copy {
+  min-width: 0;
+  display: grid;
+  gap: 2px;
+}
+
+#updateModal .update-asset-label {
+  color: var(--muted);
+  font-size: 11px;
+  line-height: 1.3;
+}
+
+#updateModal .update-asset-name {
+  min-width: 0;
+  color: var(--text);
+  font-size: 12px;
+  font-weight: 700;
+  line-height: 1.35;
+  overflow-wrap: anywhere;
+}
+
+#updateModal .update-direct-download {
+  flex: 0 0 auto;
+  min-width: 0;
+  padding: 7px 8px;
+  border-color: color-mix(in srgb, var(--border3) 76%, var(--card2));
+  color: var(--muted);
+  font-size: 12px;
+  white-space: nowrap;
+}
+
+#updateModal .update-direct-download:hover {
+  background: var(--surfaceHover);
+  color: var(--text);
+}
+
+#updateModal .update-actions {
+  padding: 12px 16px 16px;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 8px;
+  border-top: 1px solid var(--border2);
+}
+
+#updateModal .update-actions button {
+  min-width: 0;
+  min-height: 40px;
+}
+
+#updateModal .update-later:hover {
+  background: var(--surfaceHover);
+  color: var(--text);
+}
+
+#updateModal .update-primary:hover {
+  border-color: color-mix(in srgb, var(--accent) 88%, var(--card));
+  background: color-mix(in srgb, var(--accent) 88%, var(--card));
+  color: var(--accentText);
+}
+
+@media (max-width: 480px) {
+  #updateModal {
+    padding: max(12px, env(safe-area-inset-top)) max(12px, env(safe-area-inset-right))
+      max(12px, env(safe-area-inset-bottom)) max(12px, env(safe-area-inset-left));
+  }
+
+  #updateModal .update-card {
+    width: 100%;
+    max-width: 100%;
+    max-height: 100%;
+  }
+
+  #updateModal .update-header {
+    padding: 14px;
+    gap: 9px;
+  }
+
+  #updateModal .update-icon {
+    width: 34px;
+    height: 34px;
+  }
+
+  #updateModal .update-content {
+    padding: 12px 14px;
+  }
+
+  #updateModal .update-asset {
+    align-items: flex-start;
+  }
+
+  #updateModal .update-close,
+  #updateModal .update-direct-download {
+    min-height: 44px;
+  }
+
+  #updateModal .update-actions {
+    padding: 11px 14px 14px;
+  }
+
+  #updateModal .update-actions button {
+    min-height: 44px;
+  }
+}
+/* End update information card */
+
+#settingsModal .modal-panel {
+  width: min(94vw, 560px);
+  max-width: 100%;
+  max-height: min(88dvh, 760px);
+}
+
+#settingsModal .settings-shell {
+  min-height: 0;
+  flex: 1 1 auto;
+  display: flex;
+  flex-direction: column;
+}
+
+#settingsModal .settings-category-tabs {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: 2px;
+  margin: 10px 12px 0;
+  padding: 3px;
+  border: 1px solid var(--border2);
+  border-radius: 12px;
+  background: var(--card2);
+}
+
+#settingsModal .settings-category-tab {
+  min-width: 0;
+  padding: 8px 3px;
+  border-color: transparent;
+  border-radius: 9px;
+  background: transparent;
+  color: var(--muted);
+  font-size: 13px;
+  font-weight: 700;
+  white-space: nowrap;
+  box-shadow: none;
+}
+
+#settingsModal .settings-category-tab:hover {
+  background: var(--surfaceHover);
+  color: var(--text);
+}
+
+#settingsModal .settings-category-tab[aria-selected="true"] {
+  border-color: color-mix(in srgb, var(--text) 12%, var(--border2));
+  background: color-mix(in srgb, var(--text) 8%, var(--card2));
+  color: var(--text);
+}
+
+#settingsModal .settings-category-tab:focus-visible {
+  outline: 2px solid var(--text);
+  outline-offset: 2px;
+}
+
+#settingsModal .modal-body {
+  min-height: 0;
+  flex: 1 1 auto;
+}
+
+#settingsModal .settings-category-panel {
+  min-width: 0;
+}
+
+#settingsModal .settings-category-panel[hidden] {
+  display: none;
+}
+
+#settingsModal .settings-accordion-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 10px;
+}
+
+#settingsModal .settings-accordion-card {
+  min-width: 0;
+  align-self: start;
+  overflow: hidden;
+  border: 1px solid var(--border);
+  border-radius: 13px;
+  background: var(--card);
+}
+
+#settingsModal .settings-accordion-card > summary {
+  min-height: 44px;
+  padding: 11px 38px 11px 12px;
+  position: relative;
+  display: flex;
+  align-items: center;
+  color: var(--text);
+  background: var(--card2);
+  cursor: pointer;
+  font-size: 13px;
+  font-weight: 800;
+  list-style: none;
+}
+
+#settingsModal .settings-accordion-card > summary::-webkit-details-marker {
+  display: none;
+}
+
+#settingsModal .settings-accordion-card > summary::after {
+  content: "";
+  width: 7px;
+  height: 7px;
+  position: absolute;
+  right: 15px;
+  top: 50%;
+  border-right: 1.5px solid var(--muted);
+  border-bottom: 1.5px solid var(--muted);
+  transform: translateY(-70%) rotate(45deg);
+  transition: transform 0.18s ease;
+}
+
+#settingsModal .settings-accordion-card[open] > summary {
+  border-bottom: 1px solid var(--border2);
+}
+
+#settingsModal .settings-accordion-card[open] > summary::after {
+  transform: translateY(-30%) rotate(225deg);
+}
+
+#settingsModal .settings-accordion-card > summary:hover {
+  background: var(--surfaceHover);
+}
+
+#settingsModal .settings-accordion-content {
+  padding: 12px;
+  display: grid;
+  gap: 10px;
+  background: var(--card);
+}
+
+#settingsModal #settingsPanelAccount .account-panel {
+  width: 100%;
+}
+
+@media (min-width: 760px) {
+  #settingsModal .modal-panel {
+    width: min(94vw, 920px);
+    max-width: 100%;
+    height: min(88dvh, 780px);
+    max-height: min(88dvh, 780px);
+  }
+
+  #settingsModal .settings-shell {
+    display: grid;
+    grid-template-columns: 148px minmax(0, 1fr);
+  }
+
+  #settingsModal .settings-category-tabs {
+    display: flex;
+    flex-direction: column;
+    align-self: stretch;
+    gap: 4px;
+    margin: 12px 0 12px 12px;
+    padding: 4px;
+  }
+
+  #settingsModal .settings-category-tab {
+    width: 100%;
+    padding: 11px 12px;
+    text-align: left;
+  }
+
+  #settingsModal .modal-body {
+    padding: 12px;
+  }
+
+  #settingsModal .settings-accordion-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  #settingsModal .settings-accordion-wide {
+    grid-column: 1 / -1;
+  }
+}
+
 .wordbook-picker-modal,
 .android-select-picker-modal {
   align-items: end;
@@ -1890,13 +2332,13 @@ body.theme-dark .offline-tts-status.is-error {
 }
 
 .account-summary {
-  margin-top: 12px;
-  padding: 12px;
+  margin-top: 10px;
+  padding: 10px;
   border-radius: 14px;
   border: 1px solid var(--border);
   background: linear-gradient(180deg, var(--card2), var(--card));
   display: grid;
-  gap: 10px;
+  gap: 8px;
 }
 
 .account-summary-head {
@@ -1935,102 +2377,141 @@ body.theme-dark .offline-tts-status.is-error {
   white-space: nowrap;
 }
 
-.account-summary-meta-row {
+.account-summary-sync {
   display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
+  grid-template-columns: auto minmax(0, 1fr);
+  align-items: center;
   gap: 8px;
-}
-
-.account-summary-meta-row-tight {
-  gap: 6px;
-}
-
-.account-summary-meta-item {
-  padding: 8px 10px;
-  border-radius: 12px;
-  background: var(--card2);
+  min-width: 0;
+  padding: 7px 9px;
   border: 1px solid var(--border2);
-  display: grid;
-  gap: 2px;
+  border-radius: 11px;
+  background: var(--card2);
 }
 
-.account-summary-meta-item span {
+.account-summary-sync-state,
+.account-summary-sync-latest {
+  min-width: 0;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.account-summary-sync-latest {
+  justify-content: flex-end;
+  text-align: right;
+}
+
+.account-summary-sync span {
   font-size: 11px;
   color: var(--muted);
+  white-space: nowrap;
 }
 
-.account-summary-meta-item strong {
-  font-size: 13px;
-  color: var(--text);
-  line-height: 1.35;
-  word-break: break-word;
-}
-
-.account-summary-grid {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 10px;
-}
-
-.account-summary-grid.compact {
-  grid-template-columns: repeat(4, minmax(0, 1fr));
-  gap: 8px;
-}
-
-.account-summary-grid.account-summary-grid-dense {
-  grid-template-columns: repeat(4, minmax(0, 1fr));
-  gap: 8px;
-}
-
-.account-summary-item {
-  padding: 9px 10px;
-  border-radius: 12px;
-  background: var(--card2);
-  border: 1px solid var(--border2);
-  display: grid;
-  gap: 3px;
-}
-
-.account-summary-item span {
+.account-summary-sync strong {
+  min-width: 0;
   font-size: 12px;
-  color: var(--muted);
-}
-
-.account-summary-item strong {
-  font-size: 14px;
   color: var(--text);
-  word-break: break-word;
+  line-height: 1.3;
+  overflow-wrap: anywhere;
 }
 
-.account-summary-item-wide {
-  grid-column: span 2;
-}
-
-.account-summary-quicklist {
+.account-summary-key-stats,
+.account-summary-secondary-stats {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 8px;
+  overflow: hidden;
+  border: 1px solid var(--border2);
+  border-radius: 11px;
+  background: var(--card2);
 }
 
-.account-summary-quickitem {
-  padding: 8px 10px;
-  border-radius: 12px;
-  border: 1px dashed var(--border3);
-  background: color-mix(in srgb, var(--card2) 88%, transparent);
+.account-summary-stat {
+  min-width: 0;
+  padding: 7px 5px;
   display: grid;
-  gap: 3px;
+  gap: 2px;
+  text-align: center;
+  border-right: 1px solid var(--border2);
 }
 
-.account-summary-quickitem span {
+.account-summary-stat:last-child {
+  border-right: 0;
+}
+
+.account-summary-stat span {
+  font-size: 10px;
+  color: var(--muted);
+  white-space: nowrap;
+}
+
+.account-summary-stat strong {
+  min-width: 0;
+  font-size: 13px;
+  color: var(--text);
+  line-height: 1.25;
+  overflow-wrap: anywhere;
+}
+
+.account-summary-details-toggle {
+  width: 100%;
+  min-height: 34px;
+  padding: 7px 9px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  border-radius: 10px;
+  border-color: var(--border2);
+  background: transparent;
+  color: var(--muted);
+  font-size: 12px;
+  text-align: left;
+}
+
+.account-summary-details-toggle::after {
+  content: "";
+  width: 7px;
+  height: 7px;
+  flex: 0 0 auto;
+  border-right: 1.5px solid currentColor;
+  border-bottom: 1.5px solid currentColor;
+  transform: rotate(45deg) translateY(-2px);
+  transition: transform 0.18s ease;
+}
+
+.account-summary-details-toggle.is-expanded::after {
+  transform: rotate(225deg) translate(-1px, -1px);
+}
+
+.account-summary-details {
+  display: grid;
+  gap: 7px;
+}
+
+.account-summary-session {
+  min-width: 0;
+  padding: 7px 9px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  border: 1px solid var(--border2);
+  border-radius: 11px;
+  background: var(--card2);
+}
+
+.account-summary-session span {
   font-size: 11px;
   color: var(--muted);
 }
 
-.account-summary-quickitem strong {
-  font-size: 13px;
+.account-summary-session strong {
+  min-width: 0;
+  font-size: 12px;
   color: var(--text);
-  line-height: 1.35;
-  word-break: break-word;
+  text-align: right;
+  overflow-wrap: anywhere;
 }
 
 .account-summary-actions {
@@ -2102,6 +2583,16 @@ body.theme-dark .account-badge {
   color: #7ee2b8;
 }
 
+@media (min-width: 431px) {
+  .account-summary-details-toggle {
+    display: none;
+  }
+
+  .account-summary-details {
+    grid-template-columns: minmax(0, 3fr) minmax(140px, 1fr);
+  }
+}
+
 .records-stats {
   font-size: 13px;
   color: var(--muted);
@@ -2122,10 +2613,6 @@ body.theme-dark .account-badge {
 
   .view-tabs.account-tabs button {
     flex: 1 1 0;
-  }
-
-  .account-summary-grid.account-summary-grid-dense {
-    grid-template-columns: repeat(3, minmax(0, 1fr));
   }
 
   .account-summary-actions {
@@ -2168,9 +2655,9 @@ body.theme-dark .account-badge {
   }
 
   .account-summary {
-    margin-top: 10px;
-    padding: 10px;
-    gap: 8px;
+    margin-top: 8px;
+    padding: 8px;
+    gap: 7px;
   }
 
   .account-summary-head {
@@ -2192,19 +2679,20 @@ body.theme-dark .account-badge {
     font-size: 11px;
   }
 
-  .account-summary-meta-row,
-  .account-summary-grid.account-summary-grid-dense {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
+  .account-summary-sync {
     gap: 6px;
+    padding: 6px 8px;
   }
 
-  .account-summary-meta-item,
-  .account-summary-item {
-    padding: 8px;
+  .account-summary-sync-latest {
+    gap: 4px;
   }
 
-  .account-summary-meta-item strong,
-  .account-summary-item strong {
+  .account-summary-stat {
+    padding: 6px 4px;
+  }
+
+  .account-summary-stat strong {
     font-size: 13px;
   }
 
@@ -2215,6 +2703,10 @@ body.theme-dark .account-badge {
 
   .account-summary-actions #cloudLogoutBtn {
     grid-column: 1 / -1;
+    min-height: 32px;
+    padding: 6px 8px;
+    border-color: transparent;
+    color: var(--muted);
   }
 
   .account-summary-actions button {

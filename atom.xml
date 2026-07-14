@@ -311,8 +311,8 @@
     </author>
     <category term="Tech" scheme="https://k7tmiz.github.io/categories/Tech/"/>
     <category term="hexo" scheme="https://k7tmiz.github.io/tags/hexo/"/>
-    <id>https://k7tmiz.github.io/posts/null.html</id>
-    <link href="https://k7tmiz.github.io/posts/null.html"/>
+    <id>https://k7tmiz.github.io/posts/Infinity.html</id>
+    <link href="https://k7tmiz.github.io/posts/Infinity.html"/>
     <published>2025-05-19T00:46:03.000Z</published>
     <summary>
       <![CDATA[<h1 id="使用git分支保存Hexo源码到Github"><a href="#使用git分支保存Hexo源码到Github" class="headerlink" title="使用git分支保存Hexo源码到Github"></a>使用git分支保存Hexo源码到Github</h1><p>引言：最开始想弄这个主要是因为我有多系统，多台设备，每次都要把整个文件夹进行压缩备份到U盘，效率低且不够优雅，偶然搜索到两篇帖子，助我解决了这一大难题，这里感谢<a href="https://zhuanlan.zhihu.com/p/71544809">使用git分支保存hexo博客源码到github</a> 和 <a href="https://www.cnblogs.com/eidolonw/p/13066869.html">hexo源码上传到GitHub</a> 这两篇帖子的编写者！</p>
@@ -420,6 +420,21 @@
       <name>k7tmiz</name>
     </author>
     <category term="Linux" scheme="https://k7tmiz.github.io/categories/Linux/"/>
+    <category term="linux" scheme="https://k7tmiz.github.io/tags/linux/"/>
+    <id>https://k7tmiz.github.io/posts/a907d758.html</id>
+    <link href="https://k7tmiz.github.io/posts/a907d758.html"/>
+    <published>2025-04-19T14:28:32.000Z</published>
+    <summary>
+      <![CDATA[<h2 id="初步配置"><a href="#初步配置" class="headerlink" title="初步配置"></a>初步配置</h2><h4 id="联网"><a href="#联网" class="headerlink" title="联网"></a>联网</h4> <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">dhcpcd/iwctl</span><br></pre></td></tr></table></figure>]]>
+    </summary>
+    <title>Archlinux安装指南</title>
+    <updated>2026-05-05T07:28:54.638Z</updated>
+  </entry>
+  <entry>
+    <author>
+      <name>k7tmiz</name>
+    </author>
+    <category term="Linux" scheme="https://k7tmiz.github.io/categories/Linux/"/>
     <category term="tech" scheme="https://k7tmiz.github.io/tags/tech/"/>
     <category term="steam" scheme="https://k7tmiz.github.io/tags/steam/"/>
     <id>https://k7tmiz.github.io/posts/2a1b98b0.html</id>
@@ -433,21 +448,6 @@
     </summary>
     <title>Switch-SteamLibrary</title>
     <updated>2026-05-05T07:38:12.360Z</updated>
-  </entry>
-  <entry>
-    <author>
-      <name>k7tmiz</name>
-    </author>
-    <category term="Linux" scheme="https://k7tmiz.github.io/categories/Linux/"/>
-    <category term="linux" scheme="https://k7tmiz.github.io/tags/linux/"/>
-    <id>https://k7tmiz.github.io/posts/a907d758.html</id>
-    <link href="https://k7tmiz.github.io/posts/a907d758.html"/>
-    <published>2025-04-19T14:28:32.000Z</published>
-    <summary>
-      <![CDATA[<h2 id="初步配置"><a href="#初步配置" class="headerlink" title="初步配置"></a>初步配置</h2><h4 id="联网"><a href="#联网" class="headerlink" title="联网"></a>联网</h4> <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">dhcpcd/iwctl</span><br></pre></td></tr></table></figure>]]>
-    </summary>
-    <title>Archlinux安装指南</title>
-    <updated>2026-05-05T07:28:54.638Z</updated>
   </entry>
   <entry>
     <author>

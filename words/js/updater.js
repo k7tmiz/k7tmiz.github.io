@@ -1,5 +1,5 @@
 ;(function () {
-  const APP_VERSION = "1.0.31"
+  const APP_VERSION = "1.0.32"
   const REPO = "k7tmiz/A4-Memory"
   const CACHE_KEY = "a4-memory:update-check:v1"
   const SKIP_KEY = "a4-memory:update-skip:v1"
@@ -20,13 +20,68 @@
     return latest.patch > current.patch
   }
 
-  function stripHtml(html) {
+  function normalizeReleaseNotes(input) {
+    let source
     try {
-      const doc = new DOMParser().parseFromString(html, "text/html")
-      return (doc.body.textContent || doc.body.innerText || "").trim()
+      source = input == null ? "" : String(input)
     } catch {
-      return String(html || "").replace(/<[^>]*>/g, "").trim()
+      source = ""
     }
+
+    source = source
+      .replace(/<!--[\s\S]*?-->/g, "")
+      .replace(/<br\b(?:"[^"]*"|'[^']*'|[^'">])*>/gi, "\n")
+      .replace(/<\/?(?:p|div|li|h[1-6]|ul|ol|blockquote|pre)\b(?:"[^"]*"|'[^']*'|[^'">])*>/gi, "\n")
+      .replace(/<\/?[a-z][a-z0-9:-]*\b(?:"[^"]*"|'[^']*'|[^'">])*>/gi, "")
+      .replace(/&nbsp;/gi, " ")
+      .replace(/&amp;/gi, "&")
+      .replace(/&lt;/gi, "<")
+      .replace(/&gt;/gi, ">")
+      .replace(/&quot;/gi, "\"")
+      .replace(/&#39;|&apos;/gi, "'")
+      .replace(/\r\n?/g, "\n")
+
+    const recognizedHeading = /^(?:本次更新|更新内容|更新说明|what['’]s changed|changes|changelog|release notes)\s*[:：]?$/i
+    const getMarkdownHeading = (line) => {
+      const match = String(line || "").match(/^\s{0,3}#{1,6}(?:[\t ]+|$)(.*)$/)
+      return match ? match[1].replace(/[\t ]+#+[\t ]*$/, "").trim() : null
+    }
+    let sourceLines = source.split("\n")
+    const sectionStart = sourceLines.findIndex((line) => {
+      const heading = getMarkdownHeading(line)
+      return heading !== null && recognizedHeading.test(heading)
+    })
+    if (sectionStart >= 0) {
+      const sectionLines = []
+      for (let i = sectionStart + 1; i < sourceLines.length; i += 1) {
+        if (getMarkdownHeading(sourceLines[i]) !== null) break
+        sectionLines.push(sourceLines[i])
+      }
+      sourceLines = sectionLines
+    }
+
+    const notes = []
+    const redundantHeading = /^(?:本次更新|更新内容|更新说明|版本更新|what'?s new|changes?|changelog|release notes?)\s*[:：]?$/i
+    for (const rawLine of sourceLines) {
+      let line = rawLine.trim()
+      if (!line || /^[-*_]{3,}$/.test(line)) continue
+
+      line = line
+        .replace(/^\s{0,3}(?:#{1,6}\s*|[-*+]\s+|\d+[.)]\s+|>\s*)/, "")
+        .trim()
+      if (!line || redundantHeading.test(line)) continue
+
+      if (line.length > 120) {
+        let shortened = line.slice(0, 119)
+        if (/[\uD800-\uDBFF]$/.test(shortened)) shortened = shortened.slice(0, -1)
+        line = shortened.replace(/\s+$/, "") + "…"
+      }
+
+      notes.push(line)
+      if (notes.length === 4) break
+    }
+
+    return notes.length ? notes : ["包含功能优化与问题修复。"]
   }
 
   function getPlatformKind() {
@@ -115,53 +170,134 @@
     if (modal) return modal
 
     modal = document.createElement("div")
-    modal.className = "modal hidden"
+    modal.className = "modal hidden update-modal"
     modal.id = "updateModal"
     modal.setAttribute("aria-hidden", "true")
 
     const backdrop = document.createElement("div")
-    backdrop.className = "modal-backdrop"
+    backdrop.className = "modal-backdrop update-backdrop"
     backdrop.setAttribute("data-update-close", "1")
 
     const panel = document.createElement("div")
-    panel.className = "modal-panel"
-    panel.style.maxWidth = "480px"
+    panel.className = "modal-panel update-card"
+    panel.setAttribute("role", "dialog")
+    panel.setAttribute("aria-modal", "true")
+    panel.setAttribute("aria-labelledby", "updateTitle")
+    panel.setAttribute("aria-describedby", "updateBody")
 
     const header = document.createElement("div")
-    header.className = "modal-header"
+    header.className = "update-header"
+
+    const icon = document.createElement("span")
+    icon.className = "update-icon"
+    icon.setAttribute("aria-hidden", "true")
+    icon.textContent = "↑"
+
+    const heading = document.createElement("div")
+    heading.className = "update-heading"
 
     const title = document.createElement("h2")
     title.id = "updateTitle"
-    title.textContent = "新版本可用"
+    title.textContent = "发现新版本"
+
+    const subtitle = document.createElement("p")
+    subtitle.className = "update-subtitle"
+    subtitle.textContent = "安装最新版本，获得更好的使用体验。"
 
     const closeBtn = document.createElement("button")
-    closeBtn.className = "ghost"
+    closeBtn.className = "ghost update-close"
+    closeBtn.type = "button"
     closeBtn.setAttribute("data-update-close", "1")
     closeBtn.setAttribute("aria-label", "关闭")
-    closeBtn.textContent = "✕"
+    closeBtn.textContent = "关闭"
 
-    header.appendChild(title)
+    heading.appendChild(title)
+    heading.appendChild(subtitle)
+    header.appendChild(icon)
+    header.appendChild(heading)
     header.appendChild(closeBtn)
 
     const body = document.createElement("div")
-    body.className = "modal-body"
+    body.className = "update-content"
     body.id = "updateBody"
-    body.style.lineHeight = "1.6"
+
+    const versionRow = document.createElement("div")
+    versionRow.className = "update-version-row"
+    versionRow.setAttribute("aria-label", "版本对比")
+
+    const currentVersion = document.createElement("span")
+    currentVersion.className = "update-version-current"
+    currentVersion.textContent = "v" + APP_VERSION
+
+    const versionArrow = document.createElement("span")
+    versionArrow.className = "update-version-arrow"
+    versionArrow.setAttribute("aria-hidden", "true")
+    versionArrow.textContent = "→"
+
+    const latestVersion = document.createElement("span")
+    latestVersion.className = "update-version-latest"
+    latestVersion.id = "updateLatestVersion"
+
+    versionRow.appendChild(currentVersion)
+    versionRow.appendChild(versionArrow)
+    versionRow.appendChild(latestVersion)
+
+    const notesSection = document.createElement("section")
+    notesSection.className = "update-notes"
+
+    const sectionTitle = document.createElement("h3")
+    sectionTitle.textContent = "本次更新"
+
+    const notesList = document.createElement("ul")
+    notesList.className = "update-note-list"
+    notesList.id = "updateNotesList"
+
+    notesSection.appendChild(sectionTitle)
+    notesSection.appendChild(notesList)
+
+    const assetRow = document.createElement("div")
+    assetRow.className = "update-asset"
+
+    const assetCopy = document.createElement("div")
+    assetCopy.className = "update-asset-copy"
+
+    const assetLabel = document.createElement("span")
+    assetLabel.className = "update-asset-label"
+    assetLabel.id = "updateAssetLabel"
+
+    const assetName = document.createElement("span")
+    assetName.className = "update-asset-name"
+    assetName.id = "updateAssetName"
+
+    const directDownloadBtn = document.createElement("button")
+    directDownloadBtn.className = "ghost update-direct-download hidden"
+    directDownloadBtn.id = "updateDirectDownloadBtn"
+    directDownloadBtn.type = "button"
+    directDownloadBtn.textContent = "备用下载"
+
+    assetCopy.appendChild(assetLabel)
+    assetCopy.appendChild(assetName)
+    assetRow.appendChild(assetCopy)
+    assetRow.appendChild(directDownloadBtn)
+
+    body.appendChild(versionRow)
+    body.appendChild(notesSection)
+    body.appendChild(assetRow)
 
     const actions = document.createElement("div")
-    actions.className = "modal-actions"
-    actions.style.justifyContent = "flex-end"
-    actions.style.padding = "0 12px 12px"
+    actions.className = "update-actions"
 
     const skipBtn = document.createElement("button")
-    skipBtn.className = "ghost"
+    skipBtn.className = "ghost update-later"
     skipBtn.id = "updateSkipBtn"
+    skipBtn.type = "button"
     skipBtn.textContent = "稍后提醒"
 
     const downloadBtn = document.createElement("button")
-    downloadBtn.className = "primary"
+    downloadBtn.className = "primary update-primary"
     downloadBtn.id = "updateDownloadBtn"
-    downloadBtn.textContent = "查看下载"
+    downloadBtn.type = "button"
+    downloadBtn.textContent = "前往更新"
 
     actions.appendChild(skipBtn)
     actions.appendChild(downloadBtn)
@@ -196,6 +332,10 @@
       })
     })
 
+    directDownloadBtn.addEventListener("click", function () {
+      if (modal._directDownloadUrl) openExternalUrl(modal._directDownloadUrl)
+    })
+
     document.body.appendChild(modal)
     return modal
   }
@@ -216,59 +356,49 @@
     m._latestVersion = version
     m._releaseUrl = platform === "android" ? (releaseUrl || downloadUrl) : (downloadUrl || releaseUrl)
 
-    const titleEl = document.getElementById("updateTitle")
-    if (titleEl) titleEl.textContent = "新版本可用 " + version
-
     const resolvedDownloadUrl = downloadUrl || releaseUrl || ("https://github.com/" + REPO + "/releases/latest")
     const resolvedReleaseUrl = releaseUrl || ("https://github.com/" + REPO + "/releases/latest")
-    const downloadFileName = getDownloadFileName(resolvedDownloadUrl, assetName)
-    const bodyEl = document.getElementById("updateBody")
-    if (bodyEl) {
-      bodyEl.innerHTML = ""
-      let text = stripHtml(bodyHtml || "")
-      if (text.length > 300) text = text.slice(0, 300) + "..."
-      if (text) {
-        const lines = text.split("\n")
-        const p = document.createElement("p")
-        for (let i = 0; i < lines.length; i++) {
-          if (i > 0) p.appendChild(document.createElement("br"))
-          p.appendChild(document.createTextNode(lines[i]))
-        }
-        bodyEl.appendChild(p)
+    const hasDistinctDownload = resolvedDownloadUrl !== resolvedReleaseUrl
+    const downloadFileName = (assetName || hasDistinctDownload)
+      ? getDownloadFileName(resolvedDownloadUrl, assetName)
+      : ""
+
+    const latestVersionEl = document.getElementById("updateLatestVersion")
+    if (latestVersionEl) latestVersionEl.textContent = String(version || "")
+
+    const notesListEl = document.getElementById("updateNotesList")
+    if (notesListEl) {
+      notesListEl.textContent = ""
+      for (const note of normalizeReleaseNotes(bodyHtml)) {
+        const noteItem = document.createElement("li")
+        noteItem.textContent = note
+        notesListEl.appendChild(noteItem)
       }
-      const footer = document.createElement("div")
-      footer.style.cssText = "margin-top:10px;font-size:13px;color:var(--muted);word-break:break-all"
-      if (platform === "android" && downloadFileName.endsWith(".apk")) {
-        footer.appendChild(document.createTextNode("Android 下载：请在打开的 Release 页面点击 "))
-        const strong = document.createElement("strong")
-        strong.textContent = downloadFileName
-        footer.appendChild(strong)
-        footer.appendChild(document.createElement("br"))
-        const releaseLink = document.createElement("a")
-        releaseLink.href = resolvedReleaseUrl
-        releaseLink.textContent = resolvedReleaseUrl
-        releaseLink.style.cursor = "pointer"
-        releaseLink.addEventListener("click", function (e) {
-          e.preventDefault()
-          openExternalUrl(resolvedReleaseUrl)
-        })
-        footer.appendChild(releaseLink)
-        footer.appendChild(document.createElement("br"))
-        footer.appendChild(document.createTextNode("备用直链："))
-      } else {
-        footer.appendChild(document.createTextNode("下载地址："))
-      }
-      footer.appendChild(document.createElement("br"))
-      const a = document.createElement("a")
-      a.href = resolvedDownloadUrl
-      a.textContent = resolvedDownloadUrl
-      a.style.cursor = "pointer"
-      a.addEventListener("click", function (e) {
-        e.preventDefault()
-        openExternalUrl(resolvedDownloadUrl)
-      })
-      footer.appendChild(a)
-      bodyEl.appendChild(footer)
+    }
+
+    const assetLabels = {
+      android: "Android 安装包",
+      macos: "macOS 安装包",
+      windows: "Windows 安装包",
+      linux: "Linux 安装包",
+      unknown: "版本发布页",
+    }
+    const assetLabelEl = document.getElementById("updateAssetLabel")
+    if (assetLabelEl) assetLabelEl.textContent = assetLabels[platform] || assetLabels.unknown
+
+    const assetNameEl = document.getElementById("updateAssetName")
+    if (assetNameEl) {
+      assetNameEl.textContent = downloadFileName
+      assetNameEl.classList.toggle("hidden", !downloadFileName)
+    }
+
+    const showDirectDownload = platform === "android" &&
+      !!downloadFileName &&
+      resolvedDownloadUrl !== resolvedReleaseUrl
+    m._directDownloadUrl = showDirectDownload ? resolvedDownloadUrl : ""
+    const directDownloadBtn = document.getElementById("updateDirectDownloadBtn")
+    if (directDownloadBtn) {
+      directDownloadBtn.classList.toggle("hidden", !showDirectDownload)
     }
 
     if (window.A4Common && window.A4Common.setModalVisible) {
@@ -350,5 +480,6 @@
     getPlatformKind: getPlatformKind,
     selectReleaseDownloadAsset: selectReleaseDownloadAsset,
     selectReleaseDownloadUrl: selectReleaseDownloadUrl,
+    normalizeReleaseNotes: normalizeReleaseNotes,
   }
 })()

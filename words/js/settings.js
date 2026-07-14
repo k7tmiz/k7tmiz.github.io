@@ -409,6 +409,48 @@
     return { name, description, language, words, removedEmpty, removedDup }
   }
 
+  function installSettingsCategoryNavigation({ tabs, panels, scrollContainer } = {}) {
+    const tabList = Array.from(tabs || [])
+    const panelList = Array.from(panels || [])
+    const panelById = new Map(panelList.map((panel) => [panel.id, panel]))
+    const navigationKeys = new Set(["ArrowLeft", "ArrowRight", "ArrowUp", "ArrowDown", "Home", "End"])
+
+    function activate(tabOrIndex, { focus = false, resetScroll = true } = {}) {
+      const index = typeof tabOrIndex === "number" ? tabOrIndex : tabList.indexOf(tabOrIndex)
+      if (index < 0 || index >= tabList.length) return
+      const activeTab = tabList[index]
+      const activePanel = panelById.get(activeTab.getAttribute("aria-controls"))
+
+      for (const tab of tabList) {
+        const selected = tab === activeTab
+        tab.setAttribute("aria-selected", selected ? "true" : "false")
+        tab.tabIndex = selected ? 0 : -1
+      }
+      for (const panel of panelList) panel.hidden = panel !== activePanel
+      if (resetScroll && scrollContainer) scrollContainer.scrollTop = 0
+      if (focus) activeTab.focus()
+    }
+
+    function getNextIndex(index, key) {
+      const lastIndex = tabList.length - 1
+      if (key === "Home") return 0
+      if (key === "End") return lastIndex
+      if (key === "ArrowRight" || key === "ArrowDown") return (index + 1) % tabList.length
+      return (index - 1 + tabList.length) % tabList.length
+    }
+
+    tabList.forEach((tab, index) => {
+      tab.addEventListener("click", () => activate(index))
+      tab.addEventListener("keydown", (event) => {
+        if (!navigationKeys.has(event.key) || !tabList.length) return
+        event.preventDefault()
+        activate(getNextIndex(index, event.key), { focus: true })
+      })
+    })
+
+    return { activate }
+  }
+
   function buildSettingsModalDom() {
     const modal = document.createElement("div")
     modal.className = "modal hidden"
@@ -423,9 +465,163 @@
             <button class="ghost" id="closeSettingsBtn" type="button">关闭</button>
           </div>
         </div>
-        <div class="modal-body">
-          <section class="panel">
-            <div class="section-title">学习</div>
+        <div class="settings-shell">
+          <div class="settings-category-tabs" role="tablist" aria-label="设置类别">
+            <button class="settings-category-tab" id="settingsTabAccount" type="button" role="tab" aria-controls="settingsPanelAccount" aria-selected="true" tabindex="0">账号</button>
+            <button class="settings-category-tab" id="settingsTabLearning" type="button" role="tab" aria-controls="settingsPanelLearning" aria-selected="false" tabindex="-1">学习</button>
+            <button class="settings-category-tab" id="settingsTabPronunciation" type="button" role="tab" aria-controls="settingsPanelPronunciation" aria-selected="false" tabindex="-1">发音</button>
+            <button class="settings-category-tab" id="settingsTabAi" type="button" role="tab" aria-controls="settingsPanelAi" aria-selected="false" tabindex="-1">AI</button>
+            <button class="settings-category-tab" id="settingsTabMore" type="button" role="tab" aria-controls="settingsPanelMore" aria-selected="false" tabindex="-1">更多</button>
+          </div>
+          <div class="modal-body">
+            <section class="settings-category-panel" id="settingsPanelAccount" role="tabpanel" aria-labelledby="settingsTabAccount">
+              <section class="panel account-panel" id="accountPanel">
+                <div class="section-title">账号</div>
+                <div id="accountLoggedOut">
+                  <div class="form-help">登录后可用云端备份；没有账号可注册或重置密码。</div>
+                  <div class="view-tabs account-tabs" role="tablist" aria-label="账号操作">
+                    <button class="ghost active" id="accountTabLoginBtn" type="button" role="tab" aria-selected="true">登录</button>
+                    <button class="ghost" id="accountTabRegisterBtn" type="button" role="tab" aria-selected="false">注册</button>
+                    <button class="ghost" id="accountTabResetBtn" type="button" role="tab" aria-selected="false">重置密码</button>
+                  </div>
+                  <div class="account-section hidden" id="accountRegisterSection">
+                    <div class="account-section-title">邮箱验证码注册</div>
+                    <div class="form-row">
+                      <div class="form-label">注册邮箱</div>
+                      <div class="form-control form-control-stack">
+                        <input id="cloudEmailInput" class="text-input" type="email" placeholder="用于接收注册验证码" autocomplete="email" />
+                        <div id="cloudEmailHint" class="form-help field-help hidden"></div>
+                      </div>
+                    </div>
+                    <div class="form-row">
+                      <div class="form-label">注册验证码</div>
+                      <div class="form-control form-control-stack">
+                        <input id="cloudRegisterCodeInput" class="text-input" type="text" inputmode="numeric" maxlength="6" pattern="\\d{6}" placeholder="6 位验证码" autocomplete="one-time-code" />
+                        <div id="cloudRegisterCodeHint" class="form-help field-help hidden"></div>
+                      </div>
+                    </div>
+                    <div class="account-actions">
+                      <button class="ghost full" id="cloudSendCodeBtn" type="button">发送注册验证码</button>
+                    </div>
+                    <div class="form-row">
+                      <div class="form-label">用户名</div>
+                      <div class="form-control form-control-stack">
+                        <input id="cloudUsernameInput" class="text-input" type="text" maxlength="32" placeholder="注册用户名" autocomplete="username" />
+                        <div id="cloudUsernameHint" class="form-help field-help hidden"></div>
+                      </div>
+                    </div>
+                    <div class="form-row">
+                      <div class="form-label">密码</div>
+                      <div class="form-control form-control-stack">
+                        <input id="cloudPasswordInput" class="text-input" type="password" minlength="8" placeholder="注册密码" autocomplete="new-password" />
+                        <div id="cloudPasswordHint" class="form-help field-help hidden"></div>
+                      </div>
+                    </div>
+                    <div class="account-actions">
+                      <button class="ghost full" id="cloudRegisterBtn" type="button">邮箱验证码注册</button>
+                    </div>
+                  </div>
+                  <div class="account-section" id="accountLoginSection">
+                    <div class="account-section-title">账号登录</div>
+                    <div class="form-row">
+                      <div class="form-label">登录邮箱</div>
+                      <div class="form-control form-control-stack">
+                        <input id="cloudLoginEmailInput" class="text-input" type="email" placeholder="输入注册邮箱" autocomplete="email" />
+                        <div id="cloudLoginEmailHint" class="form-help field-help hidden"></div>
+                      </div>
+                    </div>
+                    <div class="form-row">
+                      <div class="form-label">密码</div>
+                      <div class="form-control form-control-stack">
+                        <input id="cloudLoginPasswordInput" class="text-input" type="password" minlength="8" placeholder="输入密码" autocomplete="current-password" />
+                        <div id="cloudLoginPasswordHint" class="form-help field-help hidden"></div>
+                      </div>
+                    </div>
+                    <div class="account-actions">
+                      <button class="primary full" id="cloudLoginBtn" type="button">登录</button>
+                    </div>
+                  </div>
+                  <div class="account-section hidden" id="accountResetSection">
+                    <div class="account-section-title">重置密码</div>
+                    <div class="form-row">
+                      <div class="form-label">重置邮箱</div>
+                      <div class="form-control form-control-stack">
+                        <input id="cloudResetEmailInput" class="text-input" type="email" placeholder="接收重置验证码的邮箱" autocomplete="email" />
+                        <div id="cloudResetEmailHint" class="form-help field-help hidden"></div>
+                      </div>
+                    </div>
+                    <div class="form-row">
+                      <div class="form-label">重置验证码</div>
+                      <div class="form-control form-control-stack">
+                        <input id="cloudResetCodeInput" class="text-input" type="text" inputmode="numeric" maxlength="6" pattern="\\d{6}" placeholder="6 位验证码" autocomplete="one-time-code" />
+                        <div id="cloudResetCodeHint" class="form-help field-help hidden"></div>
+                      </div>
+                    </div>
+                    <div class="account-actions">
+                      <button class="ghost full" id="cloudSendResetCodeBtn" type="button">发送重置验证码</button>
+                    </div>
+                    <div class="form-row">
+                      <div class="form-label">新密码</div>
+                      <div class="form-control form-control-stack">
+                        <input id="cloudResetPasswordInput" class="text-input" type="password" minlength="8" placeholder="至少 8 位" autocomplete="new-password" />
+                        <div id="cloudResetPasswordHint" class="form-help field-help hidden"></div>
+                      </div>
+                    </div>
+                    <div class="account-actions">
+                      <button class="ghost full" id="cloudResetPasswordBtn" type="button">重置密码</button>
+                    </div>
+                  </div>
+                </div>
+                <div id="accountLoggedIn" class="hidden">
+                  <div class="account-summary account-summary-compact">
+                    <div class="account-summary-head">
+                      <div class="account-summary-identity">
+                        <div class="account-summary-title" id="cloudAccountTitle">已登录</div>
+                        <div class="account-summary-subtitle" id="cloudAccountSubtitle">当前浏览器已启用云端备份</div>
+                      </div>
+                      <div class="account-badge">在线</div>
+                    </div>
+                    <div class="account-summary-sync">
+                      <div class="account-summary-sync-state">
+                        <span>云备份</span>
+                        <strong id="cloudBackupStateText">已启用</strong>
+                      </div>
+                      <div class="account-summary-sync-latest">
+                        <span>最近同步</span>
+                        <strong id="cloudLastSyncText">尚未同步</strong>
+                      </div>
+                    </div>
+                    <div class="account-summary-key-stats">
+                      <div class="account-summary-stat"><span>单词</span><strong id="cloudWordsText">0</strong></div>
+                      <div class="account-summary-stat"><span>连续</span><strong id="cloudStreakText">0 天</strong></div>
+                      <div class="account-summary-stat"><span>当前轮</span><strong id="cloudCurrentRoundText">未开始</strong></div>
+                    </div>
+                    <button class="account-summary-details-toggle" id="accountStatsToggleBtn" type="button" aria-expanded="false" aria-controls="accountStatsDetails">更多学习统计</button>
+                    <div id="accountStatsDetails" class="account-summary-details hidden">
+                      <div class="account-summary-secondary-stats">
+                        <div class="account-summary-stat"><span>轮次</span><strong id="cloudRoundsText">0</strong></div>
+                        <div class="account-summary-stat"><span>今日新增</span><strong id="cloudTodayWordsText">0</strong></div>
+                        <div class="account-summary-stat"><span>今日完成</span><strong id="cloudTodayRoundsText">0 轮</strong></div>
+                      </div>
+                      <div class="account-summary-session"><span>会话</span><strong id="cloudSessionText">刚刚开始</strong></div>
+                    </div>
+                    <div class="account-summary-actions">
+                      <button class="primary" id="cloudUploadBtn" type="button">上传云端</button>
+                      <button class="ghost" id="cloudDownloadBtn" type="button">恢复本机</button>
+                      <button class="ghost" id="cloudLogoutBtn" type="button">退出登录</button>
+                    </div>
+                    <div class="form-help account-sync-note" id="cloudSyncStatus"></div>
+                  </div>
+                </div>
+                <div class="form-help account-status hidden" id="accountStatus"></div>
+              </section>
+            </section>
+
+            <section class="settings-category-panel" id="settingsPanelLearning" role="tabpanel" aria-labelledby="settingsTabLearning" hidden>
+              <div class="settings-accordion-grid">
+                <details class="settings-accordion-card" open>
+                  <summary>外观与目标</summary>
+                  <div class="settings-accordion-content">
             <div class="form-row">
               <div class="form-label">主题模式</div>
               <div class="form-control">
@@ -459,8 +655,12 @@
               </div>
             </div>
             <div class="form-help">可选 20–30。修改后对新一轮生效。</div>
-
-            <div class="form-row" style="margin-top: 12px;">
+                  </div>
+                </details>
+                <details class="settings-accordion-card">
+                  <summary>复习节奏</summary>
+                  <div class="settings-accordion-content">
+            <div class="form-row">
               <div class="form-label">启用轻量复习</div>
               <div class="form-control"><button class="ghost" id="reviewSystemToggleBtn" type="button">复习：开</button></div>
             </div>
@@ -478,6 +678,12 @@
                 <div class="form-control"><input id="reviewMasteredDaysInput" class="text-input" type="number" min="1" max="365" value="7" /></div>
               </div>
             </div>
+            <div class="form-help">到期规则：按状态计算下次复习时间；到期后会显示"待复习"。</div>
+                  </div>
+                </details>
+                <details class="settings-accordion-card">
+                  <summary>学习体验</summary>
+                  <div class="settings-accordion-content">
             <div class="form-row">
               <div class="form-label">持续背书模式</div>
               <div class="form-control"><button class="ghost" id="continuousStudyModeToggleBtn" type="button">持续背书：关</button></div>
@@ -487,11 +693,16 @@
               <div class="form-label">启用复习卡片翻面</div>
               <div class="form-control"><button class="ghost" id="reviewCardFlipToggleBtn" type="button">翻面：关</button></div>
             </div>
-            <div class="form-help">到期规则：按状态计算下次复习时间；到期后会显示"待复习"。</div>
-          </section>
+                  </div>
+                </details>
+              </div>
+            </section>
 
-          <section class="panel">
-            <div class="section-title">发音</div>
+            <section class="settings-category-panel" id="settingsPanelPronunciation" role="tabpanel" aria-labelledby="settingsTabPronunciation" hidden>
+              <div class="settings-accordion-grid">
+                <details class="settings-accordion-card" open>
+                  <summary>发音方式</summary>
+                  <div class="settings-accordion-content">
             <div class="form-row">
               <div class="form-label">启用发音</div>
               <div class="form-control"><button class="ghost" id="pronounceToggleBtn" type="button">发音：开</button></div>
@@ -522,7 +733,11 @@
               <div class="form-label">在线兜底开关</div>
               <div class="form-control"><button class="ghost" id="onlineTtsToggleBtn" type="button">在线兜底：开</button></div>
             </div>
-
+                  </div>
+                </details>
+                <details class="settings-accordion-card settings-accordion-wide">
+                  <summary>离线语音包</summary>
+                  <div class="settings-accordion-content">
             <div class="form-row offline-tts-section hidden" id="offlineTtsSection">
               <div class="offline-tts-header">
                 <div class="form-label">离线语音包</div>
@@ -542,7 +757,11 @@
                 </div>
               </div>
             </div>
-
+                  </div>
+                </details>
+                <details class="settings-accordion-card">
+                  <summary>系统语音</summary>
+                  <div class="settings-accordion-content">
             <!-- Below are shown when System mode is selected -->
             <div class="form-row">
               <div class="form-label">英语口音</div>
@@ -596,10 +815,16 @@
             <div class="stack">
               <button class="ghost" id="testVoiceBtn" type="button">测试发音</button>
             </div>
-          </section>
+                  </div>
+                </details>
+              </div>
+            </section>
 
-          <section class="panel">
-            <div class="section-title">AI 制卡</div>
+            <section class="settings-category-panel" id="settingsPanelAi" role="tabpanel" aria-labelledby="settingsTabAi" hidden>
+              <div class="settings-accordion-grid">
+                <details class="settings-accordion-card" open>
+                  <summary>模型配置</summary>
+                  <div class="settings-accordion-content">
             <div id="aiCustomConfigPanel">
               <div class="form-row">
                 <div class="form-label">API 提供商</div>
@@ -627,6 +852,11 @@
                 </div>
               </div>
             </div>
+                  </div>
+                </details>
+                <details class="settings-accordion-card">
+                  <summary>生成参数</summary>
+                  <div class="settings-accordion-content">
             <div class="form-row">
               <div class="form-label">词书类型</div>
               <div class="form-control">
@@ -650,10 +880,16 @@
             </div>
             <div class="stack"><button class="primary full" id="aiGenerateBtn" type="button">生成并预览</button></div>
             <div class="form-help" id="aiStatus"></div>
-          </section>
+                  </div>
+                </details>
+              </div>
+            </section>
 
-          <section class="panel">
-            <div class="section-title">联网补充</div>
+            <section class="settings-category-panel" id="settingsPanelMore" role="tabpanel" aria-labelledby="settingsTabMore" hidden>
+              <div class="settings-accordion-grid">
+                <details class="settings-accordion-card" open>
+                  <summary>联网补充</summary>
+                  <div class="settings-accordion-content">
             <div class="form-row">
               <div class="form-label">联网补充</div>
               <div class="form-control"><button class="ghost" id="lookupOnlineToggleBtn" type="button">联网补充：开</button></div>
@@ -680,189 +916,58 @@
               <div class="form-label">缓存时长（天）</div>
               <div class="form-control"><input id="lookupCacheDaysInput" class="text-input" type="number" min="1" max="365" value="30" /></div>
             </div>
-          </section>
+                  </div>
+                </details>
 
-          <section class="panel account-panel" id="accountPanel">
-            <div class="section-title">账号</div>
-            <div id="accountLoggedOut">
-              <div class="form-help">登录后可用云端备份；没有账号可注册或重置密码。</div>
-              <div class="view-tabs account-tabs" role="tablist" aria-label="账号操作">
-                <button class="ghost active" id="accountTabLoginBtn" type="button" role="tab" aria-selected="true">登录</button>
-                <button class="ghost" id="accountTabRegisterBtn" type="button" role="tab" aria-selected="false">注册</button>
-                <button class="ghost" id="accountTabResetBtn" type="button" role="tab" aria-selected="false">重置密码</button>
-              </div>
-              <div class="account-section hidden" id="accountRegisterSection">
-                <div class="account-section-title">邮箱验证码注册</div>
-                <div class="form-row">
-                  <div class="form-label">注册邮箱</div>
-                  <div class="form-control form-control-stack">
-                    <input id="cloudEmailInput" class="text-input" type="email" placeholder="用于接收注册验证码" autocomplete="email" />
-                    <div id="cloudEmailHint" class="form-help field-help hidden"></div>
-                  </div>
-                </div>
-                <div class="form-row">
-                  <div class="form-label">注册验证码</div>
-                  <div class="form-control form-control-stack">
-                    <input id="cloudRegisterCodeInput" class="text-input" type="text" inputmode="numeric" maxlength="6" pattern="\\d{6}" placeholder="6 位验证码" autocomplete="one-time-code" />
-                    <div id="cloudRegisterCodeHint" class="form-help field-help hidden"></div>
-                  </div>
-                </div>
-                <div class="account-actions">
-                  <button class="ghost full" id="cloudSendCodeBtn" type="button">发送注册验证码</button>
-                </div>
-                <div class="form-row">
-                  <div class="form-label">用户名</div>
-                  <div class="form-control form-control-stack">
-                    <input id="cloudUsernameInput" class="text-input" type="text" maxlength="32" placeholder="注册用户名" autocomplete="username" />
-                    <div id="cloudUsernameHint" class="form-help field-help hidden"></div>
-                  </div>
-                </div>
-                <div class="form-row">
-                  <div class="form-label">密码</div>
-                  <div class="form-control form-control-stack">
-                    <input id="cloudPasswordInput" class="text-input" type="password" minlength="8" placeholder="注册密码" autocomplete="new-password" />
-                    <div id="cloudPasswordHint" class="form-help field-help hidden"></div>
-                  </div>
-                </div>
-                <div class="account-actions">
-                  <button class="ghost full" id="cloudRegisterBtn" type="button">邮箱验证码注册</button>
-                </div>
-              </div>
-              <div class="account-section" id="accountLoginSection">
-                <div class="account-section-title">账号登录</div>
-                <div class="form-row">
-                  <div class="form-label">登录邮箱</div>
-                  <div class="form-control form-control-stack">
-                    <input id="cloudLoginEmailInput" class="text-input" type="email" placeholder="输入注册邮箱" autocomplete="email" />
-                    <div id="cloudLoginEmailHint" class="form-help field-help hidden"></div>
-                  </div>
-                </div>
-                <div class="form-row">
-                  <div class="form-label">密码</div>
-                  <div class="form-control form-control-stack">
-                    <input id="cloudLoginPasswordInput" class="text-input" type="password" minlength="8" placeholder="输入密码" autocomplete="current-password" />
-                    <div id="cloudLoginPasswordHint" class="form-help field-help hidden"></div>
-                  </div>
-                </div>
-                <div class="account-actions">
-                  <button class="primary full" id="cloudLoginBtn" type="button">登录</button>
-                </div>
-              </div>
-              <div class="account-section hidden" id="accountResetSection">
-                <div class="account-section-title">重置密码</div>
-                <div class="form-row">
-                  <div class="form-label">重置邮箱</div>
-                  <div class="form-control form-control-stack">
-                    <input id="cloudResetEmailInput" class="text-input" type="email" placeholder="接收重置验证码的邮箱" autocomplete="email" />
-                    <div id="cloudResetEmailHint" class="form-help field-help hidden"></div>
-                  </div>
-                </div>
-                <div class="form-row">
-                  <div class="form-label">重置验证码</div>
-                  <div class="form-control form-control-stack">
-                    <input id="cloudResetCodeInput" class="text-input" type="text" inputmode="numeric" maxlength="6" pattern="\\d{6}" placeholder="6 位验证码" autocomplete="one-time-code" />
-                    <div id="cloudResetCodeHint" class="form-help field-help hidden"></div>
-                  </div>
-                </div>
-                <div class="account-actions">
-                  <button class="ghost full" id="cloudSendResetCodeBtn" type="button">发送重置验证码</button>
-                </div>
-                <div class="form-row">
-                  <div class="form-label">新密码</div>
-                  <div class="form-control form-control-stack">
-                    <input id="cloudResetPasswordInput" class="text-input" type="password" minlength="8" placeholder="至少 8 位" autocomplete="new-password" />
-                    <div id="cloudResetPasswordHint" class="form-help field-help hidden"></div>
-                  </div>
-                </div>
-                <div class="account-actions">
-                  <button class="ghost full" id="cloudResetPasswordBtn" type="button">重置密码</button>
-                </div>
-              </div>
-            </div>
-            <div id="accountLoggedIn" class="hidden">
-              <div class="account-summary account-summary-compact">
-                <div class="account-summary-head">
-                  <div class="account-summary-identity">
-                    <div class="account-summary-title" id="cloudAccountTitle">已登录</div>
-                    <div class="account-summary-subtitle" id="cloudAccountSubtitle">当前浏览器已启用云端备份</div>
-                  </div>
-                  <div class="account-badge">在线</div>
-                </div>
-                <div class="account-summary-meta-row account-summary-meta-row-tight">
-                  <div class="account-summary-meta-item">
-                    <span>云备份</span>
-                    <strong id="cloudBackupStateText">已启用</strong>
-                  </div>
-                  <div class="account-summary-meta-item">
-                    <span>最近同步</span>
-                    <strong id="cloudLastSyncText">尚未同步</strong>
-                  </div>
-                </div>
-                <div class="account-summary-grid account-summary-grid-dense">
-                  <div class="account-summary-item">
-                    <span>单词</span>
-                    <strong id="cloudWordsText">0</strong>
-                  </div>
-                  <div class="account-summary-item">
-                    <span>轮次</span>
-                    <strong id="cloudRoundsText">0</strong>
-                  </div>
-                  <div class="account-summary-item">
-                    <span>今日新增</span>
-                    <strong id="cloudTodayWordsText">0</strong>
-                  </div>
-                  <div class="account-summary-item">
-                    <span>连续</span>
-                    <strong id="cloudStreakText">0 天</strong>
-                  </div>
-                  <div class="account-summary-item">
-                    <span>今日完成</span>
-                    <strong id="cloudTodayRoundsText">0 轮</strong>
-                  </div>
-                  <div class="account-summary-item">
-                    <span>当前轮</span>
-                    <strong id="cloudCurrentRoundText">未开始</strong>
-                  </div>
-                  <div class="account-summary-item account-summary-item-wide">
-                    <span>会话</span>
-                    <strong id="cloudSessionText">刚刚开始</strong>
-                  </div>
-                </div>
-                <div class="account-summary-actions">
-                  <button class="primary" id="cloudUploadBtn" type="button">上传云端</button>
-                  <button class="ghost" id="cloudDownloadBtn" type="button">恢复本机</button>
-                  <button class="ghost" id="cloudLogoutBtn" type="button">退出登录</button>
-                </div>
-                <div class="form-help account-sync-note" id="cloudSyncStatus"></div>
-              </div>
-            </div>
-            <div class="form-help account-status hidden" id="accountStatus"></div>
-          </section>
-
-          <section class="panel">
-            <div class="section-title">数据管理</div>
+                <details class="settings-accordion-card">
+                  <summary>数据管理</summary>
+                  <div class="settings-accordion-content">
             <div class="stack">
               <button class="ghost full" id="exportBackupBtn" type="button">导出完整学习数据（JSON）</button>
               <button class="ghost full" id="importBackupBtn" type="button">导入完整学习数据（JSON）</button>
               <input id="importBackupFile" type="file" accept=".json,application/json" hidden />
             </div>
             <div class="form-help">包含学习记录与设置；导入会覆盖当前浏览器本地数据。</div>
-          </section>
+                  </div>
+                </details>
 
-          <section class="panel" id="versionPanel">
-            <div class="section-title">版本信息</div>
+                <details class="settings-accordion-card" id="versionPanel">
+                  <summary>版本信息</summary>
+                  <div class="settings-accordion-content">
             <div class="form-row">
               <div class="form-label">当前版本</div>
               <div class="form-control"><span class="form-help" id="versionText">v${window.A4Updater?.APP_VERSION || "1.0.0"}</span></div>
             </div>
             <div class="stack" style="margin-top:4px"><button class="ghost full" id="checkUpdateBtn" type="button">检查更新</button></div>
             <div class="form-help hidden" id="updateStatus"></div>
-          </section>
-
+                  </div>
+                </details>
+              </div>
+            </section>
+          </div>
         </div>
       </div>
     `
     return modal
+  }
+
+  function listenForAccountStatsBreakpoint(mediaQuery, onChange) {
+    if (!mediaQuery || typeof onChange !== "function") return () => {}
+    const listener = (event) => onChange(!!event?.matches)
+
+    if (typeof mediaQuery.addEventListener === "function") {
+      mediaQuery.addEventListener("change", listener)
+      return () => mediaQuery.removeEventListener?.("change", listener)
+    }
+    if (typeof mediaQuery.addListener === "function") {
+      mediaQuery.addListener(listener)
+      return () => mediaQuery.removeListener?.(listener)
+    }
+    return () => {}
+  }
+
+  function shouldExpandAccountStatsByDefault(mediaQuery) {
+    return mediaQuery ? !!mediaQuery.matches : true
   }
 
   function buildAiPreviewModalDom() {
@@ -924,10 +1029,11 @@
     }
 
     const modalBody = modal.querySelector(".modal-body")
-    const accountPanel = modal.querySelector("#accountPanel")
-    if (modalBody && accountPanel && modalBody.firstElementChild !== accountPanel) {
-      modalBody.insertBefore(accountPanel, modalBody.firstElementChild)
-    }
+    const settingsNavigation = installSettingsCategoryNavigation({
+      tabs: modal.querySelectorAll(".settings-category-tab"),
+      panels: modal.querySelectorAll(".settings-category-panel"),
+      scrollContainer: modalBody,
+    })
 
     const dom = {
       modal,
@@ -1008,6 +1114,8 @@
       cloudDownloadBtn: modal.querySelector("#cloudDownloadBtn"),
       accountLoggedOut: modal.querySelector("#accountLoggedOut"),
       accountLoggedIn: modal.querySelector("#accountLoggedIn"),
+      accountStatsToggleBtn: modal.querySelector("#accountStatsToggleBtn"),
+      accountStatsDetails: modal.querySelector("#accountStatsDetails"),
       cloudAccountTitle: modal.querySelector("#cloudAccountTitle"),
       cloudAccountSubtitle: modal.querySelector("#cloudAccountSubtitle"),
       cloudBackupStateText: modal.querySelector("#cloudBackupStateText"),
@@ -1097,6 +1205,20 @@
       uploadState: false,
       downloadState: false,
     }
+    const accountStatsWideQuery =
+      typeof window.matchMedia === "function" ? window.matchMedia("(min-width: 431px)") : null
+
+    function setAccountStatsExpanded(expanded) {
+      const isExpanded = !!expanded
+      if (dom.accountStatsToggleBtn) {
+        dom.accountStatsToggleBtn.setAttribute("aria-expanded", isExpanded ? "true" : "false")
+        dom.accountStatsToggleBtn.classList.toggle("is-expanded", isExpanded)
+        dom.accountStatsToggleBtn.textContent = isExpanded ? "收起学习统计" : "更多学习统计"
+      }
+      dom.accountStatsDetails?.classList.toggle("hidden", !isExpanded)
+    }
+
+    listenForAccountStatsBreakpoint(accountStatsWideQuery, setAccountStatsExpanded)
 
     function getStateSafe() {
       return typeof getState === "function" ? getState() : {}
@@ -2045,11 +2167,13 @@
     }
 
     function open() {
+      settingsNavigation.activate(0)
       // Show version panel only in Tauri (desktop/Android), not on web
       if (dom.versionPanel) {
         const isTauri = !!(window.__TAURI_INTERNALS__ || window.__TAURI__)
         dom.versionPanel.classList.toggle("hidden", !isTauri)
       }
+      setAccountStatsExpanded(shouldExpandAccountStatsByDefault(accountStatsWideQuery))
       render()
       renderAiProviderUi()
       setModalVisible(dom.modal, true)
@@ -2061,6 +2185,10 @@
 
     dom.backdrop?.addEventListener("click", () => close())
     dom.closeBtn?.addEventListener("click", () => close())
+    dom.accountStatsToggleBtn?.addEventListener("click", () => {
+      const expanded = dom.accountStatsToggleBtn.getAttribute("aria-expanded") === "true"
+      setAccountStatsExpanded(!expanded)
+    })
 
     dom.themeModeSelect?.addEventListener("change", () => {
       const themeMode = normalizeThemeMode(dom.themeModeSelect.value)
@@ -3184,6 +3312,9 @@
     formatTestSpeakResult,
     buildOfflineVoiceDownloadArgs,
     createOfflineVoiceTitle,
+    listenForAccountStatsBreakpoint,
+    shouldExpandAccountStatsByDefault,
+    installSettingsCategoryNavigation,
     normalizeAiWordbook,
     buildChatCompletionsUrl,
     stripJsonFromText,
