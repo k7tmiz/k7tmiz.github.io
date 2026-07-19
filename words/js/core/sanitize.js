@@ -14,8 +14,14 @@
       .replace(/'/g, "&#x27;")
   }
 
+  function escapeCsvFormula(value) {
+    const text = String(value ?? "")
+    return /^[=+@-]/.test(text.trimStart()) ? `'${text}` : text
+  }
+
   window.A4Sanitize = {
     escapeHtml,
     escapeAttr,
+    escapeCsvFormula,
   }
 })()

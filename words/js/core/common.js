@@ -221,6 +221,12 @@
     return "auto"
   }
 
+  function normalizeThemePalette(value) {
+    const v = String(value || "").trim().toLowerCase()
+    if (v === "paper" || v === "ocean") return v
+    return "classic"
+  }
+
   function normalizeRoundCap(value) {
     const n = Math.round(Number(value) || 0)
     return clamp(n || 30, 20, 30)
@@ -355,6 +361,7 @@
   // ── Defaults ────────────────────────────────────────────────────────────────
 
   const DEFAULTS = {
+    themePalette: "classic",
     reviewSystemEnabled: true,
     reviewAutoCloseModal: true,
     continuousStudyMode: false,
@@ -458,6 +465,10 @@
 
   function setModalVisible(modal, visible) {
     if (!modal) return
+    if (window.A4UI?.setLayerVisible) {
+      window.A4UI.setLayerVisible(modal, visible)
+      return
+    }
     if (visible) {
       const prevFocus = document.activeElement
       modal.dataset.prevFocus = prevFocus ? prevFocus.id || "" : ""
@@ -545,6 +556,24 @@
 
   function getNextPageIndex(round) {
     return getRoundLastPageIndex(round) + 1
+  }
+
+  function ensureCurrentRoundState(state, createRound) {
+    const source = state && typeof state === "object" ? state : {}
+    const rounds = Array.isArray(source.rounds) ? source.rounds : []
+    const currentRoundId = String(source.currentRoundId || "")
+    if (rounds.some((round) => String(round?.id || "") === currentRoundId)) {
+      return { rounds, currentRoundId, createdRound: null }
+    }
+    if (typeof createRound !== "function") throw new TypeError("createRound must be a function")
+    const createdRound = createRound()
+    const createdRoundId = String(createdRound?.id || "")
+    if (!createdRoundId) throw new TypeError("created round must have an id")
+    return {
+      rounds: [...rounds, createdRound],
+      currentRoundId: createdRoundId,
+      createdRound,
+    }
   }
 
   // ── Dedup ───────────────────────────────────────────────────────────────────
@@ -657,6 +686,7 @@
     getRoundItemsByPage,
     normalizeAiProvider,
     normalizeThemeMode,
+    normalizeThemePalette,
     normalizeRoundCap,
     normalizeAccent,
     normalizeVoiceMode,
@@ -679,6 +709,7 @@
     getRoundItemCountOnPage,
     isPageFull,
     getNextPageIndex,
+    ensureCurrentRoundState,
     isDuplicateInRound,
     getWordsFromGlobal,
     getWordbooksFromGlobal,

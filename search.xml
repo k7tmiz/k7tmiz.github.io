@@ -1,114 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
-    <title>我与计算机的故事</title>
-    <url>/posts/d773eb13.html</url>
-    <content><![CDATA[<p>我是一个行走在文理边界上的旅人，心中始终燃烧着对计算机世界的恒久热爱。</p>
-<p>我的故事，始于北京的家中。</p>
-<p>父母工作繁忙，陪伴我成长的，是家里那两台早早备下的电脑。或许这算得上一种时代的馈赠，让我在懵懂的年纪便与数字世界结缘。那时的热爱简单而纯粹——查资料、玩游戏、折腾软件。至于服务器、Linux、编程这些更深的概念，还远在认知的地平线之外。</p>
-<p>直到初中。</p>
-<p>某一天，我在视频中第一次看见了 Linux 的世界。那种与 Windows 完全不同的系统结构与操作方式，让我产生了一种难以言说的好奇。像是无意间推开了一扇门，我开始试着迈进去看看。</p>
-<p>我安装的第一个 Linux 发行版，是 <strong>Deepin</strong>。</p>
-<p>大约是在 <strong>2018 年，Deepin 15 的时代</strong>。那时的 DDE 桌面还没有如今这般复杂，界面简洁，风格优雅。直到今天，我依然会偶尔关注 Deepin 的更新，比如现在的 <strong>Deepin 25</strong>。看着它一点点变化，总会生出一种奇妙的感慨。</p>
-<p>不过 Deepin 并没有成为终点。</p>
-<p>很快，我被 <strong>Arch Linux</strong> 的理念吸引了。</p>
-<p>“简单、现代、实用。”</p>
-<p>那种几乎带着一点极客气质的系统哲学，在当时的我看来格外迷人。不过第一次接触 Arch，我多少还是有些谨慎，于是选择了基于 Arch 的发行版 <strong>Manjaro + KDE</strong> 作为过渡。</p>
-<p>也正是在那段时间，我和 <strong>KDE Plasma</strong> 结下了某种长期的缘分。</p>
-<p>从那次与 Manjaro 的邂逅开始，KDE 就像一位默契的老朋友。无论我后来换过多少发行版，它总会在某个时刻重新出现。</p>
-<p>至于后来究竟是因为什么最终真正投入 Arch Linux 的怀抱——</p>
-<p>是 Arch 那极具设计感的图标？<br>还是当年 Manjaro 偶尔出现的“滚挂”风波？</p>
-<p>如今已经有些记不清了。</p>
-<p>总之，从那之后，<strong>Arch Linux 逐渐成为了我的主力系统</strong>。</p>
-<p>那是一段相当狂热的时期。我开始不断尝试各种 Linux 发行版：</p>
-<ul>
-<li>Kali</li>
-<li>elementaryOS</li>
-<li>PopOS</li>
-<li>FydeOS</li>
-<li>等等等等……</li>
-</ul>
-<p>至于许多发行版例如 <strong>Linux Mint</strong>，它们只在虚拟机中短暂地停留过一段时间。</p>
-<p>如今再回头看，我已记不起我到底重装过几次系统，用过多少个发行版。</p>
-<p>但也是因为在那个阶段，我的兴趣逐渐向更深处延伸。</p>
-<p>我开始接触 <strong>服务器</strong> 与 <strong>编程</strong>。</p>
-<p>初中时期，我学习了 <strong>C++</strong>。<br>而在 <strong>初三毕业的那个暑假</strong>，我又拥抱了 <strong>Python</strong>。</p>
-<p>服务器系统方面，我曾经非常喜欢 <strong>CentOS 7</strong>。<br>后来随着它的发展路线发生变化，我逐渐转向 <strong>Debian</strong>。</p>
-<p>从 <strong>Debian 9 到 Debian 12</strong>，我几乎都亲身经历过。</p>
-<p>进入高中之后，生活节奏开始改变。</p>
-<p>疫情时代的网课需求突然增加，而 Linux 对腾讯会议等工具的支持当时还不够完善。再加上学业压力逐渐加重，可以自由折腾系统的时间越来越少。</p>
-<p>但那份热爱始终没有真正消失。</p>
-<p>那台老旧的电脑上，依旧保持着<strong>Arch Linux 与 Windows 双系统</strong>。我仍然会在某个闲暇的夜晚，打开终端，敲下那条熟悉的命令：</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">sudo pacman -Syu</span><br></pre></td></tr></table></figure>
-
-<p>有趣的是，一直到高三毕业，这个系统竟然从未真正“滚挂”。<br>它安静而稳定地陪伴了我整整三年。</p>
-<p>大学开始之后，新电脑到手。</p>
-<p>那时候电脑的主要用途变成了游戏，再加上我是文科生，于是 <strong>Windows 再次成为主角</strong>。那段时间里，我几乎很少再折腾系统。</p>
-<p>直到某一天。</p>
-<p>Windows 在一次关机之后并没有真正休眠，而是在背包里“空转”了整整一个月。等我再次打开电脑时，屏幕上只剩下一片花屏。</p>
-<p>进入 <strong>PE 环境</strong> 排查之后确认是系统问题，仅仅是官方驱动的安装与调试，就花费了整整一天。</p>
-<p>这次并不愉快的经历，加上 Windows 的强制更新、“假休眠”导致的风扇狂转，以及各种我被当作“宝宝”一样过度保护的设计——</p>
-<p>终于再次唤醒了我对 <strong>Linux 开源，自由精神</strong>的怀念。</p>
-<p>于是行动变得异常迅速。</p>
-<p>我买了一块新的硬盘。</p>
-<p><strong>十分钟之后，Arch Linux 安装完成。</strong></p>
-<p>那种熟悉的感觉几乎是瞬间回来了。</p>
-<p>不过世界也已经改变。</p>
-<p>KDE 完成了重要的版本演进；<br>Steam 正在重新塑造 Linux 游戏生态；<br>许多新的工具与技术不断出现。</p>
-<p>曾经积累的很多经验，已经不再完全适用。</p>
-<p>但这并没有让我沮丧，反而重新点燃了探索的欲望。</p>
-<p>再次深入之后，我发现整个生态早已不同：</p>
-<ul>
-<li>原生 Linux 版微信不再只是梦想</li>
-<li>QQ 也开始认真对待 Linux 用户</li>
-<li>Valve 通过 <strong>SteamDeck（搭载 Arch 系 SteamOS）</strong> 与 <strong>Proton</strong> 极大推动了 Linux 游戏生态</li>
-<li>UOS 在政企领域的推广，也让国内 Linux 用户整体受益</li>
-</ul>
-<p>如今，在 Linux 上畅玩游戏，早已不再是一件需要自嘲的事情。</p>
-<p>这也让我重新燃起了体验不同发行版的兴趣：</p>
-<ul>
-<li>openSUSE Tumbleweed 的优雅滚动</li>
-<li>Ubuntu 的庞大生态</li>
-<li>Fedora 的前沿特性</li>
-<li>openSUSE Leap 的稳健</li>
-<li>Debian 12 的纯粹</li>
-<li>NixOS 那近乎革命性的理念</li>
-</ul>
-<p>有趣的是，尽管我长期管理 <strong>Debian &#x2F; Ubuntu 服务器</strong>，桌面端却始终没有真正深入使用过原生 Debian。</p>
-<hr>
-<h2 id="我的设备"><a href="#我的设备" class="headerlink" title="我的设备"></a>我的设备</h2><p>如今，我的数字世界由两台电脑组成。</p>
-<p><strong>轻薄本</strong></p>
-<ul>
-<li>MacBook Air（主力）</li>
-</ul>
-<p><strong>游戏本</strong></p>
-<ul>
-<li>Arch Linux（主力系统）</li>
-<li>Fedora 43</li>
-<li>Windows 11（备用）</li>
-</ul>
-<p>相比过去动辄四五个系统的年代，现在的设备已经经历了一轮彻底的优化。系统数量减少了，但使用体验反而更加从容。</p>
-<p>或许，这正是折腾多年之后的一种平衡。</p>
-<hr>
-<h2 id="更新记录"><a href="#更新记录" class="headerlink" title="更新记录"></a>更新记录</h2><p>本文最初完善于 <strong>2025 年 6 月 25 日</strong>。</p>
-<p><strong>2025 年 7 月 20 日</strong>，游戏本上的 <strong>openSUSE Tumbleweed</strong> 在一次 <code>zypper dup</code> 更新中因为驱动问题“壮烈牺牲”。借此机会，我也重新审视了自己的系统结构，并将系统数量精简为三个：</p>
-<ul>
-<li>Arch Linux</li>
-<li>Fedora</li>
-<li>Windows 11</li>
-</ul>
-<p><strong>2025年8月13日</strong>，我换了一台轻薄本机械革命无界 14X Pro 2025 AI9 H365 32G+1T的最高配版本，遗憾的是其BIOS并不完善，没有做对Linux的支持，导致无线网卡无法正常在Linux环境下驱动。被迫在用Windows 11。这时候也把之前的洋垃圾轻薄本卖掉了。</p>
-<p><strong>2026年3月6日</strong>，通过国补以及以旧换新补贴，机械革命正式退役，换成了MacBook Air。</p>
-<p>折腾仍在继续，但设备与系统组合，也逐渐走向稳定。</p>
-]]></content>
-      <categories>
-        <category>Article</category>
-      </categories>
-      <tags>
-        <tag>article</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>谈谈我为什么放弃了无纸化学习</title>
     <url>/posts/4fa1af2a.html</url>
     <content><![CDATA[<p>如标题所见，我最终还是放弃了无纸化学习。这个决定并非一时兴起，而是经历了反复尝试与深刻反思之后的结果。很多人称赞数字化工具的便捷与环保，我也曾满怀期待地拥抱这一切，却发现它并不如想象中那般适合我。原因很多，听我一一道来。</p>
@@ -119,118 +11,6 @@
 <p>不仅如此，无纸化学习的体验也比较一般。大学的很多课本没有电子版，还是需要我背不少的书。扫描的代价也很大，麻烦并且不够清晰。最后不得不背—既没有方便，同时也不便携，每天依旧要背着装满课本的背包去上课，根本不可能只带一个平板。</p>
 <p>书写体验更是一坨。为了在这块玻璃屏幕上好好写字不打滑，我给过许多尝试。买过许多替代笔尖，许多笔尖套，类纸膜等等。所需开销比一本一笔高的很多，也并不自如。更不用说其他—购买时候的价格，触控笔，笔记会员，云存储的服务，累积下来性价比也并不高。书写的反馈也很弱很弱。</p>
 <p>我并非否认无纸化学习，存在即合理。但我认为时至今日，他也不一定适用于每一个学习者。对我而言，纸，是思考的空间；笔，是理解的延申。退回传统，并非倒退，而是选择了一条适合我的路。</p>
-]]></content>
-      <categories>
-        <category>Article</category>
-      </categories>
-      <tags>
-        <tag>article</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>谈谈我为什么开始拥抱苹果</title>
-    <url>/posts/fbd23e1d.html</url>
-    <content><![CDATA[<p>如标题所见，我放弃了所谓“开放”的安卓阵营，也逐渐离开了那个我非常熟悉的 Windows 世界。与此同时，我还买了 <strong>AirPods Pro 3</strong>，甚至一度认真考虑过 <strong>Apple Watch</strong>。</p>
-<p>听到这里，很多人第一反应大概都是：这人是不是疯了</p>
-<p>毕竟在不少人的理解里，苹果生态就是一套“消费陷阱”，一旦进去就很难出来。</p>
-<p>但事情其实没那么复杂。</p>
-<p>这只是我在不断尝试之后，慢慢找到的一套 <strong>更适合自己的工具组合</strong>。</p>
-<h2 id="我不是一开始就站在苹果这边"><a href="#我不是一开始就站在苹果这边" class="headerlink" title="我不是一开始就站在苹果这边"></a>我不是一开始就站在苹果这边</h2><p>在真正转向 iPhone 之前，我其实换过很多安卓手机。</p>
-<p>最早用过的是 <strong>Redmi K30 至尊纪念版</strong>，那台手机是我把当年的 iPad 卖掉之后换来的。当时真的觉得很离谱，这种配置居然只要 1999。</p>
-<p>后来高中时期，我的主力机变成了 <strong>小米 10 Pro</strong>。这台手机陪我走过了整个高中，到现在它还躺在桌子上当热点机用。</p>
-<p>那时候我几乎把所有时间都花在折腾系统上：</p>
-<ul>
-<li>Root</li>
-<li>模块</li>
-<li>调度</li>
-<li>超频</li>
-<li>各种 Magisk 模块</li>
-</ul>
-<p>每天最期待的一件事，就是看看小米有没有推新的系统更新。</p>
-<p>高考结束之后，我又换了 <strong>iQOO 12 Pro 16+1T（5599）</strong>。当时我对它的评价只有一句话：最水桶的一台旗舰。没有明显短板，什么都不差。</p>
-<p>后来在暑假快结束的时候，我本来只想买一台两千块左右的备用机，结果预算一路加到四千，最后买了 <strong>OPPO Find X7 Ultra 12+256</strong>。我非常喜欢这台手机，也带着它去了不少地方。现在回头看，我博客里很多照片其实都还带着哈苏水印。</p>
-<p>再后来，2024 年 10 月，我在一节水课上看了 <strong>真我发布会</strong>，结果又没忍住，买了一台 <strong>真我 GT7 Pro</strong>。</p>
-<p>原因其实很简单：</p>
-<ul>
-<li>骁龙 8 至尊版</li>
-<li>6500mAh 电池</li>
-</ul>
-<p>当时真的会觉得，这手机太猛了</p>
-<h2 id="为什么最后还是买了-iPhone"><a href="#为什么最后还是买了-iPhone" class="headerlink" title="为什么最后还是买了 iPhone"></a>为什么最后还是买了 iPhone</h2><p>这种状态一直持续到 <strong>2025 年 9 月</strong>。</p>
-<p>那时候我把 <strong>Find X7 Ultra</strong> 卖掉了，因为我看到了 <strong>iPhone 17 Pro</strong> 的评测。说实话，当时真的很心动，于是我干了一件挺冲动的事情：直接下单。</p>
-<p>我 8099 买的，原价 8999。</p>
-<p>当时想法也很简单：</p>
-<blockquote>
-<p>不喜欢就转手卖掉</p>
-</blockquote>
-<p>但 2025 年 10 月 1 日到手之后，我发现自己根本不想卖了。</p>
-<p>不是因为苹果多有面子，也不是因为什么品牌滤镜，而是因为一件很具体的事情：<strong>体验很统一</strong>。</p>
-<p>再加上一个现实问题，安卓这些年最核心的优势，其实已经没有以前那么成立了。</p>
-<p>以前大家说安卓，核心关键词总是“开放”。但现在：</p>
-<ul>
-<li>Bootloader 越来越难解锁</li>
-<li>Root 环境越来越难维护</li>
-<li>权限越来越封闭</li>
-</ul>
-<p>既然两个系统都在变封闭，那事情对我来说就很简单了。</p>
-<p>我选体验更好的那个</p>
-<p>更何况现在安卓旗舰也越来越贵，很多机器动不动就是七八千，价格和 iPhone 其实已经差不多。既然如此，那我为什么不选一个更省心的？</p>
-<p>更重要的是，我现在已经没有那么多时间了。</p>
-<p>我不再想把所有设备都变成一个长期维护项目。我希望它们稳定、好用，不需要我每天去照顾。我希望它们只是工具，而不是玩具。</p>
-<h2 id="为什么后来又买了-MacBook-Air"><a href="#为什么后来又买了-MacBook-Air" class="headerlink" title="为什么后来又买了 MacBook Air"></a>为什么后来又买了 MacBook Air</h2><p>其实一开始，我并没有打算买 MacBook。</p>
-<p>当我第一次意识到自己可能需要一台轻薄本的时候，我最先体验的其实是 Windows 阵营的机器。我买了一台机械革命 <strong>无界 14X Pro 2025</strong>，配置是 <strong>32G + 1T，AI9 H365 处理器</strong>。</p>
-<p>从参数上看，这台机器当时真的很诱人：</p>
-<ul>
-<li>2.8K 分辨率屏幕</li>
-<li>120Hz 高刷</li>
-<li>99Wh 大电池</li>
-<li>很丰富的接口</li>
-</ul>
-<p>这些配置几乎把我对一台轻薄本的幻想都满足了。</p>
-<p>反观当时的 <strong>MacBook Air</strong>，只有 60Hz 屏幕，电池容量看起来也不算大，价格还更贵。从参数表上看，几乎没有任何优势，所以当时的我几乎没有犹豫，直接选了 Windows 轻薄本。</p>
-<p>而且还有一个很现实的原因：那时候我根本没想到，几个月以后我会换成 iPhone。如果当时就知道后面会换苹果手机，我的选择可能也会不一样。</p>
-<p>但真正用了一段时间之后，我才慢慢意识到一个问题。</p>
-<p>参数很好看，体验却没有想象中那么好。</p>
-<p>尤其是在不插电的时候，问题会变得特别明显。虽然这台机器的续航确实不短，但系统会明显变慢，打字会卡，看视频也会卡。更离谱的是那块 120Hz 的屏幕，一旦离电，高刷就会变得很不稳定，再加上 Windows 自己的动态刷新率策略，很多时候其实一直都只是在 60Hz 运行。</p>
-<p>但问题是，我买的是轻薄本。</p>
-<p>轻薄本的意义本来就是带出去用的，不是一直插着电当台式机。结果一离电，体验就明显下降，那种卡卡的感觉真的很难受。</p>
-<p>还有一个原因，虽然不是主要原因，但它确实一直在消耗我对这台机器的耐心。</p>
-<p>我其实很早就对这台机械革命有点不爽了。后来装上 Linux 之后才发现，它的 BIOS 根本没做完整，导致 <strong>Wi-Fi 模块在 Linux 下是被硬件屏蔽的状态</strong>，系统里直接显示的是 <em>Hardware block</em>，也就是说 Wi-Fi 根本用不了。</p>
-<p>而我又很不喜欢在 Windows 下面配开发环境。像 git 这些东西，在 Windows 里总让我觉得很别扭：软件装到哪里不清楚，环境变量一堆，卸载还经常卸不干净，有些程序甚至会在后台偷偷吃电。</p>
-<p>结果就是，我本来想用 Linux 学习、写博客，最后却被迫在 Windows 下面硬撑了四五个月。那段时间真的很难受。</p>
-<p>再加上那台机器的键盘手感也很一般，打字时间一长就很累，博客也因此停更了一段时间。后来我实在受不了了，刚好赶上国补和以旧换新补贴，价格也合适，就在 <strong>M5 Air</strong> 发布的前一天入手了 <strong>M4 的 MacBook Air</strong>。</p>
-<p>真正用上之后，我反而慢慢理解了一件事情：苹果做的其实就是一台电脑。</p>
-<p>一台很纯粹的笔记本电脑，没有太多花里胡哨的东西，做工好，性能稳定，续航长，软件生态成熟。</p>
-<p>但最重要的一点其实是 <strong>离电性能</strong>。</p>
-<p>苹果自己做芯片、做系统、做整机，所以整机体验会非常统一。MacBook Air 甚至完全没有风扇，这意味着日常使用几乎是无声的。再加上键盘手感很好，合上盖子就睡眠，需要的时候再打开，整个使用逻辑都很顺。</p>
-<p>还有一点我很喜欢。macOS 的底层是 <strong>Unix</strong>，很多命令、工具和逻辑其实都和 Linux 很接近，这种熟悉感会让我非常安心。</p>
-<h2 id="AirPods-Pro-3-对我来说值在哪里"><a href="#AirPods-Pro-3-对我来说值在哪里" class="headerlink" title="AirPods Pro 3 对我来说值在哪里"></a>AirPods Pro 3 对我来说值在哪里</h2><p>至于为什么买 <strong>AirPods Pro 3</strong>，原因其实也很简单。</p>
-<p>我后来发现一件事情，蓝牙耳机谈音质，对我这种木耳来说基本就是扯淡。我根本分辨不出什么高低频、解析力、声场这种差别，但有一个东西我能非常明确地感知到：<strong>降噪</strong>。</p>
-<p>AirPods Pro 的降噪就是那种一耳朵差距。打开的那一瞬间，整个世界都会安静下来。</p>
-<p>这种体验对我来说非常重要，因为安静就意味着我更容易专注，也更容易进入状态。</p>
-<p>再加上它的通透模式、自适应降噪、空间音频，以及苹果的查找功能，这些东西都让我很惊艳。</p>
-<p>当然，我用的是 iPhone，AirPods 的连接体验确实也很方便。</p>
-<p>但说实话，这不是我留下它的主要原因。</p>
-<p>真正让我留下它的，还是降噪</p>
-<h2 id="为什么最后没买-Apple-Watch"><a href="#为什么最后没买-Apple-Watch" class="headerlink" title="为什么最后没买 Apple Watch"></a>为什么最后没买 Apple Watch</h2><p>很多人会觉得，既然我已经有了 iPhone、MacBook 和 AirPods，为什么不顺便再买一块 <strong>Apple Watch</strong>？</p>
-<p>其实我想买 Apple Watch 的原因，不是生态，而是我有健身的习惯，而且我离家 <strong>1500km</strong>。我希望自己有一套更准确的健康数据，比如心率、运动记录、健康监测。</p>
-<p>这不仅是对自己负责，也是让家人放心。</p>
-<p>但我最后没有买。</p>
-<p>原因也很简单：续航太短。</p>
-<p>Apple Watch 基本就是一天一充，而且国行版本还砍掉了快充。于是事情就变成了，充得慢，续航又短，这一点非常直接地抑制了我的购买欲。</p>
-<p>如果未来续航能解决，我大概率还是会买。</p>
-<h2 id="我不太相信“生态”这套说法"><a href="#我不太相信“生态”这套说法" class="headerlink" title="我不太相信“生态”这套说法"></a>我不太相信“生态”这套说法</h2><p>其实很多人一谈苹果就会提“生态”。</p>
-<p>但对我来说，这一直有点像个伪命题。</p>
-<p>因为我从来不在乎什么软件生态、硬件生态、全家桶这种说法。</p>
-<p>我只在乎一件事：体验。</p>
-<p>一个产品好用，我就用。不好用，我就换掉。</p>
-<p>就这么简单。</p>
-<p>没有信仰，也没有阵营。</p>
-<h2 id="写在最后"><a href="#写在最后" class="headerlink" title="写在最后"></a>写在最后</h2><p>现在的我，其实已经不像以前那样喜欢折腾了。</p>
-<p>以前我希望每一个设备到手都被我自定义一遍，希望每一个设备都完全掌控在自己手里。</p>
-<p>但现在我更希望 <strong>工具只是工具</strong>。</p>
-<p>设备不需要证明什么，只要它稳定、好用、不打扰我，那它就是一个好产品。</p>
-<p>至于它是不是苹果，其实并不重要。</p>
 ]]></content>
       <categories>
         <category>Article</category>
@@ -387,6 +167,107 @@
       </tags>
   </entry>
   <entry>
+    <title>Archlinux安装指南</title>
+    <url>/posts/a907d758.html</url>
+    <content><![CDATA[<h2 id="初步配置"><a href="#初步配置" class="headerlink" title="初步配置"></a>初步配置</h2><h4 id="联网"><a href="#联网" class="headerlink" title="联网"></a>联网</h4> <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">dhcpcd/iwctl</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>iwctl:<br>device list<br>station ‘device’ scan<br>station ‘device’ get-networks<br>station ‘device’ connect ‘wlan’</p>
+</blockquote>
+<h4 id="更新ntp服务器"><a href="#更新ntp服务器" class="headerlink" title="更新ntp服务器"></a>更新ntp服务器</h4> <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">timdatectl set-ntp true</span><br></pre></td></tr></table></figure>
+
+<h2 id="分区及挂载"><a href="#分区及挂载" class="headerlink" title="分区及挂载"></a>分区及挂载</h2><blockquote>
+<p>此处演示p1:EFI p2:&#x2F;mnt p3:swap</p>
+</blockquote>
+<h4 id="查看目前磁盘，分区状况"><a href="#查看目前磁盘，分区状况" class="headerlink" title="查看目前磁盘，分区状况"></a>查看目前磁盘，分区状况</h4><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">lsblk</span><br></pre></td></tr></table></figure>
+
+<h4 id="分区"><a href="#分区" class="headerlink" title="分区"></a>分区</h4> <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">fdisk /dev/sdX / fdisk /dev/nvme0n1</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>m 查看命令<br>n 新建一个分区<br>g 转换GPT<br>t 更改分区类型：EFI:1  SWAP:19  Linux:20</p>
+</blockquote>
+<h4 id="格式化分区为FAT32格式"><a href="#格式化分区为FAT32格式" class="headerlink" title="格式化分区为FAT32格式"></a>格式化分区为FAT32格式</h4> <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">mkfs.fat -F32 /dev/nvme0n1p1</span><br></pre></td></tr></table></figure>
+
+<h4 id="格式化分区为EXT4格式"><a href="#格式化分区为EXT4格式" class="headerlink" title="格式化分区为EXT4格式"></a>格式化分区为EXT4格式</h4> <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">mkfs.ext4 /dev/nvme0n1p2</span><br></pre></td></tr></table></figure>
+
+<h4 id="格式化分区为SWAP格式"><a href="#格式化分区为SWAP格式" class="headerlink" title="格式化分区为SWAP格式"></a>格式化分区为SWAP格式</h4> <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">mkswap /dev/nvme0n1p3</span><br></pre></td></tr></table></figure>
+
+<h4 id="开启SWAP"><a href="#开启SWAP" class="headerlink" title="开启SWAP"></a>开启SWAP</h4> <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">swapon /dev/nvme0n1p3</span><br></pre></td></tr></table></figure>
+
+<h4 id="挂载根分区"><a href="#挂载根分区" class="headerlink" title="挂载根分区"></a>挂载根分区</h4> <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">mount /dev/nvme0n1p2 /mnt</span><br></pre></td></tr></table></figure>
+
+<h4 id="新建Boot文件夹"><a href="#新建Boot文件夹" class="headerlink" title="新建Boot文件夹"></a>新建Boot文件夹</h4> <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">mkdir /mnt/boot</span><br></pre></td></tr></table></figure>
+
+<h4 id="新建Home文件夹"><a href="#新建Home文件夹" class="headerlink" title="新建Home文件夹"></a>新建Home文件夹</h4> <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">mkdir /mnt/home</span><br></pre></td></tr></table></figure>
+
+<h4 id="挂载Boot分区"><a href="#挂载Boot分区" class="headerlink" title="挂载Boot分区"></a>挂载Boot分区</h4> <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">mount /dev/nvme0n1p1 /mnt/boot</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>如果有的话一个分区为了Home分区 <code>mount /dev/nvme0n1px /mnt/home</code></p>
+</blockquote>
+<h2 id="开始安装"><a href="#开始安装" class="headerlink" title="开始安装"></a>开始安装</h2><h4 id="编辑镜像源"><a href="#编辑镜像源" class="headerlink" title="编辑镜像源"></a>编辑镜像源</h4> <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">nano /etc/pacman.d/mirrorlist</span><br></pre></td></tr></table></figure>
+
+<h4 id="拉取镜像"><a href="#拉取镜像" class="headerlink" title="拉取镜像"></a>拉取镜像</h4> <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">pacstrap /mnt base base-devel linux linux-firmware vi nano</span><br></pre></td></tr></table></figure>
+
+<h4 id="更新分区表"><a href="#更新分区表" class="headerlink" title="更新分区表"></a>更新分区表</h4> <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">genfstab -U /mnt &gt;&gt; /mnt/etc/fstab</span><br></pre></td></tr></table></figure>
+
+<h4 id="检查分区表"><a href="#检查分区表" class="headerlink" title="检查分区表"></a>检查分区表</h4> <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">cat /mnt/etc/fstab</span><br></pre></td></tr></table></figure>
+
+<h4 id="下载基本软件"><a href="#下载基本软件" class="headerlink" title="下载基本软件"></a>下载基本软件</h4> <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">pacman -S vim networkmanager dhcpcd</span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="切换到本地"><a href="#切换到本地" class="headerlink" title="切换到本地"></a>切换到本地</h2> <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">arch-chroot /mnt</span><br></pre></td></tr></table></figure>
+
+<h4 id="更新本地时间"><a href="#更新本地时间" class="headerlink" title="更新本地时间"></a>更新本地时间</h4> <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">ln -sf /usr/share/zoneinfo/Asia/Shanghai /etc/localtime</span><br></pre></td></tr></table></figure>
+
+ <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">hwclock --systohc</span><br></pre></td></tr></table></figure>
+
+<h4 id="编辑locale-gen"><a href="#编辑locale-gen" class="headerlink" title="编辑locale.gen"></a>编辑locale.gen</h4> <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">nano /etc/locale.gen</span><br></pre></td></tr></table></figure>
+
+<p><strong>找到 <code>en_US.UTF-8</code> 和 <code>zh_CN.UTF-8</code> 去掉前面的#</strong></p>
+<h4 id="更新"><a href="#更新" class="headerlink" title="更新"></a>更新</h4> <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">locale-gen</span><br></pre></td></tr></table></figure>
+
+<h4 id="编辑locale-conf文件"><a href="#编辑locale-conf文件" class="headerlink" title="编辑locale.conf文件"></a>编辑locale.conf文件</h4> <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">nano /etc/locale.conf</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>写入 <code>LANG=en_US.UTF-8</code></p>
+</blockquote>
+<h4 id="设置root密码"><a href="#设置root密码" class="headerlink" title="设置root密码"></a>设置root密码</h4> <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">passwd</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>不显示密码是正常情况</p>
+</blockquote>
+<h4 id="下载基本软件-1"><a href="#下载基本软件-1" class="headerlink" title="下载基本软件"></a>下载基本软件</h4> <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">pacman -S dialog wpa_supplicant ntfs-3g</span><br></pre></td></tr></table></figure>
+
+<h4 id="安装CPU驱动"><a href="#安装CPU驱动" class="headerlink" title="安装CPU驱动"></a>安装CPU驱动</h4><h5 id="intel"><a href="#intel" class="headerlink" title="intel"></a>intel</h5> <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">pacman -S intel-ucode</span><br></pre></td></tr></table></figure>
+
+<h5 id="amd"><a href="#amd" class="headerlink" title="amd"></a>amd</h5> <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">pacman -S amd-ucode</span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="安装引导"><a href="#安装引导" class="headerlink" title="安装引导"></a>安装引导</h2> <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">pacman -S grub efibootmgr</span><br></pre></td></tr></table></figure>
+
+<h4 id="多系统引导"><a href="#多系统引导" class="headerlink" title="多系统引导"></a>多系统引导</h4> <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">pacman -S os-prober</span><br></pre></td></tr></table></figure>
+
+<h4 id="UEFI引导"><a href="#UEFI引导" class="headerlink" title="UEFI引导"></a>UEFI引导</h4> <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">grub-install --target=x86_64-efi --efi-directory=/boot --bootloader=ArchLinux</span><br></pre></td></tr></table></figure>
+
+<h4 id="更新grub"><a href="#更新grub" class="headerlink" title="更新grub"></a>更新grub</h4> <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">grub-mkconfig -o /boot/grub/grub.cfg</span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="至此-安装结束"><a href="#至此-安装结束" class="headerlink" title="至此 安装结束"></a><strong>至此 安装结束</strong></h2><h4 id="退出"><a href="#退出" class="headerlink" title="退出"></a>退出</h4> <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">exit</span><br></pre></td></tr></table></figure>
+
+<h4 id="重启"><a href="#重启" class="headerlink" title="重启"></a>重启</h4> <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">reboot</span><br></pre></td></tr></table></figure>
+
+]]></content>
+      <categories>
+        <category>Linux</category>
+      </categories>
+      <tags>
+        <tag>linux</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>ArchLinux安装后指南</title>
     <url>/posts/f48c939a.html</url>
     <content><![CDATA[<h2 id="root登录"><a href="#root登录" class="headerlink" title="root登录"></a>root登录</h2><h4 id="联网-基于之前装的NetworkManager"><a href="#联网-基于之前装的NetworkManager" class="headerlink" title="联网,基于之前装的NetworkManager"></a>联网,基于之前装的NetworkManager</h4> <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">systemctl start NetworkManager #这里必须大写</span><br></pre></td></tr></table></figure>
@@ -497,107 +378,6 @@
 <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">sudo pacman -Sy archlinuxcn-keyring</span><br></pre></td></tr></table></figure>
 
 <h3 id="安装AUR包管理器"><a href="#安装AUR包管理器" class="headerlink" title="安装AUR包管理器"></a>安装AUR包管理器</h3> <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">sudo pacman -Sy yay paru</span><br></pre></td></tr></table></figure>
-]]></content>
-      <categories>
-        <category>Linux</category>
-      </categories>
-      <tags>
-        <tag>linux</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>Archlinux安装指南</title>
-    <url>/posts/a907d758.html</url>
-    <content><![CDATA[<h2 id="初步配置"><a href="#初步配置" class="headerlink" title="初步配置"></a>初步配置</h2><h4 id="联网"><a href="#联网" class="headerlink" title="联网"></a>联网</h4> <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">dhcpcd/iwctl</span><br></pre></td></tr></table></figure>
-
-<blockquote>
-<p>iwctl:<br>device list<br>station ‘device’ scan<br>station ‘device’ get-networks<br>station ‘device’ connect ‘wlan’</p>
-</blockquote>
-<h4 id="更新ntp服务器"><a href="#更新ntp服务器" class="headerlink" title="更新ntp服务器"></a>更新ntp服务器</h4> <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">timdatectl set-ntp true</span><br></pre></td></tr></table></figure>
-
-<h2 id="分区及挂载"><a href="#分区及挂载" class="headerlink" title="分区及挂载"></a>分区及挂载</h2><blockquote>
-<p>此处演示p1:EFI p2:&#x2F;mnt p3:swap</p>
-</blockquote>
-<h4 id="查看目前磁盘，分区状况"><a href="#查看目前磁盘，分区状况" class="headerlink" title="查看目前磁盘，分区状况"></a>查看目前磁盘，分区状况</h4><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">lsblk</span><br></pre></td></tr></table></figure>
-
-<h4 id="分区"><a href="#分区" class="headerlink" title="分区"></a>分区</h4> <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">fdisk /dev/sdX / fdisk /dev/nvme0n1</span><br></pre></td></tr></table></figure>
-
-<blockquote>
-<p>m 查看命令<br>n 新建一个分区<br>g 转换GPT<br>t 更改分区类型：EFI:1  SWAP:19  Linux:20</p>
-</blockquote>
-<h4 id="格式化分区为FAT32格式"><a href="#格式化分区为FAT32格式" class="headerlink" title="格式化分区为FAT32格式"></a>格式化分区为FAT32格式</h4> <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">mkfs.fat -F32 /dev/nvme0n1p1</span><br></pre></td></tr></table></figure>
-
-<h4 id="格式化分区为EXT4格式"><a href="#格式化分区为EXT4格式" class="headerlink" title="格式化分区为EXT4格式"></a>格式化分区为EXT4格式</h4> <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">mkfs.ext4 /dev/nvme0n1p2</span><br></pre></td></tr></table></figure>
-
-<h4 id="格式化分区为SWAP格式"><a href="#格式化分区为SWAP格式" class="headerlink" title="格式化分区为SWAP格式"></a>格式化分区为SWAP格式</h4> <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">mkswap /dev/nvme0n1p3</span><br></pre></td></tr></table></figure>
-
-<h4 id="开启SWAP"><a href="#开启SWAP" class="headerlink" title="开启SWAP"></a>开启SWAP</h4> <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">swapon /dev/nvme0n1p3</span><br></pre></td></tr></table></figure>
-
-<h4 id="挂载根分区"><a href="#挂载根分区" class="headerlink" title="挂载根分区"></a>挂载根分区</h4> <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">mount /dev/nvme0n1p2 /mnt</span><br></pre></td></tr></table></figure>
-
-<h4 id="新建Boot文件夹"><a href="#新建Boot文件夹" class="headerlink" title="新建Boot文件夹"></a>新建Boot文件夹</h4> <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">mkdir /mnt/boot</span><br></pre></td></tr></table></figure>
-
-<h4 id="新建Home文件夹"><a href="#新建Home文件夹" class="headerlink" title="新建Home文件夹"></a>新建Home文件夹</h4> <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">mkdir /mnt/home</span><br></pre></td></tr></table></figure>
-
-<h4 id="挂载Boot分区"><a href="#挂载Boot分区" class="headerlink" title="挂载Boot分区"></a>挂载Boot分区</h4> <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">mount /dev/nvme0n1p1 /mnt/boot</span><br></pre></td></tr></table></figure>
-
-<blockquote>
-<p>如果有的话一个分区为了Home分区 <code>mount /dev/nvme0n1px /mnt/home</code></p>
-</blockquote>
-<h2 id="开始安装"><a href="#开始安装" class="headerlink" title="开始安装"></a>开始安装</h2><h4 id="编辑镜像源"><a href="#编辑镜像源" class="headerlink" title="编辑镜像源"></a>编辑镜像源</h4> <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">nano /etc/pacman.d/mirrorlist</span><br></pre></td></tr></table></figure>
-
-<h4 id="拉取镜像"><a href="#拉取镜像" class="headerlink" title="拉取镜像"></a>拉取镜像</h4> <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">pacstrap /mnt base base-devel linux linux-firmware vi nano</span><br></pre></td></tr></table></figure>
-
-<h4 id="更新分区表"><a href="#更新分区表" class="headerlink" title="更新分区表"></a>更新分区表</h4> <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">genfstab -U /mnt &gt;&gt; /mnt/etc/fstab</span><br></pre></td></tr></table></figure>
-
-<h4 id="检查分区表"><a href="#检查分区表" class="headerlink" title="检查分区表"></a>检查分区表</h4> <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">cat /mnt/etc/fstab</span><br></pre></td></tr></table></figure>
-
-<h4 id="下载基本软件"><a href="#下载基本软件" class="headerlink" title="下载基本软件"></a>下载基本软件</h4> <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">pacman -S vim networkmanager dhcpcd</span><br></pre></td></tr></table></figure>
-
-
-
-<h2 id="切换到本地"><a href="#切换到本地" class="headerlink" title="切换到本地"></a>切换到本地</h2> <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">arch-chroot /mnt</span><br></pre></td></tr></table></figure>
-
-<h4 id="更新本地时间"><a href="#更新本地时间" class="headerlink" title="更新本地时间"></a>更新本地时间</h4> <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">ln -sf /usr/share/zoneinfo/Asia/Shanghai /etc/localtime</span><br></pre></td></tr></table></figure>
-
- <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">hwclock --systohc</span><br></pre></td></tr></table></figure>
-
-<h4 id="编辑locale-gen"><a href="#编辑locale-gen" class="headerlink" title="编辑locale.gen"></a>编辑locale.gen</h4> <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">nano /etc/locale.gen</span><br></pre></td></tr></table></figure>
-
-<p><strong>找到 <code>en_US.UTF-8</code> 和 <code>zh_CN.UTF-8</code> 去掉前面的#</strong></p>
-<h4 id="更新"><a href="#更新" class="headerlink" title="更新"></a>更新</h4> <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">locale-gen</span><br></pre></td></tr></table></figure>
-
-<h4 id="编辑locale-conf文件"><a href="#编辑locale-conf文件" class="headerlink" title="编辑locale.conf文件"></a>编辑locale.conf文件</h4> <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">nano /etc/locale.conf</span><br></pre></td></tr></table></figure>
-<blockquote>
-<p>写入 <code>LANG=en_US.UTF-8</code></p>
-</blockquote>
-<h4 id="设置root密码"><a href="#设置root密码" class="headerlink" title="设置root密码"></a>设置root密码</h4> <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">passwd</span><br></pre></td></tr></table></figure>
-
-<blockquote>
-<p>不显示密码是正常情况</p>
-</blockquote>
-<h4 id="下载基本软件-1"><a href="#下载基本软件-1" class="headerlink" title="下载基本软件"></a>下载基本软件</h4> <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">pacman -S dialog wpa_supplicant ntfs-3g</span><br></pre></td></tr></table></figure>
-
-<h4 id="安装CPU驱动"><a href="#安装CPU驱动" class="headerlink" title="安装CPU驱动"></a>安装CPU驱动</h4><h5 id="intel"><a href="#intel" class="headerlink" title="intel"></a>intel</h5> <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">pacman -S intel-ucode</span><br></pre></td></tr></table></figure>
-
-<h5 id="amd"><a href="#amd" class="headerlink" title="amd"></a>amd</h5> <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">pacman -S amd-ucode</span><br></pre></td></tr></table></figure>
-
-
-
-<h2 id="安装引导"><a href="#安装引导" class="headerlink" title="安装引导"></a>安装引导</h2> <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">pacman -S grub efibootmgr</span><br></pre></td></tr></table></figure>
-
-<h4 id="多系统引导"><a href="#多系统引导" class="headerlink" title="多系统引导"></a>多系统引导</h4> <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">pacman -S os-prober</span><br></pre></td></tr></table></figure>
-
-<h4 id="UEFI引导"><a href="#UEFI引导" class="headerlink" title="UEFI引导"></a>UEFI引导</h4> <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">grub-install --target=x86_64-efi --efi-directory=/boot --bootloader=ArchLinux</span><br></pre></td></tr></table></figure>
-
-<h4 id="更新grub"><a href="#更新grub" class="headerlink" title="更新grub"></a>更新grub</h4> <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">grub-mkconfig -o /boot/grub/grub.cfg</span><br></pre></td></tr></table></figure>
-
-
-
-<h2 id="至此-安装结束"><a href="#至此-安装结束" class="headerlink" title="至此 安装结束"></a><strong>至此 安装结束</strong></h2><h4 id="退出"><a href="#退出" class="headerlink" title="退出"></a>退出</h4> <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">exit</span><br></pre></td></tr></table></figure>
-
-<h4 id="重启"><a href="#重启" class="headerlink" title="重启"></a>重启</h4> <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">reboot</span><br></pre></td></tr></table></figure>
-
 ]]></content>
       <categories>
         <category>Linux</category>
@@ -767,66 +547,59 @@
       </tags>
   </entry>
   <entry>
-    <title>如何在Linux下优雅的使用网易云音乐</title>
-    <url>/posts/e85c1bad.html</url>
-    <content><![CDATA[<h2 id="目前我所知晓的方法有几种"><a href="#目前我所知晓的方法有几种" class="headerlink" title="目前我所知晓的方法有几种"></a>目前我所知晓的方法有几种</h2><ul>
-<li>网页端网易云</li>
-<li>用electron封装网页版</li>
-<li>第三方客户端(如yesplayer,splayer等)</li>
-<li>下载到本地用音乐播放器播放</li>
-<li>用wine安装Windows版本</li>
+    <title>在Linux上优雅的使用Wemod</title>
+    <url>/posts/400b687c.html</url>
+    <content><![CDATA[<h2 id="引言"><a href="#引言" class="headerlink" title="引言"></a>引言</h2><p>最近在玩Escape the backroom,里边那个耐力真的很难受,所以开了个无限耐力的,但是我不想在windows下游玩,我就去找了一下linux下的wemod的替代品,结果找到了这个项目<a href="https://github.com/DeckCheatz/wemod-launcher">wemod-launcher</a>,现在想写一篇博客介绍一下怎么使用它</p>
+<h2 id="教程"><a href="#教程" class="headerlink" title="教程"></a>教程</h2><p>首先我们需要一个 <code>Python容器</code> ,在linux下我使用的是 <code>python-venv</code> 以下演示基于ArchLinux</p>
+<h4 id="1-先装所需的依赖包"><a href="#1-先装所需的依赖包" class="headerlink" title="1. 先装所需的依赖包"></a>1. 先装所需的依赖包</h4><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">sudo pacman -Sy tk</span><br></pre></td></tr></table></figure>
+
+<p>然后把项目拉到本地</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">git clone https://github.com/DeckCheatz/wemod-launcher.git</span><br></pre></td></tr></table></figure>
+
+<p>创建一个虚拟容器</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">python -m venv wemod-launcher</span><br></pre></td></tr></table></figure>
+
+<p>切换</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">source wemod-launcher/bin/activate.fish</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>因为我用的是fish所以这里用.fish,如果</p>
+</blockquote>
+<p>这时你的python容器和wemod容器在同一个文件夹中</p>
+<h4 id="2-GE-Proton"><a href="#2-GE-Proton" class="headerlink" title="2.  GE-Proton"></a>2.  GE-Proton</h4><p>建议使用GE-Proton,通过 <code>Protonup-qt</code> 来安装GE-Proton</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">yay -S protonup-qt</span><br></pre></td></tr></table></figure>
+
+<h3 id="3-重启"><a href="#3-重启" class="headerlink" title="3. 重启"></a>3. 重启</h3><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">reboot</span><br></pre></td></tr></table></figure>
+
+<h4 id="4-准备"><a href="#4-准备" class="headerlink" title="4. 准备"></a>4. 准备</h4><p>先查看 <code>wemod-launcher</code> 的目录</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">readlink -f wemod-launcher</span><br></pre></td></tr></table></figure>
+
+<p>改成可执行权限</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">chmod -R ug+x wemod-launcher</span><br></pre></td></tr></table></figure>
+
+<h4 id="5-更改设置"><a href="#5-更改设置" class="headerlink" title="5. 更改设置"></a>5. 更改设置</h4><ul>
+<li><p>在Steam库中,兼容性选项中,强制使用你刚才下载的GE-Proton版本</p>
+</li>
+<li><p>在 <code>Launch Options （启动选项 </code>） 下，输入 <code>{path/to/wemod-launcher}/wemod %command%</code></p>
+</li>
+</ul>
+<h4 id="6-开游戏"><a href="#6-开游戏" class="headerlink" title="6. 开游戏"></a>6. 开游戏</h4><ul>
+<li><p>如果 “copy prefix question” 出现并显示 <code>might work</code> ，请选择 “no”</p>
+</li>
+<li><p>如果它提到 <code>可能有效</code> （或更好），就可以直接安全地忽略所有 rundll32.exe 错误（通过单击 <code>no</code>）</p>
+</li>
+<li><p>选择 <code>Download</code> </p>
+</li>
+<li><p>选择 Yes&#x2F;Ok 直到不再显示窗口</p>
+</li>
+<li><p>可以安全地忽略所有 rundll32.exe 错误（通过单击 <code>no</code>）</p>
+</li>
 </ul>
 <blockquote>
-<p>这里网页端的使用方法就不多赘述了，直接点击 <a href="https://music.163.com/">网易云音乐</a> 便可进入网页端</p>
+<p>Wemod应该能启动了</p>
 </blockquote>
-<h2 id="这里我们说说后几种方法"><a href="#这里我们说说后几种方法" class="headerlink" title="这里我们说说后几种方法"></a>这里我们说说后几种方法</h2><h3 id="首先用electron封装"><a href="#首先用electron封装" class="headerlink" title="首先用electron封装"></a>首先用electron封装</h3><p>不要害怕，我其实有写过一篇帖子来介绍怎么使用一个工具名叫 <code>Nativerfier</code> 的封装工具</p>
-<p>帖子如下： <a href="https://k7tmiz.com/posts/b56059f9.html">Nativefier 使用教程</a></p>
-<p>我没有尝试过把网易云网页版封装成electron程序，我其实更推荐后几种方案…</p>
-<h3 id="第三方客户端"><a href="#第三方客户端" class="headerlink" title="第三方客户端"></a>第三方客户端</h3><p>以Arch Linux为例 我推荐以下几个App(按顺序)：
-	</p>
-<ol>
-<li><p>Splayer 项目地址：<a href="https://github.com/imsyy/SPlayer">Splayer</a></p>
- <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">yay -S splayer-git</span><br></pre></td></tr></table></figure></li>
-</ol>
-<p>一款极其简约好用的音乐播放器，功能丰富操作简单直接，多系统可用，我就通过的AppImage来进行了安装，当然它也被收录到了AUR，我十分喜爱这款软件！</p>
-<ol start="2">
-<li>FeelUOwn 项目地址：<a href="https://github.com/feeluown/FeelUOwn">FeelUOwn</a></li>
-</ol>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">yay -S feeluown          # 安装稳定版，最新版的包名为 feeluown-git</span><br><span class="line">yay -S feeluown-netease  # 按需安装其它扩展</span><br><span class="line">yay -S feeluown-ytmusic</span><br><span class="line">yay -S feeluown-bilibili</span><br></pre></td></tr></table></figure>
-
-
-<p>一个稳定、用户友好以及高度可定制的音乐播放器。基于文本的歌单，方便与朋友分享、设备之间同步。一键安装，各流行平台均有打包（如 Arch Linux, Windows, macOS 等）但是在我的Arch上使用，会出现网易云无法正常登录的情况，我不知道是个例还是什么情况…但是我仍然认为他的可拓展性很强，值得一个第二<br>	<br>3. YesPlayMusic 项目地址：<a href="https://github.com/qier222/YesPlayMusic">YesPlayMusic</a></p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">yay -S yesplaymusic</span><br></pre></td></tr></table></figure>
-
-<p>高颜值的第三方网易云播放器，支持 Windows &#x2F; macOS &#x2F; Linux ，是我第一款开始使用的软件，问题是偶尔会掉线，然后颜值很高，很简约，但是作者似乎不咋打算更新新功能了，包会有点旧，介意的选前两个(我三个都要😋)</p>
-<hr>
-<h3 id="下载到本地然后用播放器不用过多赘述了"><a href="#下载到本地然后用播放器不用过多赘述了" class="headerlink" title="下载到本地然后用播放器不用过多赘述了"></a>下载到本地然后用播放器不用过多赘述了</h3><hr>
-<h3 id="接下来用讲讲如何wine安装Windows版本的网易云"><a href="#接下来用讲讲如何wine安装Windows版本的网易云" class="headerlink" title="接下来用讲讲如何wine安装Windows版本的网易云"></a>接下来用讲讲如何wine安装Windows版本的网易云</h3><h4 id="优势：体验完美，功能齐全，不用担心掉号，不用担心被检测第三方等等，还有HiDPI支持"><a href="#优势：体验完美，功能齐全，不用担心掉号，不用担心被检测第三方等等，还有HiDPI支持" class="headerlink" title="优势：体验完美，功能齐全，不用担心掉号，不用担心被检测第三方等等，还有HiDPI支持"></a>优势：体验完美，功能齐全，不用担心掉号，不用担心被检测第三方等等，还有HiDPI支持</h4><h4 id="劣势：配置麻烦，转译后可能会有一定的性能损耗"><a href="#劣势：配置麻烦，转译后可能会有一定的性能损耗" class="headerlink" title="劣势：配置麻烦，转译后可能会有一定的性能损耗"></a>劣势：配置麻烦，转译后可能会有一定的性能损耗</h4><hr>
-<h4 id="效果如下："><a href="#效果如下：" class="headerlink" title="效果如下："></a>效果如下：</h4><p><img src="/../../images/CloudMusicOnLinux/a.png"></p>
-<p>KDE的系统托盘也能正常识别使用</p>
-<p><img src="/../../images/CloudMusicOnLinux/b.png"></p>
-<h4 id="开始教学："><a href="#开始教学：" class="headerlink" title="开始教学："></a>开始教学：</h4><p>首先Arch的话通过AUR安装 <code>bottles</code> 这个包</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">yay -S bottles</span><br></pre></td></tr></table></figure>
-
-<p>Flatpak通过这个命令安装</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">flatpak install flathub com.usebottles.bottles</span><br></pre></td></tr></table></figure>
-
-<p>安装好以后打开它，等加载一会</p>
-<p>左上角➕号新建一个Bottle，名字随便写,类型选择游戏,运行器选择 <code>wine10</code></p>
-<p><img src="/../../images/c.png"></p>
-<p>点击运行可执行文件，选择<a href="https://music.163.com/#/download">官网直链下载</a>下载下来的exe文件</p>
-<p><img src="/../../images/CloudMusicOnLinux/d.png"></p>
-<p>安装后可以在下面直接打开,也可以添加快捷方式到应用程序菜单中</p>
-<p><img src="/../../images/CloudMusicOnLinux/e.png"></p>
-<h4 id="HiDPI"><a href="#HiDPI" class="headerlink" title="HiDPI"></a>HiDPI</h4><p>点击设置</p>
-<p><img src="/../../images/CloudMusicOnLinux/f.png"></p>
-<p>高级显示设置</p>
-<p><img src="/../../images/CloudMusicOnLinux/g.png"></p>
-<p>倍数用0.96乘你需要的,这里我需要150%,150x96%&#x3D;144</p>
-<p><img src="/../../images/CloudMusicOnLinux/h.png"></p>
-<p>ref： <a href="https://renil.cc/archives/47/">网易云音乐最新版 Wine方案 （网易云Beta）</a></p>
-<blockquote>
-<p>完善于2025年7月29日</p>
+<h4 id="7-登录Wemod-仅一次"><a href="#7-登录Wemod-仅一次" class="headerlink" title="7. 登录Wemod (仅一次)"></a>7. 登录Wemod (仅一次)</h4><h4 id="现在你应该就可以正常使用你的Wemod来爽快的进行游戏了"><a href="#现在你应该就可以正常使用你的Wemod来爽快的进行游戏了" class="headerlink" title="现在你应该就可以正常使用你的Wemod来爽快的进行游戏了"></a>现在你应该就可以正常使用你的Wemod来爽快的进行游戏了</h4><blockquote>
+<p>遇到问题请自行查看: <a href="https://github.com/DeckCheatz/wemod-launcher/wiki/Config-Usage">Config Usage</a></p>
 </blockquote>
 ]]></content>
       <categories>
@@ -834,6 +607,7 @@
       </categories>
       <tags>
         <tag>tech</tag>
+        <tag>gaming</tag>
       </tags>
   </entry>
   <entry>
@@ -910,77 +684,66 @@
       </tags>
   </entry>
   <entry>
-    <title>Linux使用Wayland协议下微信无法正常调用Fcitx5的中文输入法解决办法</title>
-    <url>/posts/ac1a683e.html</url>
-    <content><![CDATA[<h2 id="我的环境"><a href="#我的环境" class="headerlink" title="我的环境"></a>我的环境</h2><p>我在用ArchLinux的时候没有遇到这个问题，但是今天突发奇想，想在Fedora42+KDE+Wayland上打游戏的时候，发现自己的微信无法正常调用fcitx5的中文输入法，故来这里记录分享一下自己的经验</p>
-<p>废话不多说，直接上图！<br><img src="/../../images/Fcitx5wx/a.png"></p>
-<p>添加环境变量：</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">QT_SCALE_FACTOR=1.5 GTK_IM_MODULE=fcitx QT_IM_MODULE=fcitx</span><br></pre></td></tr></table></figure>
-
-<p>第一个是缩放，因为楼主的电脑是HiDPI屏幕，所以需要缩放1.5倍。后两个就是配置fcitx5的工具，亲测可用！</p>
-]]></content>
-      <categories>
-        <category>Linux</category>
-      </categories>
-      <tags>
-        <tag>tech</tag>
-        <tag>fcitx5</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>在Linux上优雅的使用Wemod</title>
-    <url>/posts/400b687c.html</url>
-    <content><![CDATA[<h2 id="引言"><a href="#引言" class="headerlink" title="引言"></a>引言</h2><p>最近在玩Escape the backroom,里边那个耐力真的很难受,所以开了个无限耐力的,但是我不想在windows下游玩,我就去找了一下linux下的wemod的替代品,结果找到了这个项目<a href="https://github.com/DeckCheatz/wemod-launcher">wemod-launcher</a>,现在想写一篇博客介绍一下怎么使用它</p>
-<h2 id="教程"><a href="#教程" class="headerlink" title="教程"></a>教程</h2><p>首先我们需要一个 <code>Python容器</code> ,在linux下我使用的是 <code>python-venv</code> 以下演示基于ArchLinux</p>
-<h4 id="1-先装所需的依赖包"><a href="#1-先装所需的依赖包" class="headerlink" title="1. 先装所需的依赖包"></a>1. 先装所需的依赖包</h4><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">sudo pacman -Sy tk</span><br></pre></td></tr></table></figure>
-
-<p>然后把项目拉到本地</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">git clone https://github.com/DeckCheatz/wemod-launcher.git</span><br></pre></td></tr></table></figure>
-
-<p>创建一个虚拟容器</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">python -m venv wemod-launcher</span><br></pre></td></tr></table></figure>
-
-<p>切换</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">source wemod-launcher/bin/activate.fish</span><br></pre></td></tr></table></figure>
-
-<blockquote>
-<p>因为我用的是fish所以这里用.fish,如果</p>
-</blockquote>
-<p>这时你的python容器和wemod容器在同一个文件夹中</p>
-<h4 id="2-GE-Proton"><a href="#2-GE-Proton" class="headerlink" title="2.  GE-Proton"></a>2.  GE-Proton</h4><p>建议使用GE-Proton,通过 <code>Protonup-qt</code> 来安装GE-Proton</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">yay -S protonup-qt</span><br></pre></td></tr></table></figure>
-
-<h3 id="3-重启"><a href="#3-重启" class="headerlink" title="3. 重启"></a>3. 重启</h3><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">reboot</span><br></pre></td></tr></table></figure>
-
-<h4 id="4-准备"><a href="#4-准备" class="headerlink" title="4. 准备"></a>4. 准备</h4><p>先查看 <code>wemod-launcher</code> 的目录</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">readlink -f wemod-launcher</span><br></pre></td></tr></table></figure>
-
-<p>改成可执行权限</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">chmod -R ug+x wemod-launcher</span><br></pre></td></tr></table></figure>
-
-<h4 id="5-更改设置"><a href="#5-更改设置" class="headerlink" title="5. 更改设置"></a>5. 更改设置</h4><ul>
-<li><p>在Steam库中,兼容性选项中,强制使用你刚才下载的GE-Proton版本</p>
-</li>
-<li><p>在 <code>Launch Options （启动选项 </code>） 下，输入 <code>{path/to/wemod-launcher}/wemod %command%</code></p>
-</li>
-</ul>
-<h4 id="6-开游戏"><a href="#6-开游戏" class="headerlink" title="6. 开游戏"></a>6. 开游戏</h4><ul>
-<li><p>如果 “copy prefix question” 出现并显示 <code>might work</code> ，请选择 “no”</p>
-</li>
-<li><p>如果它提到 <code>可能有效</code> （或更好），就可以直接安全地忽略所有 rundll32.exe 错误（通过单击 <code>no</code>）</p>
-</li>
-<li><p>选择 <code>Download</code> </p>
-</li>
-<li><p>选择 Yes&#x2F;Ok 直到不再显示窗口</p>
-</li>
-<li><p>可以安全地忽略所有 rundll32.exe 错误（通过单击 <code>no</code>）</p>
-</li>
+    <title>如何在Linux下优雅的使用网易云音乐</title>
+    <url>/posts/e85c1bad.html</url>
+    <content><![CDATA[<h2 id="目前我所知晓的方法有几种"><a href="#目前我所知晓的方法有几种" class="headerlink" title="目前我所知晓的方法有几种"></a>目前我所知晓的方法有几种</h2><ul>
+<li>网页端网易云</li>
+<li>用electron封装网页版</li>
+<li>第三方客户端(如yesplayer,splayer等)</li>
+<li>下载到本地用音乐播放器播放</li>
+<li>用wine安装Windows版本</li>
 </ul>
 <blockquote>
-<p>Wemod应该能启动了</p>
+<p>这里网页端的使用方法就不多赘述了，直接点击 <a href="https://music.163.com/">网易云音乐</a> 便可进入网页端</p>
 </blockquote>
-<h4 id="7-登录Wemod-仅一次"><a href="#7-登录Wemod-仅一次" class="headerlink" title="7. 登录Wemod (仅一次)"></a>7. 登录Wemod (仅一次)</h4><h4 id="现在你应该就可以正常使用你的Wemod来爽快的进行游戏了"><a href="#现在你应该就可以正常使用你的Wemod来爽快的进行游戏了" class="headerlink" title="现在你应该就可以正常使用你的Wemod来爽快的进行游戏了"></a>现在你应该就可以正常使用你的Wemod来爽快的进行游戏了</h4><blockquote>
-<p>遇到问题请自行查看: <a href="https://github.com/DeckCheatz/wemod-launcher/wiki/Config-Usage">Config Usage</a></p>
+<h2 id="这里我们说说后几种方法"><a href="#这里我们说说后几种方法" class="headerlink" title="这里我们说说后几种方法"></a>这里我们说说后几种方法</h2><h3 id="首先用electron封装"><a href="#首先用electron封装" class="headerlink" title="首先用electron封装"></a>首先用electron封装</h3><p>不要害怕，我其实有写过一篇帖子来介绍怎么使用一个工具名叫 <code>Nativerfier</code> 的封装工具</p>
+<p>帖子如下： <a href="https://k7tmiz.com/posts/b56059f9.html">Nativefier 使用教程</a></p>
+<p>我没有尝试过把网易云网页版封装成electron程序，我其实更推荐后几种方案…</p>
+<h3 id="第三方客户端"><a href="#第三方客户端" class="headerlink" title="第三方客户端"></a>第三方客户端</h3><p>以Arch Linux为例 我推荐以下几个App(按顺序)：
+	</p>
+<ol>
+<li><p>Splayer 项目地址：<a href="https://github.com/imsyy/SPlayer">Splayer</a></p>
+ <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">yay -S splayer-git</span><br></pre></td></tr></table></figure></li>
+</ol>
+<p>一款极其简约好用的音乐播放器，功能丰富操作简单直接，多系统可用，我就通过的AppImage来进行了安装，当然它也被收录到了AUR，我十分喜爱这款软件！</p>
+<ol start="2">
+<li>FeelUOwn 项目地址：<a href="https://github.com/feeluown/FeelUOwn">FeelUOwn</a></li>
+</ol>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">yay -S feeluown          # 安装稳定版，最新版的包名为 feeluown-git</span><br><span class="line">yay -S feeluown-netease  # 按需安装其它扩展</span><br><span class="line">yay -S feeluown-ytmusic</span><br><span class="line">yay -S feeluown-bilibili</span><br></pre></td></tr></table></figure>
+
+
+<p>一个稳定、用户友好以及高度可定制的音乐播放器。基于文本的歌单，方便与朋友分享、设备之间同步。一键安装，各流行平台均有打包（如 Arch Linux, Windows, macOS 等）但是在我的Arch上使用，会出现网易云无法正常登录的情况，我不知道是个例还是什么情况…但是我仍然认为他的可拓展性很强，值得一个第二<br>	<br>3. YesPlayMusic 项目地址：<a href="https://github.com/qier222/YesPlayMusic">YesPlayMusic</a></p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">yay -S yesplaymusic</span><br></pre></td></tr></table></figure>
+
+<p>高颜值的第三方网易云播放器，支持 Windows &#x2F; macOS &#x2F; Linux ，是我第一款开始使用的软件，问题是偶尔会掉线，然后颜值很高，很简约，但是作者似乎不咋打算更新新功能了，包会有点旧，介意的选前两个(我三个都要😋)</p>
+<hr>
+<h3 id="下载到本地然后用播放器不用过多赘述了"><a href="#下载到本地然后用播放器不用过多赘述了" class="headerlink" title="下载到本地然后用播放器不用过多赘述了"></a>下载到本地然后用播放器不用过多赘述了</h3><hr>
+<h3 id="接下来用讲讲如何wine安装Windows版本的网易云"><a href="#接下来用讲讲如何wine安装Windows版本的网易云" class="headerlink" title="接下来用讲讲如何wine安装Windows版本的网易云"></a>接下来用讲讲如何wine安装Windows版本的网易云</h3><h4 id="优势：体验完美，功能齐全，不用担心掉号，不用担心被检测第三方等等，还有HiDPI支持"><a href="#优势：体验完美，功能齐全，不用担心掉号，不用担心被检测第三方等等，还有HiDPI支持" class="headerlink" title="优势：体验完美，功能齐全，不用担心掉号，不用担心被检测第三方等等，还有HiDPI支持"></a>优势：体验完美，功能齐全，不用担心掉号，不用担心被检测第三方等等，还有HiDPI支持</h4><h4 id="劣势：配置麻烦，转译后可能会有一定的性能损耗"><a href="#劣势：配置麻烦，转译后可能会有一定的性能损耗" class="headerlink" title="劣势：配置麻烦，转译后可能会有一定的性能损耗"></a>劣势：配置麻烦，转译后可能会有一定的性能损耗</h4><hr>
+<h4 id="效果如下："><a href="#效果如下：" class="headerlink" title="效果如下："></a>效果如下：</h4><p><img src="/../../images/CloudMusicOnLinux/a.png"></p>
+<p>KDE的系统托盘也能正常识别使用</p>
+<p><img src="/../../images/CloudMusicOnLinux/b.png"></p>
+<h4 id="开始教学："><a href="#开始教学：" class="headerlink" title="开始教学："></a>开始教学：</h4><p>首先Arch的话通过AUR安装 <code>bottles</code> 这个包</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">yay -S bottles</span><br></pre></td></tr></table></figure>
+
+<p>Flatpak通过这个命令安装</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">flatpak install flathub com.usebottles.bottles</span><br></pre></td></tr></table></figure>
+
+<p>安装好以后打开它，等加载一会</p>
+<p>左上角➕号新建一个Bottle，名字随便写,类型选择游戏,运行器选择 <code>wine10</code></p>
+<p><img src="/../../images/c.png"></p>
+<p>点击运行可执行文件，选择<a href="https://music.163.com/#/download">官网直链下载</a>下载下来的exe文件</p>
+<p><img src="/../../images/CloudMusicOnLinux/d.png"></p>
+<p>安装后可以在下面直接打开,也可以添加快捷方式到应用程序菜单中</p>
+<p><img src="/../../images/CloudMusicOnLinux/e.png"></p>
+<h4 id="HiDPI"><a href="#HiDPI" class="headerlink" title="HiDPI"></a>HiDPI</h4><p>点击设置</p>
+<p><img src="/../../images/CloudMusicOnLinux/f.png"></p>
+<p>高级显示设置</p>
+<p><img src="/../../images/CloudMusicOnLinux/g.png"></p>
+<p>倍数用0.96乘你需要的,这里我需要150%,150x96%&#x3D;144</p>
+<p><img src="/../../images/CloudMusicOnLinux/h.png"></p>
+<p>ref： <a href="https://renil.cc/archives/47/">网易云音乐最新版 Wine方案 （网易云Beta）</a></p>
+<blockquote>
+<p>完善于2025年7月29日</p>
 </blockquote>
 ]]></content>
       <categories>
@@ -988,7 +751,6 @@
       </categories>
       <tags>
         <tag>tech</tag>
-        <tag>gaming</tag>
       </tags>
   </entry>
   <entry>
@@ -999,9 +761,9 @@
 <p>响一声后适当闭眼休息十秒</p>
 <p>然后再继续学习，循环往复…</p>
 <h2 id="音频"><a href="#音频" class="headerlink" title="音频"></a>音频</h2><p>由于音频文件太大，本座决定把bilibili视频直接搬过来…嘻嘻</p>
-<style>.bbplayer{width: 100%; max-width: 850px; margin: auto}</style><div class="bbplayer"><iframe class="bbplayer" id="mmedia-FPWfjBMVANnTdlSi" src="https://player.bilibili.com/player.html?bvid=BV1X9Lmz1EEr&page=1&high_quality=1&danmaku=true&autoplay=0" allowfullscreen="allowfullscreen" scrolling="no" border="0" frameborder="0" framespacing="0" sandbox="allow-top-navigation allow-same-origin allow-forms allow-scripts allow-popups"></iframe></div><script> document.getElementById("mmedia-FPWfjBMVANnTdlSi").style.height=document.getElementById("mmedia-FPWfjBMVANnTdlSi").scrollWidth*0.76+"px";
+<style>.bbplayer{width: 100%; max-width: 850px; margin: auto}</style><div class="bbplayer"><iframe class="bbplayer" id="mmedia-AopzNXwOBjELEyhA" src="https://player.bilibili.com/player.html?bvid=BV1X9Lmz1EEr&page=1&high_quality=1&danmaku=true&autoplay=0" allowfullscreen="allowfullscreen" scrolling="no" border="0" frameborder="0" framespacing="0" sandbox="allow-top-navigation allow-same-origin allow-forms allow-scripts allow-popups"></iframe></div><script> document.getElementById("mmedia-AopzNXwOBjELEyhA").style.height=document.getElementById("mmedia-AopzNXwOBjELEyhA").scrollWidth*0.76+"px";
     window.onresize = function(){
-      document.getElementById("mmedia-FPWfjBMVANnTdlSi").style.height=document.getElementById("mmedia-FPWfjBMVANnTdlSi").scrollWidth*0.76+"px";
+      document.getElementById("mmedia-AopzNXwOBjELEyhA").style.height=document.getElementById("mmedia-AopzNXwOBjELEyhA").scrollWidth*0.76+"px";
     }; </script>
 
 
@@ -1016,392 +778,6 @@
       </categories>
       <tags>
         <tag>study</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>西班牙语陈述式过去未完成时</title>
-    <url>/posts/567971b1.html</url>
-    <content><![CDATA[<h1 id="西班牙语陈述式过去未完成时-Preterito-Imperfecto-de-Indicativo"><a href="#西班牙语陈述式过去未完成时-Preterito-Imperfecto-de-Indicativo" class="headerlink" title="西班牙语陈述式过去未完成时 (Pretérito Imperfecto de Indicativo)"></a>西班牙语陈述式过去未完成时 (Pretérito Imperfecto de Indicativo)</h1><p>过去未完成时主要用于描述过去持续的、习惯性的动作，或对过去的背景、状态、人物进行描述，相当于英语中的 “used to”, “would (for habitual past actions)”, 或 “was&#x2F;were + -ing” (描述背景或持续动作时)。</p>
-<h2 id="一、规则动词变位"><a href="#一、规则动词变位" class="headerlink" title="一、规则动词变位"></a>一、规则动词变位</h2><p>过去未完成时的规则动词变位非常简单，只有两套词尾。</p>
-<h3 id="1-AR-结尾动词"><a href="#1-AR-结尾动词" class="headerlink" title="1. -AR 结尾动词"></a>1. -AR 结尾动词</h3><p>词根 + 以下词尾：</p>
-<ul>
-<li>Yo: <strong>-aba</strong></li>
-<li>Tú: <strong>-abas</strong></li>
-<li>Él&#x2F;Ella&#x2F;Usted: <strong>-aba</strong></li>
-<li>Nosotros&#x2F;as: <strong>-ábamos</strong> (注意重音)</li>
-<li>Vosotros&#x2F;as: <strong>-abais</strong></li>
-<li>Ellos&#x2F;Ellas&#x2F;Ustedes: <strong>-aban</strong></li>
-</ul>
-<p><strong>例如：<code>hablar</code> (说话)</strong></p>
-<table>
-<thead>
-<tr>
-<th>人称</th>
-<th>变位</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>Yo</td>
-<td>habl<strong>aba</strong></td>
-</tr>
-<tr>
-<td>Tú</td>
-<td>habl<strong>abas</strong></td>
-</tr>
-<tr>
-<td>Él&#x2F;Ella&#x2F;Usted</td>
-<td>habl<strong>aba</strong></td>
-</tr>
-<tr>
-<td>Nosotros&#x2F;as</td>
-<td>habl<strong>ábamos</strong></td>
-</tr>
-<tr>
-<td>Vosotros&#x2F;as</td>
-<td>habl<strong>abais</strong></td>
-</tr>
-<tr>
-<td>Ellos&#x2F;Ellas&#x2F;Ustedes</td>
-<td>habl<strong>aban</strong></td>
-</tr>
-</tbody></table>
-<h3 id="2-ER-和-IR-结尾动词"><a href="#2-ER-和-IR-结尾动词" class="headerlink" title="2. -ER 和 -IR 结尾动词"></a>2. -ER 和 -IR 结尾动词</h3><p>这两类动词在过去未完成时中使用相同的词尾。<br>词根 + 以下词尾：</p>
-<ul>
-<li>Yo: <strong>-ía</strong></li>
-<li>Tú: <strong>-ías</strong></li>
-<li>Él&#x2F;Ella&#x2F;Usted: <strong>-ía</strong></li>
-<li>Nosotros&#x2F;as: <strong>-íamos</strong> (注意重音)</li>
-<li>Vosotros&#x2F;as: <strong>-íais</strong></li>
-<li>Ellos&#x2F;Ellas&#x2F;Ustedes: <strong>-ían</strong></li>
-</ul>
-<p><strong>例如：<code>comer</code> (吃, -ER)</strong></p>
-<table>
-<thead>
-<tr>
-<th>人称</th>
-<th>变位</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>Yo</td>
-<td>com<strong>ía</strong></td>
-</tr>
-<tr>
-<td>Tú</td>
-<td>com<strong>ías</strong></td>
-</tr>
-<tr>
-<td>Él&#x2F;Ella&#x2F;Usted</td>
-<td>com<strong>ía</strong></td>
-</tr>
-<tr>
-<td>Nosotros&#x2F;as</td>
-<td>com<strong>íamos</strong></td>
-</tr>
-<tr>
-<td>Vosotros&#x2F;as</td>
-<td>com<strong>íais</strong></td>
-</tr>
-<tr>
-<td>Ellos&#x2F;Ellas&#x2F;Ustedes</td>
-<td>com<strong>ían</strong></td>
-</tr>
-</tbody></table>
-<p><strong>例如：<code>vivir</code> (生活, -IR)</strong></p>
-<table>
-<thead>
-<tr>
-<th>人称</th>
-<th>变位</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>Yo</td>
-<td>viv<strong>ía</strong></td>
-</tr>
-<tr>
-<td>Tú</td>
-<td>viv<strong>ías</strong></td>
-</tr>
-<tr>
-<td>Él&#x2F;Ella&#x2F;Usted</td>
-<td>viv<strong>ía</strong></td>
-</tr>
-<tr>
-<td>Nosotros&#x2F;as</td>
-<td>viv<strong>íamos</strong></td>
-</tr>
-<tr>
-<td>Vosotros&#x2F;as</td>
-<td>viv<strong>íais</strong></td>
-</tr>
-<tr>
-<td>Ellos&#x2F;Ellas&#x2F;Ustedes</td>
-<td>viv<strong>ían</strong></td>
-</tr>
-</tbody></table>
-<h2 id="二、注意事项"><a href="#二、注意事项" class="headerlink" title="二、注意事项"></a>二、注意事项</h2><ol>
-<li><strong>重音符号</strong>：<ul>
-<li>-AR 动词的 <code>nosotros</code> 形式 (<code>-ábamos</code>) 的 <code>a</code> 上有重音。</li>
-<li>-ER 和 -IR 动词的所有形式的 <code>i</code> 上都有重音 (<code>-ía</code>, <code>-ías</code>, <code>-ía</code>, <code>-íamos</code>, <code>-íais</code>, <code>-ían</code>)。</li>
-</ul>
-</li>
-<li><strong>用途</strong>：<ul>
-<li>描述过去习惯性的动作 (e.g., <code>Cuando era niño, jugaba en el parque.</code> - 当我是个孩子时，我常在公园玩。)</li>
-<li>描述过去的背景、情景、状态 (e.g., <code>Hacía sol y los pájaros cantaban.</code> - 当时阳光明媚，鸟儿在歌唱。)</li>
-<li>描述人的年龄、时间、天气等 (e.g., <code>Tenía veinte años.</code> - 他&#x2F;她当时二十岁。 <code>Eran las tres.</code> - 当时是三点。)</li>
-<li>描述两个或多个同时发生的持续性过去动作 (e.g., <code>Mientras yo cocinaba, él leía.</code> - 当我做饭的时候，他在读书。)</li>
-<li>用于礼貌地提出请求 (较少见，但可能出现，如 <code>Quería pedirle un favor.</code> - 我想请您帮个忙。)</li>
-</ul>
-</li>
-</ol>
-<h2 id="三、不规则动词"><a href="#三、不规则动词" class="headerlink" title="三、不规则动词"></a>三、不规则动词</h2><p>在过去未完成时中，只有 <strong>三个</strong> 真正的不规则动词。这是这个时态相对简单的一个原因。</p>
-<h3 id="1-Ser-是"><a href="#1-Ser-是" class="headerlink" title="1. Ser (是)"></a>1. <code>Ser</code> (是)</h3><table>
-<thead>
-<tr>
-<th>人称</th>
-<th>变位</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>Yo</td>
-<td><strong>era</strong></td>
-</tr>
-<tr>
-<td>Tú</td>
-<td><strong>eras</strong></td>
-</tr>
-<tr>
-<td>Él&#x2F;Ella&#x2F;Usted</td>
-<td><strong>era</strong></td>
-</tr>
-<tr>
-<td>Nosotros&#x2F;as</td>
-<td><strong>éramos</strong></td>
-</tr>
-<tr>
-<td>Vosotros&#x2F;as</td>
-<td><strong>erais</strong></td>
-</tr>
-<tr>
-<td>Ellos&#x2F;Ellas&#x2F;Ustedes</td>
-<td><strong>eran</strong></td>
-</tr>
-</tbody></table>
-<h3 id="2-Ir-去"><a href="#2-Ir-去" class="headerlink" title="2. Ir (去)"></a>2. <code>Ir</code> (去)</h3><table>
-<thead>
-<tr>
-<th>人称</th>
-<th>变位</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>Yo</td>
-<td><strong>iba</strong></td>
-</tr>
-<tr>
-<td>Tú</td>
-<td><strong>ibas</strong></td>
-</tr>
-<tr>
-<td>Él&#x2F;Ella&#x2F;Usted</td>
-<td><strong>iba</strong></td>
-</tr>
-<tr>
-<td>Nosotros&#x2F;as</td>
-<td><strong>íbamos</strong></td>
-</tr>
-<tr>
-<td>Vosotros&#x2F;as</td>
-<td><strong>ibais</strong></td>
-</tr>
-<tr>
-<td>Ellos&#x2F;Ellas&#x2F;Ustedes</td>
-<td><strong>iban</strong></td>
-</tr>
-</tbody></table>
-<h3 id="3-Ver-看见"><a href="#3-Ver-看见" class="headerlink" title="3. Ver (看见)"></a>3. <code>Ver</code> (看见)</h3><p>(严格来说，<code>ver</code> 保留了词根的 <code>e</code>，然后加上了规则的 <code>-ía</code> 结尾，但通常被列为不规则)</p>
-<table>
-<thead>
-<tr>
-<th>人称</th>
-<th>变位</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>Yo</td>
-<td><strong>veía</strong></td>
-</tr>
-<tr>
-<td>Tú</td>
-<td><strong>veías</strong></td>
-</tr>
-<tr>
-<td>Él&#x2F;Ella&#x2F;Usted</td>
-<td><strong>veía</strong></td>
-</tr>
-<tr>
-<td>Nosotros&#x2F;as</td>
-<td><strong>veíamos</strong></td>
-</tr>
-<tr>
-<td>Vosotros&#x2F;as</td>
-<td><strong>veíais</strong></td>
-</tr>
-<tr>
-<td>Ellos&#x2F;Ellas&#x2F;Ustedes</td>
-<td><strong>veían</strong></td>
-</tr>
-</tbody></table>
-<hr>
-<p><strong>总结</strong>：过去未完成时相对规则，主要记住两套词尾和三个不规则动词即可。重点在于理解其使用场景，以便与简单过去时区分开来。</p>
-]]></content>
-      <categories>
-        <category>Study</category>
-      </categories>
-      <tags>
-        <tag>spanish</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>云南旅游攻略4天2025.5.1</title>
-    <url>/posts/4a1e9301.html</url>
-    <content><![CDATA[<h1 id="云南旅游攻略"><a href="#云南旅游攻略" class="headerlink" title="云南旅游攻略"></a>云南旅游攻略</h1><h1 id="昆明部分"><a href="#昆明部分" class="headerlink" title="昆明部分"></a>昆明部分</h1><h2 id="昆明部分是自己做的-大理大部分是购买的，秉承着Opensource的原则全部分享出来"><a href="#昆明部分是自己做的-大理大部分是购买的，秉承着Opensource的原则全部分享出来" class="headerlink" title="昆明部分是自己做的 大理大部分是购买的，秉承着Opensource的原则全部分享出来"></a><strong>昆明部分是自己做的 大理大部分是购买的，秉承着Opensource的原则全部分享出来</strong></h2><blockquote>
-<p>其实还有好多好多照片都发到朋友圈去了 这些图片都是随便节选的…当然也是从朋友圈下载下来的 因为压缩，体积图片比较小嘻嘻</p>
-</blockquote>
-<h4 id="昆明双塔"><a href="#昆明双塔" class="headerlink" title="昆明双塔"></a>昆明双塔</h4><p><img src="/../../images/Yunnan/a.png" alt="昆明双塔" title="昆明双塔"></p>
-<ul>
-<li>滇池</li>
-<li>翠湖</li>
-<li>昆明老街</li>
-<li>西山索道(100)</li>
-<li>斗南花市</li>
-<li>陆军讲武堂</li>
-</ul>
-<h3 id="Day1-5月2日"><a href="#Day1-5月2日" class="headerlink" title="Day1 5月2日"></a>Day1 5月2日</h3><p>昆明站－昆明老街(东方书店－纸片楼－对月楼酒店)－(非正常咖啡馆 选去 打卡点)－黄公东街－翠湖公园－陆军讲武堂－西山索道－海洪湿地公园(滇池)－捞鱼河湿地公园(滇池)－斗南花市－南强集市</p>
-<blockquote>
-<p>视情况加入云南师大(主要是不好进去 管的严)</p>
-</blockquote>
-<blockquote>
-<p>最后还是没进去 from 25.5.10</p>
-</blockquote>
-<h4 id="忘了在哪拍的了…"><a href="#忘了在哪拍的了…" class="headerlink" title="忘了在哪拍的了…"></a>忘了在哪拍的了…</h4><p><img src="/../../images/Yunnan/b.png" alt="臭美" title="臭美"></p>
-<h4 id="后几张都是昆明的滇池"><a href="#后几张都是昆明的滇池" class="headerlink" title="后几张都是昆明的滇池"></a>后几张都是昆明的滇池</h4><p><img src="/../../images/Yunnan/c.png" alt="滇池" title="滇池"></p>
-<p><img src="/../../images/Yunnan/d.png" alt="滇池" title="滇池"></p>
-<p><img src="/../../images/Yunnan/e.png" alt="滇池" title="滇池"></p>
-<p><img src="/../../images/Yunnan/f.png" alt="滇池" title="滇池"></p>
-<p><img src="/../../images/Yunnan/g.png" alt="滇池" title="滇池"></p>
-<p><img src="/../../images/Yunnan/h.png" alt="滇池" title="滇池"></p>
-<h3 id="Day2-5月3日"><a href="#Day2-5月3日" class="headerlink" title="Day2 5月3日"></a>Day2 5月3日</h3><p>有可能去海埂大坝看一眼日出</p>
-<p>十点高铁－大理</p>
-<h1 id="大理"><a href="#大理" class="headerlink" title="大理"></a>大理</h1><ul>
-<li>洱海</li>
-<li>苍山(30)</li>
-<li>S弯</li>
-<li>理想邦</li>
-<li>大理古城</li>
-<li>喜洲古镇</li>
-<li>沙溪古镇</li>
-<li>双廊古镇</li>
-<li>南诏风情岛</li>
-<li>崇圣寺三塔</li>
-</ul>
-<h3 id="Day2-5月3号大理行－下午"><a href="#Day2-5月3号大理行－下午" class="headerlink" title="Day2 5月3号大理行－下午"></a>Day2 5月3号大理行－下午</h3><p>大理站－磻溪村（S湾）-喜洲古镇（扎染+稻田）-大理古城</p>
-<blockquote>
-<p>下午打车前往磻溪村，租个自行车游览网红S湾生态廊道（游览时间2.5小时）（定位马久邑或磻溪村）<br>洱海生态廊道全程差不多有50公里，精华地段就是马久邑附近和磻溪村附近，很多比较火的视频和图片都是这两段。<br>线路大概为：马久邑-富美邑-下波淜-磻溪村-古生村，沿途有很多咖啡厅，玩累了可以进去坐坐，享受一下洱海边的风景。<br>美食推荐：磻溪村附近（信达小吃，望海人家），马久邑附近(二两小吃店白族庭院私房菜，原生态白族农家菜），古生村（村里大青树附近有很多本地特色小吃）<br>之后骑行抵达喜洲古镇，游览线路大致为：<br>第一站：大理路边野餐咖啡画廊<br>第二站：我在洱海有块田！<br>超级大的拍照基地，麦田很大，人也没有喜洲古镇里的多！有很多出片的机位，有火车，有秋千都很好看！<br>第三站：白族扎染  推荐“喜蓝扎染”，做衣服。<br>扎染的步骤是先选定你做的款式，再和老板商量确认设计想法和实现步骤。店员会先辅助你完成手工部分后，进行1泡水&#x2F;去碘伏2染色3 冲洗4 氧化5 皂洗6 清洗7 晒干，整个过程根据你选择的产品难易程度决定，体验大概在30分钟到一小时。就可以获得一件亲自设计扎染的艺术品啦<br>喜洲还有非遗–瓦猫，各种类型的寓意都有，可以挑一个<br>喜洲美食推荐:喜洲粑粑(一定要尝尝，当地特色)，四方街食店，口未江湖，喜洲老冰棍，喜酒坊小吃店<br>吃完后夜游大理古城<br>游览路线指南:床单艺术厂-五华楼（出片，缺点人多）-红龙井-关帝庙-文殊庙-天主教堂-玉洱园 -洋人街-电影博物馆-基督教堂</p>
-</blockquote>
-<p><strong>住宿</strong>：大理古城</p>
-<h4 id="洱海"><a href="#洱海" class="headerlink" title="洱海"></a>洱海</h4><p><img src="/../../images/Yunnan/i.png" alt="洱海" title="洱海"></p>
-<h3 id="Day3-5月4号"><a href="#Day3-5月4号" class="headerlink" title="Day3 5月4号"></a>Day3 5月4号</h3><p>龙龛码头-云想山（路极公园）-理想邦–文笔村日落</p>
-<blockquote>
-<p>早上第一站龙龛码头（游览时间2小时）， 大理最美码头之一，还有水中红杉树拍照很美。<br>如果想体验洱海日出，就需要早一点，日出时间：早上7:30-8:00左右，可以稍微提前一点去占位置，享受等待日出的过程。<br>位置导航：直接导航阳光便利店，距离海边大概只有200米<br>之后电动车前往云想山-路极公园—亚洲第二国内唯一的路极（游览时间2.5小时）<br>无想，无限的放空，任凭暮霭一点一点席卷天边，大理城的万家灯火星星点点，陆续绽放。沉溺在这无边的夜色之中。<br>悬崖礼堂  白色的三角礼堂在蓝天与洱海的背景下特别唯美，还能看到远处的风车山<br>咖啡店  一楼有个有着大大落地窗，很好拍，二楼是2188落日餐厅，价格有点贵，味道也一般般，三楼是天台，有一个镜面地板，白天可以拍自己的倒影，晚上看夜景一览无余<br>山顶草坪 在咖啡馆旁边的草坡上，草坪不大，结合天空的云朵可以拍出很好玩的照片<br>路极  是来自新西兰的无动力车，自己可以控制速度沿着山道开<br>路极门票：大人188元3次  分叉口选右边是缓长的道，左边道更刺激好玩<br>开到山脚可以坐缆车或者电瓶车上山顶<br>下午前往圣托里尼·理想邦（游览时间1小时）<br>推荐打卡：理想的花园！它藏在圣托里尼岛里，浪漫氛围拉满<br>拍照点：小木屋、天空之镜、秋千、仙人掌、花门、大片的绣球花和小雏菊<br>门票：135元&#x2F;2人，单人票是68元&#x2F;人<br>美食推荐：烟云融合菜餐厅·川滇菜、天边的云Sky Cloud 海景餐厅<br>最后前往文笔村，抵达前往海之礼堂，感受那里的壮丽海景。晚上，在海之礼堂边的悬崖餐厅品尝美食，欣赏美丽的日落。<br>打卡彩虹公路，这里有种日本镰仓的感觉。无论是漫步还是骑行，都能让你放松心情。午餐时间，推荐到推荐餐厅：青寂日落海景餐厅  六阅海东方悬崖海景餐厅<br>备选体验景点：罗荃半岛旁的理记咖啡（游览时间1小时）<br>刘亦菲同款【理记先生】，是一辆超长的绿皮车，摊主推荐了“老板的一生”和“苍山梅烦恼”<br>老板的一生：是一款生椰dirty，有苦有甜，感觉比之前用冰博客做的更好喝些。<br>苍山梅烦恼：梅子味的冰美式，带点酸，果酸和咖啡的酸融合在一起，不会太酸也尝不到偏甜的糖浆味</p>
-</blockquote>
-<h4 id="洱海-1"><a href="#洱海-1" class="headerlink" title="洱海"></a>洱海</h4><p><img src="/../../images/Yunnan/j.png" alt="洱海" title="洱海"><br><img src="/../../images/Yunnan/k.png" alt="洱海" title="洱海"></p>
-<h3 id="Day4-5月5号-回昆明"><a href="#Day4-5月5号-回昆明" class="headerlink" title="Day4 5月5号 回昆明"></a>Day4 5月5号 回昆明</h3><p>苍山索道（感通）-大理站</p>
-<blockquote>
-<p>打车前往感通索道，苍山景点最集中的一条索道，全长2630米，全程25分钟，乘坐该缆车，可仰望苍山雪峰俯瞰百里洱海大理古城。沿途有珍珑棋局清碧溪苍山大峡谷玉带云游路，除索道外，还有千年古刹感通寺、“最美尼姑庵”寂照庵。<br>感通索道详细攻略<br>门票价格：全程窗口115，网络110，<br>游玩线路：感通全程索道往返，约2.5小时<br>1检票后乘索道至上站<br>2到上站后游玩珍珑棋局、玉带路、苍山大峡谷、清碧溪<br>3从感通索道下山<br>4下山后游玩感通寺、寂照庵（可在庵内吃斋饭）</p>
-</blockquote>
-<h1 id="大理伴手礼"><a href="#大理伴手礼" class="headerlink" title="大理伴手礼"></a>大理伴手礼</h1><blockquote>
-<p>大理伴手礼推荐：白族扎染  瓦猫  白族甲马  剑川木雕  白族羊毛毡 鹤庆银器 下关沱茶 雕梅酒 洱宝话梅 乳扇 鲜花饼  鹤庆米糕<br>大理古城北门菜市场平等路上山货特产批发：普洱茶、果酒、野生菌、蜂蜜  小粒咖啡都不错<br>大理古城土特产最多，都可以适当讲价。先尝后买。<br>下关火车站旁边的有点贵。</p>
-</blockquote>
-]]></content>
-      <categories>
-        <category>Travel</category>
-      </categories>
-      <tags>
-        <tag>travel</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>GIT提交时不用输入用户名密码的方法</title>
-    <url>/posts/87bb185d.html</url>
-    <content><![CDATA[<h2 id="起因"><a href="#起因" class="headerlink" title="起因"></a>起因</h2><p>每次git push都要用用户名和密码，每次都要去复制一下然后粘贴过去… 是真的很烦人</p>
-<h2 id="教程"><a href="#教程" class="headerlink" title="教程"></a>教程</h2><ol>
-<li>进入项目的目录:以Hexo举例</li>
-</ol>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">cd Hexo</span><br></pre></td></tr></table></figure>
-
-<ol start="2">
-<li>输入以下命令:</li>
-</ol>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">git config credential.helper store</span><br></pre></td></tr></table></figure>
-
-<blockquote>
-<p>也可以加上 <code>--global</code> 只对全局生效，不带就是只对当前库生效</p>
-</blockquote>
-<ol start="3">
-<li><code>.git</code> 文件夹下的 <code>.config</code> 文件应该多了两行</li>
-</ol>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">[credential]</span><br><span class="line">	helper = store</span><br></pre></td></tr></table></figure>
-
-<ol start="4">
-<li><p><code>git push</code> 到远程仓库，<strong>输入正确的用户名和密码</strong></p>
-</li>
-<li><p>再次运行 <code>git push</code> 就不需要用户名密码了</p>
-</li>
-<li><p>回到用户主目录发现多了一个 <code>.git-credentials</code> 这个就是用来存储用户名和密码的</p>
-</li>
-</ol>
-<p>ref: <a href="https://blog.csdn.net/q1054261752/article/details/126389400">GIT提交时不用输入用户名密码的方法</a></p>
-]]></content>
-      <categories>
-        <category>Tech</category>
-      </categories>
-      <tags>
-        <tag>git</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>MSI-PERKEYRGB</title>
-    <url>/posts/5a88bde.html</url>
-    <content><![CDATA[<h1 id="MSI-PERKEYRGB"><a href="#MSI-PERKEYRGB" class="headerlink" title="MSI-PERKEYRGB"></a>MSI-PERKEYRGB</h1><blockquote>
-<p>适用于我MSI-GP68HX的键盘RGB调光的git项目</p>
-</blockquote>
-<p>下面是Github的项目地址： <a href="https://github.com/Askannz/msi-perkeyrgb">msi-perkeyrgb</a></p>
-<hr>
-<h3 id="安装教程这里就掠过"><a href="#安装教程这里就掠过" class="headerlink" title="安装教程这里就掠过"></a>安装教程这里就掠过</h3><h3 id="简单用法"><a href="#简单用法" class="headerlink" title="简单用法"></a>简单用法</h3><h4 id="Steady-Color：稳定颜色"><a href="#Steady-Color：稳定颜色" class="headerlink" title="Steady Color：稳定颜色"></a>Steady Color：稳定颜色</h4><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">msi-perkeyrgb --model &lt;MSI model&gt; -s &lt;COLOR&gt;</span><br></pre></td></tr></table></figure>
-<h4 id="Preset：内置预设-–list-presets"><a href="#Preset：内置预设-–list-presets" class="headerlink" title="Preset：内置预设(–list-presets)"></a>Preset：内置预设(–list-presets)</h4><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">msi-perkeyrgb --model &lt;MSI model&gt; -p &lt;preset&gt;</span><br></pre></td></tr></table></figure>
-<h3 id="高级用法不多赘述-个人用不到"><a href="#高级用法不多赘述-个人用不到" class="headerlink" title="高级用法不多赘述 个人用不到"></a>高级用法不多赘述 个人用不到</h3><hr>
-<h3 id="个人电脑键盘预设配色如下："><a href="#个人电脑键盘预设配色如下：" class="headerlink" title="个人电脑键盘预设配色如下："></a>个人电脑键盘预设配色如下：</h3><ul>
-<li>aqua</li>
-<li>chakra</li>
-<li>default</li>
-<li>disco</li>
-<li>drain</li>
-<li>freeway</li>
-<li>rainbow-split</li>
-<li>roulette</li>
-</ul>
-<h3 id="如果你的电脑也没有被录入的话-可以通过id的方式进行使用。"><a href="#如果你的电脑也没有被录入的话-可以通过id的方式进行使用。" class="headerlink" title="如果你的电脑也没有被录入的话 可以通过id的方式进行使用。"></a>如果你的电脑也没有被录入的话 可以通过id的方式进行使用。</h3><p>注意：这里是十六进制的数字 –id VENDOR_ID:PRODUCT_ID</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">例 sudo msi-perkeyrgb --id 1038:113a -p rainbow-split</span><br></pre></td></tr></table></figure>
-
-]]></content>
-      <categories>
-        <category>Tech</category>
-      </categories>
-      <tags>
-        <tag>linux</tag>
-        <tag>msi</tag>
       </tags>
   </entry>
   <entry>
@@ -1956,235 +1332,299 @@
       </tags>
   </entry>
   <entry>
-    <title>Nativefier 使用教程</title>
-    <url>/posts/b56059f9.html</url>
-    <content><![CDATA[<h1 id="Nativefier-使用教程"><a href="#Nativefier-使用教程" class="headerlink" title="Nativefier 使用教程"></a>Nativefier 使用教程</h1><h4 id="基于electron的打包软件"><a href="#基于electron的打包软件" class="headerlink" title="基于electron的打包软件"></a>基于electron的打包软件</h4><h5 id="nativefier-n-p-—-arch-—-weight-—-height"><a href="#nativefier-n-p-—-arch-—-weight-—-height" class="headerlink" title="nativefier -n &lt;打包后的应用名称&gt; -p &lt;程序兼容的平台&gt; —-arch &lt;架构&gt; —- weight &lt;窗口宽度&gt; —-height &lt;窗口高度&gt; &lt;网页URL&gt;"></a>nativefier -n &lt;打包后的应用名称&gt; -p &lt;程序兼容的平台&gt; —-arch &lt;架构&gt; —- weight &lt;窗口宽度&gt; —-height &lt;窗口高度&gt; &lt;网页URL&gt;</h5><h4 id="实例（Eshelper）"><a href="#实例（Eshelper）" class="headerlink" title="实例（Eshelper）"></a>实例（Eshelper）</h4><p>nativefier -n Eshelper -p linux –arch x64 –width 1024 –height 768 –tray<br>--disable-dev-tools <a href="https://www.esdict.cn/">https://www.esdict.cn/</a></p>
-<p>#如果想让程序可以后台运行，可以增加参数——tray</p>
-<p>#如果不想在使用时可以调出chrome的开发者工具，可以增加参数——disable-dev-tools</p>
-<p>#如果想控制程序在同一时间只能运行一个实例，则增加参数——single-instance</p>
-<h4 id="desktop文件（Linux下启动文件）"><a href="#desktop文件（Linux下启动文件）" class="headerlink" title=".desktop文件（Linux下启动文件）"></a>.desktop文件（Linux下启动文件）</h4><p>[Desktop Entry]</p>
-<p># type关键字如上所述</p>
-<p>Type&#x3D;Application</p>
-<p># 本文件所遵循的桌面项规范版本</p>
-<p>Version&#x3D;1.0</p>
-<p># 应用程序的名称</p>
-<p>Name&#x3D;jMemorize</p>
-<p># 显示为工具提示的注释</p>
-<p>Comment&#x3D;Flash card based learning tool</p>
-<p># 可执行文件所在的目录</p>
-<p>Path&#x3D;&#x2F;opt&#x2F;jmemorise</p>
-<p># 可执行文件，可以带参</p>
-<p>Exec&#x3D;jmemorize</p>
-<p># 图标名称</p>
-<p>Icon&#x3D;jmemorize</p>
-<p># 应用程序是否需要运行在终端中</p>
-<p>Terminal&#x3D;false</p>
-<p># 本桌面项将显示在哪些分类中</p>
-<p>Categories&#x3D;Education;Languages;Java;</p>
-<h4 id="desktop文件存放位置"><a href="#desktop文件存放位置" class="headerlink" title=".desktop文件存放位置"></a>.desktop文件存放位置</h4><p>&#x2F;usr&#x2F;share&#x2F;applications&#x2F;</p>
+    <title>Linux使用Wayland协议下微信无法正常调用Fcitx5的中文输入法解决办法</title>
+    <url>/posts/ac1a683e.html</url>
+    <content><![CDATA[<h2 id="我的环境"><a href="#我的环境" class="headerlink" title="我的环境"></a>我的环境</h2><p>我在用ArchLinux的时候没有遇到这个问题，但是今天突发奇想，想在Fedora42+KDE+Wayland上打游戏的时候，发现自己的微信无法正常调用fcitx5的中文输入法，故来这里记录分享一下自己的经验</p>
+<p>废话不多说，直接上图！<br><img src="/../../images/Fcitx5wx/a.png"></p>
+<p>添加环境变量：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">QT_SCALE_FACTOR=1.5 GTK_IM_MODULE=fcitx QT_IM_MODULE=fcitx</span><br></pre></td></tr></table></figure>
+
+<p>第一个是缩放，因为楼主的电脑是HiDPI屏幕，所以需要缩放1.5倍。后两个就是配置fcitx5的工具，亲测可用！</p>
 ]]></content>
       <categories>
-        <category>Tech</category>
+        <category>Linux</category>
       </categories>
       <tags>
         <tag>tech</tag>
+        <tag>fcitx5</tag>
       </tags>
   </entry>
   <entry>
-    <title>因上传过大文件而导致hexo部署时Spawn failed报错的解决方法以及注意事项</title>
-    <url>/posts/5618ea3e.html</url>
-    <content><![CDATA[<p>之前我发布了一篇<a href="https://k7tmiz.com/posts/f78c38a6.html#more">学习计时器</a>的文章,当时上传的音频我没注意体积有多大，是在<code>hexo d</code>这一步没有成功, warning警告说“GitHub建议上传最大体积为50MB, 上限为100MB”, 很明显我上传的音频文件体积已经超过了100MB. 因此我删掉了那个大文件, 但是当我再次尝试部署时, 还是弹出来一样的warning, 报错文件的路径也和之前的一样, 可是我明明已经删除了那个文件, 后来经过不断的尝试以及在网上搜索, 我找到了一篇和我遇到问题一样的情况<a href="https://ultrafisher.github.io/2020/09/06/%E5%9B%A0%E4%B8%8A%E4%BC%A0%E8%BF%87%E5%A4%A7%E6%96%87%E4%BB%B6%E8%80%8C%E5%AF%BC%E8%87%B4hexo%E9%83%A8%E7%BD%B2%E6%97%B6Spawnfailed%E6%8A%A5%E9%94%99%E7%9A%84%E8%A7%A3%E5%86%B3%E6%96%B9%E6%B3%95%E4%BB%A5%E5%8F%8A%E6%B3%A8%E6%84%8F%E4%BA%8B%E9%A1%B9/">因上传过大文件而导致hexo部署时Spawn failed报错的解决方法以及注意事项</a> 这里再在自己的博客上做一个记录：</p>
-<h2 id="首先恢复仓库文件"><a href="#首先恢复仓库文件" class="headerlink" title="首先恢复仓库文件"></a>首先恢复仓库文件</h2><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">cd .deploy_git</span><br></pre></td></tr></table></figure>
-
-<h2 id="然后找到自己的-commitid"><a href="#然后找到自己的-commitid" class="headerlink" title="然后找到自己的 commitid"></a>然后找到自己的 <code>commitid</code></h2><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">git log</span><br></pre></td></tr></table></figure>
-
-<h2 id="接着输入命令："><a href="#接着输入命令：" class="headerlink" title="接着输入命令："></a>接着输入命令：</h2><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">git reset --hard `commitid`</span><br></pre></td></tr></table></figure>
-
-<p>按理来说应该就没有问题可以正常 <code>hexo d</code> 了</p>
-]]></content>
-      <categories>
-        <category>Tech</category>
-      </categories>
-      <tags>
-        <tag>hexo</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>记录我电脑外放消失的一次</title>
-    <url>/posts/8c7c6a2b.html</url>
-    <content><![CDATA[<p><strong>很偶然的发现</strong></p>
-<h2 id="起因"><a href="#起因" class="headerlink" title="起因"></a>起因</h2><p>起因是我要做pre,然后昨天晚上十二点半去楼道的自习室加班加点，然后当时刚好忘记带耳机了，大半夜也没什么人，我就打算外放了，然后没声音，我还以为是系统bug,重启了一下，发现还是没声，没管它接着弄了…回到宿舍插上耳机又有声音了？？？</p>
-<p>到这我还不是很确定…</p>
-<p>然后第二天中午回来发现还是不行，我就打算排除法，因为我是多Linux➕Win的配置，我从Arch出去先进了Fedora,发现还是没声。我就排除系统问题了。然后又进Win发现还是一样没声。最后进了SUSE，这个我当时所有系统都崩了就它没事的超稳定系统，同样不能用…</p>
-<p>我就用了很多命令然后发现，硬件都是正常的？？？我就觉着可能是硬件坏了。但是插上耳机还是有音频输出，jack detect也没问题，就是外放不了？？</p>
-<p>然后管不了那么多了，我着急用pre,匆忙做完下午去上专业课了。</p>
-<p>下了专业课回到寝室接着排查，然后最终决定放弃，不带电脑去中心上课了。</p>
-<p>然后下课回来路上刷到一篇帖子，说是静电问题，回来放了一下静电就好了…</p>
-<h2 id="GPT的建议"><a href="#GPT的建议" class="headerlink" title="GPT的建议"></a>GPT的建议</h2><p>电脑本身在正常使用中不会频繁积累危险级别的静电（ESD），但定期给电脑<strong>释放静电</strong>可以降低潜在的硬件风险，尤其是在以下几种情况下：</p>
-<hr>
-<h3 id="✅-建议给电脑释放静电的时机"><a href="#✅-建议给电脑释放静电的时机" class="headerlink" title="✅ 建议给电脑释放静电的时机"></a>✅ <strong>建议给电脑释放静电的时机</strong></h3><ol>
-<li><p><strong>更换或安装硬件前（如加内存、换硬盘）</strong></p>
-<ul>
-<li>*<em>必须</em>释放静电，否则有可能损坏主板、内存或其他敏感元件。</li>
-</ul>
-</li>
-<li><p><strong>电脑出现异常问题，如：</strong></p>
-<ul>
-<li>无法开机、USB设备识别异常、扬声器无声、电源灯亮但无反应；</li>
-<li>这些可能是“软性静电锁定”导致主板处于保护状态。</li>
-</ul>
-</li>
-<li><p><strong>长时间未关机、处于待机状态超过一周时</strong></p>
-<ul>
-<li>有时电荷会在电源线路中缓慢积累。</li>
-</ul>
-</li>
-<li><p><strong>环境干燥、冬天、穿化纤衣服经常接触电脑</strong></p>
-<ul>
-<li>更容易产生人体静电放电。</li>
-</ul>
-</li>
-</ol>
-<hr>
-<h3 id="🕓-多久放一次静电比较合适？"><a href="#🕓-多久放一次静电比较合适？" class="headerlink" title="🕓 多久放一次静电比较合适？"></a>🕓 <strong>多久放一次静电比较合适？</strong></h3><ul>
-<li><p><strong>日常使用：</strong><br>不需要频繁释放，一般<strong>每月一次或每次电脑出现异常时操作即可</strong>。</p>
-</li>
-<li><p><strong>高风险环境（冬季&#x2F;干燥&#x2F;有明显静电打火感）：</strong><br>每周一次或者每次使用前摸一下金属物体（如桌脚或插排外壳）做人体放电。</p>
-</li>
-</ul>
-<hr>
-<h3 id="⚙️-如何给电脑释放静电？"><a href="#⚙️-如何给电脑释放静电？" class="headerlink" title="⚙️ 如何给电脑释放静电？"></a>⚙️ <strong>如何给电脑释放静电？</strong></h3><h4 id="台式机："><a href="#台式机：" class="headerlink" title="台式机："></a>台式机：</h4><ol>
-<li>完全关机并<strong>拔掉电源线</strong>；</li>
-<li><strong>按住电源键不松手 10~30 秒</strong>，让主板和电源的余电释放；</li>
-<li>如果还要打开机箱操作，建议佩戴防静电手环或触摸金属机箱外壳。</li>
-</ol>
-<h4 id="笔记本电脑："><a href="#笔记本电脑：" class="headerlink" title="笔记本电脑："></a>笔记本电脑：</h4><ol>
-<li>关机 → 拔掉充电器；</li>
-<li>如可拆卸电池，先<strong>拔电池</strong>；</li>
-<li>同样<strong>长按电源键 10~30 秒</strong>；</li>
-<li>再重新装好电池或接上电源即可。</li>
-</ol>
-<hr>
-<h3 id="✅-总结"><a href="#✅-总结" class="headerlink" title="✅ 总结"></a>✅ 总结</h3><table>
-<thead>
-<tr>
-<th>情况</th>
-<th>建议释放静电频率</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>日常无异常使用</td>
-<td>每月一次或无需频繁操作</td>
-</tr>
-<tr>
-<td>干燥环境、静电多</td>
-<td>每周一次</td>
-</tr>
-<tr>
-<td>换硬件、电脑异常</td>
-<td>当次操作前务必释放</td>
-</tr>
-</tbody></table>
-<p>如果你电脑近期频繁出现扬声器无声、USB异常等问题，建议你现在就做一次释放静电操作试试，看是否能解决问题。</p>
-]]></content>
-      <categories>
-        <category>Tech</category>
-      </categories>
-      <tags>
-        <tag>tech</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>关于Spotify桌面端的美化</title>
-    <url>/posts/4795de82.html</url>
-    <content><![CDATA[<h2 id="简单的开头：为什么我切换到了Spotify"><a href="#简单的开头：为什么我切换到了Spotify" class="headerlink" title="简单的开头：为什么我切换到了Spotify"></a>简单的开头：为什么我切换到了Spotify</h2><p>前两天，我收到了一条短信<br><img src="/../../images/Spicetify/a.png"></p>
-<p>由于Linux端的网易云已经年久失修，最新的一个官方包大概是七八年前维护的，无论是功能性还是美观度都无法支撑我继续使用。wine模拟出的官方版有时候占用也比较高，Splayer就成为了我的首选。</p>
-<p>据说是因为这个 <code>听歌打卡</code> 的功能，但我也不好说到底是不是这个原因…<br><img src="/../../images/Spicetify/c.png"></p>
-<p>于是我就投入了Spotify的怀抱</p>
-<p>其实很早之前就在用mod版本，但是经过这么一出，没忍住直接冲了年会员<br><img src="/../../images/Spicetify/b.png"></p>
-<p>而且Spotify的推荐算法简直无敌，歌库也很全，多端同步也超级无敌，一年价格也能接受，Linux端也有很多东西可玩，那我就来了</p>
-<h2 id="安装Spotify"><a href="#安装Spotify" class="headerlink" title="安装Spotify"></a>安装Spotify</h2><h3 id="ArchLinux"><a href="#ArchLinux" class="headerlink" title="ArchLinux"></a>ArchLinux</h3><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">sudo pacman -S spotify-launcher</span><br></pre></td></tr></table></figure>
-
-<h3 id="Flatpak"><a href="#Flatpak" class="headerlink" title="Flatpak"></a>Flatpak</h3><p><a href="https://flathub.org/apps/com.spotify.Client">Spotify</a></p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">flatpak install flathub com.spotify.Client</span><br></pre></td></tr></table></figure>
-
-
-<h2 id="Spicetify插件"><a href="#Spicetify插件" class="headerlink" title="Spicetify插件"></a>Spicetify插件</h2><p>原生的Linux版本的Spotify也太丑了…</p>
-<p>于是我就去网上找类似的插件，意图稍微的美化一下</p>
-<p>官网：<a href="https://spicetify.app/">Spicetify</a></p>
-<h3 id="安装"><a href="#安装" class="headerlink" title="安装"></a>安装</h3><p>由于我是Linux端，所以直接：</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">curl -fsSL https://raw.githubusercontent.com/spicetify/cli/main/install.sh | sh</span><br></pre></td></tr></table></figure>
-
-<p>问你要不要安装 <code>Marketplace</code> 直接Y</p>
-<p>然后安完了应该是提示你</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">spicetify backup apply</span><br></pre></td></tr></table></figure>
-
-<p>这里<strong>Flatpak</strong>版本还要多一步加权限，否则 <code>spicetify backup apply</code> 会运行失败</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">sudo chmod a+wr /var/lib/flatpak/app/com.spotify.Client/x86_64/stable/active/files/extra/share/spotify/</span><br></pre></td></tr></table></figure>
-
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">sudo chmod a+wr /var/lib/flatpak/app/com.spotify.Client/x86_64/stable/active/files/extra/share/spotify/Apps -R</span><br></pre></td></tr></table></figure>
-
-<blockquote>
-<p>还有可能会提示你 <code>spotify_path</code> 或者 <code>prefs_path</code> 有问题，你只需按照它的提示找到那个 <code>~/.config/spicetify/config-xpui.ini</code> 文件然后修改即可</p>
+    <title>MSI-PERKEYRGB</title>
+    <url>/posts/5a88bde.html</url>
+    <content><![CDATA[<h1 id="MSI-PERKEYRGB"><a href="#MSI-PERKEYRGB" class="headerlink" title="MSI-PERKEYRGB"></a>MSI-PERKEYRGB</h1><blockquote>
+<p>适用于我MSI-GP68HX的键盘RGB调光的git项目</p>
 </blockquote>
-<p>参考：<a href="https://spicetify.app/docs/advanced-usage/installation/">Installation</a></p>
-<p>至此应该就是安好了</p>
-<h3 id="美化"><a href="#美化" class="headerlink" title="美化"></a>美化</h3><p>进来点上面的购物车按钮，安装以下几个：</p>
-<p>扩展我只装了这个</p>
-<p><img src="/../../images/Spicetify/d.png"></p>
-<p>装别的主题之前似乎都得装这个…</p>
-<p><img src="/../../images/Spicetify/e.png"></p>
-<p>然后我用的这个 <code>Lucid</code></p>
-<p><img src="/../../images/Spicetify/f.png"></p>
-<p>最后就这两个小东西</p>
-<p><img src="/../../images/Spicetify/g.png"></p>
+<p>下面是Github的项目地址： <a href="https://github.com/Askannz/msi-perkeyrgb">msi-perkeyrgb</a></p>
 <hr>
-<h2 id="效果"><a href="#效果" class="headerlink" title="效果"></a>效果</h2><p><img src="/../../images/Spicetify/h.png"></p>
-<p><img src="/../../images/Spicetify/i.png"></p>
+<h3 id="安装教程这里就掠过"><a href="#安装教程这里就掠过" class="headerlink" title="安装教程这里就掠过"></a>安装教程这里就掠过</h3><h3 id="简单用法"><a href="#简单用法" class="headerlink" title="简单用法"></a>简单用法</h3><h4 id="Steady-Color：稳定颜色"><a href="#Steady-Color：稳定颜色" class="headerlink" title="Steady Color：稳定颜色"></a>Steady Color：稳定颜色</h4><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">msi-perkeyrgb --model &lt;MSI model&gt; -s &lt;COLOR&gt;</span><br></pre></td></tr></table></figure>
+<h4 id="Preset：内置预设-–list-presets"><a href="#Preset：内置预设-–list-presets" class="headerlink" title="Preset：内置预设(–list-presets)"></a>Preset：内置预设(–list-presets)</h4><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">msi-perkeyrgb --model &lt;MSI model&gt; -p &lt;preset&gt;</span><br></pre></td></tr></table></figure>
+<h3 id="高级用法不多赘述-个人用不到"><a href="#高级用法不多赘述-个人用不到" class="headerlink" title="高级用法不多赘述 个人用不到"></a>高级用法不多赘述 个人用不到</h3><hr>
+<h3 id="个人电脑键盘预设配色如下："><a href="#个人电脑键盘预设配色如下：" class="headerlink" title="个人电脑键盘预设配色如下："></a>个人电脑键盘预设配色如下：</h3><ul>
+<li>aqua</li>
+<li>chakra</li>
+<li>default</li>
+<li>disco</li>
+<li>drain</li>
+<li>freeway</li>
+<li>rainbow-split</li>
+<li>roulette</li>
+</ul>
+<h3 id="如果你的电脑也没有被录入的话-可以通过id的方式进行使用。"><a href="#如果你的电脑也没有被录入的话-可以通过id的方式进行使用。" class="headerlink" title="如果你的电脑也没有被录入的话 可以通过id的方式进行使用。"></a>如果你的电脑也没有被录入的话 可以通过id的方式进行使用。</h3><p>注意：这里是十六进制的数字 –id VENDOR_ID:PRODUCT_ID</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">例 sudo msi-perkeyrgb --id 1038:113a -p rainbow-split</span><br></pre></td></tr></table></figure>
+
 ]]></content>
       <categories>
         <category>Tech</category>
       </categories>
       <tags>
         <tag>linux</tag>
-        <tag>spotify</tag>
+        <tag>msi</tag>
       </tags>
   </entry>
   <entry>
-    <title>其实是献给自己的Hexo教程 2</title>
-    <url>/posts/Infinity.html</url>
-    <content><![CDATA[<h1 id="使用git分支保存Hexo源码到Github"><a href="#使用git分支保存Hexo源码到Github" class="headerlink" title="使用git分支保存Hexo源码到Github"></a>使用git分支保存Hexo源码到Github</h1><p>引言：最开始想弄这个主要是因为我有多系统，多台设备，每次都要把整个文件夹进行压缩备份到U盘，效率低且不够优雅，偶然搜索到两篇帖子，助我解决了这一大难题，这里感谢<a href="https://zhuanlan.zhihu.com/p/71544809">使用git分支保存hexo博客源码到github</a> 和 <a href="https://www.cnblogs.com/eidolonw/p/13066869.html">hexo源码上传到GitHub</a> 这两篇帖子的编写者！</p>
-<p>那么，教程开始</p>
-<h2 id="教程"><a href="#教程" class="headerlink" title="教程"></a>教程</h2><h3 id="1-如图："><a href="#1-如图：" class="headerlink" title="1. 如图："></a>1. 如图：</h3><p><img src="/../../images/Hexo/b.png" alt="如图" title="如图"></p>
-<h3 id="2-然后将其设置成默认分支："><a href="#2-然后将其设置成默认分支：" class="headerlink" title="2. 然后将其设置成默认分支："></a>2. 然后将其设置成默认分支：</h3><p><img src="/../../images/Hexo/c.png" alt="如图" title="如图"></p>
-<p>然后你这时候如果直接按照文章来的话，不行，大概率会<strong>报错</strong>…(问就是试过)</p>
-<h3 id="3-初始化"><a href="#3-初始化" class="headerlink" title="3. 初始化"></a>3. 初始化</h3><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">git init #先初始化</span><br></pre></td></tr></table></figure>
-
-<h3 id="4-然后将本地Hexo目录与远程仓库关联"><a href="#4-然后将本地Hexo目录与远程仓库关联" class="headerlink" title="4. 然后将本地Hexo目录与远程仓库关联"></a>4. <strong>然后将本地Hexo目录与远程仓库关联</strong></h3><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">git remote add origin https://github.com/k7tmiz/k7tmiz.github.io.git</span><br></pre></td></tr></table></figure>
-
-<h3 id="5-此时进入目录"><a href="#5-此时进入目录" class="headerlink" title="5. 此时进入目录"></a>5. 此时进入目录</h3><p><code>Ctrl+H</code> 显示所有文件。删掉 <code>.deploy_git</code> 文件夹，如果已经clone过主题文件，那么需要把theme主题文件夹里的 <code>.git</code> 也删除。因为git不能嵌套上传，最好是显示隐藏文件，检查一下有没有，否则上传的时候会出错，导致你的主题文件无法上传，这样你的配置在别的电脑上就无法正常使用了。<strong>根目录中应该有个 <code>.gitignore</code> 文件</strong>，如果没有，请自行创建并添加以下内容:</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">.DS_Store</span><br><span class="line">Thumbs.db</span><br><span class="line">db.json</span><br><span class="line">*.log</span><br><span class="line">node_modules/</span><br><span class="line">public/</span><br><span class="line">.deploy*/</span><br><span class="line">_multiconfig.yml</span><br></pre></td></tr></table></figure>
-
-
-<h3 id="6-将clone并修改以后的文件夹推送到远程库"><a href="#6-将clone并修改以后的文件夹推送到远程库" class="headerlink" title="6. 将clone并修改以后的文件夹推送到远程库"></a>6. 将clone并修改以后的文件夹推送到远程库</h3><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">git add .</span><br><span class="line">git commit –m &quot;Description&quot;</span><br><span class="line">git push origin Hexo</span><br></pre></td></tr></table></figure>
-<p>此时已经成功将整个网站的源码全部推送到了远程库的默认分支Hexo中</p>
-<h3 id="7-删除public等文件（可选）"><a href="#7-删除public等文件（可选）" class="headerlink" title="7. 删除public等文件（可选）"></a>7. 删除public等文件（可选）</h3><p>因为source分支是从master分支新建的，初始代码实际就是master的拷贝，因而master中已有的public等deploy生成的文件也会一起带过来，这些都不算是博客源文件，如果你也觉着source分支还存着这些有些别扭，就可以先在本地把它删掉，然后执行：</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">git add .</span><br><span class="line">git commit -m &#x27;DEL: public things which only for deploy&#x27;</span><br><span class="line">git push origin source</span><br></pre></td></tr></table></figure>
-<p>执行完之后，你的仓库大概就是长这个样子：</p>
-<p><img src="/../../images/Hexo/d.png" alt="如图" title="如图"></p>
-<p>后续即便你再发布博客时，deploy生成public文件，在提交博客源码时，也不会将其带上去，因为有.gitignore将其忽略了。</p>
-<h3 id="8-新环境"><a href="#8-新环境" class="headerlink" title="8. 新环境"></a>8. 新环境</h3><p>假设我们换电脑了，要在新环境继续在原有仓库基础上撸文章，此时通过 <code>git clone</code> 将博客源码拉到本地，然后安装、初始化Hexo就能搞定：</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">git clone https://github.com/k7tmiz/k7tmiz.github.io.git Blog</span><br><span class="line">cd Blog</span><br><span class="line">npm install -g hexo-cli</span><br><span class="line">npm install hexo-deployer-git -save</span><br><span class="line">npm install #安装所有依赖模块</span><br></pre></td></tr></table></figure>
-
-<blockquote>
-<p>插曲，其实不设置成默认的也可以，只不过拉取的时候要git clone -b <code>branch_name</code> <code>source</code></p>
-</blockquote>
+    <title>西班牙语陈述式过去未完成时</title>
+    <url>/posts/567971b1.html</url>
+    <content><![CDATA[<h1 id="西班牙语陈述式过去未完成时-Preterito-Imperfecto-de-Indicativo"><a href="#西班牙语陈述式过去未完成时-Preterito-Imperfecto-de-Indicativo" class="headerlink" title="西班牙语陈述式过去未完成时 (Pretérito Imperfecto de Indicativo)"></a>西班牙语陈述式过去未完成时 (Pretérito Imperfecto de Indicativo)</h1><p>过去未完成时主要用于描述过去持续的、习惯性的动作，或对过去的背景、状态、人物进行描述，相当于英语中的 “used to”, “would (for habitual past actions)”, 或 “was&#x2F;were + -ing” (描述背景或持续动作时)。</p>
+<h2 id="一、规则动词变位"><a href="#一、规则动词变位" class="headerlink" title="一、规则动词变位"></a>一、规则动词变位</h2><p>过去未完成时的规则动词变位非常简单，只有两套词尾。</p>
+<h3 id="1-AR-结尾动词"><a href="#1-AR-结尾动词" class="headerlink" title="1. -AR 结尾动词"></a>1. -AR 结尾动词</h3><p>词根 + 以下词尾：</p>
+<ul>
+<li>Yo: <strong>-aba</strong></li>
+<li>Tú: <strong>-abas</strong></li>
+<li>Él&#x2F;Ella&#x2F;Usted: <strong>-aba</strong></li>
+<li>Nosotros&#x2F;as: <strong>-ábamos</strong> (注意重音)</li>
+<li>Vosotros&#x2F;as: <strong>-abais</strong></li>
+<li>Ellos&#x2F;Ellas&#x2F;Ustedes: <strong>-aban</strong></li>
+</ul>
+<p><strong>例如：<code>hablar</code> (说话)</strong></p>
+<table>
+<thead>
+<tr>
+<th>人称</th>
+<th>变位</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Yo</td>
+<td>habl<strong>aba</strong></td>
+</tr>
+<tr>
+<td>Tú</td>
+<td>habl<strong>abas</strong></td>
+</tr>
+<tr>
+<td>Él&#x2F;Ella&#x2F;Usted</td>
+<td>habl<strong>aba</strong></td>
+</tr>
+<tr>
+<td>Nosotros&#x2F;as</td>
+<td>habl<strong>ábamos</strong></td>
+</tr>
+<tr>
+<td>Vosotros&#x2F;as</td>
+<td>habl<strong>abais</strong></td>
+</tr>
+<tr>
+<td>Ellos&#x2F;Ellas&#x2F;Ustedes</td>
+<td>habl<strong>aban</strong></td>
+</tr>
+</tbody></table>
+<h3 id="2-ER-和-IR-结尾动词"><a href="#2-ER-和-IR-结尾动词" class="headerlink" title="2. -ER 和 -IR 结尾动词"></a>2. -ER 和 -IR 结尾动词</h3><p>这两类动词在过去未完成时中使用相同的词尾。<br>词根 + 以下词尾：</p>
+<ul>
+<li>Yo: <strong>-ía</strong></li>
+<li>Tú: <strong>-ías</strong></li>
+<li>Él&#x2F;Ella&#x2F;Usted: <strong>-ía</strong></li>
+<li>Nosotros&#x2F;as: <strong>-íamos</strong> (注意重音)</li>
+<li>Vosotros&#x2F;as: <strong>-íais</strong></li>
+<li>Ellos&#x2F;Ellas&#x2F;Ustedes: <strong>-ían</strong></li>
+</ul>
+<p><strong>例如：<code>comer</code> (吃, -ER)</strong></p>
+<table>
+<thead>
+<tr>
+<th>人称</th>
+<th>变位</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Yo</td>
+<td>com<strong>ía</strong></td>
+</tr>
+<tr>
+<td>Tú</td>
+<td>com<strong>ías</strong></td>
+</tr>
+<tr>
+<td>Él&#x2F;Ella&#x2F;Usted</td>
+<td>com<strong>ía</strong></td>
+</tr>
+<tr>
+<td>Nosotros&#x2F;as</td>
+<td>com<strong>íamos</strong></td>
+</tr>
+<tr>
+<td>Vosotros&#x2F;as</td>
+<td>com<strong>íais</strong></td>
+</tr>
+<tr>
+<td>Ellos&#x2F;Ellas&#x2F;Ustedes</td>
+<td>com<strong>ían</strong></td>
+</tr>
+</tbody></table>
+<p><strong>例如：<code>vivir</code> (生活, -IR)</strong></p>
+<table>
+<thead>
+<tr>
+<th>人称</th>
+<th>变位</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Yo</td>
+<td>viv<strong>ía</strong></td>
+</tr>
+<tr>
+<td>Tú</td>
+<td>viv<strong>ías</strong></td>
+</tr>
+<tr>
+<td>Él&#x2F;Ella&#x2F;Usted</td>
+<td>viv<strong>ía</strong></td>
+</tr>
+<tr>
+<td>Nosotros&#x2F;as</td>
+<td>viv<strong>íamos</strong></td>
+</tr>
+<tr>
+<td>Vosotros&#x2F;as</td>
+<td>viv<strong>íais</strong></td>
+</tr>
+<tr>
+<td>Ellos&#x2F;Ellas&#x2F;Ustedes</td>
+<td>viv<strong>ían</strong></td>
+</tr>
+</tbody></table>
+<h2 id="二、注意事项"><a href="#二、注意事项" class="headerlink" title="二、注意事项"></a>二、注意事项</h2><ol>
+<li><strong>重音符号</strong>：<ul>
+<li>-AR 动词的 <code>nosotros</code> 形式 (<code>-ábamos</code>) 的 <code>a</code> 上有重音。</li>
+<li>-ER 和 -IR 动词的所有形式的 <code>i</code> 上都有重音 (<code>-ía</code>, <code>-ías</code>, <code>-ía</code>, <code>-íamos</code>, <code>-íais</code>, <code>-ían</code>)。</li>
+</ul>
+</li>
+<li><strong>用途</strong>：<ul>
+<li>描述过去习惯性的动作 (e.g., <code>Cuando era niño, jugaba en el parque.</code> - 当我是个孩子时，我常在公园玩。)</li>
+<li>描述过去的背景、情景、状态 (e.g., <code>Hacía sol y los pájaros cantaban.</code> - 当时阳光明媚，鸟儿在歌唱。)</li>
+<li>描述人的年龄、时间、天气等 (e.g., <code>Tenía veinte años.</code> - 他&#x2F;她当时二十岁。 <code>Eran las tres.</code> - 当时是三点。)</li>
+<li>描述两个或多个同时发生的持续性过去动作 (e.g., <code>Mientras yo cocinaba, él leía.</code> - 当我做饭的时候，他在读书。)</li>
+<li>用于礼貌地提出请求 (较少见，但可能出现，如 <code>Quería pedirle un favor.</code> - 我想请您帮个忙。)</li>
+</ul>
+</li>
+</ol>
+<h2 id="三、不规则动词"><a href="#三、不规则动词" class="headerlink" title="三、不规则动词"></a>三、不规则动词</h2><p>在过去未完成时中，只有 <strong>三个</strong> 真正的不规则动词。这是这个时态相对简单的一个原因。</p>
+<h3 id="1-Ser-是"><a href="#1-Ser-是" class="headerlink" title="1. Ser (是)"></a>1. <code>Ser</code> (是)</h3><table>
+<thead>
+<tr>
+<th>人称</th>
+<th>变位</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Yo</td>
+<td><strong>era</strong></td>
+</tr>
+<tr>
+<td>Tú</td>
+<td><strong>eras</strong></td>
+</tr>
+<tr>
+<td>Él&#x2F;Ella&#x2F;Usted</td>
+<td><strong>era</strong></td>
+</tr>
+<tr>
+<td>Nosotros&#x2F;as</td>
+<td><strong>éramos</strong></td>
+</tr>
+<tr>
+<td>Vosotros&#x2F;as</td>
+<td><strong>erais</strong></td>
+</tr>
+<tr>
+<td>Ellos&#x2F;Ellas&#x2F;Ustedes</td>
+<td><strong>eran</strong></td>
+</tr>
+</tbody></table>
+<h3 id="2-Ir-去"><a href="#2-Ir-去" class="headerlink" title="2. Ir (去)"></a>2. <code>Ir</code> (去)</h3><table>
+<thead>
+<tr>
+<th>人称</th>
+<th>变位</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Yo</td>
+<td><strong>iba</strong></td>
+</tr>
+<tr>
+<td>Tú</td>
+<td><strong>ibas</strong></td>
+</tr>
+<tr>
+<td>Él&#x2F;Ella&#x2F;Usted</td>
+<td><strong>iba</strong></td>
+</tr>
+<tr>
+<td>Nosotros&#x2F;as</td>
+<td><strong>íbamos</strong></td>
+</tr>
+<tr>
+<td>Vosotros&#x2F;as</td>
+<td><strong>ibais</strong></td>
+</tr>
+<tr>
+<td>Ellos&#x2F;Ellas&#x2F;Ustedes</td>
+<td><strong>iban</strong></td>
+</tr>
+</tbody></table>
+<h3 id="3-Ver-看见"><a href="#3-Ver-看见" class="headerlink" title="3. Ver (看见)"></a>3. <code>Ver</code> (看见)</h3><p>(严格来说，<code>ver</code> 保留了词根的 <code>e</code>，然后加上了规则的 <code>-ía</code> 结尾，但通常被列为不规则)</p>
+<table>
+<thead>
+<tr>
+<th>人称</th>
+<th>变位</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Yo</td>
+<td><strong>veía</strong></td>
+</tr>
+<tr>
+<td>Tú</td>
+<td><strong>veías</strong></td>
+</tr>
+<tr>
+<td>Él&#x2F;Ella&#x2F;Usted</td>
+<td><strong>veía</strong></td>
+</tr>
+<tr>
+<td>Nosotros&#x2F;as</td>
+<td><strong>veíamos</strong></td>
+</tr>
+<tr>
+<td>Vosotros&#x2F;as</td>
+<td><strong>veíais</strong></td>
+</tr>
+<tr>
+<td>Ellos&#x2F;Ellas&#x2F;Ustedes</td>
+<td><strong>veían</strong></td>
+</tr>
+</tbody></table>
+<hr>
+<p><strong>总结</strong>：过去未完成时相对规则，主要记住两套词尾和三个不规则动词即可。重点在于理解其使用场景，以便与简单过去时区分开来。</p>
 ]]></content>
       <categories>
-        <category>Tech</category>
+        <category>Study</category>
       </categories>
       <tags>
-        <tag>hexo</tag>
+        <tag>spanish</tag>
       </tags>
   </entry>
   <entry>
@@ -2395,6 +1835,566 @@
       </categories>
       <tags>
         <tag>hexo</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>关于Spotify桌面端的美化</title>
+    <url>/posts/4795de82.html</url>
+    <content><![CDATA[<h2 id="简单的开头：为什么我切换到了Spotify"><a href="#简单的开头：为什么我切换到了Spotify" class="headerlink" title="简单的开头：为什么我切换到了Spotify"></a>简单的开头：为什么我切换到了Spotify</h2><p>前两天，我收到了一条短信<br><img src="/../../images/Spicetify/a.png"></p>
+<p>由于Linux端的网易云已经年久失修，最新的一个官方包大概是七八年前维护的，无论是功能性还是美观度都无法支撑我继续使用。wine模拟出的官方版有时候占用也比较高，Splayer就成为了我的首选。</p>
+<p>据说是因为这个 <code>听歌打卡</code> 的功能，但我也不好说到底是不是这个原因…<br><img src="/../../images/Spicetify/c.png"></p>
+<p>于是我就投入了Spotify的怀抱</p>
+<p>其实很早之前就在用mod版本，但是经过这么一出，没忍住直接冲了年会员<br><img src="/../../images/Spicetify/b.png"></p>
+<p>而且Spotify的推荐算法简直无敌，歌库也很全，多端同步也超级无敌，一年价格也能接受，Linux端也有很多东西可玩，那我就来了</p>
+<h2 id="安装Spotify"><a href="#安装Spotify" class="headerlink" title="安装Spotify"></a>安装Spotify</h2><h3 id="ArchLinux"><a href="#ArchLinux" class="headerlink" title="ArchLinux"></a>ArchLinux</h3><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">sudo pacman -S spotify-launcher</span><br></pre></td></tr></table></figure>
+
+<h3 id="Flatpak"><a href="#Flatpak" class="headerlink" title="Flatpak"></a>Flatpak</h3><p><a href="https://flathub.org/apps/com.spotify.Client">Spotify</a></p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">flatpak install flathub com.spotify.Client</span><br></pre></td></tr></table></figure>
+
+
+<h2 id="Spicetify插件"><a href="#Spicetify插件" class="headerlink" title="Spicetify插件"></a>Spicetify插件</h2><p>原生的Linux版本的Spotify也太丑了…</p>
+<p>于是我就去网上找类似的插件，意图稍微的美化一下</p>
+<p>官网：<a href="https://spicetify.app/">Spicetify</a></p>
+<h3 id="安装"><a href="#安装" class="headerlink" title="安装"></a>安装</h3><p>由于我是Linux端，所以直接：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">curl -fsSL https://raw.githubusercontent.com/spicetify/cli/main/install.sh | sh</span><br></pre></td></tr></table></figure>
+
+<p>问你要不要安装 <code>Marketplace</code> 直接Y</p>
+<p>然后安完了应该是提示你</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">spicetify backup apply</span><br></pre></td></tr></table></figure>
+
+<p>这里<strong>Flatpak</strong>版本还要多一步加权限，否则 <code>spicetify backup apply</code> 会运行失败</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">sudo chmod a+wr /var/lib/flatpak/app/com.spotify.Client/x86_64/stable/active/files/extra/share/spotify/</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">sudo chmod a+wr /var/lib/flatpak/app/com.spotify.Client/x86_64/stable/active/files/extra/share/spotify/Apps -R</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>还有可能会提示你 <code>spotify_path</code> 或者 <code>prefs_path</code> 有问题，你只需按照它的提示找到那个 <code>~/.config/spicetify/config-xpui.ini</code> 文件然后修改即可</p>
+</blockquote>
+<p>参考：<a href="https://spicetify.app/docs/advanced-usage/installation/">Installation</a></p>
+<p>至此应该就是安好了</p>
+<h3 id="美化"><a href="#美化" class="headerlink" title="美化"></a>美化</h3><p>进来点上面的购物车按钮，安装以下几个：</p>
+<p>扩展我只装了这个</p>
+<p><img src="/../../images/Spicetify/d.png"></p>
+<p>装别的主题之前似乎都得装这个…</p>
+<p><img src="/../../images/Spicetify/e.png"></p>
+<p>然后我用的这个 <code>Lucid</code></p>
+<p><img src="/../../images/Spicetify/f.png"></p>
+<p>最后就这两个小东西</p>
+<p><img src="/../../images/Spicetify/g.png"></p>
+<hr>
+<h2 id="效果"><a href="#效果" class="headerlink" title="效果"></a>效果</h2><p><img src="/../../images/Spicetify/h.png"></p>
+<p><img src="/../../images/Spicetify/i.png"></p>
+]]></content>
+      <categories>
+        <category>Tech</category>
+      </categories>
+      <tags>
+        <tag>linux</tag>
+        <tag>spotify</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>记录我电脑外放消失的一次</title>
+    <url>/posts/8c7c6a2b.html</url>
+    <content><![CDATA[<p><strong>很偶然的发现</strong></p>
+<h2 id="起因"><a href="#起因" class="headerlink" title="起因"></a>起因</h2><p>起因是我要做pre,然后昨天晚上十二点半去楼道的自习室加班加点，然后当时刚好忘记带耳机了，大半夜也没什么人，我就打算外放了，然后没声音，我还以为是系统bug,重启了一下，发现还是没声，没管它接着弄了…回到宿舍插上耳机又有声音了？？？</p>
+<p>到这我还不是很确定…</p>
+<p>然后第二天中午回来发现还是不行，我就打算排除法，因为我是多Linux➕Win的配置，我从Arch出去先进了Fedora,发现还是没声。我就排除系统问题了。然后又进Win发现还是一样没声。最后进了SUSE，这个我当时所有系统都崩了就它没事的超稳定系统，同样不能用…</p>
+<p>我就用了很多命令然后发现，硬件都是正常的？？？我就觉着可能是硬件坏了。但是插上耳机还是有音频输出，jack detect也没问题，就是外放不了？？</p>
+<p>然后管不了那么多了，我着急用pre,匆忙做完下午去上专业课了。</p>
+<p>下了专业课回到寝室接着排查，然后最终决定放弃，不带电脑去中心上课了。</p>
+<p>然后下课回来路上刷到一篇帖子，说是静电问题，回来放了一下静电就好了…</p>
+<h2 id="GPT的建议"><a href="#GPT的建议" class="headerlink" title="GPT的建议"></a>GPT的建议</h2><p>电脑本身在正常使用中不会频繁积累危险级别的静电（ESD），但定期给电脑<strong>释放静电</strong>可以降低潜在的硬件风险，尤其是在以下几种情况下：</p>
+<hr>
+<h3 id="✅-建议给电脑释放静电的时机"><a href="#✅-建议给电脑释放静电的时机" class="headerlink" title="✅ 建议给电脑释放静电的时机"></a>✅ <strong>建议给电脑释放静电的时机</strong></h3><ol>
+<li><p><strong>更换或安装硬件前（如加内存、换硬盘）</strong></p>
+<ul>
+<li>*<em>必须</em>释放静电，否则有可能损坏主板、内存或其他敏感元件。</li>
+</ul>
+</li>
+<li><p><strong>电脑出现异常问题，如：</strong></p>
+<ul>
+<li>无法开机、USB设备识别异常、扬声器无声、电源灯亮但无反应；</li>
+<li>这些可能是“软性静电锁定”导致主板处于保护状态。</li>
+</ul>
+</li>
+<li><p><strong>长时间未关机、处于待机状态超过一周时</strong></p>
+<ul>
+<li>有时电荷会在电源线路中缓慢积累。</li>
+</ul>
+</li>
+<li><p><strong>环境干燥、冬天、穿化纤衣服经常接触电脑</strong></p>
+<ul>
+<li>更容易产生人体静电放电。</li>
+</ul>
+</li>
+</ol>
+<hr>
+<h3 id="🕓-多久放一次静电比较合适？"><a href="#🕓-多久放一次静电比较合适？" class="headerlink" title="🕓 多久放一次静电比较合适？"></a>🕓 <strong>多久放一次静电比较合适？</strong></h3><ul>
+<li><p><strong>日常使用：</strong><br>不需要频繁释放，一般<strong>每月一次或每次电脑出现异常时操作即可</strong>。</p>
+</li>
+<li><p><strong>高风险环境（冬季&#x2F;干燥&#x2F;有明显静电打火感）：</strong><br>每周一次或者每次使用前摸一下金属物体（如桌脚或插排外壳）做人体放电。</p>
+</li>
+</ul>
+<hr>
+<h3 id="⚙️-如何给电脑释放静电？"><a href="#⚙️-如何给电脑释放静电？" class="headerlink" title="⚙️ 如何给电脑释放静电？"></a>⚙️ <strong>如何给电脑释放静电？</strong></h3><h4 id="台式机："><a href="#台式机：" class="headerlink" title="台式机："></a>台式机：</h4><ol>
+<li>完全关机并<strong>拔掉电源线</strong>；</li>
+<li><strong>按住电源键不松手 10~30 秒</strong>，让主板和电源的余电释放；</li>
+<li>如果还要打开机箱操作，建议佩戴防静电手环或触摸金属机箱外壳。</li>
+</ol>
+<h4 id="笔记本电脑："><a href="#笔记本电脑：" class="headerlink" title="笔记本电脑："></a>笔记本电脑：</h4><ol>
+<li>关机 → 拔掉充电器；</li>
+<li>如可拆卸电池，先<strong>拔电池</strong>；</li>
+<li>同样<strong>长按电源键 10~30 秒</strong>；</li>
+<li>再重新装好电池或接上电源即可。</li>
+</ol>
+<hr>
+<h3 id="✅-总结"><a href="#✅-总结" class="headerlink" title="✅ 总结"></a>✅ 总结</h3><table>
+<thead>
+<tr>
+<th>情况</th>
+<th>建议释放静电频率</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>日常无异常使用</td>
+<td>每月一次或无需频繁操作</td>
+</tr>
+<tr>
+<td>干燥环境、静电多</td>
+<td>每周一次</td>
+</tr>
+<tr>
+<td>换硬件、电脑异常</td>
+<td>当次操作前务必释放</td>
+</tr>
+</tbody></table>
+<p>如果你电脑近期频繁出现扬声器无声、USB异常等问题，建议你现在就做一次释放静电操作试试，看是否能解决问题。</p>
+]]></content>
+      <categories>
+        <category>Tech</category>
+      </categories>
+      <tags>
+        <tag>tech</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>云南旅游攻略4天2025.5.1</title>
+    <url>/posts/4a1e9301.html</url>
+    <content><![CDATA[<h1 id="云南旅游攻略"><a href="#云南旅游攻略" class="headerlink" title="云南旅游攻略"></a>云南旅游攻略</h1><h1 id="昆明部分"><a href="#昆明部分" class="headerlink" title="昆明部分"></a>昆明部分</h1><h2 id="昆明部分是自己做的-大理大部分是购买的，秉承着Opensource的原则全部分享出来"><a href="#昆明部分是自己做的-大理大部分是购买的，秉承着Opensource的原则全部分享出来" class="headerlink" title="昆明部分是自己做的 大理大部分是购买的，秉承着Opensource的原则全部分享出来"></a><strong>昆明部分是自己做的 大理大部分是购买的，秉承着Opensource的原则全部分享出来</strong></h2><blockquote>
+<p>其实还有好多好多照片都发到朋友圈去了 这些图片都是随便节选的…当然也是从朋友圈下载下来的 因为压缩，体积图片比较小嘻嘻</p>
+</blockquote>
+<h4 id="昆明双塔"><a href="#昆明双塔" class="headerlink" title="昆明双塔"></a>昆明双塔</h4><p><img src="/../../images/Yunnan/a.png" alt="昆明双塔" title="昆明双塔"></p>
+<ul>
+<li>滇池</li>
+<li>翠湖</li>
+<li>昆明老街</li>
+<li>西山索道(100)</li>
+<li>斗南花市</li>
+<li>陆军讲武堂</li>
+</ul>
+<h3 id="Day1-5月2日"><a href="#Day1-5月2日" class="headerlink" title="Day1 5月2日"></a>Day1 5月2日</h3><p>昆明站－昆明老街(东方书店－纸片楼－对月楼酒店)－(非正常咖啡馆 选去 打卡点)－黄公东街－翠湖公园－陆军讲武堂－西山索道－海洪湿地公园(滇池)－捞鱼河湿地公园(滇池)－斗南花市－南强集市</p>
+<blockquote>
+<p>视情况加入云南师大(主要是不好进去 管的严)</p>
+</blockquote>
+<blockquote>
+<p>最后还是没进去 from 25.5.10</p>
+</blockquote>
+<h4 id="忘了在哪拍的了…"><a href="#忘了在哪拍的了…" class="headerlink" title="忘了在哪拍的了…"></a>忘了在哪拍的了…</h4><p><img src="/../../images/Yunnan/b.png" alt="臭美" title="臭美"></p>
+<h4 id="后几张都是昆明的滇池"><a href="#后几张都是昆明的滇池" class="headerlink" title="后几张都是昆明的滇池"></a>后几张都是昆明的滇池</h4><p><img src="/../../images/Yunnan/c.png" alt="滇池" title="滇池"></p>
+<p><img src="/../../images/Yunnan/d.png" alt="滇池" title="滇池"></p>
+<p><img src="/../../images/Yunnan/e.png" alt="滇池" title="滇池"></p>
+<p><img src="/../../images/Yunnan/f.png" alt="滇池" title="滇池"></p>
+<p><img src="/../../images/Yunnan/g.png" alt="滇池" title="滇池"></p>
+<p><img src="/../../images/Yunnan/h.png" alt="滇池" title="滇池"></p>
+<h3 id="Day2-5月3日"><a href="#Day2-5月3日" class="headerlink" title="Day2 5月3日"></a>Day2 5月3日</h3><p>有可能去海埂大坝看一眼日出</p>
+<p>十点高铁－大理</p>
+<h1 id="大理"><a href="#大理" class="headerlink" title="大理"></a>大理</h1><ul>
+<li>洱海</li>
+<li>苍山(30)</li>
+<li>S弯</li>
+<li>理想邦</li>
+<li>大理古城</li>
+<li>喜洲古镇</li>
+<li>沙溪古镇</li>
+<li>双廊古镇</li>
+<li>南诏风情岛</li>
+<li>崇圣寺三塔</li>
+</ul>
+<h3 id="Day2-5月3号大理行－下午"><a href="#Day2-5月3号大理行－下午" class="headerlink" title="Day2 5月3号大理行－下午"></a>Day2 5月3号大理行－下午</h3><p>大理站－磻溪村（S湾）-喜洲古镇（扎染+稻田）-大理古城</p>
+<blockquote>
+<p>下午打车前往磻溪村，租个自行车游览网红S湾生态廊道（游览时间2.5小时）（定位马久邑或磻溪村）<br>洱海生态廊道全程差不多有50公里，精华地段就是马久邑附近和磻溪村附近，很多比较火的视频和图片都是这两段。<br>线路大概为：马久邑-富美邑-下波淜-磻溪村-古生村，沿途有很多咖啡厅，玩累了可以进去坐坐，享受一下洱海边的风景。<br>美食推荐：磻溪村附近（信达小吃，望海人家），马久邑附近(二两小吃店白族庭院私房菜，原生态白族农家菜），古生村（村里大青树附近有很多本地特色小吃）<br>之后骑行抵达喜洲古镇，游览线路大致为：<br>第一站：大理路边野餐咖啡画廊<br>第二站：我在洱海有块田！<br>超级大的拍照基地，麦田很大，人也没有喜洲古镇里的多！有很多出片的机位，有火车，有秋千都很好看！<br>第三站：白族扎染  推荐“喜蓝扎染”，做衣服。<br>扎染的步骤是先选定你做的款式，再和老板商量确认设计想法和实现步骤。店员会先辅助你完成手工部分后，进行1泡水&#x2F;去碘伏2染色3 冲洗4 氧化5 皂洗6 清洗7 晒干，整个过程根据你选择的产品难易程度决定，体验大概在30分钟到一小时。就可以获得一件亲自设计扎染的艺术品啦<br>喜洲还有非遗–瓦猫，各种类型的寓意都有，可以挑一个<br>喜洲美食推荐:喜洲粑粑(一定要尝尝，当地特色)，四方街食店，口未江湖，喜洲老冰棍，喜酒坊小吃店<br>吃完后夜游大理古城<br>游览路线指南:床单艺术厂-五华楼（出片，缺点人多）-红龙井-关帝庙-文殊庙-天主教堂-玉洱园 -洋人街-电影博物馆-基督教堂</p>
+</blockquote>
+<p><strong>住宿</strong>：大理古城</p>
+<h4 id="洱海"><a href="#洱海" class="headerlink" title="洱海"></a>洱海</h4><p><img src="/../../images/Yunnan/i.png" alt="洱海" title="洱海"></p>
+<h3 id="Day3-5月4号"><a href="#Day3-5月4号" class="headerlink" title="Day3 5月4号"></a>Day3 5月4号</h3><p>龙龛码头-云想山（路极公园）-理想邦–文笔村日落</p>
+<blockquote>
+<p>早上第一站龙龛码头（游览时间2小时）， 大理最美码头之一，还有水中红杉树拍照很美。<br>如果想体验洱海日出，就需要早一点，日出时间：早上7:30-8:00左右，可以稍微提前一点去占位置，享受等待日出的过程。<br>位置导航：直接导航阳光便利店，距离海边大概只有200米<br>之后电动车前往云想山-路极公园—亚洲第二国内唯一的路极（游览时间2.5小时）<br>无想，无限的放空，任凭暮霭一点一点席卷天边，大理城的万家灯火星星点点，陆续绽放。沉溺在这无边的夜色之中。<br>悬崖礼堂  白色的三角礼堂在蓝天与洱海的背景下特别唯美，还能看到远处的风车山<br>咖啡店  一楼有个有着大大落地窗，很好拍，二楼是2188落日餐厅，价格有点贵，味道也一般般，三楼是天台，有一个镜面地板，白天可以拍自己的倒影，晚上看夜景一览无余<br>山顶草坪 在咖啡馆旁边的草坡上，草坪不大，结合天空的云朵可以拍出很好玩的照片<br>路极  是来自新西兰的无动力车，自己可以控制速度沿着山道开<br>路极门票：大人188元3次  分叉口选右边是缓长的道，左边道更刺激好玩<br>开到山脚可以坐缆车或者电瓶车上山顶<br>下午前往圣托里尼·理想邦（游览时间1小时）<br>推荐打卡：理想的花园！它藏在圣托里尼岛里，浪漫氛围拉满<br>拍照点：小木屋、天空之镜、秋千、仙人掌、花门、大片的绣球花和小雏菊<br>门票：135元&#x2F;2人，单人票是68元&#x2F;人<br>美食推荐：烟云融合菜餐厅·川滇菜、天边的云Sky Cloud 海景餐厅<br>最后前往文笔村，抵达前往海之礼堂，感受那里的壮丽海景。晚上，在海之礼堂边的悬崖餐厅品尝美食，欣赏美丽的日落。<br>打卡彩虹公路，这里有种日本镰仓的感觉。无论是漫步还是骑行，都能让你放松心情。午餐时间，推荐到推荐餐厅：青寂日落海景餐厅  六阅海东方悬崖海景餐厅<br>备选体验景点：罗荃半岛旁的理记咖啡（游览时间1小时）<br>刘亦菲同款【理记先生】，是一辆超长的绿皮车，摊主推荐了“老板的一生”和“苍山梅烦恼”<br>老板的一生：是一款生椰dirty，有苦有甜，感觉比之前用冰博客做的更好喝些。<br>苍山梅烦恼：梅子味的冰美式，带点酸，果酸和咖啡的酸融合在一起，不会太酸也尝不到偏甜的糖浆味</p>
+</blockquote>
+<h4 id="洱海-1"><a href="#洱海-1" class="headerlink" title="洱海"></a>洱海</h4><p><img src="/../../images/Yunnan/j.png" alt="洱海" title="洱海"><br><img src="/../../images/Yunnan/k.png" alt="洱海" title="洱海"></p>
+<h3 id="Day4-5月5号-回昆明"><a href="#Day4-5月5号-回昆明" class="headerlink" title="Day4 5月5号 回昆明"></a>Day4 5月5号 回昆明</h3><p>苍山索道（感通）-大理站</p>
+<blockquote>
+<p>打车前往感通索道，苍山景点最集中的一条索道，全长2630米，全程25分钟，乘坐该缆车，可仰望苍山雪峰俯瞰百里洱海大理古城。沿途有珍珑棋局清碧溪苍山大峡谷玉带云游路，除索道外，还有千年古刹感通寺、“最美尼姑庵”寂照庵。<br>感通索道详细攻略<br>门票价格：全程窗口115，网络110，<br>游玩线路：感通全程索道往返，约2.5小时<br>1检票后乘索道至上站<br>2到上站后游玩珍珑棋局、玉带路、苍山大峡谷、清碧溪<br>3从感通索道下山<br>4下山后游玩感通寺、寂照庵（可在庵内吃斋饭）</p>
+</blockquote>
+<h1 id="大理伴手礼"><a href="#大理伴手礼" class="headerlink" title="大理伴手礼"></a>大理伴手礼</h1><blockquote>
+<p>大理伴手礼推荐：白族扎染  瓦猫  白族甲马  剑川木雕  白族羊毛毡 鹤庆银器 下关沱茶 雕梅酒 洱宝话梅 乳扇 鲜花饼  鹤庆米糕<br>大理古城北门菜市场平等路上山货特产批发：普洱茶、果酒、野生菌、蜂蜜  小粒咖啡都不错<br>大理古城土特产最多，都可以适当讲价。先尝后买。<br>下关火车站旁边的有点贵。</p>
+</blockquote>
+]]></content>
+      <categories>
+        <category>Travel</category>
+      </categories>
+      <tags>
+        <tag>travel</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>GIT提交时不用输入用户名密码的方法</title>
+    <url>/posts/87bb185d.html</url>
+    <content><![CDATA[<h2 id="起因"><a href="#起因" class="headerlink" title="起因"></a>起因</h2><p>每次git push都要用用户名和密码，每次都要去复制一下然后粘贴过去… 是真的很烦人</p>
+<h2 id="教程"><a href="#教程" class="headerlink" title="教程"></a>教程</h2><ol>
+<li>进入项目的目录:以Hexo举例</li>
+</ol>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">cd Hexo</span><br></pre></td></tr></table></figure>
+
+<ol start="2">
+<li>输入以下命令:</li>
+</ol>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">git config credential.helper store</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>也可以加上 <code>--global</code> 只对全局生效，不带就是只对当前库生效</p>
+</blockquote>
+<ol start="3">
+<li><code>.git</code> 文件夹下的 <code>.config</code> 文件应该多了两行</li>
+</ol>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">[credential]</span><br><span class="line">	helper = store</span><br></pre></td></tr></table></figure>
+
+<ol start="4">
+<li><p><code>git push</code> 到远程仓库，<strong>输入正确的用户名和密码</strong></p>
+</li>
+<li><p>再次运行 <code>git push</code> 就不需要用户名密码了</p>
+</li>
+<li><p>回到用户主目录发现多了一个 <code>.git-credentials</code> 这个就是用来存储用户名和密码的</p>
+</li>
+</ol>
+<p>ref: <a href="https://blog.csdn.net/q1054261752/article/details/126389400">GIT提交时不用输入用户名密码的方法</a></p>
+]]></content>
+      <categories>
+        <category>Tech</category>
+      </categories>
+      <tags>
+        <tag>git</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Nativefier 使用教程</title>
+    <url>/posts/b56059f9.html</url>
+    <content><![CDATA[<h1 id="Nativefier-使用教程"><a href="#Nativefier-使用教程" class="headerlink" title="Nativefier 使用教程"></a>Nativefier 使用教程</h1><h4 id="基于electron的打包软件"><a href="#基于electron的打包软件" class="headerlink" title="基于electron的打包软件"></a>基于electron的打包软件</h4><h5 id="nativefier-n-p-—-arch-—-weight-—-height"><a href="#nativefier-n-p-—-arch-—-weight-—-height" class="headerlink" title="nativefier -n &lt;打包后的应用名称&gt; -p &lt;程序兼容的平台&gt; —-arch &lt;架构&gt; —- weight &lt;窗口宽度&gt; —-height &lt;窗口高度&gt; &lt;网页URL&gt;"></a>nativefier -n &lt;打包后的应用名称&gt; -p &lt;程序兼容的平台&gt; —-arch &lt;架构&gt; —- weight &lt;窗口宽度&gt; —-height &lt;窗口高度&gt; &lt;网页URL&gt;</h5><h4 id="实例（Eshelper）"><a href="#实例（Eshelper）" class="headerlink" title="实例（Eshelper）"></a>实例（Eshelper）</h4><p>nativefier -n Eshelper -p linux –arch x64 –width 1024 –height 768 –tray<br>--disable-dev-tools <a href="https://www.esdict.cn/">https://www.esdict.cn/</a></p>
+<p>#如果想让程序可以后台运行，可以增加参数——tray</p>
+<p>#如果不想在使用时可以调出chrome的开发者工具，可以增加参数——disable-dev-tools</p>
+<p>#如果想控制程序在同一时间只能运行一个实例，则增加参数——single-instance</p>
+<h4 id="desktop文件（Linux下启动文件）"><a href="#desktop文件（Linux下启动文件）" class="headerlink" title=".desktop文件（Linux下启动文件）"></a>.desktop文件（Linux下启动文件）</h4><p>[Desktop Entry]</p>
+<p># type关键字如上所述</p>
+<p>Type&#x3D;Application</p>
+<p># 本文件所遵循的桌面项规范版本</p>
+<p>Version&#x3D;1.0</p>
+<p># 应用程序的名称</p>
+<p>Name&#x3D;jMemorize</p>
+<p># 显示为工具提示的注释</p>
+<p>Comment&#x3D;Flash card based learning tool</p>
+<p># 可执行文件所在的目录</p>
+<p>Path&#x3D;&#x2F;opt&#x2F;jmemorise</p>
+<p># 可执行文件，可以带参</p>
+<p>Exec&#x3D;jmemorize</p>
+<p># 图标名称</p>
+<p>Icon&#x3D;jmemorize</p>
+<p># 应用程序是否需要运行在终端中</p>
+<p>Terminal&#x3D;false</p>
+<p># 本桌面项将显示在哪些分类中</p>
+<p>Categories&#x3D;Education;Languages;Java;</p>
+<h4 id="desktop文件存放位置"><a href="#desktop文件存放位置" class="headerlink" title=".desktop文件存放位置"></a>.desktop文件存放位置</h4><p>&#x2F;usr&#x2F;share&#x2F;applications&#x2F;</p>
+]]></content>
+      <categories>
+        <category>Tech</category>
+      </categories>
+      <tags>
+        <tag>tech</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>因上传过大文件而导致hexo部署时Spawn failed报错的解决方法以及注意事项</title>
+    <url>/posts/5618ea3e.html</url>
+    <content><![CDATA[<p>之前我发布了一篇<a href="https://k7tmiz.com/posts/f78c38a6.html#more">学习计时器</a>的文章,当时上传的音频我没注意体积有多大，是在<code>hexo d</code>这一步没有成功, warning警告说“GitHub建议上传最大体积为50MB, 上限为100MB”, 很明显我上传的音频文件体积已经超过了100MB. 因此我删掉了那个大文件, 但是当我再次尝试部署时, 还是弹出来一样的warning, 报错文件的路径也和之前的一样, 可是我明明已经删除了那个文件, 后来经过不断的尝试以及在网上搜索, 我找到了一篇和我遇到问题一样的情况<a href="https://ultrafisher.github.io/2020/09/06/%E5%9B%A0%E4%B8%8A%E4%BC%A0%E8%BF%87%E5%A4%A7%E6%96%87%E4%BB%B6%E8%80%8C%E5%AF%BC%E8%87%B4hexo%E9%83%A8%E7%BD%B2%E6%97%B6Spawnfailed%E6%8A%A5%E9%94%99%E7%9A%84%E8%A7%A3%E5%86%B3%E6%96%B9%E6%B3%95%E4%BB%A5%E5%8F%8A%E6%B3%A8%E6%84%8F%E4%BA%8B%E9%A1%B9/">因上传过大文件而导致hexo部署时Spawn failed报错的解决方法以及注意事项</a> 这里再在自己的博客上做一个记录：</p>
+<h2 id="首先恢复仓库文件"><a href="#首先恢复仓库文件" class="headerlink" title="首先恢复仓库文件"></a>首先恢复仓库文件</h2><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">cd .deploy_git</span><br></pre></td></tr></table></figure>
+
+<h2 id="然后找到自己的-commitid"><a href="#然后找到自己的-commitid" class="headerlink" title="然后找到自己的 commitid"></a>然后找到自己的 <code>commitid</code></h2><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">git log</span><br></pre></td></tr></table></figure>
+
+<h2 id="接着输入命令："><a href="#接着输入命令：" class="headerlink" title="接着输入命令："></a>接着输入命令：</h2><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">git reset --hard `commitid`</span><br></pre></td></tr></table></figure>
+
+<p>按理来说应该就没有问题可以正常 <code>hexo d</code> 了</p>
+]]></content>
+      <categories>
+        <category>Tech</category>
+      </categories>
+      <tags>
+        <tag>hexo</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>其实是献给自己的Hexo教程 2</title>
+    <url>/posts/Infinity.html</url>
+    <content><![CDATA[<h1 id="使用git分支保存Hexo源码到Github"><a href="#使用git分支保存Hexo源码到Github" class="headerlink" title="使用git分支保存Hexo源码到Github"></a>使用git分支保存Hexo源码到Github</h1><p>引言：最开始想弄这个主要是因为我有多系统，多台设备，每次都要把整个文件夹进行压缩备份到U盘，效率低且不够优雅，偶然搜索到两篇帖子，助我解决了这一大难题，这里感谢<a href="https://zhuanlan.zhihu.com/p/71544809">使用git分支保存hexo博客源码到github</a> 和 <a href="https://www.cnblogs.com/eidolonw/p/13066869.html">hexo源码上传到GitHub</a> 这两篇帖子的编写者！</p>
+<p>那么，教程开始</p>
+<h2 id="教程"><a href="#教程" class="headerlink" title="教程"></a>教程</h2><h3 id="1-如图："><a href="#1-如图：" class="headerlink" title="1. 如图："></a>1. 如图：</h3><p><img src="/../../images/Hexo/b.png" alt="如图" title="如图"></p>
+<h3 id="2-然后将其设置成默认分支："><a href="#2-然后将其设置成默认分支：" class="headerlink" title="2. 然后将其设置成默认分支："></a>2. 然后将其设置成默认分支：</h3><p><img src="/../../images/Hexo/c.png" alt="如图" title="如图"></p>
+<p>然后你这时候如果直接按照文章来的话，不行，大概率会<strong>报错</strong>…(问就是试过)</p>
+<h3 id="3-初始化"><a href="#3-初始化" class="headerlink" title="3. 初始化"></a>3. 初始化</h3><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">git init #先初始化</span><br></pre></td></tr></table></figure>
+
+<h3 id="4-然后将本地Hexo目录与远程仓库关联"><a href="#4-然后将本地Hexo目录与远程仓库关联" class="headerlink" title="4. 然后将本地Hexo目录与远程仓库关联"></a>4. <strong>然后将本地Hexo目录与远程仓库关联</strong></h3><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">git remote add origin https://github.com/k7tmiz/k7tmiz.github.io.git</span><br></pre></td></tr></table></figure>
+
+<h3 id="5-此时进入目录"><a href="#5-此时进入目录" class="headerlink" title="5. 此时进入目录"></a>5. 此时进入目录</h3><p><code>Ctrl+H</code> 显示所有文件。删掉 <code>.deploy_git</code> 文件夹，如果已经clone过主题文件，那么需要把theme主题文件夹里的 <code>.git</code> 也删除。因为git不能嵌套上传，最好是显示隐藏文件，检查一下有没有，否则上传的时候会出错，导致你的主题文件无法上传，这样你的配置在别的电脑上就无法正常使用了。<strong>根目录中应该有个 <code>.gitignore</code> 文件</strong>，如果没有，请自行创建并添加以下内容:</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">.DS_Store</span><br><span class="line">Thumbs.db</span><br><span class="line">db.json</span><br><span class="line">*.log</span><br><span class="line">node_modules/</span><br><span class="line">public/</span><br><span class="line">.deploy*/</span><br><span class="line">_multiconfig.yml</span><br></pre></td></tr></table></figure>
+
+
+<h3 id="6-将clone并修改以后的文件夹推送到远程库"><a href="#6-将clone并修改以后的文件夹推送到远程库" class="headerlink" title="6. 将clone并修改以后的文件夹推送到远程库"></a>6. 将clone并修改以后的文件夹推送到远程库</h3><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">git add .</span><br><span class="line">git commit –m &quot;Description&quot;</span><br><span class="line">git push origin Hexo</span><br></pre></td></tr></table></figure>
+<p>此时已经成功将整个网站的源码全部推送到了远程库的默认分支Hexo中</p>
+<h3 id="7-删除public等文件（可选）"><a href="#7-删除public等文件（可选）" class="headerlink" title="7. 删除public等文件（可选）"></a>7. 删除public等文件（可选）</h3><p>因为source分支是从master分支新建的，初始代码实际就是master的拷贝，因而master中已有的public等deploy生成的文件也会一起带过来，这些都不算是博客源文件，如果你也觉着source分支还存着这些有些别扭，就可以先在本地把它删掉，然后执行：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">git add .</span><br><span class="line">git commit -m &#x27;DEL: public things which only for deploy&#x27;</span><br><span class="line">git push origin source</span><br></pre></td></tr></table></figure>
+<p>执行完之后，你的仓库大概就是长这个样子：</p>
+<p><img src="/../../images/Hexo/d.png" alt="如图" title="如图"></p>
+<p>后续即便你再发布博客时，deploy生成public文件，在提交博客源码时，也不会将其带上去，因为有.gitignore将其忽略了。</p>
+<h3 id="8-新环境"><a href="#8-新环境" class="headerlink" title="8. 新环境"></a>8. 新环境</h3><p>假设我们换电脑了，要在新环境继续在原有仓库基础上撸文章，此时通过 <code>git clone</code> 将博客源码拉到本地，然后安装、初始化Hexo就能搞定：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">git clone https://github.com/k7tmiz/k7tmiz.github.io.git Blog</span><br><span class="line">cd Blog</span><br><span class="line">npm install -g hexo-cli</span><br><span class="line">npm install hexo-deployer-git -save</span><br><span class="line">npm install #安装所有依赖模块</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>插曲，其实不设置成默认的也可以，只不过拉取的时候要git clone -b <code>branch_name</code> <code>source</code></p>
+</blockquote>
+]]></content>
+      <categories>
+        <category>Tech</category>
+      </categories>
+      <tags>
+        <tag>hexo</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>谈谈我为什么开始拥抱苹果</title>
+    <url>/posts/fbd23e1d.html</url>
+    <content><![CDATA[<p>如标题所见，我放弃了所谓“开放”的安卓阵营，也逐渐离开了那个我非常熟悉的 Windows 世界。与此同时，我还买了 <strong>AirPods Pro 3</strong>，甚至一度认真考虑过 <strong>Apple Watch</strong>。</p>
+<p>听到这里，很多人第一反应大概都是：这人是不是疯了</p>
+<p>毕竟在不少人的理解里，苹果生态就是一套“消费陷阱”，一旦进去就很难出来。</p>
+<p>但事情其实没那么复杂。</p>
+<p>这只是我在不断尝试之后，慢慢找到的一套 <strong>更适合自己的工具组合</strong>。</p>
+<h2 id="我不是一开始就站在苹果这边"><a href="#我不是一开始就站在苹果这边" class="headerlink" title="我不是一开始就站在苹果这边"></a>我不是一开始就站在苹果这边</h2><p>在真正转向 iPhone 之前，我其实换过很多安卓手机。</p>
+<p>最早用过的是 <strong>Redmi K30 至尊纪念版</strong>，那台手机是我把当年的 iPad 卖掉之后换来的。当时真的觉得很离谱，这种配置居然只要 1999。</p>
+<p>后来高中时期，我的主力机变成了 <strong>小米 10 Pro</strong>。这台手机陪我走过了整个高中，到现在它还躺在桌子上当热点机用。</p>
+<p>那时候我几乎把所有时间都花在折腾系统上：</p>
+<ul>
+<li>Root</li>
+<li>模块</li>
+<li>调度</li>
+<li>超频</li>
+<li>各种 Magisk 模块</li>
+</ul>
+<p>每天最期待的一件事，就是看看小米有没有推新的系统更新。</p>
+<p>高考结束之后，我又换了 <strong>iQOO 12 Pro 16+1T（5599）</strong>。当时我对它的评价只有一句话：最水桶的一台旗舰。没有明显短板，什么都不差。</p>
+<p>后来在暑假快结束的时候，我本来只想买一台两千块左右的备用机，结果预算一路加到四千，最后买了 <strong>OPPO Find X7 Ultra 12+256</strong>。我非常喜欢这台手机，也带着它去了不少地方。现在回头看，我博客里很多照片其实都还带着哈苏水印。</p>
+<p>再后来，2024 年 10 月，我在一节水课上看了 <strong>真我发布会</strong>，结果又没忍住，买了一台 <strong>真我 GT7 Pro</strong>。</p>
+<p>原因其实很简单：</p>
+<ul>
+<li>骁龙 8 至尊版</li>
+<li>6500mAh 电池</li>
+</ul>
+<p>当时真的会觉得，这手机太猛了</p>
+<h2 id="为什么最后还是买了-iPhone"><a href="#为什么最后还是买了-iPhone" class="headerlink" title="为什么最后还是买了 iPhone"></a>为什么最后还是买了 iPhone</h2><p>这种状态一直持续到 <strong>2025 年 9 月</strong>。</p>
+<p>那时候我把 <strong>Find X7 Ultra</strong> 卖掉了，因为我看到了 <strong>iPhone 17 Pro</strong> 的评测。说实话，当时真的很心动，于是我干了一件挺冲动的事情：直接下单。</p>
+<p>我 8099 买的，原价 8999。</p>
+<p>当时想法也很简单：</p>
+<blockquote>
+<p>不喜欢就转手卖掉</p>
+</blockquote>
+<p>但 2025 年 10 月 1 日到手之后，我发现自己根本不想卖了。</p>
+<p>不是因为苹果多有面子，也不是因为什么品牌滤镜，而是因为一件很具体的事情：<strong>体验很统一</strong>。</p>
+<p>再加上一个现实问题，安卓这些年最核心的优势，其实已经没有以前那么成立了。</p>
+<p>以前大家说安卓，核心关键词总是“开放”。但现在：</p>
+<ul>
+<li>Bootloader 越来越难解锁</li>
+<li>Root 环境越来越难维护</li>
+<li>权限越来越封闭</li>
+</ul>
+<p>既然两个系统都在变封闭，那事情对我来说就很简单了。</p>
+<p>我选体验更好的那个</p>
+<p>更何况现在安卓旗舰也越来越贵，很多机器动不动就是七八千，价格和 iPhone 其实已经差不多。既然如此，那我为什么不选一个更省心的？</p>
+<p>更重要的是，我现在已经没有那么多时间了。</p>
+<p>我不再想把所有设备都变成一个长期维护项目。我希望它们稳定、好用，不需要我每天去照顾。我希望它们只是工具，而不是玩具。</p>
+<h2 id="为什么后来又买了-MacBook-Air"><a href="#为什么后来又买了-MacBook-Air" class="headerlink" title="为什么后来又买了 MacBook Air"></a>为什么后来又买了 MacBook Air</h2><p>其实一开始，我并没有打算买 MacBook。</p>
+<p>当我第一次意识到自己可能需要一台轻薄本的时候，我最先体验的其实是 Windows 阵营的机器。我买了一台机械革命 <strong>无界 14X Pro 2025</strong>，配置是 <strong>32G + 1T，AI9 H365 处理器</strong>。</p>
+<p>从参数上看，这台机器当时真的很诱人：</p>
+<ul>
+<li>2.8K 分辨率屏幕</li>
+<li>120Hz 高刷</li>
+<li>99Wh 大电池</li>
+<li>很丰富的接口</li>
+</ul>
+<p>这些配置几乎把我对一台轻薄本的幻想都满足了。</p>
+<p>反观当时的 <strong>MacBook Air</strong>，只有 60Hz 屏幕，电池容量看起来也不算大，价格还更贵。从参数表上看，几乎没有任何优势，所以当时的我几乎没有犹豫，直接选了 Windows 轻薄本。</p>
+<p>而且还有一个很现实的原因：那时候我根本没想到，几个月以后我会换成 iPhone。如果当时就知道后面会换苹果手机，我的选择可能也会不一样。</p>
+<p>但真正用了一段时间之后，我才慢慢意识到一个问题。</p>
+<p>参数很好看，体验却没有想象中那么好。</p>
+<p>尤其是在不插电的时候，问题会变得特别明显。虽然这台机器的续航确实不短，但系统会明显变慢，打字会卡，看视频也会卡。更离谱的是那块 120Hz 的屏幕，一旦离电，高刷就会变得很不稳定，再加上 Windows 自己的动态刷新率策略，很多时候其实一直都只是在 60Hz 运行。</p>
+<p>但问题是，我买的是轻薄本。</p>
+<p>轻薄本的意义本来就是带出去用的，不是一直插着电当台式机。结果一离电，体验就明显下降，那种卡卡的感觉真的很难受。</p>
+<p>还有一个原因，虽然不是主要原因，但它确实一直在消耗我对这台机器的耐心。</p>
+<p>我其实很早就对这台机械革命有点不爽了。后来装上 Linux 之后才发现，它的 BIOS 根本没做完整，导致 <strong>Wi-Fi 模块在 Linux 下是被硬件屏蔽的状态</strong>，系统里直接显示的是 <em>Hardware block</em>，也就是说 Wi-Fi 根本用不了。</p>
+<p>而我又很不喜欢在 Windows 下面配开发环境。像 git 这些东西，在 Windows 里总让我觉得很别扭：软件装到哪里不清楚，环境变量一堆，卸载还经常卸不干净，有些程序甚至会在后台偷偷吃电。</p>
+<p>结果就是，我本来想用 Linux 学习、写博客，最后却被迫在 Windows 下面硬撑了四五个月。那段时间真的很难受。</p>
+<p>再加上那台机器的键盘手感也很一般，打字时间一长就很累，博客也因此停更了一段时间。后来我实在受不了了，刚好赶上国补和以旧换新补贴，价格也合适，就在 <strong>M5 Air</strong> 发布的前一天入手了 <strong>M4 的 MacBook Air</strong>。</p>
+<p>真正用上之后，我反而慢慢理解了一件事情：苹果做的其实就是一台电脑。</p>
+<p>一台很纯粹的笔记本电脑，没有太多花里胡哨的东西，做工好，性能稳定，续航长，软件生态成熟。</p>
+<p>但最重要的一点其实是 <strong>离电性能</strong>。</p>
+<p>苹果自己做芯片、做系统、做整机，所以整机体验会非常统一。MacBook Air 甚至完全没有风扇，这意味着日常使用几乎是无声的。再加上键盘手感很好，合上盖子就睡眠，需要的时候再打开，整个使用逻辑都很顺。</p>
+<p>还有一点我很喜欢。macOS 的底层是 <strong>Unix</strong>，很多命令、工具和逻辑其实都和 Linux 很接近，这种熟悉感会让我非常安心。</p>
+<h2 id="AirPods-Pro-3-对我来说值在哪里"><a href="#AirPods-Pro-3-对我来说值在哪里" class="headerlink" title="AirPods Pro 3 对我来说值在哪里"></a>AirPods Pro 3 对我来说值在哪里</h2><p>至于为什么买 <strong>AirPods Pro 3</strong>，原因其实也很简单。</p>
+<p>我后来发现一件事情，蓝牙耳机谈音质，对我这种木耳来说基本就是扯淡。我根本分辨不出什么高低频、解析力、声场这种差别，但有一个东西我能非常明确地感知到：<strong>降噪</strong>。</p>
+<p>AirPods Pro 的降噪就是那种一耳朵差距。打开的那一瞬间，整个世界都会安静下来。</p>
+<p>这种体验对我来说非常重要，因为安静就意味着我更容易专注，也更容易进入状态。</p>
+<p>再加上它的通透模式、自适应降噪、空间音频，以及苹果的查找功能，这些东西都让我很惊艳。</p>
+<p>当然，我用的是 iPhone，AirPods 的连接体验确实也很方便。</p>
+<p>但说实话，这不是我留下它的主要原因。</p>
+<p>真正让我留下它的，还是降噪</p>
+<h2 id="为什么最后没买-Apple-Watch"><a href="#为什么最后没买-Apple-Watch" class="headerlink" title="为什么最后没买 Apple Watch"></a>为什么最后没买 Apple Watch</h2><p>很多人会觉得，既然我已经有了 iPhone、MacBook 和 AirPods，为什么不顺便再买一块 <strong>Apple Watch</strong>？</p>
+<p>其实我想买 Apple Watch 的原因，不是生态，而是我有健身的习惯，而且我离家 <strong>1500km</strong>。我希望自己有一套更准确的健康数据，比如心率、运动记录、健康监测。</p>
+<p>这不仅是对自己负责，也是让家人放心。</p>
+<p>但我最后没有买。</p>
+<p>原因也很简单：续航太短。</p>
+<p>Apple Watch 基本就是一天一充，而且国行版本还砍掉了快充。于是事情就变成了，充得慢，续航又短，这一点非常直接地抑制了我的购买欲。</p>
+<p>如果未来续航能解决，我大概率还是会买。</p>
+<h2 id="我不太相信“生态”这套说法"><a href="#我不太相信“生态”这套说法" class="headerlink" title="我不太相信“生态”这套说法"></a>我不太相信“生态”这套说法</h2><p>其实很多人一谈苹果就会提“生态”。</p>
+<p>但对我来说，这一直有点像个伪命题。</p>
+<p>因为我从来不在乎什么软件生态、硬件生态、全家桶这种说法。</p>
+<p>我只在乎一件事：体验。</p>
+<p>一个产品好用，我就用。不好用，我就换掉。</p>
+<p>就这么简单。</p>
+<p>没有信仰，也没有阵营。</p>
+<h2 id="写在最后"><a href="#写在最后" class="headerlink" title="写在最后"></a>写在最后</h2><p>现在的我，其实已经不像以前那样喜欢折腾了。</p>
+<p>以前我希望每一个设备到手都被我自定义一遍，希望每一个设备都完全掌控在自己手里。</p>
+<p>但现在我更希望 <strong>工具只是工具</strong>。</p>
+<p>设备不需要证明什么，只要它稳定、好用、不打扰我，那它就是一个好产品。</p>
+<p>至于它是不是苹果，其实并不重要。</p>
+]]></content>
+      <categories>
+        <category>Article</category>
+      </categories>
+      <tags>
+        <tag>article</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>我与计算机的故事</title>
+    <url>/posts/d773eb13.html</url>
+    <content><![CDATA[<p>我是一个行走在文理边界上的旅人，心中始终燃烧着对计算机世界的恒久热爱。</p>
+<p>我的故事，始于北京的家中。</p>
+<p>父母工作繁忙，陪伴我成长的，是家里那两台早早备下的电脑。或许这算得上一种时代的馈赠，让我在懵懂的年纪便与数字世界结缘。那时的热爱简单而纯粹——查资料、玩游戏、折腾软件。至于服务器、Linux、编程这些更深的概念，还远在认知的地平线之外。</p>
+<p>直到初中。</p>
+<p>某一天，我在视频中第一次看见了 Linux 的世界。那种与 Windows 完全不同的系统结构与操作方式，让我产生了一种难以言说的好奇。像是无意间推开了一扇门，我开始试着迈进去看看。</p>
+<p>我安装的第一个 Linux 发行版，是 <strong>Deepin</strong>。</p>
+<p>大约是在 <strong>2018 年，Deepin 15 的时代</strong>。那时的 DDE 桌面还没有如今这般复杂，界面简洁，风格优雅。直到今天，我依然会偶尔关注 Deepin 的更新，比如现在的 <strong>Deepin 25</strong>。看着它一点点变化，总会生出一种奇妙的感慨。</p>
+<p>不过 Deepin 并没有成为终点。</p>
+<p>很快，我被 <strong>Arch Linux</strong> 的理念吸引了。</p>
+<p>“简单、现代、实用。”</p>
+<p>那种几乎带着一点极客气质的系统哲学，在当时的我看来格外迷人。不过第一次接触 Arch，我多少还是有些谨慎，于是选择了基于 Arch 的发行版 <strong>Manjaro + KDE</strong> 作为过渡。</p>
+<p>也正是在那段时间，我和 <strong>KDE Plasma</strong> 结下了某种长期的缘分。</p>
+<p>从那次与 Manjaro 的邂逅开始，KDE 就像一位默契的老朋友。无论我后来换过多少发行版，它总会在某个时刻重新出现。</p>
+<p>至于后来究竟是因为什么最终真正投入 Arch Linux 的怀抱——</p>
+<p>是 Arch 那极具设计感的图标？<br>还是当年 Manjaro 偶尔出现的“滚挂”风波？</p>
+<p>如今已经有些记不清了。</p>
+<p>总之，从那之后，<strong>Arch Linux 逐渐成为了我的主力系统</strong>。</p>
+<p>那是一段相当狂热的时期。我开始不断尝试各种 Linux 发行版：</p>
+<ul>
+<li>Kali</li>
+<li>elementaryOS</li>
+<li>PopOS</li>
+<li>FydeOS</li>
+<li>等等等等……</li>
+</ul>
+<p>至于许多发行版例如 <strong>Linux Mint</strong>，它们只在虚拟机中短暂地停留过一段时间。</p>
+<p>如今再回头看，我已记不起我到底重装过几次系统，用过多少个发行版。</p>
+<p>但也是因为在那个阶段，我的兴趣逐渐向更深处延伸。</p>
+<p>我开始接触 <strong>服务器</strong> 与 <strong>编程</strong>。</p>
+<p>初中时期，我学习了 <strong>C++</strong>。<br>而在 <strong>初三毕业的那个暑假</strong>，我又拥抱了 <strong>Python</strong>。</p>
+<p>服务器系统方面，我曾经非常喜欢 <strong>CentOS 7</strong>。<br>后来随着它的发展路线发生变化，我逐渐转向 <strong>Debian</strong>。</p>
+<p>从 <strong>Debian 9 到 Debian 12</strong>，我几乎都亲身经历过。</p>
+<p>进入高中之后，生活节奏开始改变。</p>
+<p>疫情时代的网课需求突然增加，而 Linux 对腾讯会议等工具的支持当时还不够完善。再加上学业压力逐渐加重，可以自由折腾系统的时间越来越少。</p>
+<p>但那份热爱始终没有真正消失。</p>
+<p>那台老旧的电脑上，依旧保持着<strong>Arch Linux 与 Windows 双系统</strong>。我仍然会在某个闲暇的夜晚，打开终端，敲下那条熟悉的命令：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">sudo pacman -Syu</span><br></pre></td></tr></table></figure>
+
+<p>有趣的是，一直到高三毕业，这个系统竟然从未真正“滚挂”。<br>它安静而稳定地陪伴了我整整三年。</p>
+<p>大学开始之后，新电脑到手。</p>
+<p>那时候电脑的主要用途变成了游戏，再加上我是文科生，于是 <strong>Windows 再次成为主角</strong>。那段时间里，我几乎很少再折腾系统。</p>
+<p>直到某一天。</p>
+<p>Windows 在一次关机之后并没有真正休眠，而是在背包里“空转”了整整一个月。等我再次打开电脑时，屏幕上只剩下一片花屏。</p>
+<p>进入 <strong>PE 环境</strong> 排查之后确认是系统问题，仅仅是官方驱动的安装与调试，就花费了整整一天。</p>
+<p>这次并不愉快的经历，加上 Windows 的强制更新、“假休眠”导致的风扇狂转，以及各种我被当作“宝宝”一样过度保护的设计——</p>
+<p>终于再次唤醒了我对 <strong>Linux 开源，自由精神</strong>的怀念。</p>
+<p>于是行动变得异常迅速。</p>
+<p>我买了一块新的硬盘。</p>
+<p><strong>十分钟之后，Arch Linux 安装完成。</strong></p>
+<p>那种熟悉的感觉几乎是瞬间回来了。</p>
+<p>不过世界也已经改变。</p>
+<p>KDE 完成了重要的版本演进；<br>Steam 正在重新塑造 Linux 游戏生态；<br>许多新的工具与技术不断出现。</p>
+<p>曾经积累的很多经验，已经不再完全适用。</p>
+<p>但这并没有让我沮丧，反而重新点燃了探索的欲望。</p>
+<p>再次深入之后，我发现整个生态早已不同：</p>
+<ul>
+<li>原生 Linux 版微信不再只是梦想</li>
+<li>QQ 也开始认真对待 Linux 用户</li>
+<li>Valve 通过 <strong>SteamDeck（搭载 Arch 系 SteamOS）</strong> 与 <strong>Proton</strong> 极大推动了 Linux 游戏生态</li>
+<li>UOS 在政企领域的推广，也让国内 Linux 用户整体受益</li>
+</ul>
+<p>如今，在 Linux 上畅玩游戏，早已不再是一件需要自嘲的事情。</p>
+<p>这也让我重新燃起了体验不同发行版的兴趣：</p>
+<ul>
+<li>openSUSE Tumbleweed 的优雅滚动</li>
+<li>Ubuntu 的庞大生态</li>
+<li>Fedora 的前沿特性</li>
+<li>openSUSE Leap 的稳健</li>
+<li>Debian 12 的纯粹</li>
+<li>NixOS 那近乎革命性的理念</li>
+</ul>
+<p>有趣的是，尽管我长期管理 <strong>Debian &#x2F; Ubuntu 服务器</strong>，桌面端却始终没有真正深入使用过原生 Debian。</p>
+<hr>
+<h2 id="我的设备"><a href="#我的设备" class="headerlink" title="我的设备"></a>我的设备</h2><p>如今，我的数字世界由两台电脑组成。</p>
+<p><strong>轻薄本</strong></p>
+<ul>
+<li>MacBook Air（主力）</li>
+</ul>
+<p><strong>游戏本</strong></p>
+<ul>
+<li>Arch Linux（主力系统）</li>
+<li>Fedora 43</li>
+<li>Windows 11（备用）</li>
+</ul>
+<p>相比过去动辄四五个系统的年代，现在的设备已经经历了一轮彻底的优化。系统数量减少了，但使用体验反而更加从容。</p>
+<p>或许，这正是折腾多年之后的一种平衡。</p>
+<hr>
+<h2 id="更新记录"><a href="#更新记录" class="headerlink" title="更新记录"></a>更新记录</h2><p>本文最初完善于 <strong>2025 年 6 月 25 日</strong>。</p>
+<p><strong>2025 年 7 月 20 日</strong>，游戏本上的 <strong>openSUSE Tumbleweed</strong> 在一次 <code>zypper dup</code> 更新中因为驱动问题“壮烈牺牲”。借此机会，我也重新审视了自己的系统结构，并将系统数量精简为三个：</p>
+<ul>
+<li>Arch Linux</li>
+<li>Fedora</li>
+<li>Windows 11</li>
+</ul>
+<p><strong>2025年8月13日</strong>，我换了一台轻薄本机械革命无界 14X Pro 2025 AI9 H365 32G+1T的最高配版本，遗憾的是其BIOS并不完善，没有做对Linux的支持，导致无线网卡无法正常在Linux环境下驱动。被迫在用Windows 11。这时候也把之前的洋垃圾轻薄本卖掉了。</p>
+<p><strong>2026年3月6日</strong>，通过国补以及以旧换新补贴，机械革命正式退役，换成了MacBook Air。</p>
+<p>折腾仍在继续，但设备与系统组合，也逐渐走向稳定。</p>
+]]></content>
+      <categories>
+        <category>Article</category>
+      </categories>
+      <tags>
+        <tag>article</tag>
       </tags>
   </entry>
 </search>

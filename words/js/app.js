@@ -20,6 +20,7 @@ const {
   buildLatestTermMap,
   getRoundPageCount,
   getRoundItemsByPage,
+  ensureCurrentRoundState,
   clamp,
   normalizeMeaningKey,
   setModalVisible,
@@ -33,6 +34,7 @@ const settings = window.A4Settings || {}
 const utils = window.A4Utils || {}
 const {
   normalizeThemeMode = (v) => (v === "dark" || v === "light" ? v : "auto"),
+  normalizeThemePalette = (v) => (v === "paper" || v === "ocean" ? v : "classic"),
   normalizeAccent = (v) => String(v || "").trim().toLowerCase(),
   normalizeVoiceMode = (v) => (v === "manual" || v === "auto" ? v : "auto"),
   normalizePronunciationLang = (v) => String(v || "").trim().toLowerCase() || "auto",
@@ -144,7 +146,6 @@ function closeWordbookPicker() {
   setModalVisible(dom.wordbookPickerModal, false)
 }
 
-let settingsController = null
 let lookupController = null
 let pendingAddWordAfterRoundFull = null
 let announcementModal = null
@@ -248,11 +249,9 @@ function scheduleAnnouncementCheck(delayMs = 0) {
 }
 
 function openSettingsModal() {
-  if (settingsController) {
-    settingsController.open()
-    return
-  }
-  setModalVisible(dom.settingsModal, true)
+  const href = "./settings.html?from=study"
+  if (window.A4Motion?.navigate?.(href) === true) return
+  window.location.assign(href)
 }
 
 function openLookupModal({ preset } = {}) {
@@ -286,6 +285,18 @@ const dom = {
   wordbookPickerBackdrop: document.getElementById("wordbookPickerBackdrop"),
   wordbookPickerCloseBtn: document.getElementById("wordbookPickerCloseBtn"),
   wordbookPickerList: document.getElementById("wordbookPickerList"),
+  mobileRoundBadge: document.getElementById("mobileRoundBadge"),
+  paperMeta: document.getElementById("paperMeta"),
+  mobileMoreBtn: document.getElementById("mobileMoreBtn"),
+  mobileMoreModal: document.getElementById("mobileMoreModal"),
+  mobileMoreBackdrop: document.getElementById("mobileMoreBackdrop"),
+  mobileMoreCloseBtn: document.getElementById("mobileMoreCloseBtn"),
+  paperReviewBtn: document.getElementById("paperReviewBtn"),
+  paperMeaningBtn: document.getElementById("paperMeaningBtn"),
+  paperMeaningLabel: document.getElementById("paperMeaningLabel"),
+  dockNextBtn: document.getElementById("dockNextBtn"),
+  desktopToolsBtn: document.getElementById("desktopToolsBtn"),
+  desktopToolsPopover: document.getElementById("desktopToolsPopover"),
   importWordbookBtn: document.getElementById("importWordbookBtn"),
   importFile: document.getElementById("importFile"),
   importModal: document.getElementById("importModal"),
@@ -408,6 +419,7 @@ const appState = {
   currentPageIndex: 0,
   immersiveMode: false,
   themeMode: "auto",
+  themePalette: "classic",
   systemPrefersDark: false,
   unknownTerms: [],
   reviewQueue: [],
@@ -525,6 +537,9 @@ function applyTheme() {
   const dark = getResolvedDarkMode()
   if (dark) document.body.classList.add("theme-dark")
   else document.body.classList.remove("theme-dark")
+  const palette = normalizeThemePalette(appState.themePalette)
+  document.body.classList.toggle("theme-palette-paper", palette === "paper")
+  document.body.classList.toggle("theme-palette-ocean", palette === "ocean")
 }
 
 const themeMedia = window.matchMedia ? window.matchMedia("(prefers-color-scheme: dark)") : null
@@ -1343,17 +1358,20 @@ function getCurrentRoundIndex() {
 function ensureCurrentRound() {
   if (getCurrentRound()) return
   const langBase = getActiveLangBase()
-  const round = {
-    id: makeId(),
-    startedAt: new Date().toISOString(),
-    finishedAt: "",
-    items: [],
-    roundCap: normalizeRoundCap(appState.roundCap),
-    type: ROUND_TYPE_NORMAL,
-    language: langBase,
-  }
-  appState.rounds = [round]
-  appState.currentRoundId = round.id
+  const next = ensureCurrentRoundState(
+    { rounds: appState.rounds, currentRoundId: appState.currentRoundId },
+    () => ({
+      id: makeId(),
+      startedAt: new Date().toISOString(),
+      finishedAt: "",
+      items: [],
+      roundCap: normalizeRoundCap(appState.roundCap),
+      type: ROUND_TYPE_NORMAL,
+      language: langBase,
+    })
+  )
+  appState.rounds = next.rounds
+  appState.currentRoundId = next.currentRoundId
 }
 
 function finalizeCurrentRound() {
@@ -1417,6 +1435,7 @@ function _persistImpl() {
     immersiveMode: appState.immersiveMode,
     darkMode,
     themeMode: appState.themeMode,
+    themePalette: normalizeThemePalette(appState.themePalette),
     unknownTerms: appState.unknownTerms,
     roundCap: appState.roundCap,
     dailyGoalRounds: appState.dailyGoalRounds,
@@ -1517,6 +1536,11 @@ function updateBadge() {
   const pageIndex = clamp(Math.floor(Number(appState.currentPageIndex) || 0), 0, Math.max(0, pageCount - 1))
   const cap = getCurrentRoundCap()
   dom.roundBadge.textContent = `第${roundNo}轮 · 第${pageIndex + 1}/${pageCount}张 · ${appState.placed.length}/${cap}`
+  if (dom.mobileRoundBadge) dom.mobileRoundBadge.textContent = `${appState.placed.length} / ${cap}`
+  if (dom.paperMeta) {
+    const total = Array.isArray(round?.items) ? round.items.length : 0
+    dom.paperMeta.textContent = `第 ${roundNo} 轮 · ${total} 个词`
+  }
   if (dom.roundProgress) dom.roundProgress.style.width = `${(appState.placed.length / cap) * 100}%`
   renderStats()
 }
@@ -1586,6 +1610,8 @@ function renderStats() {
 
 function updateMeaningToggle() {
   dom.toggleMeaningBtn.textContent = `显示释义：${appState.showMeaning ? "开" : "关"}`
+  if (dom.paperMeaningLabel) dom.paperMeaningLabel.textContent = `释义${appState.showMeaning ? "开" : "关"}`
+  if (dom.paperMeaningBtn) dom.paperMeaningBtn.setAttribute("aria-pressed", appState.showMeaning ? "true" : "false")
   if (appState.showMeaning) {
     dom.paper.classList.add("show-meaning")
   } else {
@@ -1664,7 +1690,6 @@ function speakTerm(term) {
     appState.voiceMode = "auto"
     appState.voiceURI = ""
     persist()
-    if (settingsController) settingsController.render()
   }
 
   const targetBase = String(
@@ -1696,7 +1721,6 @@ function speakTerm(term) {
     offlineVoiceId,
   })
 
-  if (settingsController) settingsController.updateVoiceUi()
 }
 
 // ===== 复习弹窗（手动复习 / 自动复习共用渲染）=====
@@ -2234,6 +2258,7 @@ function restore() {
   if (typeof saved.themeMode === "string") appState.themeMode = normalizeThemeMode(saved.themeMode)
   else if (typeof saved.darkMode === "boolean") appState.themeMode = saved.darkMode ? "dark" : "light"
   else appState.themeMode = "auto"
+  appState.themePalette = normalizeThemePalette(saved.themePalette)
 
   const unknownRaw = Array.isArray(saved.unknownTerms)
     ? saved.unknownTerms.map((s) => String(s || "").trim()).filter(Boolean)
@@ -2511,6 +2536,8 @@ function addNextWordToCurrentRound({ preferUnseenFirst } = {}) {
     pageIndex: targetPageIndex,
     lang: langBase,
   }
+  placed.el.classList.add("word-enter")
+  placed.el.addEventListener("animationend", () => placed.el.classList.remove("word-enter"), { once: true })
   appState.placed.push({ word, roundItem, el: placed.el, box: placed.box, fontSize, pos: placed.pos })
 
   round.items.push(roundItem)
@@ -2638,50 +2665,6 @@ dom.newRoundBtn.addEventListener("click", () => {
   newRound()
 })
 
-if (window.A4Settings && typeof window.A4Settings.createSettingsModalController === "function") {
-  settingsController = window.A4Settings.createSettingsModalController({
-    getState: () => appState,
-    setState: (patch) => Object.assign(appState, patch),
-    persist,
-    applyTheme,
-    onAfterChange: ({ key } = {}) => {
-      if (key === "dailyGoalRounds" || key === "dailyGoalWords") renderStats()
-      if (key === "reviewSystemEnabled" || key === "reviewIntervals") {
-        renderStats()
-      }
-      if (key === "roundCap") {
-        const round = getCurrentRound()
-        if (round && (!Array.isArray(round.items) || round.items.length === 0)) round.roundCap = appState.roundCap
-        updateBadge()
-      }
-      if (key === "pronunciationLang") {
-        const before = getCurrentRound()
-        const beforeType = normalizeRoundType(before?.type || ROUND_TYPE_NORMAL)
-        const beforeLang = getLangBase(before?.language || "")
-        renderWordbookSelect()
-        updateSourceWords()
-        const afterLang = getActiveLangBase()
-        if (beforeType === ROUND_TYPE_NORMAL && Array.isArray(before?.items) && before.items.length > 0 && beforeLang && beforeLang !== afterLang) {
-          startNextRound()
-        } else {
-          appState.pool = []
-          appState.poolIndex = 0
-        }
-        updateBadge()
-        updateHint()
-      }
-      if (key === "reviewCardFlipEnabled") {
-        if (isModalOpen(dom.reviewModal)) {
-          resetReviewCardFlipState()
-          renderReviewCard()
-        }
-      }
-      if (key === "customWordbooks") renderWordbookSelect()
-    },
-    getWordbookLanguage: () => getWordbookLanguageForSpeech(),
-  })
-}
-
 if (window.A4Lookup && typeof window.A4Lookup.createLookupModalController === "function") {
   lookupController = window.A4Lookup.createLookupModalController({
     getState: () => appState,
@@ -2691,7 +2674,51 @@ if (window.A4Lookup && typeof window.A4Lookup.createLookupModalController === "f
   })
 }
 
-dom.settingsBtn.addEventListener("click", () => openSettingsModal())
+dom.dockNextBtn?.addEventListener("click", () => dom.nextBtn.click())
+dom.paperReviewBtn?.addEventListener("click", () => dom.reviewBtn.click())
+dom.paperMeaningBtn?.addEventListener("click", () => dom.toggleMeaningBtn.click())
+
+function setDesktopToolsVisible(visible) {
+  if (!dom.desktopToolsPopover) return
+  dom.desktopToolsPopover.classList.toggle("hidden", !visible)
+  dom.desktopToolsBtn?.setAttribute("aria-expanded", visible ? "true" : "false")
+}
+
+dom.desktopToolsBtn?.addEventListener("click", (event) => {
+  event.stopPropagation()
+  setDesktopToolsVisible(dom.desktopToolsPopover?.classList.contains("hidden") === true)
+})
+
+dom.desktopToolsPopover?.addEventListener("click", (event) => event.stopPropagation())
+dom.desktopToolsPopover?.querySelectorAll("[data-action-target]").forEach((button) => {
+  button.addEventListener("click", () => {
+    const target = document.getElementById(button.dataset.actionTarget || "")
+    setDesktopToolsVisible(false)
+    target?.click?.()
+  })
+})
+
+document.addEventListener("click", () => setDesktopToolsVisible(false))
+document.addEventListener("keydown", (event) => {
+  if (event.key === "Escape") setDesktopToolsVisible(false)
+})
+
+function setMobileMoreVisible(visible) {
+  if (!dom.mobileMoreModal) return
+  setModalVisible(dom.mobileMoreModal, visible)
+  dom.mobileMoreBtn?.setAttribute("aria-expanded", visible ? "true" : "false")
+}
+
+dom.mobileMoreBtn?.addEventListener("click", () => setMobileMoreVisible(true))
+dom.mobileMoreBackdrop?.addEventListener("click", () => setMobileMoreVisible(false))
+dom.mobileMoreCloseBtn?.addEventListener("click", () => setMobileMoreVisible(false))
+dom.mobileMoreModal?.querySelectorAll("[data-action-target]").forEach((button) => {
+  button.addEventListener("click", () => {
+    const target = document.getElementById(button.dataset.actionTarget || "")
+    setMobileMoreVisible(false)
+    target?.click?.()
+  })
+})
 dom.lookupBtn?.addEventListener("click", () => openLookupModal())
 
 if (shouldUseAndroidWordbookPicker()) {

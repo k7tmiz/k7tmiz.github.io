@@ -1,0 +1,150 @@
+body.theme-palette-paper {
+  --bg: #f1eee6;
+  --bg-gradient: radial-gradient(circle at top left, #fbf8ef 0%, #e9e6dc 100%);
+  --text: #26312e;
+  --muted: #6d7773;
+  --card: rgba(255, 253, 247, 0.88);
+  --card2: rgba(250, 248, 241, 0.9);
+  --border: rgba(217, 213, 201, 0.86);
+  --border2: rgba(232, 227, 215, 0.9);
+  --border3: rgba(201, 198, 187, 0.9);
+  --accent: #176b5a;
+  --accentHover: #125548;
+  --accentText: #ffffff;
+  --surfaceHover: rgba(23, 107, 90, 0.07);
+  --paperBorder: rgba(202, 198, 185, 0.75);
+  --shadow: 0 8px 28px rgba(44, 56, 49, 0.08), 0 1px 3px rgba(44, 56, 49, 0.04);
+  --shadowModal: 0 28px 68px rgba(44, 56, 49, 0.18), 0 8px 24px rgba(44, 56, 49, 0.1);
+  --wordBg: rgba(255, 254, 249, 0.72);
+  --wordBorder: rgba(38, 49, 46, 0.07);
+  --backdrop: rgba(30, 48, 43, 0.36);
+  --paper: #fffef8;
+}
+
+body.theme-dark.theme-palette-paper {
+  --bg: #09110f;
+  --bg-gradient: radial-gradient(circle at top right, #12231e 0%, #070d0b 100%);
+  --text: #e3ece8;
+  --muted: #9aaba5;
+  --card: rgba(20, 36, 31, 0.72);
+  --card2: rgba(25, 43, 37, 0.68);
+  --border: rgba(225, 242, 235, 0.1);
+  --border2: rgba(225, 242, 235, 0.07);
+  --border3: rgba(225, 242, 235, 0.14);
+  --accent: #d9eee7;
+  --accentHover: #f2faf7;
+  --accentText: #12362d;
+  --surfaceHover: rgba(225, 242, 235, 0.08);
+  --paperBorder: rgba(225, 242, 235, 0.12);
+  --shadow: 0 14px 36px rgba(0, 0, 0, 0.44), 0 2px 8px rgba(0, 0, 0, 0.24);
+  --shadowModal: 0 34px 84px rgba(0, 0, 0, 0.64), 0 12px 34px rgba(0, 0, 0, 0.42);
+  --wordBg: rgba(31, 53, 46, 0.76);
+  --wordBorder: rgba(225, 242, 235, 0.1);
+  --backdrop: rgba(0, 0, 0, 0.68);
+  --paper: rgba(18, 32, 28, 0.92);
+}
+
+body.theme-palette-ocean {
+  --bg: #edf4f7;
+  --bg-gradient: radial-gradient(circle at top left, #f8fcff 0%, #e9f1f6 100%);
+  --text: #102631;
+  --muted: #607683;
+  --card: rgba(249, 253, 255, 0.88);
+  --card2: rgba(244, 250, 252, 0.9);
+  --border: rgba(214, 227, 233, 0.88);
+  --border2: rgba(223, 234, 240, 0.92);
+  --border3: rgba(198, 216, 225, 0.9);
+  --accent: #155e75;
+  --accentHover: #104b5e;
+  --accentText: #ffffff;
+  --surfaceHover: rgba(21, 94, 117, 0.07);
+  --paperBorder: rgba(204, 220, 228, 0.78);
+  --shadow: 0 8px 28px rgba(21, 73, 91, 0.08), 0 1px 3px rgba(21, 73, 91, 0.04);
+  --shadowModal: 0 28px 68px rgba(21, 73, 91, 0.18), 0 8px 24px rgba(21, 73, 91, 0.1);
+  --wordBg: rgba(251, 254, 255, 0.72);
+  --wordBorder: rgba(16, 38, 49, 0.07);
+  --backdrop: rgba(16, 50, 66, 0.36);
+  --paper: #fcfeff;
+}
+
+body.theme-dark.theme-palette-ocean {
+  --bg: #071117;
+  --bg-gradient: radial-gradient(circle at top right, #0d2631 0%, #050c10 100%);
+  --text: #deedf3;
+  --muted: #93aab5;
+  --card: rgba(14, 38, 49, 0.72);
+  --card2: rgba(18, 46, 59, 0.66);
+  --border: rgba(220, 239, 247, 0.1);
+  --border2: rgba(220, 239, 247, 0.07);
+  --border3: rgba(220, 239, 247, 0.14);
+  --accent: #d9edf5;
+  --accentHover: #f2fbff;
+  --accentText: #103847;
+  --surfaceHover: rgba(220, 239, 247, 0.08);
+  --paperBorder: rgba(220, 239, 247, 0.12);
+  --shadow: 0 14px 36px rgba(0, 0, 0, 0.44), 0 2px 8px rgba(0, 0, 0, 0.24);
+  --shadowModal: 0 34px 84px rgba(0, 0, 0, 0.64), 0 12px 34px rgba(0, 0, 0, 0.42);
+  --wordBg: rgba(23, 54, 67, 0.76);
+  --wordBorder: rgba(220, 239, 247, 0.1);
+  --backdrop: rgba(0, 0, 0, 0.68);
+  --paper: rgba(13, 34, 43, 0.92);
+}
+
+.theme-palette-options {
+  width: 100%;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 8px;
+}
+
+.theme-palette-option {
+  min-height: 44px;
+  padding: 6px 7px 6px 10px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 6px;
+  border-color: var(--border3);
+  color: var(--muted);
+  font-size: 12px;
+}
+
+.theme-palette-option.active {
+  border-color: var(--accent);
+  color: var(--text);
+  box-shadow: 0 0 0 1px var(--accent);
+}
+
+.theme-palette-swatch {
+  width: 24px;
+  height: 24px;
+  flex: 0 0 auto;
+  border: 1px solid var(--border3);
+  border-radius: 8px;
+}
+
+.theme-palette-swatch-classic {
+  background: linear-gradient(135deg, #f5f6fa 50%, #0f172a 50%);
+}
+
+.theme-palette-swatch-paper {
+  background: linear-gradient(135deg, #f7f3e8 50%, #176b5a 50%);
+}
+
+.theme-palette-swatch-ocean {
+  background: linear-gradient(135deg, #eef5fb 50%, #155e75 50%);
+}
+
+@media (max-width: 430px) {
+  .form-row-palette {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .theme-palette-option {
+    min-height: 48px;
+    padding-left: 8px;
+    flex-direction: column-reverse;
+    justify-content: center;
+  }
+}

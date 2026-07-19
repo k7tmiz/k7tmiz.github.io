@@ -10,33 +10,38 @@
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
     <meta name="apple-mobile-web-app-title" content="A4 Memory" />
     <meta name="mobile-web-app-capable" content="yes" />
-    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; connect-src 'self' https://api.k7tmiz.com https://api.github.com https://api.dictionaryapi.dev https://translate.google.com https://speech.platform.bing.com wss://speech.platform.bing.com https://api.openai.com https://api.anthropic.com https://generativelanguage.googleapis.com; media-src 'self' blob: https:; font-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self';" />
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; connect-src 'self' https://api.k7tmiz.com https://api.github.com https://raw.githubusercontent.com https://api.dictionaryapi.dev https://api.mymemory.translated.net https://translate.google.com https://speech.platform.bing.com wss://speech.platform.bing.com https://api.openai.com https://api.anthropic.com https://generativelanguage.googleapis.com https://api.deepseek.com https://api.siliconflow.cn; media-src 'self' blob: https:; font-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self';" />
     <link rel="manifest" href="./manifest.webmanifest" />
     <link rel="icon" href="./assets/icon.svg" type="image/svg+xml" />
     <link rel="mask-icon" href="./assets/mask-icon.svg" color="#0b1220" />
     <link rel="apple-touch-icon" href="./assets/icon.svg" />
-    <link rel="stylesheet" href="./css/style.css?v=20260714-1" />
+    <link rel="stylesheet" href="./css/style.css?v=20260719-3" />
+    <link rel="stylesheet" href="./css/theme.css?v=20260719-1" />
+    <link rel="stylesheet" href="./css/shell.css?v=20260719-5" />
   </head>
-  <body>
-    <header class="app-header">
-      <div class="title">
-        <h1>A4 Memory</h1>
-        <p class="subtitle">每新增一个单词，就完整复习一遍本轮 A4 上所有单词</p>
-      </div>
-      <div class="status">
+  <body class="home-page">
+    <aside class="desktop-status-stack" aria-label="本轮学习进度">
+      <section class="desktop-status-card">
+        <div class="desktop-status-eyebrow">本轮进度</div>
         <div class="status-top">
           <div class="badge" id="roundBadge">本轮 0/—</div>
-          <button class="ghost" id="settingsBtn" type="button">设置</button>
         </div>
-        <div class="status-meta" id="roundStatusCounts"></div>
         <div class="status-progress" aria-hidden="true">
           <div class="status-progress-bar" id="roundProgress"></div>
         </div>
-      </div>
-    </header>
+        <div class="status-meta" id="roundStatusCounts"></div>
+      </section>
+    </aside>
 
     <main class="app">
       <section class="controls home-controls" aria-label="控制区">
+        <div class="desktop-brand desktop-only">
+          <span class="desktop-brand-mark" aria-hidden="true">A4</span>
+          <div>
+            <h1>A4 Memory</h1>
+            <p>让单词落在一张纸上</p>
+          </div>
+        </div>
         <div class="controls-row controls-row-top">
           <div class="controls-row-main">
             <button class="primary" id="nextBtn" type="button">下一个单词</button>
@@ -50,6 +55,7 @@
           </div>
         </div>
         <div class="controls-row controls-row-wordbook immersive-hide">
+          <span class="desktop-section-label desktop-only">当前词书</span>
           <div class="select-wrap">
             <select id="wordbookSelect" aria-label="选择词书"></select>
             <button class="wordbook-picker-btn hidden" id="wordbookPickerBtn" type="button" aria-haspopup="dialog" aria-expanded="false">
@@ -58,11 +64,27 @@
             </button>
           </div>
           <button id="importWordbookBtn" type="button">导入词书</button>
+          <span class="mobile-round-chip mobile-only" id="mobileRoundBadge">0 / 30</span>
+          <button class="mobile-more-button mobile-only" id="mobileMoreBtn" type="button" aria-label="更多学习工具" aria-haspopup="dialog" aria-expanded="false">
+            <svg viewBox="0 0 20 20" aria-hidden="true"><circle cx="4" cy="10" r="1.4"></circle><circle cx="10" cy="10" r="1.4"></circle><circle cx="16" cy="10" r="1.4"></circle></svg>
+          </button>
           <input id="importFile" type="file" accept=".csv,.txt,.json" hidden />
         </div>
         <div class="controls-row controls-row-toggles">
           <button class="ghost" id="toggleMeaningBtn" type="button">显示释义：关</button>
           <button class="ghost" id="toggleImmersiveBtn" type="button">沉浸模式：关</button>
+        </div>
+        <div class="desktop-tools-card desktop-only">
+          <button class="desktop-tools-button" id="desktopToolsBtn" type="button" aria-haspopup="true" aria-expanded="false">
+            <span>更多学习工具</span><span aria-hidden="true">•••</span>
+          </button>
+          <div class="desktop-tools-popover hidden" id="desktopToolsPopover" aria-label="更多学习工具">
+            <button data-action-target="newRoundBtn" type="button"><span aria-hidden="true">＋</span>新建一轮</button>
+            <button data-action-target="lookupBtn" type="button"><span aria-hidden="true">⌕</span>查词</button>
+            <button data-action-target="importWordbookBtn" type="button"><span aria-hidden="true">⇧</span>导入词书</button>
+            <button data-action-target="toggleImmersiveBtn" type="button"><span aria-hidden="true">◫</span>沉浸模式</button>
+            <button data-action-target="introBtn" type="button"><span aria-hidden="true">?</span>用法介绍</button>
+          </div>
         </div>
       </section>
 
@@ -74,11 +96,41 @@
 
       <section class="paper-wrap" aria-label="A4纸区域">
         <div class="paper" id="paper">
+          <div class="paper-toolbar">
+            <span class="paper-toolbar-meta" id="paperMeta">第 1 轮 · 0 个词</span>
+            <div class="paper-toolbar-actions">
+              <button class="paper-toolbar-action" id="paperReviewBtn" type="button">
+                <svg viewBox="0 0 20 20" aria-hidden="true"><path d="M4.3 7.5a6.2 6.2 0 1 1 1.6 6.6"></path><path d="M4.3 3.8v3.7H8"></path></svg>
+                <span>复习</span>
+              </button>
+              <button class="paper-toolbar-action" id="paperMeaningBtn" type="button" aria-pressed="false">
+                <svg viewBox="0 0 20 20" aria-hidden="true"><path d="M2.5 10s2.7-4.4 7.5-4.4 7.5 4.4 7.5 4.4-2.7 4.4-7.5 4.4S2.5 10 2.5 10Z"></path><circle cx="10" cy="10" r="2"></circle></svg>
+                <span id="paperMeaningLabel">释义关</span>
+              </button>
+            </div>
+          </div>
           <div class="paper-inner" id="paperInner"></div>
           <div class="paper-hint" id="paperHint">点击「下一个单词」开始</div>
         </div>
       </section>
     </main>
+
+    <div class="app-dock-shell" aria-label="学习快捷操作">
+      <nav class="app-dock-nav" aria-label="主要导航">
+        <a class="app-dock-item active" id="dockStudyNav" aria-current="page" href="./index.html">
+          <svg viewBox="0 0 20 20" aria-hidden="true"><path d="M3.5 5.5h13v10h-13z"></path><path d="M6.5 3.5h7"></path></svg><span>学习</span>
+        </a>
+        <a href="./records.html" class="app-dock-item" data-a4-page-transition>
+          <svg viewBox="0 0 20 20" aria-hidden="true"><circle cx="10" cy="10" r="6.2"></circle><path d="M10 6.5V10l2.7 1.7"></path></svg><span>记录</span>
+        </a>
+        <a href="./settings.html?from=study" class="app-dock-item" id="dockSettingsNav" data-a4-page-transition>
+          <svg viewBox="0 0 20 20" aria-hidden="true"><path d="M3.5 5h13M3.5 10h13M3.5 15h13"></path><circle cx="7" cy="5" r="1.4"></circle><circle cx="13" cy="10" r="1.4"></circle><circle cx="8.5" cy="15" r="1.4"></circle></svg><span>设置</span>
+        </a>
+      </nav>
+      <button class="app-next-action" id="dockNextBtn" type="button">
+        <svg viewBox="0 0 20 20" aria-hidden="true"><path d="M10 4v12M4 10h12"></path></svg><span>下一个单词</span>
+      </button>
+    </div>
 
     <div class="modal hidden" id="reviewModal" aria-hidden="true">
       <div class="modal-backdrop" id="reviewBackdrop"></div>
@@ -337,18 +389,38 @@ ability,n.,能力</pre>
       </div>
     </div>
 
+    <div class="modal mobile-more-modal hidden" id="mobileMoreModal" aria-hidden="true">
+      <div class="modal-backdrop" id="mobileMoreBackdrop"></div>
+      <section class="modal-panel mobile-more-panel" role="dialog" aria-modal="true" aria-labelledby="mobileMoreTitle">
+        <div class="mobile-sheet-grab" aria-hidden="true"></div>
+        <div class="mobile-more-header">
+          <h2 id="mobileMoreTitle">更多学习工具</h2>
+          <button class="mobile-sheet-close" id="mobileMoreCloseBtn" data-layer-close type="button" aria-label="关闭">×</button>
+        </div>
+        <div class="mobile-more-grid">
+          <button class="mobile-more-action" data-action-target="newRoundBtn" type="button"><span class="mobile-more-icon">＋</span><span><strong>新建一轮</strong><small>结束当前学习进度</small></span></button>
+          <button class="mobile-more-action" data-action-target="lookupBtn" type="button"><span class="mobile-more-icon">⌕</span><span><strong>查词</strong><small>查询并加入本轮</small></span></button>
+          <button class="mobile-more-action" data-action-target="importWordbookBtn" type="button"><span class="mobile-more-icon">⇧</span><span><strong>导入词书</strong><small>TXT / CSV / JSON</small></span></button>
+          <button class="mobile-more-action" data-action-target="toggleImmersiveBtn" type="button"><span class="mobile-more-icon">◫</span><span><strong>沉浸模式</strong><small>隐藏辅助控件</small></span></button>
+          <button class="mobile-more-action" data-action-target="introBtn" type="button"><span class="mobile-more-icon">?</span><span><strong>用法介绍</strong><small>查看完整说明</small></span></button>
+        </div>
+      </section>
+    </div>
+
     <div class="toast hidden" id="appToast" role="status" aria-live="polite"></div>
 
     <script src="./data/words.js"></script>
-    <script src="./js/core/common.js?v=20260617-1"></script>
-    <script src="./js/core/sanitize.js"></script>
-    <script src="./js/utils.js?v=20260617-1"></script>
+    <script src="./js/core/common.js?v=20260719-1"></script>
+    <script src="./js/ui/layers.js?v=20260719-3"></script>
+    <script src="./js/ui/motion.js?v=20260719-3"></script>
+    <script src="./js/core/sanitize.js?v=20260714-2"></script>
+    <script src="./js/utils.js?v=20260719-3"></script>
     <script src="./js/storage.js"></script>
     <script src="./js/cloud.js?v=20260606-4"></script>
     <script src="./js/speech.js?v=20260617-1"></script>
     <script src="./js/updater.js?v=20260714-1"></script>
-    <script src="./js/settings.js?v=20260714-1"></script>
+    <script src="./js/settings.js?v=20260719-4"></script>
     <script src="./js/lookup.js"></script>
-    <script src="./js/app.js?v=20260617-1"></script>
+    <script src="./js/app.js?v=20260719-5"></script>
   </body>
 </html>

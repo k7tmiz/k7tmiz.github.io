@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover" />
+    <title>设置 - A4 Memory</title>
+    <meta name="description" content="A4 Memory 设置 — 管理账号、学习、发音、AI 与应用偏好。" />
+    <meta name="theme-color" content="#0b1220" />
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; connect-src 'self' https://api.k7tmiz.com https://api.github.com https://raw.githubusercontent.com https://api.dictionaryapi.dev https://api.mymemory.translated.net https://translate.google.com https://speech.platform.bing.com wss://speech.platform.bing.com https://api.openai.com https://api.anthropic.com https://generativelanguage.googleapis.com https://api.deepseek.com https://api.siliconflow.cn; media-src 'self' blob: https:; font-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self';" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <meta name="apple-mobile-web-app-title" content="A4 Memory" />
+    <meta name="mobile-web-app-capable" content="yes" />
+    <link rel="manifest" href="./manifest.webmanifest" />
+    <link rel="icon" href="./assets/icon.svg" type="image/svg+xml" />
+    <link rel="mask-icon" href="./assets/mask-icon.svg" color="#0b1220" />
+    <link rel="apple-touch-icon" href="./assets/icon.svg" />
+    <link rel="stylesheet" href="./css/style.css?v=20260719-3" />
+    <link rel="stylesheet" href="./css/theme.css?v=20260719-1" />
+    <link rel="stylesheet" href="./css/shell.css?v=20260719-5" />
+  </head>
+  <body class="settings-page">
+    <main class="settings-page-main" id="settingsPageMount" aria-label="应用设置"></main>
+
+    <div class="app-dock-shell is-secondary" aria-label="设置页导航">
+      <nav class="app-dock-nav" aria-label="主要导航">
+        <a class="app-dock-item" href="./index.html" data-a4-page-transition>
+          <svg viewBox="0 0 20 20" aria-hidden="true"><path d="M3.5 5.5h13v10h-13z"></path><path d="M6.5 3.5h7"></path></svg><span>学习</span>
+        </a>
+        <a class="app-dock-item" href="./records.html" data-a4-page-transition>
+          <svg viewBox="0 0 20 20" aria-hidden="true"><circle cx="10" cy="10" r="6.2"></circle><path d="M10 6.5V10l2.7 1.7"></path></svg><span>记录</span>
+        </a>
+        <span class="app-dock-item active" aria-current="page">
+          <svg viewBox="0 0 20 20" aria-hidden="true"><path d="M3.5 5h13M3.5 10h13M3.5 15h13"></path><circle cx="7" cy="5" r="1.4"></circle><circle cx="13" cy="10" r="1.4"></circle><circle cx="8.5" cy="15" r="1.4"></circle></svg><span>设置</span>
+        </span>
+      </nav>
+    </div>
+
+    <script src="./data/words.js"></script>
+    <script src="./js/utils.js?v=20260719-3"></script>
+    <script src="./js/storage.js"></script>
+    <script src="./js/cloud.js?v=20260606-4"></script>
+    <script src="./js/core/common.js?v=20260719-1"></script>
+    <script src="./js/ui/layers.js?v=20260719-3"></script>
+    <script src="./js/ui/motion.js?v=20260719-3"></script>
+    <script src="./js/core/sanitize.js?v=20260714-2"></script>
+    <script src="./js/speech.js?v=20260617-1"></script>
+    <script src="./js/updater.js?v=20260714-1"></script>
+    <script src="./js/settings.js?v=20260719-4"></script>
+    <script src="./js/settings-page.js?v=20260719-1"></script>
+  </body>
+</html>

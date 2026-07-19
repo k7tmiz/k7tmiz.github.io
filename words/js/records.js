@@ -1,5 +1,6 @@
 ;(function () {
   const escapeHtmlAttr = window.A4Sanitize.escapeHtml
+  const escapeCsvFormula = window.A4Sanitize.escapeCsvFormula
 
   function loadState() {
     return window.A4Storage?.loadState?.() || null
@@ -30,6 +31,7 @@
     buildFirstSeenRoundMap,
     formatMeaning,
     normalizeTtsPreferences,
+    normalizeThemePalette,
   } = window.A4Common || {}
 
   function formatDateTimeText(value) {
@@ -38,7 +40,7 @@
   }
 
   function escapeCsv(value) {
-    const s = String(value ?? "")
+    const s = escapeCsvFormula(value)
     if (/[",\r\n]/.test(s)) return `"${s.replaceAll('"', '""')}"`
     return s
   }
@@ -549,6 +551,7 @@
     const dailyGoalRounds = Math.max(0, Math.min(20, Math.round(Number(raw?.dailyGoalRounds) || 0)))
     const dailyGoalWords = Math.max(0, Math.min(500, Math.round(Number(raw?.dailyGoalWords) || 0)))
     const ttsPreferences = normalizeTtsPreferences?.(raw || {}) || {}
+    const themePalette = normalizeThemePalette?.(raw?.themePalette) || "classic"
     if (!raw)
       return {
         version: 2,
@@ -556,6 +559,7 @@
         meaningVisible: false,
         darkMode: false,
         themeMode: "auto",
+        themePalette,
         roundCap: 30,
         dailyGoalRounds: 0,
         dailyGoalWords: 0,
@@ -571,6 +575,7 @@
         darkMode: !!raw.darkMode,
         themeMode:
         normalizedThemeMode || (typeof raw.darkMode === "boolean" ? (raw.darkMode ? "dark" : "light") : "auto"),
+        themePalette,
         roundCap,
         dailyGoalRounds,
         dailyGoalWords,
@@ -604,6 +609,7 @@
       meaningVisible: showMeaning,
       darkMode: !!raw.darkMode,
       themeMode: normalizedThemeMode || fallbackThemeMode,
+      themePalette,
       roundCap,
       dailyGoalRounds,
       dailyGoalWords,
@@ -611,6 +617,37 @@
       ...ttsPreferences,
       rounds: [round],
       currentRoundId: round.id,
+    }
+  }
+
+  function computeRecordsSummary({ rounds, state, nowMs = Date.now() }) {
+    const list = Array.isArray(rounds) ? rounds : []
+    const source = state && typeof state === "object" ? state : {}
+    const stats = computeStudyStats(list)
+    const dueWords = source.reviewSystemEnabled === false
+      ? 0
+      : Array.from(buildLatestTermMap(list).values()).filter((entry) => {
+        const dueAt = parseIsoTime(entry?.nextReviewAt)
+        return dueAt !== null && dueAt <= nowMs
+      }).length
+    const goalRounds = Math.max(0, Math.min(20, Number(source.dailyGoalRounds) || 0))
+    const goalWords = Math.max(0, Math.min(500, Number(source.dailyGoalWords) || 0))
+    const goalParts = []
+    if (goalWords > 0) goalParts.push(`${stats.todayWords}/${goalWords} 个词`)
+    if (goalRounds > 0) goalParts.push(`${stats.todayCompletedRounds}/${goalRounds} 轮`)
+    const goalDone =
+      (goalRounds > 0 && stats.todayCompletedRounds >= goalRounds) ||
+      (goalWords > 0 && stats.todayWords >= goalWords)
+    const goalText = goalParts.length
+      ? `每日目标：${goalParts.join(" · ")} · ${goalDone ? "已达成" : "未达成"}`
+      : "每日目标：未设置"
+
+    return {
+      todayWords: stats.todayWords,
+      dueWords,
+      streak: stats.streak,
+      goalText,
+      totalText: `累计 ${stats.totalWords} 个词 · 完成 ${stats.completedRounds} 轮`,
     }
   }
 
@@ -777,7 +814,6 @@
     const viewStatusBtn = document.getElementById("viewStatusBtn")
     const roundsView = document.getElementById("rounds")
     const statusView = document.getElementById("statusView")
-    const openSettingsBtn = document.getElementById("openSettingsBtn")
     const lookupBtn = document.getElementById("lookupBtn")
     const clearBtn = document.getElementById("clearBtn")
 
@@ -795,6 +831,9 @@
     const applyTheme = () => {
       if (getResolvedDark()) document.body.classList.add("theme-dark")
       else document.body.classList.remove("theme-dark")
+      const palette = normalizeThemePalette?.(state.themePalette) || "classic"
+      document.body.classList.toggle("theme-palette-paper", palette === "paper")
+      document.body.classList.toggle("theme-palette-ocean", palette === "ocean")
     }
 
     let announcementModal = null
@@ -898,27 +937,6 @@
       })
     }
 
-    let settingsController = null
-    if (window.A4Settings && typeof window.A4Settings.createSettingsModalController === "function") {
-      settingsController = window.A4Settings.createSettingsModalController({
-        getState: () => state,
-        setState: (patch) => Object.assign(state, patch),
-        persist: () => saveState({ ...state, rounds }),
-        applyTheme,
-        onAfterChange: ({ key } = {}) => {
-          if (key === "dailyGoalRounds" || key === "dailyGoalWords") renderStats()
-          if (key === "roundCap") render()
-        },
-        getWordbookLanguage: () => {
-          const selected = String(state.selectedWordbookId || "")
-          const books = Array.isArray(state.customWordbooks) ? state.customWordbooks : []
-          const book = books.find((b) => String(b?.id || "") === selected)
-          const lang = String(book?.language || "").trim()
-          return lang || "en"
-        },
-      })
-    }
-
     let lookupController = null
     if (window.A4Lookup && typeof window.A4Lookup.createLookupModalController === "function") {
       lookupController = window.A4Lookup.createLookupModalController({
@@ -985,17 +1003,32 @@
 
     const renderStats = () => {
       if (!recordsStats) return
-      const s = computeStudyStats(rounds)
-      const goalRounds = Math.max(0, Math.min(20, Number(state.dailyGoalRounds) || 0))
-      const goalWords = Math.max(0, Math.min(500, Number(state.dailyGoalWords) || 0))
-      const goalDone =
-      (goalRounds > 0 && s.todayCompletedRounds >= goalRounds) || (goalWords > 0 && s.todayWords >= goalWords)
-      const goalRows = []
-      if (goalRounds > 0) goalRows.push(`每日目标（轮次）：${s.todayCompletedRounds}/${goalRounds}`)
-      if (goalWords > 0) goalRows.push(`每日目标（单词）：${s.todayWords}/${goalWords}`)
-      const goalLine = goalRows.length ? goalRows.join(" · ") : "每日目标：未设置"
-      const goalState = goalDone ? "已达成" : goalRows.length ? "未达成" : ""
-      recordsStats.textContent = `总学习单词：${s.totalWords} · 完成轮次：${s.completedRounds} · 连续学习：${s.streak}天\n今日学习：${s.todayWords}词 · 今日完成：${s.todayCompletedRounds}轮\n${goalLine}${goalState ? ` · ${goalState}` : ""}`
+      const summary = computeRecordsSummary({ rounds, state })
+      const grid = document.createElement("div")
+      grid.className = "records-stat-grid"
+      const cards = [
+        ["今日新增", String(summary.todayWords)],
+        ["待复习", String(summary.dueWords)],
+        ["连续学习", `${summary.streak} 天`],
+      ]
+      for (const [labelText, valueText] of cards) {
+        const card = document.createElement("div")
+        card.className = "records-stat-card"
+        const label = document.createElement("span")
+        label.textContent = labelText
+        const value = document.createElement("strong")
+        value.textContent = valueText
+        card.append(label, value)
+        grid.appendChild(card)
+      }
+      const detail = document.createElement("div")
+      detail.className = "records-stat-detail"
+      const total = document.createElement("span")
+      total.textContent = summary.totalText
+      const goal = document.createElement("span")
+      goal.textContent = summary.goalText
+      detail.append(total, goal)
+      recordsStats.replaceChildren(grid, detail)
     }
 
     render()
@@ -1030,10 +1063,6 @@
 
     printBtn.addEventListener("click", () => {
       openPrintRoundsAsPdf(rounds.map((r, idx) => ({ round: r, roundNo: idx + 1 })))
-    })
-
-    openSettingsBtn.addEventListener("click", () => {
-      if (settingsController) settingsController.open()
     })
 
     lookupBtn?.addEventListener("click", () => {

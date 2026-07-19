@@ -4,6 +4,7 @@
   const { showConfirmDialog } = window.A4Utils || {}
 
   const normalizeThemeMode = window.A4Common?.normalizeThemeMode
+  const normalizeThemePalette = window.A4Common?.normalizeThemePalette || (() => "classic")
   const normalizeRoundCap = window.A4Common?.normalizeRoundCap
   const normalizeAccent = window.A4Common?.normalizeAccent
   const normalizeVoiceMode = window.A4Common?.normalizeVoiceMode
@@ -15,9 +16,83 @@
   const normalizeRoundType = window.A4Common?.normalizeRoundType
   const ROUND_TYPE_NORMAL = window.A4Common?.ROUND_TYPE_NORMAL || "normal"
   const normalizeWordObject = window.A4Common?.normalizeWordObject
+  const getWordbooksFromGlobal = window.A4Common?.getWordbooksFromGlobal || (() => [])
   const ACCOUNT_REGISTER_CODE_COOLDOWN_KEY = "a4-memory:register-code-cooldown:v1"
   const ACCOUNT_RESET_CODE_COOLDOWN_KEY = "a4-memory:reset-code-cooldown:v1"
   const ACCOUNT_SYNC_META_KEY = "a4-memory:cloud-sync-meta:v1"
+
+  const AI_PROVIDER_PRESETS = {
+    openai: {
+      baseUrl: "https://api.openai.com/v1",
+      models: ["gpt-4o-mini", "gpt-4.1-mini", "gpt-4o"],
+      defaultModel: "gpt-4o-mini",
+    },
+    gemini: {
+      baseUrl: "https://generativelanguage.googleapis.com/v1beta/openai",
+      models: ["gemini-1.5-flash", "gemini-1.5-pro"],
+      defaultModel: "gemini-1.5-flash",
+    },
+    deepseek: {
+      baseUrl: "https://api.deepseek.com/v1",
+      models: ["deepseek-chat", "deepseek-reasoner"],
+      defaultModel: "deepseek-chat",
+    },
+    siliconcloud: {
+      baseUrl: "https://api.siliconflow.cn/v1",
+      models: ["deepseek-ai/DeepSeek-V3", "deepseek-ai/DeepSeek-R1"],
+      defaultModel: "deepseek-ai/DeepSeek-V3",
+    },
+    custom: {
+      baseUrl: "",
+      models: [],
+      defaultModel: "",
+    },
+  }
+
+  function getAiPreset(provider) {
+    const normalized = normalizeAiProvider(provider)
+    return AI_PROVIDER_PRESETS[normalized] || AI_PROVIDER_PRESETS.custom
+  }
+
+  function getAiEndpointOrigin(value) {
+    const text = String(value || "").trim()
+    if (!text) return ""
+    try {
+      return new URL(text).origin
+    } catch {
+      return `invalid:${text}`
+    }
+  }
+
+  function shouldResetAiApiKey({ prevConfig, nextProvider, nextBaseUrl }) {
+    const prevProvider = normalizeAiProvider(prevConfig?.provider)
+    const normalizedNextProvider = normalizeAiProvider(nextProvider)
+    if (prevProvider !== normalizedNextProvider) return true
+    return getAiEndpointOrigin(prevConfig?.baseUrl) !== getAiEndpointOrigin(nextBaseUrl)
+  }
+
+  function computeAiConfigOnProviderChange({ prevConfig, nextProvider }) {
+    const prevProvider = normalizeAiProvider(prevConfig?.provider)
+    const nextProv = normalizeAiProvider(nextProvider)
+    const prevPreset = getAiPreset(prevProvider)
+    const nextPreset = getAiPreset(nextProv)
+
+    let baseUrl = String(prevConfig?.baseUrl || "").trim()
+    let model = String(prevConfig?.model || "").trim()
+    if (!baseUrl || (prevPreset.baseUrl && baseUrl === prevPreset.baseUrl)) {
+      baseUrl = String(nextPreset.baseUrl || "").trim()
+    }
+    if (!model || (prevPreset.defaultModel && model === prevPreset.defaultModel)) {
+      model = String(nextPreset.defaultModel || "").trim()
+    }
+
+    return {
+      provider: nextProv,
+      baseUrl,
+      apiKey: prevProvider === nextProv ? String(prevConfig?.apiKey || "").trim() : "",
+      model,
+    }
+  }
 
   function buildTestSpeechOptions({ text, state, wordbookLanguage, languageBase }) {
     const source = state && typeof state === "object" ? state : {}
@@ -110,6 +185,7 @@
 
   function normalizePendingKind(value) {
     const v = String(value || "").trim().toLowerCase()
+    if (!v) return ""
     if (v === "due") return "due"
     const status = normalizeStatus(v)
     if (status === "mastered" || status === "learning" || status === "unknown") return status
@@ -201,6 +277,7 @@
     next.version = 2
 
     next.themeMode = normalizeThemeMode(next.themeMode)
+    next.themePalette = normalizeThemePalette(next.themePalette)
     if (typeof next.darkMode !== "boolean") {
       const mq = window.matchMedia ? window.matchMedia("(prefers-color-scheme: dark)") : null
       next.darkMode = next.themeMode === "dark" ? true : next.themeMode === "light" ? false : !!mq?.matches
@@ -308,7 +385,11 @@
       .filter(Boolean)
 
     next.selectedWordbookId = typeof next.selectedWordbookId === "string" ? next.selectedWordbookId : ""
-    if (next.selectedWordbookId && !next.customWordbooks.some((b) => b.id === next.selectedWordbookId)) {
+    const validWordbookIds = new Set([
+      ...getWordbooksFromGlobal().map((book) => String(book?.id || "")).filter(Boolean),
+      ...next.customWordbooks.map((book) => String(book?.id || "")).filter(Boolean),
+    ])
+    if (next.selectedWordbookId && !validWordbookIds.has(next.selectedWordbookId)) {
       next.selectedWordbookId = ""
     }
 
@@ -632,6 +713,16 @@
                 </select>
               </div>
             </div>
+            <div class="form-row form-row-palette">
+              <div class="form-label">配色方案</div>
+              <div class="form-control">
+                <div class="theme-palette-options" id="themePaletteGroup" role="radiogroup" aria-label="配色方案">
+                  <button class="theme-palette-option" data-theme-palette="classic" type="button" role="radio" aria-checked="true">经典<span class="theme-palette-swatch theme-palette-swatch-classic" aria-hidden="true"></span></button>
+                  <button class="theme-palette-option" data-theme-palette="paper" type="button" role="radio" aria-checked="false">纸张绿<span class="theme-palette-swatch theme-palette-swatch-paper" aria-hidden="true"></span></button>
+                  <button class="theme-palette-option" data-theme-palette="ocean" type="button" role="radio" aria-checked="false">海蓝<span class="theme-palette-swatch theme-palette-swatch-ocean" aria-hidden="true"></span></button>
+                </div>
+              </div>
+            </div>
             <div class="form-row">
               <div class="form-label">每日目标轮次</div>
               <div class="form-control"><input id="dailyGoalRoundsInput" class="text-input" type="number" min="0" max="20" value="0" /></div>
@@ -735,10 +826,10 @@
             </div>
                   </div>
                 </details>
-                <details class="settings-accordion-card settings-accordion-wide">
+                <details class="settings-accordion-card settings-accordion-wide" id="offlineTtsCard" open>
                   <summary>离线语音包</summary>
                   <div class="settings-accordion-content">
-            <div class="form-row offline-tts-section hidden" id="offlineTtsSection">
+            <div class="form-row offline-tts-section" id="offlineTtsSection">
               <div class="offline-tts-header">
                 <div class="form-label">离线语音包</div>
                 <button class="ghost" id="offlineTtsRefreshBtn" type="button">刷新</button>
@@ -998,6 +1089,11 @@
 
   function setModalVisible(modal, visible) {
     if (!modal) return
+    const sharedSetLayerVisible = window.A4UI?.setLayerVisible || window.A4Common?.setModalVisible
+    if (sharedSetLayerVisible) {
+      sharedSetLayerVisible(modal, visible)
+      return
+    }
     if (visible) {
       modal.classList.remove("hidden")
       modal.setAttribute("aria-hidden", "false")
@@ -1014,6 +1110,8 @@
     applyTheme,
     onAfterChange,
     getWordbookLanguage,
+    presentation = "modal",
+    onClose,
   }) {
     window.A4Speech?.installSpeech?.({
       onVoicesChanged: () => {
@@ -1028,6 +1126,17 @@
       document.body.appendChild(modal)
     }
 
+    const pagePresentation = presentation === "page"
+    if (pagePresentation) {
+      modal.classList.add("settings-page-root")
+      modal.classList.remove("modal")
+      modal.querySelector("#settingsBackdrop")?.setAttribute("hidden", "")
+      const panel = modal.querySelector(".modal-panel")
+      panel?.setAttribute("role", "region")
+      panel?.removeAttribute("aria-modal")
+      modal.querySelector("#closeSettingsBtn")?.replaceChildren("返回")
+    }
+
     const modalBody = modal.querySelector(".modal-body")
     const settingsNavigation = installSettingsCategoryNavigation({
       tabs: modal.querySelectorAll(".settings-category-tab"),
@@ -1040,6 +1149,7 @@
       backdrop: modal.querySelector("#settingsBackdrop"),
       closeBtn: modal.querySelector("#closeSettingsBtn"),
       themeModeSelect: modal.querySelector("#themeModeSelect"),
+      themePaletteButtons: Array.from(modal.querySelectorAll("[data-theme-palette]")),
       dailyGoalRoundsInput: modal.querySelector("#dailyGoalRoundsInput"),
       dailyGoalWordsInput: modal.querySelector("#dailyGoalWordsInput"),
       roundCapInput: modal.querySelector("#roundCapInput"),
@@ -1065,6 +1175,7 @@
       onlineTtsProviderRow: modal.querySelector("#onlineTtsProviderRow"),
       onlineTtsPrivacyHint: modal.querySelector("#onlineTtsPrivacyHint"),
       offlineTtsSection: modal.querySelector("#offlineTtsSection"),
+      offlineTtsCard: modal.querySelector("#offlineTtsCard"),
       offlineTtsList: modal.querySelector("#offlineTtsList"),
       offlineTtsRefreshBtn: modal.querySelector("#offlineTtsRefreshBtn"),
       offlineTtsHint: modal.querySelector("#offlineTtsHint"),
@@ -1691,6 +1802,13 @@
       const installedMap = new Map((installed || []).map((v) => [String(v?.id || ""), v]))
       const voices = manifest?.voices || []
       list.innerHTML = ""
+      const currentMode = window.A4Common?.normalizeTtsMode?.(getStateSafe()?.ttsMode) || "online"
+      if (currentMode === "offline" && installedMap.size === 0) {
+        const warning = document.createElement("div")
+        warning.className = "form-help offline-voice-warning"
+        warning.textContent = "离线模式尚未安装语音包，请先下载至少一个对应语言模型。"
+        list.appendChild(warning)
+      }
       if (offlineUiState.manifestErr) {
         setOfflineTtsError("加载语音列表", offlineUiState.manifestErr)
       }
@@ -1809,6 +1927,12 @@
     function render() {
       const state = getStateSafe()
       if (dom.themeModeSelect) dom.themeModeSelect.value = normalizeThemeMode(state?.themeMode)
+      const themePalette = normalizeThemePalette(state?.themePalette)
+      for (const button of dom.themePaletteButtons) {
+        const active = button.dataset.themePalette === themePalette
+        button.classList.toggle("active", active)
+        button.setAttribute("aria-checked", active ? "true" : "false")
+      }
       if (dom.dailyGoalRoundsInput) dom.dailyGoalRoundsInput.value = String(clamp(state?.dailyGoalRounds || 0, 0, 20))
       if (dom.dailyGoalWordsInput) dom.dailyGoalWordsInput.value = String(clamp(state?.dailyGoalWords || 0, 0, 500))
       if (dom.roundCapInput) dom.roundCapInput.value = String(normalizeRoundCap(state?.roundCap))
@@ -1848,9 +1972,17 @@
         dom.onlineTtsProviderRow.classList.toggle("hidden", ttsMode !== "online")
       if (dom.onlineTtsPrivacyHint)
         dom.onlineTtsPrivacyHint.classList.toggle("hidden", ttsMode !== "online")
-      if (dom.offlineTtsSection)
-        dom.offlineTtsSection.classList.toggle("hidden", ttsMode !== "offline")
-      if (ttsMode === "offline") renderOfflineVoiceList()
+      if (dom.offlineTtsSection) dom.offlineTtsSection.classList.remove("hidden")
+      if (dom.offlineTtsCard && ttsMode === "offline") dom.offlineTtsCard.open = true
+      if (dom.offlineTtsHint) {
+        dom.offlineTtsHint.textContent =
+          ttsMode === "online"
+            ? "在线发音不可用时，会按已安装离线语音包 → 系统语音兜底；模型可在桌面端和 Android 应用中管理。"
+            : ttsMode === "offline"
+              ? "离线模式只使用已安装模型，并在失败时回退系统语音，不会联网。"
+              : "当前首选系统语音；可在此预先管理离线模型，供离线模式和在线发音兜底使用。"
+      }
+      renderOfflineVoiceList()
       const lookupOnlineEnabled = typeof state?.lookupOnlineEnabled === "boolean" ? state.lookupOnlineEnabled : true
       const lookupOnlineSource = String(state?.lookupOnlineSource || "").trim().toLowerCase() === "custom" ? "custom" : "builtin"
       const lookupSpanishConjugationEnabled =
@@ -1882,41 +2014,8 @@
       updateAccountUi()
     }
 
-    const AI_PROVIDER_PRESETS = {
-      openai: {
-        baseUrl: "https://api.openai.com/v1",
-        models: ["gpt-4o-mini", "gpt-4.1-mini", "gpt-4o"],
-        defaultModel: "gpt-4o-mini",
-      },
-      gemini: {
-        baseUrl: "https://generativelanguage.googleapis.com/v1beta/openai",
-        models: ["gemini-1.5-flash", "gemini-1.5-pro"],
-        defaultModel: "gemini-1.5-flash",
-      },
-      deepseek: {
-        baseUrl: "https://api.deepseek.com/v1",
-        models: ["deepseek-chat", "deepseek-reasoner"],
-        defaultModel: "deepseek-chat",
-      },
-      siliconcloud: {
-        baseUrl: "https://api.siliconflow.cn/v1",
-        models: ["deepseek-ai/DeepSeek-V3", "deepseek-ai/DeepSeek-R1"],
-        defaultModel: "deepseek-ai/DeepSeek-V3",
-      },
-      custom: {
-        baseUrl: "",
-        models: [],
-        defaultModel: "",
-      },
-    }
-
     function normalizeAiProviderLocal(value) {
       return normalizeAiProvider(value)
-    }
-
-    function getAiPreset(provider) {
-      const p = normalizeAiProviderLocal(provider)
-      return AI_PROVIDER_PRESETS[p] || AI_PROVIDER_PRESETS.custom
     }
 
     function getAiConfigFromState(state) {
@@ -1933,10 +2032,17 @@
     function patchAiConfig(patch, { syncInputs } = {}) {
       const state = getStateSafe()
       const prev = getAiConfigFromState(state)
+      const nextProvider = patch.provider != null ? normalizeAiProviderLocal(patch.provider) : prev.provider
+      const nextBaseUrl = patch.baseUrl != null ? String(patch.baseUrl || "").trim() : prev.baseUrl
       const next = {
-        provider: patch.provider != null ? normalizeAiProviderLocal(patch.provider) : prev.provider,
-        baseUrl: patch.baseUrl != null ? String(patch.baseUrl || "").trim() : prev.baseUrl,
-        apiKey: patch.apiKey != null ? String(patch.apiKey || "").trim() : prev.apiKey,
+        provider: nextProvider,
+        baseUrl: nextBaseUrl,
+        apiKey:
+          patch.apiKey != null
+            ? String(patch.apiKey || "").trim()
+            : shouldResetAiApiKey({ prevConfig: prev, nextProvider, nextBaseUrl })
+              ? ""
+              : prev.apiKey,
         model: patch.model != null ? String(patch.model || "").trim() : prev.model,
       }
       setStateSafe({ aiConfig: next })
@@ -1947,22 +2053,6 @@
       }
       persistSafe()
       afterChange("aiConfig")
-    }
-
-    function computeAiConfigOnProviderChange({ prevConfig, nextProvider }) {
-      const prevProvider = normalizeAiProviderLocal(prevConfig?.provider)
-      const nextProv = normalizeAiProviderLocal(nextProvider)
-      const prevPreset = getAiPreset(prevProvider)
-      const nextPreset = getAiPreset(nextProv)
-
-      let baseUrl = String(prevConfig?.baseUrl || "").trim()
-      let model = String(prevConfig?.model || "").trim()
-      const apiKey = String(prevConfig?.apiKey || "").trim()
-
-      if (!baseUrl || (prevPreset.baseUrl && baseUrl === prevPreset.baseUrl)) baseUrl = String(nextPreset.baseUrl || "").trim()
-      if (!model || (prevPreset.defaultModel && model === prevPreset.defaultModel)) model = String(nextPreset.defaultModel || "").trim()
-
-      return { provider: nextProv, baseUrl, apiKey, model }
     }
 
     function renderAiProviderUi() {
@@ -2176,10 +2266,19 @@
       setAccountStatsExpanded(shouldExpandAccountStatsByDefault(accountStatsWideQuery))
       render()
       renderAiProviderUi()
+      if (pagePresentation) {
+        dom.modal.classList.remove("hidden", "a4-layer-closing")
+        dom.modal.setAttribute("aria-hidden", "false")
+        return
+      }
       setModalVisible(dom.modal, true)
     }
 
     function close() {
+      if (pagePresentation) {
+        if (typeof onClose === "function") onClose()
+        return
+      }
       setModalVisible(dom.modal, false)
     }
 
@@ -2197,6 +2296,17 @@
       persistSafe()
       afterChange("themeMode")
     })
+
+    for (const button of dom.themePaletteButtons) {
+      button.addEventListener("click", () => {
+        const themePalette = normalizeThemePalette(button.dataset.themePalette)
+        setStateSafe({ themePalette })
+        if (typeof applyTheme === "function") applyTheme()
+        render()
+        persistSafe()
+        afterChange("themePalette")
+      })
+    }
 
     const sanitizeVerificationCodeInput = (input) => {
       if (!input) return
@@ -3290,12 +3400,13 @@
     return { open, close, render, updateVoiceUi, renderVoiceSelect, renderVoiceModeUi, updateAccountUi }
   }
 
-  if (!document.getElementById("settingsModal")) {
+  const settingsPageMount = document.getElementById("settingsPageMount")
+  if (settingsPageMount && !document.getElementById("settingsModal")) {
     try {
-      document.body.appendChild(buildSettingsModalDom())
+      settingsPageMount.appendChild(buildSettingsModalDom())
     } catch { /* ignore */ }
   }
-  if (!document.getElementById("aiPreviewModal")) {
+  if (settingsPageMount && !document.getElementById("aiPreviewModal")) {
     try {
       document.body.appendChild(buildAiPreviewModalDom())
     } catch { /* ignore */ }
@@ -3303,11 +3414,14 @@
 
   window.A4Settings = {
     normalizeThemeMode,
+    normalizeThemePalette,
     normalizeRoundCap,
     normalizeAccent,
     normalizePronunciationLang,
     normalizeVoiceMode,
     normalizeImportedState,
+    computeAiConfigOnProviderChange,
+    shouldResetAiApiKey,
     buildTestSpeechOptions,
     formatTestSpeakResult,
     buildOfflineVoiceDownloadArgs,

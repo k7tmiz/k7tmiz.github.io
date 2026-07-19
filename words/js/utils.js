@@ -69,6 +69,23 @@
     return typeof getTauriInvoke() === "function" && /Android/i.test(navigator.userAgent || "")
   }
 
+  function setUtilityLayerVisible(modal, visible) {
+    if (!modal) return
+    const sharedSetLayerVisible = window.A4UI?.setLayerVisible || window.A4Common?.setModalVisible
+    if (sharedSetLayerVisible) {
+      sharedSetLayerVisible(modal, visible)
+      return
+    }
+    modal.classList.toggle("hidden", !visible)
+    modal.setAttribute("aria-hidden", visible ? "false" : "true")
+  }
+
+  function closeUtilityLayer(modal) {
+    if (window.A4UI?.closeLayer) return window.A4UI.closeLayer(modal)
+    setUtilityLayerVisible(modal, false)
+    return Promise.resolve(true)
+  }
+
   function showConfirmDialog(messageOrOpts) {
     const opts = typeof messageOrOpts === "string" ? { message: messageOrOpts } : messageOrOpts || {}
     const {
@@ -112,6 +129,7 @@
       closeBtn.className = "ghost records-confirm-close"
       closeBtn.type = "button"
       closeBtn.textContent = "关闭"
+      closeBtn.setAttribute("data-layer-close", "")
       actionsHead.appendChild(closeBtn)
       header.appendChild(actionsHead)
 
@@ -138,7 +156,8 @@
       panel.appendChild(actions)
 
       const modal = document.createElement("div")
-      modal.className = "modal"
+      modal.className = "modal hidden"
+      modal.setAttribute("aria-hidden", "true")
       modal.appendChild(backdrop)
       modal.appendChild(panel)
       document.body.appendChild(modal)
@@ -147,14 +166,19 @@
       const finish = (value) => {
         if (settled) return
         settled = true
-        document.body.removeChild(modal)
-        resolve(value)
+        Promise.resolve(closeUtilityLayer(modal))
+          .catch(() => false)
+          .then(() => {
+            if (modal.parentElement === document.body) document.body.removeChild(modal)
+            resolve(value)
+          })
       }
 
       backdrop.addEventListener("click", () => finish(false))
       closeBtn.addEventListener("click", () => finish(false))
       cancelBtn.addEventListener("click", () => finish(false))
       okBtn.addEventListener("click", () => finish(true))
+      setUtilityLayerVisible(modal, true)
     })
   }
 
@@ -240,8 +264,7 @@
   function closeAndroidSelectPicker() {
     const modal = document.getElementById("androidSelectPickerModal")
     if (!modal) return
-    modal.classList.add("hidden")
-    modal.setAttribute("aria-hidden", "true")
+    setUtilityLayerVisible(modal, false)
     document.querySelectorAll(".android-select-picker-btn[aria-expanded='true']").forEach((button) => {
       button.setAttribute("aria-expanded", "false")
     })
@@ -304,8 +327,7 @@
       }
     }
 
-    modal.classList.remove("hidden")
-    modal.setAttribute("aria-hidden", "false")
+    setUtilityLayerVisible(modal, true)
     select.__a4AndroidSelectButton?.setAttribute("aria-expanded", "true")
   }
 
