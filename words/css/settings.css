@@ -1,0 +1,1618 @@
+/* ==========================================================================
+   设置视图：页面式仪表盘、五分类滑动导航、编号分区与细线表单行
+   ========================================================================== */
+
+body.settings-page {
+  min-height: 100dvh;
+}
+
+body.settings-page .settings-page-main {
+  width: min(100%, 1120px);
+  margin: 0 auto;
+  padding:
+    clamp(28px, 4vw, 48px)
+    max(clamp(16px, 4vw, 44px), env(safe-area-inset-right))
+    calc(140px + env(safe-area-inset-bottom))
+    max(clamp(16px, 4vw, 44px), env(safe-area-inset-left));
+}
+
+#settingsModal {
+  --primary: var(--accent);
+  --shadow-sm: var(--shadow);
+  color: var(--text);
+}
+
+body.settings-page #settingsModal.settings-page-root {
+  position: static;
+  display: block;
+  padding: 0;
+}
+
+body.settings-page #settingsModal .modal-backdrop {
+  display: none;
+}
+
+body.settings-page #settingsModal .modal-panel {
+  width: 100%;
+  max-width: 100%;
+  height: auto;
+  min-height: 0;
+  max-height: none;
+  overflow: visible;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
+  animation: none;
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+}
+
+/* AI Model Controls */
+.ai-model-control {
+  width: 100%;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 8px;
+  align-items: center;
+}
+
+.ai-model-picker-btn {
+  min-height: 42px;
+  padding: 8px 14px;
+  white-space: nowrap;
+  border-radius: var(--radius-md);
+}
+
+/* 1. Header & Page Intro：与内容同一阅读栏，保存状态随说明文字排在标题下方 */
+#settingsModal .settings-page-intro,
+#settingsModal .settings-shell {
+  width: min(100%, 720px);
+  margin-inline: auto;
+}
+
+.settings-page-intro {
+  min-width: 0;
+  margin-bottom: clamp(24px, 3.5vw, 36px);
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 14px;
+  color: var(--text);
+  padding-bottom: 0;
+}
+
+.settings-page-heading {
+  min-width: 0;
+}
+
+.settings-page-kicker {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 0;
+  border-radius: 0;
+  background: transparent;
+  border: none;
+  margin-bottom: 10px;
+  color: var(--muted);
+  font-size: var(--fs-2xs);
+  font-weight: var(--fw-bold);
+}
+
+.settings-page-intro h1 {
+  margin: 0;
+  font-size: var(--fs-display);
+  line-height: 1.04;
+}
+
+.settings-page-intro p {
+  margin: 6px 0 0;
+  color: var(--muted);
+  font-size: var(--fs-md);
+  line-height: 1.5;
+  font-weight: var(--fw-medium);
+}
+
+.settings-page-status {
+  min-height: 0;
+  padding: 0;
+  flex: 0 0 auto;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  color: var(--muted);
+  font-size: var(--fs-xs);
+  font-weight: var(--fw-semibold);
+}
+
+@keyframes settings-saved-pulse {
+  0% {
+    box-shadow: 0 0 0 0 color-mix(in srgb, var(--success) 45%, transparent);
+  }
+  100% {
+    box-shadow: 0 0 0 9px color-mix(in srgb, var(--success) 0%, transparent);
+  }
+}
+
+.settings-page-status.is-saved {
+  color: var(--success);
+}
+
+.settings-page-status.is-saved .settings-page-status-dot {
+  animation: settings-saved-pulse 900ms var(--motion-ease-out) both;
+}
+
+.settings-page-status-dot {
+  width: 8px;
+  height: 8px;
+  flex: 0 0 auto;
+  border-radius: 999px;
+  background: var(--success);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--success) 24%, transparent);
+}
+
+/* 2. Shell & 5-Category Navigation Rail */
+#settingsModal .settings-shell {
+  min-height: 0;
+  flex: 0 0 auto;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  align-content: start;
+  align-items: stretch;
+  gap: clamp(16px, 2vw, 22px);
+}
+
+#settingsModal .settings-category-tabs {
+  --settings-tab-index: 0;
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: 0;
+  height: 48px;
+  padding: 4px;
+  user-select: none;
+  touch-action: pan-y;
+  border: 1px solid var(--glass-border);
+  border-radius: 999px;
+  background: var(--glass);
+  box-shadow:
+    inset 0 1px 0 color-mix(in srgb, var(--glass-hi) 65%, transparent),
+    var(--dock-shadow);
+  backdrop-filter: blur(var(--glass-blur)) saturate(180%);
+  -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(180%);
+  transform: translateX(var(--a4-dock-shift, 0px)) scale(calc(var(--a4-dock-sx, 1) * var(--a4-dock-press, 1)), calc(var(--a4-dock-sy, 1) * var(--a4-dock-press, 1)));
+  transition: transform 260ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+#settingsModal .settings-category-tabs.is-lifting {
+  --a4-dock-press: 0.988;
+}
+
+#settingsModal .settings-category-tabs.is-dragging,
+#settingsModal .settings-category-tabs.is-dragging .settings-category-indicator {
+  transition: none;
+}
+
+#settingsModal .settings-category-tabs.is-lifting .settings-category-indicator,
+#settingsModal .settings-category-tabs.is-dragging .settings-category-indicator {
+  --a4-dock-lift: 1.22;
+  --a4-dock-float: -1.5px;
+  border-color: color-mix(in srgb, var(--glass-border) 50%, transparent);
+  box-shadow:
+    inset 0 1px 0 color-mix(in srgb, var(--glass-hi) 72%, transparent),
+    inset 0 -10px 16px color-mix(in srgb, var(--text) 8%, transparent),
+    0 10px 24px color-mix(in srgb, var(--text) 18%, transparent);
+  filter:
+    drop-shadow(calc(0.35px + var(--a4-dock-motion, 0) * 0.85px) 0 0 rgba(255, 45, 85, 0.24))
+    drop-shadow(calc(-0.35px - var(--a4-dock-motion, 0) * 0.85px) 0 0 rgba(0, 210, 255, 0.26));
+}
+
+#settingsModal .settings-category-tabs::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  border-radius: inherit;
+  background: linear-gradient(
+    180deg,
+    color-mix(in srgb, var(--glass-hi) 35%, transparent),
+    color-mix(in srgb, var(--glass-hi) 8%, transparent) 40%,
+    transparent 64%
+  );
+  pointer-events: none;
+}
+
+#settingsModal .settings-category-tabs::after {
+  content: "";
+  position: absolute;
+  inset: -1px;
+  z-index: 3;
+  border-radius: inherit;
+  background: linear-gradient(
+    105deg,
+    transparent 14%,
+    rgba(255, 255, 255, 0.17) calc(46% + var(--a4-dock-sweep, 0px)),
+    rgba(255, 255, 255, 0.05) calc(54% + var(--a4-dock-sweep, 0px)),
+    transparent 86%
+  );
+  box-shadow:
+    inset calc(var(--a4-dock-dir, 0) * (7px + var(--a4-dock-over, 0) * 9px)) 0 14px -8px rgba(255, 255, 255, 0.5),
+    inset calc(var(--a4-dock-dir, 0) * -2px) 0 8px -4px color-mix(in srgb, var(--text) 10%, transparent);
+  opacity: var(--a4-dock-glow, var(--a4-dock-motion, 0));
+  pointer-events: none;
+}
+
+#settingsModal .settings-category-tabs.is-clamped::after {
+  box-shadow:
+    inset calc(var(--a4-dock-dir, 0) * 13px) 0 20px -8px rgba(255, 255, 255, 0.64),
+    inset calc(var(--a4-dock-dir, 0) * -3px) 0 10px -4px color-mix(in srgb, var(--text) 15%, transparent);
+}
+
+body.settings-page #settingsModal .settings-category-tabs {
+  position: sticky;
+  z-index: 18;
+  top: 0;
+  align-self: stretch;
+}
+
+#settingsModal .settings-category-indicator {
+  position: absolute;
+  z-index: 1;
+  top: 4px;
+  bottom: 4px;
+  left: 4px;
+  width: calc((100% - 8px) / 5);
+  --a4-dock-lift: 1;
+  border: 1px solid var(--glass-border);
+  border-radius: 999px;
+  background: var(--glass-solid);
+  box-shadow:
+    inset 0 1px 0 color-mix(in srgb, var(--glass-hi) 75%, transparent),
+    0 4px 14px -4px color-mix(in srgb, var(--text) 16%, transparent);
+  opacity: 0;
+  pointer-events: none;
+  transform: translate3d(calc(var(--settings-tab-index, 0) * 100% + var(--a4-dock-drag, 0px)), var(--a4-dock-float, 0px), 0) scale(var(--a4-dock-lift, 1));
+  transition: transform var(--motion-duration-move) var(--motion-ease-out), box-shadow 200ms ease, opacity var(--motion-duration-fast) ease-out;
+  will-change: transform;
+}
+
+#settingsModal .settings-category-tabs.is-indicator-ready .settings-category-indicator {
+  opacity: 1;
+}
+
+#settingsModal .settings-category-indicator::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background:
+    radial-gradient(130% 100% at 50% 110%, color-mix(in srgb, var(--glass-hi) 42%, transparent), transparent 64%),
+    linear-gradient(180deg, color-mix(in srgb, var(--glass-hi) 16%, transparent), transparent 42%);
+  opacity: 0;
+  transition: opacity 180ms ease;
+  pointer-events: none;
+}
+
+#settingsModal .settings-category-tabs.is-lifting .settings-category-indicator::after,
+#settingsModal .settings-category-tabs.is-dragging .settings-category-indicator::after {
+  opacity: 1;
+}
+
+#settingsModal .settings-category-tab {
+  position: relative;
+  z-index: 2;
+  -webkit-user-drag: none;
+  min-width: 0;
+  height: 40px;
+  min-height: 40px;
+  padding: 0 10px;
+  border: 0;
+  border-radius: 999px;
+  background: transparent;
+  box-shadow: none;
+  color: var(--muted);
+  font-size: var(--fs-sm);
+  font-weight: var(--fw-bold);
+  white-space: nowrap;
+  transition: color 180ms ease, transform 140ms ease, background 180ms ease;
+}
+
+#settingsModal .settings-category-tab:hover {
+  background: transparent;
+  color: var(--text);
+}
+
+#settingsModal .settings-category-tab:active {
+  transform: scale(0.97);
+}
+
+#settingsModal .settings-category-tab[aria-selected="true"] {
+  border-color: transparent;
+  background: transparent;
+  color: var(--text);
+}
+
+#settingsModal .settings-category-tab:focus-visible {
+  outline: 2px solid var(--text);
+  outline-offset: 2px;
+}
+
+#settingsModal .modal-body {
+  min-width: 0;
+  min-height: 0;
+  padding: 0;
+  overflow: visible;
+}
+
+#settingsModal .settings-category-panel {
+  min-width: 0;
+}
+
+#settingsModal .settings-category-panel[hidden] {
+  display: none;
+}
+
+/* 3. Open Section Grid（分区按序号编号） */
+#settingsModal .settings-accordion-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: clamp(40px, 6vw, 56px);
+  align-items: start;
+  counter-reset: settings-section;
+}
+
+#settingsModal .settings-category-panel > .panel,
+#settingsModal .settings-accordion-card {
+  color: var(--text);
+}
+
+#settingsModal .settings-category-panel > .panel {
+  margin: 0;
+  padding: 4px 0 0;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+}
+
+#settingsModal .settings-category-panel > .panel .section-title {
+  margin-bottom: 18px;
+  font-family: var(--font-display);
+  font-size: var(--fs-3xl);
+  font-weight: var(--display-weight);
+  letter-spacing: var(--display-tracking);
+}
+
+/* Permanent Open Bento Card Styles */
+#settingsModal .settings-accordion-card {
+  min-width: 0;
+  align-self: start;
+  overflow: clip;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
+  transition: none;
+}
+
+#settingsModal .settings-accordion-card:hover {
+  border-color: transparent;
+  box-shadow: none;
+  transform: none;
+}
+
+/* Static Card Section Header */
+#settingsModal .settings-accordion-card > .settings-card-header,
+#settingsModal .settings-accordion-card > summary {
+  position: relative;
+  min-height: 44px;
+  padding: 10px 0 12px;
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+  color: var(--text);
+  background: transparent;
+  border-bottom: 1px solid var(--text);
+  cursor: default;
+  user-select: none;
+  font-family: var(--font-display);
+  font-size: var(--fs-xl);
+  font-weight: var(--display-weight);
+  letter-spacing: -0.01em;
+  counter-increment: settings-section;
+}
+
+#settingsModal .settings-accordion-card > .settings-card-header::before {
+  content: counter(settings-section, decimal-leading-zero);
+  color: var(--muted);
+  font-family: var(--font-ui);
+  font-size: var(--fs-2xs);
+  font-weight: var(--fw-bold);
+  letter-spacing: 0.08em;
+  font-variant-numeric: tabular-nums;
+}
+
+#settingsModal .settings-accordion-content {
+  display: grid !important;
+  padding: 4px 0 8px;
+  gap: 0;
+  background: transparent;
+}
+
+/* 分组卡片：每个分区的设置行收进一张圆角表面，标题位于卡片上方；行间分隔线留在卡片内 */
+#settingsModal .settings-accordion-card > .settings-card-header {
+  min-height: 0;
+  margin-bottom: 10px;
+  padding: 0 4px;
+  border-bottom: 0;
+  font-size: var(--fs-lg);
+}
+
+#settingsModal .settings-accordion-content,
+#settingsModal #accountLoggedOut,
+#settingsModal #accountLoggedIn {
+  padding: 4px 20px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  background: var(--card);
+  box-shadow: var(--group-shadow, none);
+}
+
+#settingsModal #accountLoggedOut,
+#settingsModal #accountLoggedIn {
+  padding-block: 18px 20px;
+}
+
+#settingsModal .settings-accordion-content > .form-row:last-child,
+#settingsModal .settings-accordion-content > .form-help:last-child,
+#settingsModal .settings-accordion-content > :last-child > .form-row:last-child {
+  border-bottom: 0;
+}
+
+#settingsModal .settings-accordion-content > .form-help:last-child {
+  padding-bottom: 16px;
+}
+
+/* 4. Form Layouts & Seamless Rows */
+#settingsModal .form-row {
+  margin: 0;
+  min-height: 60px;
+  padding: 14px 0;
+  display: grid;
+  grid-template-columns: 130px minmax(0, 1fr);
+  align-items: center;
+  gap: 16px;
+  background: transparent;
+  border-bottom: 1px solid var(--border2);
+}
+
+#settingsModal .form-row:last-child {
+  border-bottom: 0;
+}
+
+/* 说明文字紧贴所属的表单行，分隔线移到说明下方 */
+#settingsModal .form-row:has(+ .form-help) {
+  min-height: 0;
+  padding-bottom: 4px;
+  border-bottom: 0;
+}
+
+#settingsModal .settings-accordion-content > .form-help {
+  padding-bottom: 14px;
+  border-bottom: 1px solid var(--border2);
+}
+
+#settingsModal .settings-accordion-content > .form-help:last-child {
+  border-bottom: 0;
+}
+
+#settingsModal .form-label {
+  color: var(--text);
+  font-size: var(--fs-base);
+  font-weight: var(--fw-semibold);
+}
+
+/* 说明文字作为所属设置的注释：较小、限宽、行距放松 */
+#settingsModal .settings-accordion-content > .form-help,
+#settingsModal .account-panel .form-help {
+  /* 文字限宽但分隔线保持通栏 */
+  padding-right: max(0px, calc(100% - 36em));
+  color: var(--muted);
+  font-size: var(--fs-sm);
+  line-height: 1.65;
+}
+
+#settingsModal .form-control {
+  min-width: 0;
+}
+
+#settingsModal select,
+#settingsModal input.text-input,
+#settingsModal input[type="number"] {
+  width: 100%;
+  min-height: 42px;
+  padding: 9px 14px;
+  border: 1px solid var(--border3);
+  border-radius: var(--radius-md);
+  background-color: var(--field);
+  color: var(--text);
+  font-size: var(--fs-md);
+  font-weight: var(--fw-medium);
+  box-shadow: none;
+  transition: border-color 160ms ease, box-shadow 160ms ease;
+}
+
+#settingsModal select {
+  padding-right: 36px;
+}
+
+/* 天数等短数字输入与紧凑下拉同宽，靠右对齐 */
+#settingsModal input[type="number"] {
+  width: 7.2em;
+  justify-self: end;
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+#settingsModal .form-control:has(> input[type="number"]) {
+  justify-content: flex-end;
+}
+
+#settingsModal select:focus,
+#settingsModal input.text-input:focus,
+#settingsModal input[type="number"]:focus {
+  outline: none;
+  border-color: var(--text);
+  box-shadow: var(--ring);
+}
+
+#settingsModal .form-control button.ghost {
+  min-height: 40px;
+  padding: 8px 16px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  border: 1px solid var(--border3);
+  border-radius: var(--radius-md);
+  background: var(--control);
+  color: var(--text);
+  font-size: var(--fs-sm);
+  font-weight: var(--fw-semibold);
+  cursor: pointer;
+  transition: border-color 160ms ease, background-color 160ms ease;
+}
+
+#settingsModal .form-control button.ghost:hover {
+  border-color: var(--border-hover);
+  background: var(--surfaceHover);
+}
+
+/* 分区内的独立操作：以描边次级按钮呈现，避免透明按钮在细线表单中失去边界 */
+#settingsModal .settings-accordion-content > .stack {
+  padding: 14px 0 8px;
+  gap: 8px;
+}
+
+#settingsModal .settings-accordion-content > .stack > button.ghost,
+#settingsModal .offline-tts-header > button.ghost {
+  min-height: 42px;
+  border: 1px solid var(--border3) !important;
+  background: var(--control);
+  color: var(--text);
+}
+
+#settingsModal .settings-accordion-content > .stack > button.ghost:hover,
+#settingsModal .offline-tts-header > button.ghost:hover {
+  border-color: var(--border-hover) !important;
+  background: var(--surfaceHover);
+}
+
+#settingsModal .form-row.offline-tts-section {
+  grid-template-columns: minmax(0, 1fr);
+  align-items: stretch;
+}
+
+#settingsModal .offline-tts-header > button.ghost {
+  min-height: 34px;
+  padding: 6px 14px;
+  font-size: var(--fs-sm);
+}
+
+/* 分段选择：滑动指示块随选中项移动（纯 CSS，按选中项序号定位） */
+.settings-segmented {
+  --seg-count: 3;
+  --seg-index: 0;
+  position: relative;
+  isolation: isolate;
+  width: 100%;
+  max-width: 360px;
+  padding: 3px;
+  display: grid;
+  grid-template-columns: repeat(var(--seg-count), minmax(0, 1fr));
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  background: var(--track);
+}
+
+.settings-segmented::before {
+  content: "";
+  position: absolute;
+  z-index: -1;
+  top: 3px;
+  bottom: 3px;
+  left: 3px;
+  width: calc((100% - 6px) / var(--seg-count));
+  border-radius: calc(var(--radius-md) - 3px);
+  background: var(--glass-solid);
+  box-shadow: 0 1px 3px color-mix(in srgb, var(--text) 16%, transparent);
+  transform: translate3d(calc(var(--seg-index) * 100%), 0, 0);
+  transition: transform var(--motion-duration-move) var(--motion-ease-out);
+}
+
+.settings-segmented:has(> button:nth-of-type(2)[aria-checked="true"]) {
+  --seg-index: 1;
+}
+
+.settings-segmented:has(> button:nth-of-type(3)[aria-checked="true"]) {
+  --seg-index: 2;
+}
+
+.settings-segmented > button {
+  min-width: 0;
+  min-height: 36px;
+  padding: 0 6px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  border: 0;
+  border-radius: calc(var(--radius-md) - 3px);
+  background: transparent;
+  box-shadow: none;
+  color: var(--muted);
+  font-size: var(--fs-sm);
+  font-weight: var(--fw-semibold);
+  white-space: nowrap;
+}
+
+.settings-segmented > button:hover {
+  background: transparent;
+  color: var(--text);
+}
+
+.settings-segmented > button[aria-checked="true"] {
+  color: var(--text);
+}
+
+#settingsModal .form-control:has(> .settings-segmented) {
+  justify-content: flex-end;
+}
+
+/* 账号操作切换同样以滑动指示块表达选中 */
+#settingsModal .view-tabs.account-tabs {
+  --seg-index: 0;
+  position: relative;
+  isolation: isolate;
+}
+
+#settingsModal .view-tabs.account-tabs::before {
+  content: "";
+  position: absolute;
+  z-index: -1;
+  top: 4px;
+  bottom: 4px;
+  left: 4px;
+  width: calc((100% - 8px) / 3);
+  border-radius: 999px;
+  background: var(--glass-solid);
+  box-shadow: 0 1px 3px color-mix(in srgb, var(--text) 14%, transparent);
+  transform: translate3d(calc(var(--seg-index) * 100%), 0, 0);
+  transition: transform var(--motion-duration-move) var(--motion-ease-out);
+}
+
+#settingsModal .view-tabs.account-tabs:has(> button:nth-of-type(2).active) {
+  --seg-index: 1;
+}
+
+#settingsModal .view-tabs.account-tabs:has(> button:nth-of-type(3).active) {
+  --seg-index: 2;
+}
+
+#settingsModal #settingsPanelAccount {
+  counter-reset: settings-section;
+}
+
+#settingsModal #settingsPanelAccount .settings-account-extras {
+  margin-top: clamp(40px, 6vw, 56px);
+  counter-reset: none;
+}
+
+/* 账号区标题与其他分区标题一致：编号 + 展示字体 + 下划线 */
+#settingsModal #settingsPanelAccount .account-panel > .section-title {
+  min-height: 44px;
+  margin-bottom: 14px;
+  min-height: 0;
+  margin-bottom: 10px;
+  padding: 0 4px;
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+  border-bottom: 0;
+  font-size: var(--fs-lg);
+  letter-spacing: -0.01em;
+  counter-increment: settings-section;
+}
+
+#settingsModal #settingsPanelAccount .account-panel > .section-title::before {
+  content: counter(settings-section, decimal-leading-zero);
+  color: var(--muted);
+  font-family: var(--font-ui);
+  font-size: var(--fs-2xs);
+  font-weight: var(--fw-bold);
+  letter-spacing: 0.08em;
+  font-variant-numeric: tabular-nums;
+}
+
+/* 5. Account & Cloud Area */
+#settingsModal #settingsPanelAccount .account-panel {
+  width: 100%;
+}
+
+.account-tabs {
+  margin-top: 16px;
+}
+
+/* 登录 / 注册 / 重置表单保持易读宽度，不随桌面宽度拉长 */
+#settingsModal #accountLoggedOut {
+  max-width: 100%;
+}
+
+#settingsModal .view-tabs.account-tabs {
+  width: 100%;
+  height: 44px;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0;
+  padding: 4px;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  background: var(--track);
+  box-shadow: none;
+}
+
+#settingsModal .view-tabs.account-tabs button {
+  min-height: 36px;
+  padding: 0 10px;
+  border: 0;
+  border-radius: 999px;
+  background: transparent;
+  box-shadow: none;
+  color: var(--muted);
+  transform: none;
+}
+
+#settingsModal .view-tabs.account-tabs button:hover {
+  background: transparent;
+  color: var(--text);
+  transform: none;
+}
+
+#settingsModal .view-tabs.account-tabs button.active {
+  background: transparent;
+  color: var(--text);
+  box-shadow: none;
+}
+
+#settingsModal .form-control:has(.settings-switch),
+#settingsModal .form-control:has(.settings-compact-select) {
+  display: flex;
+  justify-content: flex-end;
+}
+
+#settingsModal .form-control:has(.settings-compact-select) .android-select-picker-btn {
+  width: auto;
+  min-width: 6.4em;
+  min-height: 42px;
+}
+
+#settingsModal select.settings-compact-select {
+  width: auto;
+  min-width: 5.6em;
+  max-width: 8em;
+  min-height: 36px;
+  padding: 6px 28px 6px 12px;
+}
+
+.settings-switch,
+#settingsModal .settings-switch {
+  width: 52px;
+  height: 32px;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  box-shadow: none;
+}
+
+.settings-switch:hover,
+.settings-switch:active {
+  background: transparent;
+  transform: none;
+  box-shadow: none;
+}
+
+.settings-switch-track {
+  position: relative;
+  display: block;
+  width: 52px;
+  height: 32px;
+  overflow: hidden;
+  border: 1px solid var(--border3);
+  border-radius: 999px;
+  background: var(--track);
+  box-shadow: inset 0 1px 2px color-mix(in srgb, var(--text) 8%, transparent);
+  transition: background-color 220ms ease, border-color 220ms ease;
+}
+
+.settings-switch-track::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: linear-gradient(
+    180deg,
+    color-mix(in srgb, var(--glass-hi) 20%, transparent),
+    transparent 60%
+  );
+  pointer-events: none;
+}
+
+.settings-switch-knob {
+  position: absolute;
+  top: 3px;
+  left: 3px;
+  width: 24px;
+  height: 24px;
+  border-radius: 999px;
+  background: var(--glass-solid);
+  box-shadow: 0 1px 2px color-mix(in srgb, var(--text) 18%, transparent), 0 3px 8px -2px color-mix(in srgb, var(--text) 16%, transparent);
+  transition:
+    transform var(--motion-duration-move) var(--motion-ease-out),
+    width 220ms var(--motion-ease-out),
+    background-color 220ms ease;
+}
+
+/* 按住开关时滑块拉长，松开后回弹到位 */
+.settings-switch:active .settings-switch-knob {
+  width: 30px;
+}
+
+.settings-switch[aria-checked="true"]:active .settings-switch-knob {
+  transform: translateX(14px);
+}
+
+.settings-switch[aria-checked="true"] .settings-switch-track {
+  border-color: var(--accent);
+  background: var(--accent);
+}
+
+.settings-switch[aria-checked="true"] .settings-switch-knob {
+  background: var(--accentText);
+}
+
+.settings-switch[aria-checked="true"] .settings-switch-knob {
+  transform: translateX(20px);
+}
+
+.account-panel {
+  scroll-margin-top: 84px;
+}
+
+.account-oauth {
+  margin-top: 14px;
+}
+
+.account-oauth-btn {
+  width: 100%;
+  min-height: 46px;
+  padding: 11px 18px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  border: 1px solid color-mix(in srgb, var(--border3) 82%, #dadce0);
+  border-radius: 14px;
+  background: #ffffff;
+  color: #1f1f1f;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06), inset 0 1px 0 rgba(255, 255, 255, 0.8);
+  font-size: var(--fs-md);
+  font-weight: var(--fw-bold);
+  letter-spacing: -0.01em;
+  cursor: pointer;
+  transition: border-color var(--motion-duration-fast) var(--motion-ease-out), background-color var(--motion-duration-fast) var(--motion-ease-out), box-shadow var(--motion-duration-fast) var(--motion-ease-out), transform var(--motion-duration-fast) var(--motion-ease-out);
+}
+
+.account-oauth-btn:hover {
+  background: #f8f9fa;
+  border-color: color-mix(in srgb, var(--border3) 60%, #c6c6c6);
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.08);
+  transform: translateY(-1px);
+}
+
+.account-oauth-btn:active {
+  transform: scale(0.98);
+}
+
+.account-oauth-btn:disabled {
+  opacity: 0.62;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+}
+
+.account-oauth-google-icon {
+  width: 18px;
+  height: 18px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: 0 0 auto;
+}
+
+.account-oauth-google-icon svg {
+  display: block;
+}
+
+.account-oauth-btn-label {
+  line-height: 1.2;
+}
+
+.account-auth-divider {
+  margin: 18px 0 16px;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
+  align-items: center;
+  gap: 12px;
+  color: var(--muted);
+  font-size: var(--fs-xs);
+  font-weight: var(--fw-semibold);
+}
+
+.account-auth-divider::before,
+.account-auth-divider::after {
+  content: "";
+  height: 1px;
+  background: var(--border2);
+}
+
+.account-auth-divider span {
+  white-space: nowrap;
+}
+
+body.theme-dark .account-oauth-btn {
+  background: #ffffff;
+  color: #1f1f1f;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.4);
+}
+
+body.theme-dark .account-oauth-btn:hover {
+  background: #f1f3f4;
+}
+
+/* Eliminate nested box styling in account sections */
+.account-section {
+  margin-top: 16px;
+  padding: 0;
+  display: grid;
+  gap: 14px;
+  border: none;
+  background: transparent;
+}
+
+.account-section-title {
+  color: var(--text);
+  font-size: var(--fs-md);
+  font-weight: var(--fw-heavy);
+  margin-bottom: 2px;
+}
+
+.account-actions {
+  display: grid;
+  gap: 8px;
+}
+
+/* Primary Auth Submit Button */
+#cloudLoginBtn,
+#cloudRegisterBtn,
+#cloudResetPasswordBtn,
+#cloudSendCodeBtn,
+#cloudSendResetCodeBtn {
+  min-height: 44px;
+  padding: 10px 20px;
+  border: 0;
+  border-radius: var(--radius-md);
+  background: var(--accent);
+  color: var(--accentText, #ffffff);
+  font-size: var(--fs-md);
+  font-weight: var(--fw-bold);
+  box-shadow: var(--primary-shadow);
+  cursor: pointer;
+  transition: background-color 160ms ease;
+}
+
+#cloudLoginBtn:hover,
+#cloudRegisterBtn:hover,
+#cloudResetPasswordBtn:hover,
+#cloudSendCodeBtn:hover,
+#cloudSendResetCodeBtn:hover {
+  background: var(--accentHover);
+}
+
+.account-summary {
+  margin-top: 4px;
+  padding: 4px 0 0;
+  display: grid;
+  gap: 16px;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
+}
+
+.account-summary-head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 14px;
+}
+
+.account-summary-identity {
+  min-width: 0;
+  display: grid;
+  gap: 3px;
+}
+
+.account-summary-title {
+  overflow-wrap: anywhere;
+  color: var(--text);
+  font-size: var(--fs-2xl);
+  font-weight: var(--fw-heavy);
+  letter-spacing: -0.02em;
+}
+
+.account-summary-subtitle {
+  margin-top: 2px;
+  overflow-wrap: anywhere;
+  color: var(--muted);
+  font-size: var(--fs-sm);
+  line-height: 1.45;
+}
+
+.account-badge {
+  padding: 6px 14px;
+  flex: 0 0 auto;
+  border: 1px solid color-mix(in srgb, var(--success) 24%, transparent);
+  border-radius: var(--radius-pill);
+  background: color-mix(in srgb, var(--success) 12%, transparent);
+  color: var(--success);
+  font-size: var(--fs-xs);
+  font-weight: var(--fw-heavy);
+  white-space: nowrap;
+}
+
+.account-summary-sync {
+  min-width: 0;
+  padding: 12px 16px;
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  align-items: center;
+  gap: 12px;
+  border: 1px solid var(--border2);
+  border-radius: var(--radius-lg);
+  background: transparent;
+}
+
+.account-summary-sync-state,
+.account-summary-sync-latest {
+  min-width: 0;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.account-summary-sync-latest {
+  justify-content: flex-end;
+  text-align: right;
+}
+
+.account-summary-sync span {
+  color: var(--muted);
+  font-size: var(--fs-xs);
+  white-space: nowrap;
+}
+
+.account-summary-sync strong {
+  min-width: 0;
+  overflow-wrap: anywhere;
+  color: var(--text);
+  font-size: var(--fs-sm);
+  line-height: 1.35;
+}
+
+.account-summary-key-stats,
+.account-summary-secondary-stats {
+  overflow: hidden;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  border: 1px solid var(--border2);
+  border-radius: var(--radius-lg);
+  background: transparent;
+}
+
+.account-summary-stat {
+  min-width: 0;
+  padding: 12px 8px;
+  display: grid;
+  gap: 3px;
+  border-right: 1px solid var(--border2);
+  text-align: center;
+}
+
+.account-summary-stat:last-child {
+  border-right: 0;
+}
+
+.account-summary-stat span {
+  color: var(--muted);
+  font-size: var(--fs-2xs);
+  white-space: nowrap;
+}
+
+.account-summary-stat strong {
+  min-width: 0;
+  overflow-wrap: anywhere;
+  color: var(--text);
+  font-size: var(--fs-lg);
+  font-weight: var(--fw-heavy);
+  line-height: 1.25;
+}
+
+.account-summary-details-toggle {
+  width: 100%;
+  min-height: 38px;
+  padding: 8px 12px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  border: 1px solid var(--border2);
+  border-radius: var(--radius-md);
+  background: transparent;
+  color: var(--muted);
+  font-size: var(--fs-xs);
+  text-align: left;
+}
+
+.account-summary-details-toggle::after {
+  content: "";
+  width: 7px;
+  height: 7px;
+  flex: 0 0 auto;
+  border-right: 1.5px solid currentColor;
+  border-bottom: 1.5px solid currentColor;
+  transform: rotate(45deg) translateY(-2px);
+  transition: transform 180ms ease;
+}
+
+.account-summary-details-toggle.is-expanded::after {
+  transform: rotate(225deg) translate(-1px, -1px);
+}
+
+.account-summary-details {
+  display: grid;
+  gap: 10px;
+}
+
+.account-summary-session {
+  min-width: 0;
+  padding: 11px 16px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  border: 1px solid var(--border2);
+  border-radius: var(--radius-lg);
+  background: transparent;
+}
+
+.account-summary-session span {
+  color: var(--muted);
+  font-size: var(--fs-xs);
+}
+
+.account-summary-session strong {
+  min-width: 0;
+  overflow-wrap: anywhere;
+  color: var(--text);
+  font-size: var(--fs-sm);
+  text-align: right;
+}
+
+/* 6. Tactile Cloud Action Tiles */
+.account-cloud-actions {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 14px;
+}
+
+.account-cloud-action {
+  min-width: 0;
+  min-height: 80px;
+  padding: 16px;
+  display: grid;
+  grid-template-columns: 46px minmax(0, 1fr);
+  align-items: center;
+  gap: 14px;
+  background: color-mix(in srgb, var(--card) 96%, var(--primary) 4%);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-xl);
+  box-shadow: var(--shadow-sm);
+  color: var(--text);
+  text-align: left;
+  transition:
+    border-color 180ms ease,
+    background 180ms ease,
+    box-shadow 180ms ease,
+    transform 140ms ease;
+}
+
+.account-cloud-action:hover {
+  background: var(--surfaceHover);
+  border-color: var(--border-hover);
+}
+
+.account-cloud-action:active {
+  transform: scale(0.98);
+}
+
+.account-cloud-action:disabled {
+  cursor: wait;
+  opacity: 0.62;
+  transform: none;
+}
+
+.account-cloud-action-upload {
+  border-color: color-mix(in srgb, var(--primary) 32%, var(--border));
+  color: var(--primary);
+}
+
+.account-cloud-action-restore {
+  color: var(--text);
+}
+
+.account-cloud-action-icon {
+  width: 46px;
+  height: 46px;
+  display: grid;
+  place-items: center;
+  border: 1px solid color-mix(in srgb, currentColor 20%, var(--border));
+  border-radius: var(--radius-md);
+  background: color-mix(in srgb, currentColor 9%, transparent);
+  font-size: var(--fs-3xl);
+  font-weight: var(--fw-heavy);
+}
+
+.account-cloud-action-copy {
+  min-width: 0;
+  display: grid;
+  gap: 3px;
+}
+
+.account-cloud-action-copy strong,
+.account-cloud-action-copy small {
+  overflow-wrap: anywhere;
+}
+
+.account-cloud-action-copy strong {
+  color: currentColor;
+  font-size: var(--fs-md);
+  font-weight: var(--fw-heavy);
+}
+
+.account-cloud-action-copy small {
+  color: var(--muted);
+  font-size: var(--fs-xs);
+  font-weight: var(--fw-medium);
+  line-height: 1.35;
+}
+
+.account-logout-action {
+  justify-self: center;
+  min-height: 38px;
+  padding: 8px 20px;
+  border: 1px solid transparent;
+  border-color: transparent;
+  border-radius: 999px;
+  background: transparent;
+  color: var(--muted);
+  font-size: var(--fs-sm);
+  font-weight: var(--fw-semibold);
+  box-shadow: none;
+  transition: border-color var(--motion-duration-fast) var(--motion-ease-out), background-color var(--motion-duration-fast) var(--motion-ease-out), color var(--motion-duration-fast) var(--motion-ease-out);
+}
+
+.account-logout-action:hover {
+  border-color: color-mix(in srgb, var(--danger) 20%, transparent);
+  background: color-mix(in srgb, var(--danger) 8%, transparent);
+  color: var(--danger);
+}
+
+.account-sync-note {
+  margin-top: 0;
+}
+
+.account-status {
+  margin-top: 14px;
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  font-size: var(--fs-sm);
+}
+
+.account-status.is-info {
+  border-color: var(--border3);
+  color: var(--text);
+}
+
+.account-status.is-success {
+  border-color: color-mix(in srgb, var(--success) 28%, transparent);
+  background: color-mix(in srgb, var(--success) 10%, transparent);
+  color: var(--success);
+}
+
+.account-status.is-error {
+  border-color: color-mix(in srgb, var(--danger) 28%, transparent);
+  background: color-mix(in srgb, var(--danger) 10%, transparent);
+  color: var(--danger);
+}
+
+.offline-tts-section {
+  transition: opacity 180ms ease, filter 180ms ease;
+}
+
+.offline-tts-section.is-secondary {
+  opacity: 0.82;
+}
+
+.offline-tts-section.is-secondary .offline-tts-hint {
+  color: var(--muted);
+}
+
+/* Responsive Queries */
+@media (min-width: 431px) {
+  .account-summary-details-toggle {
+    display: none;
+  }
+
+  .account-summary-details {
+    grid-template-columns: minmax(0, 3fr) minmax(140px, 1fr);
+  }
+}
+
+/* 桌面：单一居中阅读栏。分区自上而下排列，留足行距与分区间距，避免仪表盘式的双栏拥挤 */
+@media (min-width: 760px) {
+  #settingsModal .settings-shell {
+    grid-template-columns: minmax(0, 1fr);
+    align-items: start;
+    gap: 36px;
+  }
+
+  #settingsModal .settings-category-tabs {
+    display: grid;
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+    width: 100%;
+  }
+
+  #settingsModal .settings-category-tab {
+    min-height: 40px;
+    padding: 8px 12px;
+    font-size: var(--fs-md);
+  }
+
+  #settingsModal .form-row {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1.15fr);
+    gap: 24px;
+  }
+}
+
+@media (max-width: 759px) {
+  body.settings-page .settings-page-main {
+    padding:
+      max(18px, env(safe-area-inset-top))
+      max(var(--page-gutter), env(safe-area-inset-right))
+      calc(120px + env(safe-area-inset-bottom))
+      max(var(--page-gutter), env(safe-area-inset-left));
+  }
+
+  .settings-page-intro {
+    margin-bottom: 14px;
+    padding: 0 2px 0;
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .settings-page-intro h1 {
+    font-size: var(--fs-display-compact);
+  }
+
+  .settings-page-status {
+    min-height: 32px;
+    padding: 6px 12px;
+    box-shadow: none;
+  }
+
+  body.settings-page #settingsModal .settings-category-tabs {
+    top: max(8px, env(safe-area-inset-top));
+    align-self: stretch;
+    width: 100%;
+    margin: 0;
+  }
+
+  #settingsModal .modal-body {
+    padding-top: 4px;
+  }
+
+  #settingsModal .settings-category-panel > .panel {
+    padding: 2px 0 0;
+    border-radius: 0;
+  }
+
+  #settingsModal .settings-accordion-card {
+    border-radius: 0;
+  }
+
+  .account-panel .form-row {
+    grid-template-columns: 1fr;
+    align-items: start;
+    gap: 7px;
+  }
+
+  .account-oauth-btn {
+    min-height: 44px;
+    font-size: var(--fs-sm);
+  }
+
+  .account-auth-divider {
+    margin: 12px 0 10px;
+  }
+
+  .view-tabs.account-tabs {
+    width: 100%;
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 0;
+  }
+
+  .view-tabs.account-tabs button {
+    width: 100%;
+    min-width: 0;
+    padding: 8px 4px;
+    font-size: var(--fs-xs);
+  }
+
+  .account-summary {
+    padding: 2px 0 0;
+    gap: 10px;
+  }
+
+  .account-summary-sync {
+    align-items: start;
+    grid-template-columns: 1fr;
+  }
+
+  .account-summary-sync-latest {
+    justify-content: flex-start;
+    text-align: left;
+  }
+
+  .account-cloud-action {
+    min-height: 70px;
+    padding: 12px;
+    grid-template-columns: 36px minmax(0, 1fr);
+    gap: 10px;
+  }
+
+  .account-cloud-action-icon {
+    width: 36px;
+    height: 36px;
+    font-size: var(--fs-xl);
+  }
+}
+
+/* 手机：标签与控件按内容比例分栏；文本输入、模型选择与账号表单改为上下排列 */
+@media (max-width: 520px) {
+  #settingsModal .form-row {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1.35fr);
+    gap: 12px;
+    padding: 13px 0;
+  }
+
+  #settingsModal .form-row:has(.settings-segmented),
+  #settingsModal .form-row:has(> .form-control > .text-input:not([type="number"])),
+  #settingsModal .form-row:has(.ai-model-control),
+  #settingsModal .account-panel .form-row {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 8px;
+    align-items: start;
+  }
+
+  #settingsModal .form-label {
+    font-size: var(--fs-sm);
+  }
+
+  #settingsModal .settings-segmented {
+    max-width: none;
+  }
+
+  #settingsModal .settings-segmented > button {
+    min-height: 40px;
+  }
+
+  #settingsModal select,
+  #settingsModal input.text-input,
+  #settingsModal input[type="number"] {
+    min-height: 46px;
+  }
+
+  #settingsModal .settings-accordion-card > .settings-card-header {
+    font-size: var(--fs-lg);
+  }
+
+  .settings-page-intro p {
+    font-size: var(--fs-sm);
+  }
+}
+
+@media (max-width: 370px) {
+  body.settings-page .settings-page-main {
+    padding-inline: max(var(--page-gutter), env(safe-area-inset-left));
+  }
+
+  #settingsModal .settings-category-tabs {
+    gap: 1px;
+    padding: 3px;
+  }
+
+  #settingsModal .settings-category-tab {
+    min-height: 42px;
+    padding-inline: 2px;
+    font-size: var(--fs-xs);
+  }
+
+  .account-cloud-actions {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  #settingsModal .settings-category-tabs::after,
+  #settingsModal .settings-category-indicator::after {
+    display: none;
+  }
+
+  #settingsModal .settings-category-indicator,
+  #settingsModal .settings-category-tab,
+  .account-cloud-action,
+  .account-oauth-btn,
+  .offline-tts-section {
+    transition: none !important;
+  }
+}

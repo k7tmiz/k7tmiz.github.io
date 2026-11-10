@@ -1,0 +1,1251 @@
+<!DOCTYPE html><html data-astro-transition-scope="astro-nfpogox7-1" lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="description" content="技术记录与实践笔记。"><meta name="author" content="k7tmiz"><meta id="theme-color" name="theme-color" content="#f8f7f4"><meta name="generator" content="Astro v7.2.0"><link rel="icon" type="image/png" href="/avatars/avatar.png"><link rel="apple-touch-icon" href="/avatars/avatar.png"><link rel="preconnect" href="https://cravatar.cn"><title>我与计算机的故事 - k7tmiz</title><link rel="canonical" href="https://k7tmiz.com/posts/d773eb13/"><link rel="alternate" type="application/rss+xml" title="k7tmiz RSS" href="https://k7tmiz.com/rss.xml"><meta property="og:title" content="我与计算机的故事 - k7tmiz"><meta property="og:description" content="技术记录与实践笔记。"><meta property="og:type" content="article"><meta property="og:url" content="https://k7tmiz.com/posts/d773eb13/"><meta property="og:site_name" content="k7tmiz"><meta property="og:locale" content="zh_CN"><meta property="og:image" content="https://k7tmiz.com/share/og-default.jpg"><meta name="twitter:card" content="summary_large_image"><meta name="twitter:title" content="我与计算机的故事 - k7tmiz"><meta name="twitter:description" content="技术记录与实践笔记。"><meta name="twitter:image" content="https://k7tmiz.com/share/og-default.jpg"><script type="application/ld+json">{"@context":"https://schema.org","@type":"WebSite","name":"k7tmiz","url":"https://k7tmiz.com","description":"一些碎碎念","inLanguage":"zh-CN","author":{"@type":"Person","name":"k7tmiz","url":"https://k7tmiz.com"}}</script><script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"我与计算机的故事","description":"技术记录与实践笔记。","inLanguage":"zh-CN","url":"https://k7tmiz.com/posts/d773eb13/","mainEntityOfPage":"https://k7tmiz.com/posts/d773eb13/","datePublished":"2025-05-11T22:24:04.000Z","dateModified":"2025-05-11T22:24:04.000Z","author":{"@type":"Person","name":"k7tmiz","url":"https://k7tmiz.com"},"publisher":{"@type":"Person","name":"k7tmiz","url":"https://k7tmiz.com"},"keywords":"article"}</script><meta name="astro-view-transitions-enabled" content="true"><meta name="astro-view-transitions-fallback" content="animate"><script type="module" src="/_astro/ClientRouter.astro_astro_type_script_index_0_lang.DW-LBy1z.js"></script><script>
+      (() => {
+        const storageKey = 'blog-theme';
+        const lightColor = '#f8f7f4';
+        const darkColor = '#0e1116';
+        const getTheme = () => {
+          try {
+            const stored = localStorage.getItem(storageKey);
+            if (stored) return stored;
+          } catch {
+          }
+          return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+        };
+        const restoreTheme = () => {
+          const theme = getTheme();
+          document.documentElement.dataset.theme = theme;
+          document.documentElement.classList.add('js');
+          document.querySelector('#theme-color')?.setAttribute(
+            'content',
+            theme === 'dark' ? darkColor : lightColor,
+          );
+        };
+
+        restoreTheme();
+        // ClientRouter swaps the <html> attributes. Restore the chosen theme
+        // synchronously inside the swap callback, before the new frame paints.
+        document.addEventListener('astro:after-swap', restoreTheme);
+      })();
+    </script><link rel="stylesheet" href="/_astro/BaseLayout.BXjcRk6J.css"><style>[data-astro-transition-scope="astro-nfpogox7-1"] { view-transition-name: root; }@layer astro { ::view-transition-old(root) { animation: none; opacity: 0; mix-blend-mode: normal; }::view-transition-new(root) { animation: none; mix-blend-mode: normal; }::view-transition-group(root) { animation: none } }[data-astro-transition-fallback="old"] [data-astro-transition-scope="astro-nfpogox7-1"],
+			[data-astro-transition-fallback="old"][data-astro-transition-scope="astro-nfpogox7-1"] { animation: none; mix-blend-mode: normal; }[data-astro-transition-fallback="new"] [data-astro-transition-scope="astro-nfpogox7-1"],
+			[data-astro-transition-fallback="new"][data-astro-transition-scope="astro-nfpogox7-1"] { animation: none; mix-blend-mode: normal; }</style><style>[data-astro-transition-scope="astro-wugk46rw-2"] { view-transition-name: page-content; }@layer astro { ::view-transition-old(page-content) { 
+	animation-duration: 70ms;
+	animation-timing-function: cubic-bezier(0.4, 0, 1, 1);
+	animation-fill-mode: both;
+	animation-name: blogRouteOut; }::view-transition-new(page-content) { 
+	animation-duration: 130ms;
+	animation-timing-function: cubic-bezier(0.22, 1, 0.36, 1);
+	animation-delay: 70ms;
+	animation-fill-mode: both;
+	animation-name: blogRouteIn; }[data-astro-transition=back]::view-transition-old(page-content) { 
+	animation-duration: 70ms;
+	animation-timing-function: cubic-bezier(0.4, 0, 1, 1);
+	animation-fill-mode: both;
+	animation-name: blogRouteOut; }[data-astro-transition=back]::view-transition-new(page-content) { 
+	animation-duration: 130ms;
+	animation-timing-function: cubic-bezier(0.22, 1, 0.36, 1);
+	animation-delay: 70ms;
+	animation-fill-mode: both;
+	animation-name: blogRouteIn; } }[data-astro-transition-fallback="old"] [data-astro-transition-scope="astro-wugk46rw-2"],
+			[data-astro-transition-fallback="old"][data-astro-transition-scope="astro-wugk46rw-2"] { 
+	animation-duration: 70ms;
+	animation-timing-function: cubic-bezier(0.4, 0, 1, 1);
+	animation-fill-mode: both;
+	animation-name: blogRouteOut; }[data-astro-transition-fallback="new"] [data-astro-transition-scope="astro-wugk46rw-2"],
+			[data-astro-transition-fallback="new"][data-astro-transition-scope="astro-wugk46rw-2"] { 
+	animation-duration: 130ms;
+	animation-timing-function: cubic-bezier(0.22, 1, 0.36, 1);
+	animation-delay: 70ms;
+	animation-fill-mode: both;
+	animation-name: blogRouteIn; }[data-astro-transition=back][data-astro-transition-fallback="old"] [data-astro-transition-scope="astro-wugk46rw-2"],
+			[data-astro-transition=back][data-astro-transition-fallback="old"][data-astro-transition-scope="astro-wugk46rw-2"] { 
+	animation-duration: 70ms;
+	animation-timing-function: cubic-bezier(0.4, 0, 1, 1);
+	animation-fill-mode: both;
+	animation-name: blogRouteOut; }[data-astro-transition=back][data-astro-transition-fallback="new"] [data-astro-transition-scope="astro-wugk46rw-2"],
+			[data-astro-transition=back][data-astro-transition-fallback="new"][data-astro-transition-scope="astro-wugk46rw-2"] { 
+	animation-duration: 130ms;
+	animation-timing-function: cubic-bezier(0.22, 1, 0.36, 1);
+	animation-delay: 70ms;
+	animation-fill-mode: both;
+	animation-name: blogRouteIn; }</style><style>[data-astro-transition-scope="astro-l25zdozq-3"] { view-transition-name: astro-l25zdozq-3; }@layer astro { ::view-transition-old(astro-l25zdozq-3) { animation: none; opacity: 0; mix-blend-mode: normal; }::view-transition-new(astro-l25zdozq-3) { animation: none; mix-blend-mode: normal; }::view-transition-group(astro-l25zdozq-3) { animation: none } }[data-astro-transition-fallback="old"] [data-astro-transition-scope="astro-l25zdozq-3"],
+			[data-astro-transition-fallback="old"][data-astro-transition-scope="astro-l25zdozq-3"] { animation: none; mix-blend-mode: normal; }[data-astro-transition-fallback="new"] [data-astro-transition-scope="astro-l25zdozq-3"],
+			[data-astro-transition-fallback="new"][data-astro-transition-scope="astro-l25zdozq-3"] { animation: none; mix-blend-mode: normal; }</style><style>[data-astro-transition-scope="astro-urs5wucv-4"] { view-transition-name: music-player; }@layer astro { ::view-transition-old(music-player) { animation: none; opacity: 0; mix-blend-mode: normal; }::view-transition-new(music-player) { animation: none; mix-blend-mode: normal; }::view-transition-group(music-player) { animation: none } }[data-astro-transition-fallback="old"] [data-astro-transition-scope="astro-urs5wucv-4"],
+			[data-astro-transition-fallback="old"][data-astro-transition-scope="astro-urs5wucv-4"] { animation: none; mix-blend-mode: normal; }[data-astro-transition-fallback="new"] [data-astro-transition-scope="astro-urs5wucv-4"],
+			[data-astro-transition-fallback="new"][data-astro-transition-scope="astro-urs5wucv-4"] { animation: none; mix-blend-mode: normal; }</style></head><body class="article-page"><a class="skip-link" href="#main">跳到正文</a><div class="reading-progress" aria-hidden="true"><span data-reading-progress></span></div><header data-astro-transition-persist="site-nav" data-astro-transition-scope="astro-l25zdozq-3" class="site-nav"><nav class="site-nav__pill" aria-label="主导航"><span class="site-nav__indicator" aria-hidden="true"></span><a href="/" data-nav-route>首页</a><a href="/archive/" data-nav-route>归档</a><a href="/about/" data-nav-route>关于</a><span class="site-nav__sep" aria-hidden="true"></span><a href="https://github.com/k7tmiz" class="site-nav__icon" aria-label="GitHub 仓库" title="GitHub 仓库" target="_blank" rel="noopener noreferrer"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 19c-4.3 1.4-4.3-2.5-6-3m12 5v-3.5c0-1 .1-1.4-.5-2 2.8-.3 5.5-1.4 5.5-6a4.7 4.7 0 0 0-1.3-3.2 4.3 4.3 0 0 0-.1-3.2s-1.1-.3-3.5 1.3a12 12 0 0 0-6.2 0C6.5 2.8 5.4 3.1 5.4 3.1a4.3 4.3 0 0 0-.1 3.2A4.7 4.7 0 0 0 4 9.5c0 4.6 2.7 5.7 5.5 6-.6.6-.6 1.2-.5 2V21"/></svg></a><a href="/search/" class="site-nav__icon" aria-label="搜索" aria-keyshortcuts="/ Meta+K" title="搜索（/ 或 ⌘K）"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg></a><button type="button" class="theme-toggle site-nav__icon" data-theme-toggle aria-label="切换深色模式"><svg class="theme-toggle__moon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8Z"/></svg><svg class="theme-toggle__sun" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg></button></nav></header><script type="module">var e=window.__blogNavMotion??={pendingPath:``,indicator:null,animation:null,initialized:!1},t=e=>{let t=e.endsWith(`/`)?e:`${e}/`;return t===`//`?`/`:t},n=(e,t)=>{let n=e.getBoundingClientRect(),r=t.getBoundingClientRect();return{x:n.left-r.left,y:n.top-r.top,width:n.width,height:n.height}},r=({x:e})=>`translateX(${e}px) translateY(-50%)`,i=()=>{let t=e.animation;t&&(t.cancel(),e.animation=null)},a=(t=!0)=>{let a=document.querySelector(`.site-nav__pill`),o=a?.querySelector(`.site-nav__indicator`),s=a?.querySelector(`a[data-nav-route].is-current`);if(!a||!o||!s){a?.classList.remove(`has-indicator`);return}let c=a.getBoundingClientRect(),l=s.getBoundingClientRect(),u={x:l.left-c.left,y:0,width:l.width,height:l.height},d=e.indicator??u;if(e.animation&&(d=n(o,a),i()),!t||typeof o.animate!=`function`){a.classList.remove(`is-indicator-ready`),o.style.width=`${u.width}px`,o.style.height=`${u.height}px`,o.style.transform=r(u),e.indicator=u,a.classList.add(`has-indicator`),window.requestAnimationFrame(()=>a.classList.add(`is-indicator-ready`));return}o.style.width=`${u.width}px`,o.style.height=`${u.height}px`,o.style.transform=r(u),a.classList.add(`has-indicator`);let f=o.animate([{width:`${d.width}px`,height:`${d.height}px`,transform:r(d)},{width:`${u.width}px`,height:`${u.height}px`,transform:r(u)}],{duration:420,easing:`cubic-bezier(0.16, 1, 0.3, 1)`,fill:`both`});e.animation=f,e.indicator=u,f.onfinish=()=>{if(e.animation===f){try{f.commitStyles?.()}catch{}f.cancel(),e.animation=null}}},o=(n=!1)=>{let r=t(window.location.pathname);if(document.querySelectorAll(`.site-nav a[href]`).forEach(e=>{let n=t(new URL(e.href,window.location.href).pathname),i=n===`/`?r===`/`:r.startsWith(n);e.classList.remove(`is-pending`),e.classList.toggle(`is-current`,i),i?e.setAttribute(`aria-current`,`page`):e.removeAttribute(`aria-current`)}),e.pendingPath===r){e.pendingPath=``;return}a(n)},s=n=>{if(n.button!==0||n.metaKey||n.ctrlKey||n.shiftKey||n.altKey)return;let r=n.target;if(!(r instanceof Element))return;let i=r.closest(`.site-nav a[data-nav-route]`);if(!i)return;let o=t(new URL(i.href,window.location.href).pathname);o!==t(window.location.pathname)&&(e.pendingPath=o,document.querySelectorAll(`.site-nav a[data-nav-route]`).forEach(e=>{e.classList.toggle(`is-pending`,e===i),e.classList.toggle(`is-current`,e===i)}),a(!0))};e.initialized||=(o(),document.addEventListener(`pointerdown`,s),document.addEventListener(`click`,e=>{e.detail===0&&s(e)}),document.addEventListener(`astro:after-swap`,()=>o(!0)),window.addEventListener(`resize`,()=>a(!1),{passive:!0}),!0);</script><main data-astro-transition-scope="astro-wugk46rw-2" id="main"><article class="article article--toc"><a class="back-link" href="/"><svg class="back-link__arrow" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>返回首页</a><header class="article__header"><div class="post-meta"><span>Article</span><time datetime="2025-05-11T22:24:04.000Z">2025年5月11日</time><span>6 分钟阅读</span></div><h1>我与计算机的故事</h1><p>技术记录与实践笔记。</p><div class="tag-list" aria-label="标签"><span>article</span></div></header><div class="article__body"><div class="article__main"><div class="post-content"><p>我是一个行走在文理边界上的旅人，心中始终燃烧着对计算机世界的恒久热爱。</p>
+<p>我的故事，始于北京的家中。</p>
+<p>父母工作繁忙，陪伴我成长的，是家里那两台早早备下的电脑。或许这算得上一种时代的馈赠，让我在懵懂的年纪便与数字世界结缘。那时的热爱简单而纯粹——查资料、玩游戏、折腾软件。至于服务器、Linux、编程这些更深的概念，还远在认知的地平线之外。</p>
+<p>直到初中。</p>
+<p>某一天，我在视频中第一次看见了 Linux 的世界。那种与 Windows 完全不同的系统结构与操作方式，让我产生了一种难以言说的好奇。像是无意间推开了一扇门，我开始试着迈进去看看。</p>
+<p>我安装的第一个 Linux 发行版，是 <strong>Deepin</strong>。</p>
+<p>大约是在 <strong>2018 年，Deepin 15 的时代</strong>。那时的 DDE 桌面还没有如今这般复杂，界面简洁，风格优雅。直到今天，我依然会偶尔关注 Deepin 的更新，比如现在的 <strong>Deepin 25</strong>。看着它一点点变化，总会生出一种奇妙的感慨。</p>
+<p>不过 Deepin 并没有成为终点。</p>
+<p>很快，我被 <strong>Arch Linux</strong> 的理念吸引了。</p>
+<p>“简单、现代、实用。”</p>
+<p>那种几乎带着一点极客气质的系统哲学，在当时的我看来格外迷人。不过第一次接触 Arch，我多少还是有些谨慎，于是选择了基于 Arch 的发行版 <strong>Manjaro + KDE</strong> 作为过渡。</p>
+<p>也正是在那段时间，我和 <strong>KDE Plasma</strong> 结下了某种长期的缘分。</p>
+<p>从那次与 Manjaro 的邂逅开始，KDE 就像一位默契的老朋友。无论我后来换过多少发行版，它总会在某个时刻重新出现。</p>
+<p>至于后来究竟是因为什么最终真正投入 Arch Linux 的怀抱——</p>
+<p>是 Arch 那极具设计感的图标？
+还是当年 Manjaro 偶尔出现的“滚挂”风波？</p>
+<p>如今已经有些记不清了。</p>
+<p>总之，从那之后，<strong>Arch Linux 逐渐成为了我的主力系统</strong>。</p>
+<p>那是一段相当狂热的时期。我开始不断尝试各种 Linux 发行版：</p>
+<ul>
+<li>Kali</li>
+<li>elementaryOS</li>
+<li>PopOS</li>
+<li>FydeOS</li>
+<li>等等等等…</li>
+</ul>
+<p>至于许多发行版例如 <strong>Linux Mint</strong>，它们只在虚拟机中短暂地停留过一段时间。</p>
+<p>如今再回头看，我已记不起我到底重装过几次系统，用过多少个发行版。</p>
+<p>但也是因为在那个阶段，我的兴趣逐渐向更深处延伸。</p>
+<p>我开始接触 <strong>服务器</strong> 与 <strong>编程</strong>。</p>
+<p>初中时期，我学习了 <strong>C++</strong>。
+而在 <strong>初三毕业的那个暑假</strong>，我又拥抱了 <strong>Python</strong>。</p>
+<p>服务器系统方面，我曾经非常喜欢 <strong>CentOS 7</strong>。
+后来随着它的发展路线发生变化，我逐渐转向 <strong>Debian</strong>。</p>
+<p>从 <strong>Debian 9 到 Debian 12</strong>，我几乎都亲身经历过。</p>
+<p>进入高中之后，生活节奏开始改变。</p>
+<p>疫情时代的网课需求突然增加，而 Linux 对腾讯会议等工具的支持当时还不够完善。再加上学业压力逐渐加重，可以自由折腾系统的时间越来越少。</p>
+<p>但那份热爱始终没有真正消失。</p>
+<p>那台老旧的电脑上，依旧保持着<strong>Arch Linux 与 Windows 双系统</strong>。我仍然会在某个闲暇的夜晚，打开终端，敲下那条熟悉的命令：</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="plaintext"><code><span class="line"><span>sudo pacman -Syu</span></span></code></pre>
+<p>有趣的是，一直到高三毕业，这个系统竟然从未真正“滚挂”。
+它安静而稳定地陪伴了我整整三年。</p>
+<p>大学开始之后，新电脑到手。</p>
+<p>那时候电脑的主要用途变成了游戏，再加上我是文科生，于是 <strong>Windows 再次成为主角</strong>。那段时间里，我几乎很少再折腾系统。</p>
+<p>直到某一天。</p>
+<p>Windows 在一次关机之后并没有真正休眠，而是在背包里“空转”了整整一个月。等我再次打开电脑时，屏幕上只剩下一片花屏。</p>
+<p>进入 <strong>PE 环境</strong> 排查之后确认是系统问题，仅仅是官方驱动的安装与调试，就花费了整整一天。</p>
+<p>这次并不愉快的经历，加上 Windows 的强制更新、“假休眠”导致的风扇狂转，以及各种我被当作“宝宝”一样过度保护的设计——</p>
+<p>终于再次唤醒了我对 <strong>Linux 开源，自由精神</strong>的怀念。</p>
+<p>于是行动变得异常迅速。</p>
+<p>我买了一块新的硬盘。</p>
+<p><strong>十分钟之后，Arch Linux 安装完成。</strong></p>
+<p>那种熟悉的感觉几乎是瞬间回来了。</p>
+<p>不过世界也已经改变。</p>
+<p>KDE 完成了重要的版本演进；
+Steam 正在重新塑造 Linux 游戏生态；
+许多新的工具与技术不断出现。</p>
+<p>曾经积累的很多经验，已经不再完全适用。</p>
+<p>但这并没有让我沮丧，反而重新点燃了探索的欲望。</p>
+<p>再次深入之后，我发现整个生态早已不同：</p>
+<ul>
+<li>原生 Linux 版微信不再只是梦想</li>
+<li>QQ 也开始认真对待 Linux 用户</li>
+<li>Valve 通过 <strong>SteamDeck（搭载 Arch 系 SteamOS）</strong> 与 <strong>Proton</strong> 极大推动了 Linux 游戏生态</li>
+<li>UOS 在政企领域的推广，也让国内 Linux 用户整体受益</li>
+</ul>
+<p>如今，在 Linux 上畅玩游戏，早已不再是一件需要自嘲的事情。</p>
+<p>这也让我重新燃起了体验不同发行版的兴趣：</p>
+<ul>
+<li>openSUSE Tumbleweed 的优雅滚动</li>
+<li>Ubuntu 的庞大生态</li>
+<li>Fedora 的前沿特性</li>
+<li>openSUSE Leap 的稳健</li>
+<li>Debian 12 的纯粹</li>
+<li>NixOS 那近乎革命性的理念</li>
+</ul>
+<p>有趣的是，尽管我长期管理 <strong>Debian / Ubuntu 服务器</strong>，桌面端却始终没有真正深入使用过原生 Debian。</p>
+<hr>
+<h2 id="我的设备">我的设备</h2>
+<p>如今，我的数字世界由两台电脑组成。</p>
+<p><strong>轻薄本</strong></p>
+<ul>
+<li>MacBook Air（主力）</li>
+</ul>
+<p><strong>游戏本</strong></p>
+<ul>
+<li>Arch Linux（主力系统）</li>
+<li>Fedora 43</li>
+<li>Windows 11（备用）</li>
+</ul>
+<p>相比过去动辄四五个系统的年代，现在的设备已经经历了一轮彻底的优化。系统数量减少了，但使用体验反而更加从容。</p>
+<p>或许，这正是折腾多年之后的一种平衡。</p>
+<hr>
+<h2 id="更新记录">更新记录</h2>
+<p>本文最初完善于 <strong>2025 年 6 月 25 日</strong>。</p>
+<p><strong>2025 年 7 月 20 日</strong>，游戏本上的 <strong>openSUSE Tumbleweed</strong> 在一次 <code>zypper dup</code> 更新中因为驱动问题“壮烈牺牲”。借此机会，我也重新审视了自己的系统结构，并将系统数量精简为三个：</p>
+<ul>
+<li>Arch Linux</li>
+<li>Fedora</li>
+<li>Windows 11</li>
+</ul>
+<p><strong>2025年8月13日</strong>，我换了一台轻薄本机械革命无界 14X Pro 2025 AI9 H365 32G+1T的最高配版本，遗憾的是其BIOS并不完善，没有做对Linux的支持，导致无线网卡无法正常在Linux环境下驱动。被迫在用Windows 11。这时候也把之前的洋垃圾轻薄本卖掉了。</p>
+<p><strong>2026年3月6日</strong>，通过国补以及以旧换新补贴，机械革命正式退役，换成了MacBook Air。</p>
+<p>折腾仍在继续，但设备与系统组合，也逐渐走向稳定。</p></div><footer class="article__footer"><nav class="post-nav" aria-label="相邻文章"><a class="post-nav__prev" href="/posts/b8718f34/"><span>上一篇</span><strong>西班牙语简单过去时</strong></a><a class="post-nav__next" href="/posts/8b69008/"><span>下一篇</span><strong>其实是献给自己的Hexo教程</strong></a></nav><section class="related-posts" aria-labelledby="related-heading"><h2 id="related-heading">相关文章</h2><div class="related-posts__grid"><a href="/posts/fbd23e1d/"><span>Article</span><strong>谈谈我为什么开始拥抱苹果</strong><small>技术记录与实践笔记。</small></a><a href="/posts/4fa1af2a/"><span>Article</span><strong>谈谈我为什么放弃了无纸化学习</strong><small>技术记录与实践笔记。</small></a><a href="/posts/e74fd7e6/"><span>Article</span><strong>高考一年后有感</strong><small>技术记录与实践笔记。</small></a></div></section></footer></div><aside class="article__aside"><nav class="toc" aria-labelledby="toc-heading"><h2 id="toc-heading">目录</h2><ol><li class="toc__group toc__item--depth-2"><a href="#我的设备">我的设备</a></li><li class="toc__group toc__item--depth-2"><a href="#更新记录">更新记录</a></li></ol></nav></aside></div><div data-qc-root data-qc-selector=".post-content" hidden></div><script type="module">var e=null,t=()=>{let t=document.querySelector(`[data-qc-root]`);t!==e&&(e=t)};t(),document.addEventListener(`astro:page-load`,t);</script><section class="cbox" data-cbox><div class="cbox__head"><h2 class="cbox__title">评论</h2><span class="cbox__count" data-c-count></span></div><div data-c-mount></div></section><script type="module">var e=null,t=()=>{let t=document.querySelector(`[data-cbox]`);t!==e&&(e=t,t&&(t.hidden=!0))};t(),document.addEventListener(`astro:page-load`,t);</script></article></main><footer class="site-footer"><div class="site-footer__inner"><div class="site-footer__id"><img src="/avatars/avatar.png" alt="k7tmiz" class="site-footer__avatar" width="40" height="40"><div class="site-footer__id-text"><strong>k7tmiz</strong><span>Viva la vida</span></div></div><nav class="site-footer__links" aria-label="页脚链接"><a href="https://github.com/k7tmiz" target="_blank" rel="noopener noreferrer"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 19c-4.3 1.4-4.3-2.5-6-3m12 5v-3.5c0-1 .1-1.4-.5-2 2.8-.3 5.5-1.4 5.5-6a4.7 4.7 0 0 0-1.3-3.2 4.3 4.3 0 0 0-.1-3.2s-1.1-.3-3.5 1.3a12 12 0 0 0-6.2 0C6.5 2.8 5.4 3.1 5.4 3.1a4.3 4.3 0 0 0-.1 3.2A4.7 4.7 0 0 0 4 9.5c0 4.6 2.7 5.7 5.5 6-.6.6-.6 1.2-.5 2V21"/></svg>GitHub</a><a href="/rss.xml"><svg width="11" height="11" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><g transform="translate(1.3 -1.3) translate(12 12) scale(0.82) translate(-12 -12)"><path d="M19.199 24C19.199 13.467 10.533 4.8 0 4.8V0c13.165 0 24 10.835 24 24h-4.801zM3.291 17.415c1.814 0 3.293 1.479 3.293 3.295 0 1.813-1.485 3.29-3.301 3.29C1.47 24 0 22.526 0 20.71s1.475-3.294 3.291-3.295zM15.909 24h-4.665c0-6.169-5.075-11.245-11.244-11.245V8.09c8.727 0 15.909 7.184 15.909 15.91z"/></g></svg>RSS</a><span class="site-footer__sep" aria-hidden="true"></span></nav></div><div class="site-footer__bar"><span>© 2026 k7tmiz</span><span aria-hidden="true">·</span><a href="https://k7tmiz.com">k7tmiz.com</a><span aria-hidden="true">·</span><span>由 <a href="https://astro.build" target="_blank" rel="noopener noreferrer">Astro</a> 构建</span></div></footer><div data-astro-transition-persist="music-player" data-astro-transition-scope="astro-urs5wucv-4" class="music-player" data-music-player data-testid="music-player" data-playlist-id="13735371900" data-api-base="https://meting.mikus.ink/api"><section id="music-player-panel" class="music-player__panel" data-music-panel data-testid="music-panel" aria-label="音乐播放器" aria-hidden="true" inert><header class="music-player__header"><div class="music-player__playing-state"><span class="music-player__icon music-player__status-icon" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" fill="currentColor"><path d="M56,96v64a8,8,0,0,1-16,0V96a8,8,0,0,1,16,0ZM88,24a8,8,0,0,0-8,8V224a8,8,0,0,0,16,0V32A8,8,0,0,0,88,24Zm40,32a8,8,0,0,0-8,8V192a8,8,0,0,0,16,0V64A8,8,0,0,0,128,56Zm40,32a8,8,0,0,0-8,8v64a8,8,0,0,0,16,0V96A8,8,0,0,0,168,88Zm40-16a8,8,0,0,0-8,8v96a8,8,0,0,0,16,0V80A8,8,0,0,0,208,72Z"/></svg></span><span class="music-player__status" data-music-status aria-live="polite">正在连接歌单…</span></div><div class="music-player__header-actions"><button type="button" data-music-mute aria-label="静音" title="静音" disabled><span class="music-player__icon music-player__volume-icon" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" fill="currentColor"><path d="M155.51,24.81a8,8,0,0,0-8.42.88L77.25,80H32A16,16,0,0,0,16,96v64a16,16,0,0,0,16,16H77.25l69.84,54.31A8,8,0,0,0,160,224V32A8,8,0,0,0,155.51,24.81ZM32,96H72v64H32ZM144,207.64,88,164.09V91.91l56-43.55Zm54-106.08a40,40,0,0,1,0,52.88,8,8,0,0,1-12-10.58,24,24,0,0,0,0-31.72,8,8,0,0,1,12-10.58ZM248,128a79.9,79.9,0,0,1-20.37,53.34,8,8,0,0,1-11.92-10.67,64,64,0,0,0,0-85.33,8,8,0,1,1,11.92-10.67A79.83,79.83,0,0,1,248,128Z"/></svg></span><span class="music-player__icon music-player__muted-icon" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" fill="currentColor"><path d="M53.92,34.62A8,8,0,1,0,42.08,45.38L73.55,80H32A16,16,0,0,0,16,96v64a16,16,0,0,0,16,16H77.25l69.84,54.31A8,8,0,0,0,160,224V175.09l42.08,46.29a8,8,0,1,0,11.84-10.76ZM32,96H72v64H32ZM144,207.64,88,164.09V95.89l56,61.6Zm42-63.77a24,24,0,0,0,0-31.72,8,8,0,1,1,12-10.57,40,40,0,0,1,0,52.88,8,8,0,0,1-12-10.59Zm-80.16-76a8,8,0,0,1,1.4-11.23l39.85-31A8,8,0,0,1,160,32v74.83a8,8,0,0,1-16,0V48.36l-26.94,21A8,8,0,0,1,105.84,67.91ZM248,128a79.9,79.9,0,0,1-20.37,53.34,8,8,0,0,1-11.92-10.67,64,64,0,0,0,0-85.33,8,8,0,1,1,11.92-10.67A79.83,79.83,0,0,1,248,128Z"/></svg></span></button><a href="https://music.163.com/#/playlist?id=13735371900" target="_blank" rel="noopener noreferrer" aria-label="在网易云音乐中打开歌单" title="在网易云音乐中打开"><span class="music-player__icon" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" fill="currentColor"><path d="M224,104a8,8,0,0,1-16,0V59.32l-66.33,66.34a8,8,0,0,1-11.32-11.32L196.68,48H152a8,8,0,0,1,0-16h64a8,8,0,0,1,8,8Zm-40,24a8,8,0,0,0-8,8v72H48V80h72a8,8,0,0,0,0-16H48A16,16,0,0,0,32,80V208a16,16,0,0,0,16,16H176a16,16,0,0,0,16-16V136A8,8,0,0,0,184,128Z"/></svg></span></a><button type="button" data-music-close aria-label="收起音乐播放器" title="收起"><span class="music-player__icon" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" fill="currentColor"><path d="M205.66,194.34a8,8,0,0,1-11.32,11.32L128,139.31,61.66,205.66a8,8,0,0,1-11.32-11.32L116.69,128,50.34,61.66A8,8,0,0,1,61.66,50.34L128,116.69l66.34-66.35a8,8,0,0,1,11.32,11.32L139.31,128Z"/></svg></span></button></div></header><div class="music-player__now"><div class="music-player__cover" aria-hidden="true"><span class="music-player__cover-fallback music-player__icon"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" fill="currentColor"><path d="M212.92,17.69a8,8,0,0,0-6.86-1.45l-128,32A8,8,0,0,0,72,56V166.08A36,36,0,1,0,88,196V110.25l112-28v51.83A36,36,0,1,0,216,164V24A8,8,0,0,0,212.92,17.69ZM52,216a20,20,0,1,1,20-20A20,20,0,0,1,52,216ZM88,93.75V62.25l112-28v31.5ZM180,184a20,20,0,1,1,20-20A20,20,0,0,1,180,184Z"/></svg></span><img data-music-cover alt="" width="132" height="132" hidden></div><div class="music-player__meta"><strong data-music-title>歌单加载中</strong><span data-music-artist>网易云音乐</span></div><button type="button" class="music-player__favorite" data-music-favorite aria-label="收藏当前歌曲" aria-pressed="false" title="收藏" disabled><span class="music-player__icon music-player__heart-icon" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" fill="currentColor"><path d="M178,40c-20.65,0-38.73,8.88-50,23.89C116.73,48.88,98.65,40,78,40a62.07,62.07,0,0,0-62,62c0,70,103.79,126.66,108.21,129a8,8,0,0,0,7.58,0C136.21,228.66,240,172,240,102A62.07,62.07,0,0,0,178,40ZM128,214.8C109.74,204.16,32,155.69,32,102A46.06,46.06,0,0,1,78,56c19.45,0,35.78,10.36,42.6,27a8,8,0,0,0,14.8,0c6.82-16.67,23.15-27,42.6-27a46.06,46.06,0,0,1,46,46C224,155.61,146.24,204.15,128,214.8Z"/></svg></span><span class="music-player__icon music-player__heart-fill-icon" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" fill="currentColor"><path d="M240,102c0,70-103.79,126.66-108.21,129a8,8,0,0,1-7.58,0C119.79,228.66,16,172,16,102A62.07,62.07,0,0,1,78,40c20.65,0,38.73,8.88,50,23.89C139.27,48.88,157.35,40,178,40A62.07,62.07,0,0,1,240,102Z"/></svg></span></button></div><div class="music-player__timeline"><div class="music-player__seek"><span class="music-player__seek-track" aria-hidden="true"><span class="music-player__seek-fill"></span></span><input type="range" min="0" max="1000" value="0" step="1" data-music-progress aria-label="播放进度" aria-valuetext="0:00 / 0:00" disabled></div><div class="music-player__time" aria-hidden="true"><span data-music-current-time>0:00</span><span data-music-duration>0:00</span></div></div><div class="music-player__controls" aria-label="播放控制"><button type="button" data-music-shuffle aria-label="随机播放" aria-pressed="false" title="随机播放" disabled><span class="music-player__icon" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" fill="currentColor"><path d="M237.66,178.34a8,8,0,0,1,0,11.32l-24,24a8,8,0,0,1-11.32-11.32L212.69,192H200.94a72.12,72.12,0,0,1-58.59-30.15l-41.72-58.4A56.1,56.1,0,0,0,55.06,80H32a8,8,0,0,1,0-16H55.06a72.12,72.12,0,0,1,58.59,30.15l41.72,58.4A56.1,56.1,0,0,0,200.94,176h11.75l-10.35-10.34a8,8,0,0,1,11.32-11.32ZM143,107a8,8,0,0,0,11.16-1.86l1.2-1.67A56.1,56.1,0,0,1,200.94,80h11.75L202.34,90.34a8,8,0,0,0,11.32,11.32l24-24a8,8,0,0,0,0-11.32l-24-24a8,8,0,0,0-11.32,11.32L212.69,64H200.94a72.12,72.12,0,0,0-58.59,30.15l-1.2,1.67A8,8,0,0,0,143,107Zm-30,42a8,8,0,0,0-11.16,1.86l-1.2,1.67A56.1,56.1,0,0,1,55.06,176H32a8,8,0,0,0,0,16H55.06a72.12,72.12,0,0,0,58.59-30.15l1.2-1.67A8,8,0,0,0,113,149Z"/></svg></span></button><button type="button" data-music-prev aria-label="上一首" title="上一首" disabled><span class="music-player__icon" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" fill="currentColor"><path d="M208,47.88V208.12a16,16,0,0,1-24.43,13.43L64,146.77V216a8,8,0,0,1-16,0V40a8,8,0,0,1,16,0v69.23L183.57,34.45A15.95,15.95,0,0,1,208,47.88Z"/></svg></span></button><button type="button" class="music-player__play" data-music-play data-testid="music-play" aria-label="播放" title="播放" disabled><span class="music-player__icon music-player__play-icon" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" fill="currentColor"><path d="M240,128a15.74,15.74,0,0,1-7.6,13.51L88.32,229.65a16,16,0,0,1-16.2.3A15.86,15.86,0,0,1,64,216.13V39.87a15.86,15.86,0,0,1,8.12-13.82,16,16,0,0,1,16.2.3L232.4,114.49A15.74,15.74,0,0,1,240,128Z"/></svg></span><span class="music-player__icon music-player__pause-icon" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" fill="currentColor"><path d="M216,48V208a16,16,0,0,1-16,16H160a16,16,0,0,1-16-16V48a16,16,0,0,1,16-16h40A16,16,0,0,1,216,48ZM96,32H56A16,16,0,0,0,40,48V208a16,16,0,0,0,16,16H96a16,16,0,0,0,16-16V48A16,16,0,0,0,96,32Z"/></svg></span></button><button type="button" data-music-next aria-label="下一首" title="下一首" disabled><span class="music-player__icon" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" fill="currentColor"><path d="M208,40V216a8,8,0,0,1-16,0V146.77L72.43,221.55A15.95,15.95,0,0,1,48,208.12V47.88A15.95,15.95,0,0,1,72.43,34.45L192,109.23V40a8,8,0,0,1,16,0Z"/></svg></span></button><button type="button" data-music-repeat aria-label="单曲循环" aria-pressed="false" title="单曲循环" disabled><span class="music-player__icon" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" fill="currentColor"><path d="M24,128A72.08,72.08,0,0,1,96,56H204.69L194.34,45.66a8,8,0,0,1,11.32-11.32l24,24a8,8,0,0,1,0,11.32l-24,24a8,8,0,0,1-11.32-11.32L204.69,72H96a56.06,56.06,0,0,0-56,56,8,8,0,0,1-16,0Zm200-8a8,8,0,0,0-8,8,56.06,56.06,0,0,1-56,56H51.31l10.35-10.34a8,8,0,0,0-11.32-11.32l-24,24a8,8,0,0,0,0,11.32l24,24a8,8,0,0,0,11.32-11.32L51.31,200H160a72.08,72.08,0,0,0,72-72A8,8,0,0,0,224,120Z"/></svg></span></button></div><div class="music-player__queue-head"><span>播放列表</span><button type="button" data-music-retry hidden>重新加载</button><small data-music-count>加载中</small></div><ol class="music-player__queue" data-music-list aria-label="歌单曲目"><li class="music-player__empty" data-music-empty>正在从网易云读取歌单…</li></ol></section><button type="button" class="music-player__toggle" data-music-toggle data-testid="music-toggle" aria-controls="music-player-panel" aria-expanded="false" aria-label="打开音乐播放器" title="音乐"><span class="music-player__disc" aria-hidden="true"><span class="music-player__disc-fallback music-player__icon"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" fill="currentColor"><path d="M212.92,17.69a8,8,0,0,0-6.86-1.45l-128,32A8,8,0,0,0,72,56V166.08A36,36,0,1,0,88,196V110.25l112-28v51.83A36,36,0,1,0,216,164V24A8,8,0,0,0,212.92,17.69ZM52,216a20,20,0,1,1,20-20A20,20,0,0,1,52,216ZM88,93.75V62.25l112-28v31.5ZM180,184a20,20,0,1,1,20-20A20,20,0,0,1,180,184Z"/></svg></span><img data-music-dock-cover alt="" width="34" height="34" hidden></span><span class="music-player__pulse music-player__icon" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" fill="currentColor"><path d="M56,96v64a8,8,0,0,1-16,0V96a8,8,0,0,1,16,0ZM88,24a8,8,0,0,0-8,8V224a8,8,0,0,0,16,0V32A8,8,0,0,0,88,24Zm40,32a8,8,0,0,0-8,8V192a8,8,0,0,0,16,0V64A8,8,0,0,0,128,56Zm40,32a8,8,0,0,0-8,8v64a8,8,0,0,0,16,0V96A8,8,0,0,0,168,88Zm40-16a8,8,0,0,0-8,8v96a8,8,0,0,0,16,0V80A8,8,0,0,0,208,72Z"/></svg></span></button><audio data-music-audio preload="none"></audio></div><script>
+  (() => {
+    const formatTime = (seconds) => {
+      if (!Number.isFinite(seconds) || seconds < 0) return '0:00';
+      const minutes = Math.floor(seconds / 60);
+      return `${minutes}:${String(Math.floor(seconds % 60)).padStart(2, '0')}`;
+    };
+
+    const initPlayer = (root) => {
+      if (root.dataset.ready === 'true') return;
+      root.dataset.ready = 'true';
+
+      const panel = root.querySelector('[data-music-panel]');
+      const toggle = root.querySelector('[data-music-toggle]');
+      const closeButton = root.querySelector('[data-music-close]');
+      const audio = root.querySelector('[data-music-audio]');
+      const playButton = root.querySelector('[data-music-play]');
+      const prevButton = root.querySelector('[data-music-prev]');
+      const nextButton = root.querySelector('[data-music-next]');
+      const muteButton = root.querySelector('[data-music-mute]');
+      const shuffleButton = root.querySelector('[data-music-shuffle]');
+      const repeatButton = root.querySelector('[data-music-repeat]');
+      const favoriteButton = root.querySelector('[data-music-favorite]');
+      const retryButton = root.querySelector('[data-music-retry]');
+      const progress = root.querySelector('[data-music-progress]');
+      const currentTime = root.querySelector('[data-music-current-time]');
+      const duration = root.querySelector('[data-music-duration]');
+      const title = root.querySelector('[data-music-title]');
+      const artist = root.querySelector('[data-music-artist]');
+      const status = root.querySelector('[data-music-status]');
+      const count = root.querySelector('[data-music-count]');
+      const list = root.querySelector('[data-music-list]');
+      const cover = root.querySelector('[data-music-cover]');
+      const dockCover = root.querySelector('[data-music-dock-cover]');
+      const playlistId = root.dataset.playlistId || '8792942606';
+      const apiBase = root.dataset.apiBase || 'https://meting.mikus.ink/api';
+      const storageKey = `blog-music-player:${playlistId}`;
+
+      if (
+        !panel || !toggle || !audio || !playButton || !prevButton || !nextButton ||
+        !muteButton || !progress || !list || !title || !artist || !status
+      ) return;
+
+      let tracks = [];
+      let currentIndex = 0;
+      let loadedIndex = -1;
+      let wantsPlayback = false;
+      let playGeneration = 0;
+      let skipScheduled = false;
+      let skipTimer = 0;
+      let failedTracks = new Set();
+      let fetchController = null;
+
+      const saved = (() => {
+        try {
+          return JSON.parse(localStorage.getItem(storageKey) || '{}');
+        } catch {
+          return {};
+        }
+      })();
+
+      let shuffleEnabled = Boolean(saved.shuffle);
+      let repeatOne = Boolean(saved.repeatOne);
+      const favorites = new Set(
+        Array.isArray(saved.favorites)
+          ? saved.favorites.filter((value) => typeof value === 'string').slice(0, 250)
+          : [],
+      );
+
+      audio.volume = Number.isFinite(saved.volume)
+        ? Math.min(1, Math.max(0, saved.volume))
+        : 0.72;
+      audio.muted = Boolean(saved.muted);
+      audio.loop = repeatOne;
+      root.classList.toggle('is-muted', audio.muted);
+      shuffleButton?.setAttribute('aria-pressed', String(shuffleEnabled));
+      repeatButton?.setAttribute('aria-pressed', String(repeatOne));
+
+      const persist = () => {
+        try {
+          localStorage.setItem(
+            storageKey,
+            JSON.stringify({
+              index: currentIndex,
+              volume: audio.volume,
+              muted: audio.muted,
+              shuffle: shuffleEnabled,
+              repeatOne,
+              favorites: [...favorites],
+            }),
+          );
+        } catch {
+        }
+      };
+
+      const safeUrl = (value) => {
+        if (!value) return '';
+        try {
+          const parsed = new URL(String(value), window.location.href);
+          if (parsed.protocol !== 'http:' && parsed.protocol !== 'https:') return '';
+          if (window.location.protocol === 'https:' && parsed.protocol === 'http:') {
+            parsed.protocol = 'https:';
+          }
+          return parsed.toString();
+        } catch {
+          return '';
+        }
+      };
+
+      const cleanText = (value, fallback) => {
+        const text = String(value || '').trim().replace(/\s+/g, ' ');
+        return (text || fallback).slice(0, 180);
+      };
+
+      const setStatus = (message) => {
+        status.textContent = message;
+      };
+
+      const setControlsDisabled = (disabled) => {
+        [
+          playButton,
+          prevButton,
+          nextButton,
+          muteButton,
+          shuffleButton,
+          repeatButton,
+          favoriteButton,
+        ].forEach((button) => {
+          if (!button) return;
+          button.disabled = disabled;
+        });
+      };
+
+      const setOpen = (open) => {
+        root.classList.toggle('is-open', open);
+        panel.setAttribute('aria-hidden', String(!open));
+        if (open) panel.removeAttribute('inert');
+        else panel.setAttribute('inert', '');
+        toggle.setAttribute('aria-expanded', String(open));
+        toggle.setAttribute('aria-label', open ? '收起音乐播放器' : '打开音乐播放器');
+        toggle.title = open ? '收起音乐' : '音乐';
+        if (open) {
+          window.requestAnimationFrame(() => {
+            scrollActiveTrack();
+            closeButton?.focus({ preventScroll: true });
+          });
+        }
+      };
+
+      const updateCover = (image, source) => {
+        if (!image) return;
+        if (!source) {
+          image.hidden = true;
+          image.removeAttribute('src');
+          return;
+        }
+        image.hidden = false;
+        image.src = source;
+      };
+
+      cover?.addEventListener('error', () => { cover.hidden = true; });
+      dockCover?.addEventListener('error', () => { dockCover.hidden = true; });
+
+      const updateMediaSession = (track) => {
+        if (!('mediaSession' in navigator) || !('MediaMetadata' in window)) return;
+        try {
+          navigator.mediaSession.metadata = new MediaMetadata({
+            title: track.title,
+            artist: track.artist,
+            album: 'k7tmiz · 网易云歌单',
+            artwork: track.cover
+              ? [{ src: track.cover, sizes: '300x300', type: 'image/jpeg' }]
+              : [],
+          });
+        } catch {
+        }
+      };
+
+      const getTrackKey = (track) => `${track.title}\u0000${track.artist}\u0000${track.url}`;
+
+      const updateFavoriteState = () => {
+        if (!favoriteButton || !tracks.length) return;
+        const active = favorites.has(getTrackKey(tracks[currentIndex]));
+        favoriteButton.classList.toggle('is-favorite', active);
+        favoriteButton.setAttribute('aria-pressed', String(active));
+        favoriteButton.setAttribute('aria-label', active ? '取消收藏当前歌曲' : '收藏当前歌曲');
+        favoriteButton.title = active ? '取消收藏' : '收藏';
+      };
+
+      const scrollActiveTrack = () => {
+        const activeButton = list.querySelector(`[data-track-index="${currentIndex}"]`);
+        activeButton?.scrollIntoView({ block: 'nearest' });
+      };
+
+      const updateActiveTrack = () => {
+        list.querySelectorAll('[data-track-index]').forEach((button) => {
+          const active = Number(button.dataset.trackIndex) === currentIndex;
+          button.setAttribute('aria-current', String(active));
+        });
+      };
+
+      const showTrack = (index) => {
+        if (!tracks.length) return;
+        currentIndex = ((index % tracks.length) + tracks.length) % tracks.length;
+        const track = tracks[currentIndex];
+        title.textContent = track.title;
+        artist.textContent = track.artist;
+        updateCover(cover, track.cover);
+        updateCover(dockCover, track.cover);
+        updateActiveTrack();
+        updateFavoriteState();
+        if (count) count.textContent = `${currentIndex + 1}/${tracks.length}`;
+        if (root.classList.contains('is-open')) window.requestAnimationFrame(scrollActiveTrack);
+        updateMediaSession(track);
+        persist();
+      };
+
+      const resetTimeline = () => {
+        progress.value = '0';
+        progress.style.setProperty('--music-progress', '0%');
+        progress.parentElement?.style.setProperty('--music-progress', '0%');
+        progress.disabled = true;
+        progress.setAttribute('aria-valuetext', '0:00 / 0:00');
+        if (currentTime) currentTime.textContent = '0:00';
+        if (duration) duration.textContent = '0:00';
+      };
+
+      const loadCurrentAudio = () => {
+        if (!tracks.length) return false;
+        if (loadedIndex === currentIndex && audio.src) return true;
+        loadedIndex = currentIndex;
+        resetTimeline();
+        audio.src = tracks[currentIndex].url;
+        audio.load();
+        return true;
+      };
+
+      const scheduleSkip = () => {
+        if (skipScheduled || !wantsPlayback || !tracks.length) return;
+        skipScheduled = true;
+        failedTracks.add(currentIndex);
+        root.classList.remove('is-playing', 'is-loading');
+
+        if (failedTracks.size >= tracks.length) {
+          wantsPlayback = false;
+          setStatus('歌单中的曲目暂时都无法播放');
+          skipScheduled = false;
+          return;
+        }
+
+        let next = currentIndex;
+        do {
+          next = (next + 1) % tracks.length;
+        } while (failedTracks.has(next) && next !== currentIndex);
+
+        setStatus('这首暂不可播，已为你切换下一首');
+        skipTimer = window.setTimeout(() => {
+          skipTimer = 0;
+          skipScheduled = false;
+          selectTrack(next, true, false);
+        }, 420);
+      };
+
+      const playCurrent = async () => {
+        if (!loadCurrentAudio()) return;
+        const generation = ++playGeneration;
+        wantsPlayback = true;
+        root.classList.add('is-loading');
+        setStatus('正在缓冲…');
+        try {
+          await audio.play();
+        } catch (error) {
+          if (generation !== playGeneration || error?.name === 'AbortError') return;
+          root.classList.remove('is-loading');
+          if (error?.name === 'NotAllowedError') {
+            wantsPlayback = false;
+            setStatus('浏览器阻止了播放，请再点一次');
+            return;
+          }
+          scheduleSkip();
+        }
+      };
+
+      function selectTrack(index, shouldPlay, userInitiated = true) {
+        if (!tracks.length) return;
+        if (userInitiated && skipTimer) {
+          window.clearTimeout(skipTimer);
+          skipTimer = 0;
+          skipScheduled = false;
+        }
+        if (userInitiated) failedTracks.delete(((index % tracks.length) + tracks.length) % tracks.length);
+        const changed = currentIndex !== ((index % tracks.length) + tracks.length) % tracks.length;
+        if (changed) {
+          playGeneration += 1;
+          if (!audio.paused) audio.pause();
+        }
+        showTrack(index);
+        if (changed) {
+          loadedIndex = -1;
+          audio.removeAttribute('src');
+          audio.load();
+          resetTimeline();
+        }
+        if (shouldPlay) playCurrent();
+        else setStatus('准备就绪');
+      }
+
+      const getAdjacentIndex = (direction) => {
+        if (!shuffleEnabled || tracks.length < 2) return currentIndex + direction;
+        let candidate = currentIndex;
+        for (let attempts = 0; attempts < tracks.length * 2 && candidate === currentIndex; attempts += 1) {
+          candidate = Math.floor(Math.random() * tracks.length);
+        }
+        return candidate === currentIndex ? currentIndex + direction : candidate;
+      };
+
+      const renderTracks = () => {
+        list.replaceChildren();
+        const fragment = document.createDocumentFragment();
+        tracks.forEach((track, index) => {
+          const item = document.createElement('li');
+          const button = document.createElement('button');
+          const artwork = track.cover
+            ? document.createElement('img')
+            : document.createElement('span');
+          const copy = document.createElement('span');
+          const trackTitle = document.createElement('strong');
+          const trackArtist = document.createElement('small');
+          const trackPosition = document.createElement('span');
+
+          button.type = 'button';
+          button.className = 'music-player__track-button';
+          button.dataset.trackIndex = String(index);
+          button.setAttribute('aria-label', `播放 ${track.title} - ${track.artist}`);
+          button.setAttribute('aria-current', String(index === currentIndex));
+          if (artwork instanceof HTMLImageElement) {
+            artwork.className = 'music-player__track-art';
+            artwork.src = track.cover;
+            artwork.alt = '';
+            artwork.loading = 'lazy';
+            artwork.referrerPolicy = 'no-referrer';
+          } else {
+            artwork.className = 'music-player__track-number';
+            artwork.textContent = String(index + 1).padStart(2, '0');
+          }
+          copy.className = 'music-player__track-copy';
+          trackTitle.textContent = track.title;
+          trackArtist.textContent = track.artist;
+          trackPosition.className = 'music-player__track-position';
+          trackPosition.textContent = String(index + 1).padStart(2, '0');
+          copy.append(trackTitle, trackArtist);
+          button.append(artwork, copy, trackPosition);
+          item.append(button);
+          fragment.append(item);
+        });
+        list.append(fragment);
+      };
+
+      const loadPlaylist = async () => {
+        fetchController?.abort();
+        fetchController = new AbortController();
+        const timeout = window.setTimeout(() => fetchController.abort(), 10000);
+        setControlsDisabled(true);
+        retryButton?.setAttribute('hidden', '');
+        count.textContent = '加载中';
+        setStatus('正在连接歌单…');
+        list.innerHTML = '<li class="music-player__empty">正在从网易云读取歌单…</li>';
+
+        try {
+          const endpoint = new URL(apiBase, window.location.href);
+          endpoint.searchParams.set('server', 'netease');
+          endpoint.searchParams.set('type', 'playlist');
+          endpoint.searchParams.set('id', playlistId);
+          const response = await fetch(endpoint, {
+            signal: fetchController.signal,
+            mode: 'cors',
+            credentials: 'omit',
+            headers: { Accept: 'application/json' },
+          });
+          if (!response.ok) throw new Error(`Playlist request failed: ${response.status}`);
+          const data = await response.json();
+          if (!Array.isArray(data)) throw new Error('Invalid playlist response');
+
+          tracks = data
+            .slice(0, 250)
+            .map((item) => ({
+              title: cleanText(item.title ?? item.name, '未知歌曲'),
+              artist: cleanText(item.author ?? item.artist, '未知歌手'),
+              cover: safeUrl(item.pic ?? item.cover ?? item.image),
+              url: safeUrl(item.url ?? item.src),
+            }))
+            .filter((track) => track.url);
+
+          if (!tracks.length) throw new Error('Playlist is empty');
+          const requestedIndex = Number(saved.index);
+          currentIndex = Number.isInteger(requestedIndex)
+            ? Math.min(tracks.length - 1, Math.max(0, requestedIndex))
+            : 0;
+          loadedIndex = -1;
+          failedTracks = new Set();
+          renderTracks();
+          showTrack(currentIndex);
+          setControlsDisabled(false);
+          setStatus('准备就绪');
+        } catch (error) {
+          if (error?.name === 'AbortError') setStatus('歌单连接超时');
+          else setStatus('歌单暂时无法加载');
+          title.textContent = '稍后再试';
+          artist.textContent = '也可以前往网易云查看歌单';
+          count.textContent = '0/0';
+          list.innerHTML = '<li class="music-player__empty">公共音乐接口暂时不可用，请稍后重试。</li>';
+          retryButton?.removeAttribute('hidden');
+        } finally {
+          window.clearTimeout(timeout);
+        }
+      };
+
+      toggle.addEventListener('click', () => {
+        setOpen(!root.classList.contains('is-open'));
+      });
+
+      closeButton?.addEventListener('click', () => {
+        setOpen(false);
+        toggle.focus();
+      });
+
+      document.addEventListener('pointerdown', (event) => {
+        if (root.classList.contains('is-open') && !root.contains(event.target)) setOpen(false);
+      });
+
+      document.addEventListener('keydown', (event) => {
+        if (event.key === 'Escape' && root.classList.contains('is-open')) {
+          setOpen(false);
+          toggle.focus();
+        }
+      });
+
+      playButton.addEventListener('click', () => {
+        if (audio.paused) playCurrent();
+        else {
+          playGeneration += 1;
+          wantsPlayback = false;
+          audio.pause();
+        }
+      });
+
+      prevButton.addEventListener('click', () => {
+        const keepPlaying = wantsPlayback && !audio.paused;
+        selectTrack(getAdjacentIndex(-1), keepPlaying);
+      });
+
+      nextButton.addEventListener('click', () => {
+        const keepPlaying = wantsPlayback && !audio.paused;
+        selectTrack(getAdjacentIndex(1), keepPlaying);
+      });
+
+      muteButton.addEventListener('click', () => {
+        audio.muted = !audio.muted;
+      });
+
+      shuffleButton?.addEventListener('click', () => {
+        shuffleEnabled = !shuffleEnabled;
+        shuffleButton.setAttribute('aria-pressed', String(shuffleEnabled));
+        shuffleButton.title = shuffleEnabled ? '关闭随机播放' : '随机播放';
+        persist();
+      });
+
+      repeatButton?.addEventListener('click', () => {
+        repeatOne = !repeatOne;
+        audio.loop = repeatOne;
+        repeatButton.setAttribute('aria-pressed', String(repeatOne));
+        repeatButton.title = repeatOne ? '关闭单曲循环' : '单曲循环';
+        persist();
+      });
+
+      favoriteButton?.addEventListener('click', () => {
+        if (!tracks.length) return;
+        const key = getTrackKey(tracks[currentIndex]);
+        if (favorites.has(key)) favorites.delete(key);
+        else favorites.add(key);
+        updateFavoriteState();
+        persist();
+      });
+
+      retryButton?.addEventListener('click', loadPlaylist);
+
+      list.addEventListener('click', (event) => {
+        const button = event.target.closest('[data-track-index]');
+        if (!button || !list.contains(button)) return;
+        selectTrack(Number(button.dataset.trackIndex), true);
+      });
+
+      progress.addEventListener('input', () => {
+        if (!Number.isFinite(audio.duration) || audio.duration <= 0) return;
+        const ratio = Number(progress.value) / 1000;
+        progress.style.setProperty('--music-progress', `${ratio * 100}%`);
+        progress.parentElement?.style.setProperty('--music-progress', `${ratio * 100}%`);
+        audio.currentTime = ratio * audio.duration;
+        progress.setAttribute(
+          'aria-valuetext',
+          `${formatTime(audio.currentTime)} / ${formatTime(audio.duration)}`,
+        );
+      });
+
+      audio.addEventListener('loadstart', () => {
+        if (wantsPlayback) {
+          root.classList.add('is-loading');
+          setStatus('正在缓冲…');
+        }
+      });
+
+      audio.addEventListener('playing', () => {
+        wantsPlayback = true;
+        root.classList.remove('is-loading');
+        root.classList.add('is-playing');
+        playButton.setAttribute('aria-label', '暂停');
+        playButton.title = '暂停';
+        setStatus('正在播放');
+      });
+
+      audio.addEventListener('pause', () => {
+        root.classList.remove('is-playing', 'is-loading');
+        playButton.setAttribute('aria-label', '播放');
+        playButton.title = '播放';
+        if (!wantsPlayback && audio.currentTime > 0 && !audio.ended) setStatus('已暂停');
+      });
+
+      audio.addEventListener('waiting', () => {
+        if (wantsPlayback) {
+          root.classList.add('is-loading');
+          setStatus('网络缓冲中…');
+        }
+      });
+
+      audio.addEventListener('loadedmetadata', () => {
+        progress.disabled = !Number.isFinite(audio.duration);
+        if (duration) duration.textContent = formatTime(audio.duration);
+        progress.setAttribute(
+          'aria-valuetext',
+          `${formatTime(audio.currentTime)} / ${formatTime(audio.duration)}`,
+        );
+      });
+
+      audio.addEventListener('timeupdate', () => {
+        if (Number.isFinite(audio.duration) && audio.duration > 0) {
+          const ratio = audio.currentTime / audio.duration;
+          progress.value = String(Math.round(ratio * 1000));
+          progress.style.setProperty('--music-progress', `${ratio * 100}%`);
+          progress.parentElement?.style.setProperty('--music-progress', `${ratio * 100}%`);
+          if (currentTime) currentTime.textContent = formatTime(audio.currentTime);
+          if (duration) duration.textContent = formatTime(audio.duration);
+          progress.setAttribute(
+            'aria-valuetext',
+            `${formatTime(audio.currentTime)} / ${formatTime(audio.duration)}`,
+          );
+        }
+      });
+
+      audio.addEventListener('ended', () => {
+        selectTrack(repeatOne ? currentIndex : getAdjacentIndex(1), true, false);
+      });
+      audio.addEventListener('error', scheduleSkip);
+      audio.addEventListener('volumechange', () => {
+        root.classList.toggle('is-muted', audio.muted || audio.volume === 0);
+        muteButton.setAttribute('aria-label', audio.muted ? '恢复声音' : '静音');
+        muteButton.title = audio.muted ? '恢复声音' : '静音';
+        persist();
+      });
+
+      if ('mediaSession' in navigator) {
+        try {
+          navigator.mediaSession.setActionHandler('play', playCurrent);
+          navigator.mediaSession.setActionHandler('pause', () => {
+            playGeneration += 1;
+            wantsPlayback = false;
+            audio.pause();
+          });
+          navigator.mediaSession.setActionHandler('previoustrack', () => selectTrack(getAdjacentIndex(-1), true));
+          navigator.mediaSession.setActionHandler('nexttrack', () => selectTrack(getAdjacentIndex(1), true));
+        } catch {
+        }
+      }
+
+      loadPlaylist();
+    };
+
+    document.querySelectorAll('[data-music-player]').forEach(initPlayer);
+  })();
+</script><button type="button" class="to-top" data-to-top aria-label="回到顶部"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 19V5M6 11l6-6 6 6"></path></svg></button><script data-astro-rerun>
+      (() => {
+        window.__blogRevealController?.abort();
+        const controller = new AbortController();
+        window.__blogRevealController = controller;
+        const signal = controller.signal;
+        const sel =
+          '.hero__intro > *, .hero__picks, .section__header, .section__more, .post-row, .related-posts, .post-nav, .article__header > *, .article__main > .article__cover, .proj-section__head, .proj, .page-header, .archive-summary, .archive-year__head, .about__intro > *, .note';
+
+        // This fires inside ClientRouter's DOM-swap callback, before the browser
+        // captures the incoming frame. It prevents the page-level fade from
+        // snapshotting above-the-fold content in its hidden reveal state.
+        const revealIncomingFrame = () => {
+          // Route content already has one page-level entrance. Reveal every
+          // incoming child before capture so the swap callback performs no
+          // geometry reads and cannot extend the transition's blank interval.
+          const visible = [...document.querySelectorAll(sel)];
+
+          visible.forEach((el) => {
+            el.style.transition = 'none';
+            el.classList.add('is-revealed');
+            el.dataset.revealed = '1';
+          });
+
+          window.requestAnimationFrame(() => {
+            visible.forEach((el) => {
+              el.style.transition = '';
+            });
+          });
+        };
+        document.addEventListener('astro:after-swap', revealIncomingFrame, { signal });
+
+        const targets = [...document.querySelectorAll(sel)];
+
+        if (!targets.length) {
+          return;
+        }
+
+        // Position-based reveal: robust to fast scroll jumps, anchor links and
+        // restored scroll (anything at/above the viewport reveals; off-screen
+        // content that was jumped past simply appears without re-animating).
+        let ticking = false;
+        const routeSwap = document.documentElement.hasAttribute('data-astro-transition');
+        const reveal = () => {
+          ticking = false;
+          const line = window.innerHeight * 0.94;
+          const batch = [];
+          for (const el of targets) {
+            if (el.dataset.revealed) {
+              continue;
+            }
+            if (el.getBoundingClientRect().top < line) {
+              batch.push(el);
+            }
+          }
+          // Stagger only the items that cross in together (e.g. the on-load batch).
+          batch.forEach((el, index) => {
+            if (routeSwap) {
+              el.style.transition = 'none';
+              window.requestAnimationFrame(() => {
+                el.style.transition = '';
+              });
+            } else {
+              el.style.setProperty('--reveal-delay', Math.min(index, 6) * 0.06 + 's');
+            }
+            el.classList.add('is-revealed');
+            el.dataset.revealed = '1';
+          });
+        };
+        const onScroll = () => {
+          if (!ticking) {
+            ticking = true;
+            window.requestAnimationFrame(reveal);
+          }
+        };
+
+        window.addEventListener('scroll', onScroll, { passive: true, signal });
+        window.addEventListener('resize', onScroll, { passive: true, signal });
+        window.addEventListener('load', reveal, { signal });
+        window.requestAnimationFrame(reveal);
+      })();
+    </script><script data-astro-rerun>
+      (() => {
+        // Mark article images once their bytes arrive so CSS can fade them in.
+        document.querySelectorAll('.post-content img').forEach((img) => {
+          const mark = () => img.classList.add('is-loaded');
+          if (img.complete) {
+            mark();
+            return;
+          }
+          img.addEventListener('load', mark, { once: true });
+          img.addEventListener('error', mark, { once: true });
+        });
+      })();
+    </script><script data-astro-rerun>
+      window.__blogPageController?.abort();
+      window.__blogPageController = new AbortController();
+
+      (() => {
+        const signal = window.__blogPageController.signal;
+        const storageKey = 'blog-theme';
+        const lightColor = '#f8f7f4';
+        const darkColor = '#0e1116';
+        const button = document.querySelector('[data-theme-toggle]');
+        const themeColor = document.querySelector('#theme-color');
+        const getStoredTheme = () => {
+          try {
+            return localStorage.getItem(storageKey);
+          } catch {
+            return null;
+          }
+        };
+        const setStoredTheme = (theme) => {
+          try {
+            localStorage.setItem(storageKey, theme);
+          } catch {
+          }
+        };
+
+        const getSystemTheme = () =>
+          window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+
+        const applyTheme = (theme, persist = true) => {
+          document.documentElement.dataset.theme = theme;
+          themeColor?.setAttribute('content', theme === 'dark' ? darkColor : lightColor);
+
+          if (button) {
+            button.dataset.themeIcon = theme;
+            button.setAttribute(
+              'aria-label',
+              theme === 'dark' ? '切换到浅色模式' : '切换到深色模式',
+            );
+            button.setAttribute('aria-pressed', String(theme === 'dark'));
+          }
+
+          if (persist) {
+            setStoredTheme(theme);
+          }
+        };
+
+        const currentTheme = () =>
+          document.documentElement.dataset.theme || getStoredTheme() || getSystemTheme();
+
+        // Inject literal percentages instead of px values or dynamic vars.
+        // Chrome rasterizes view-transition snapshots at device-pixel density;
+        // px clip coordinates can therefore render at half-size on a 2x screen,
+        // leaving part of the viewport uncovered until the snapshot disappears.
+        // Exact percentages stay in the snapshot's own coordinate space.
+        const themeRevealStyle =
+          document.getElementById('theme-reveal-style') ??
+          (() => {
+            const styleEl = document.createElement('style');
+            styleEl.id = 'theme-reveal-style';
+            document.head.append(styleEl);
+            return styleEl;
+          })();
+
+        applyTheme(currentTheme(), false);
+
+        const motionOK = window.matchMedia('(prefers-reduced-motion: no-preference)').matches;
+        let themeAnimTimer;
+        let themeSwitching = false;
+        button?.addEventListener('click', () => {
+          if (themeSwitching) return;
+          const next = currentTheme() === 'dark' ? 'light' : 'dark';
+          const root = document.documentElement;
+
+          // New theme sweeps out of the toggle as an expanding circle.
+          if (
+            motionOK &&
+            document.startViewTransition &&
+            !root.hasAttribute('data-astro-transition')
+          ) {
+            const rect = button.getBoundingClientRect();
+            const x = rect.left + rect.width / 2;
+            const y = rect.top + rect.height / 2;
+            const radius =
+              Math.hypot(
+                Math.max(x, window.innerWidth - x),
+                Math.max(y, window.innerHeight - y),
+              ) + 20;
+            const xPercent = (x / window.innerWidth) * 100;
+            const yPercent = (y / window.innerHeight) * 100;
+            // CSS resolves a circle's percentage radius against the normalized
+            // diagonal: hypot(width, height) / sqrt(2).
+            const radiusReference =
+              Math.hypot(window.innerWidth, window.innerHeight) / Math.SQRT2;
+            const radiusPercent = (radius / radiusReference) * 100;
+
+            themeSwitching = true;
+            button.classList.add('is-switching');
+            themeRevealStyle.textContent = `@keyframes theme-reveal { from { clip-path: circle(0 at ${xPercent.toFixed(4)}% ${yPercent.toFixed(4)}%); } to { clip-path: circle(${radiusPercent.toFixed(4)}% at ${xPercent.toFixed(4)}% ${yPercent.toFixed(4)}%); } }`;
+            root.classList.add('theme-vt');
+            const vt = document.startViewTransition(() => applyTheme(next));
+            vt.finished
+              .catch(() => {})
+              .finally(() => {
+                themeSwitching = false;
+                button.classList.remove('is-switching');
+                root.classList.remove('theme-vt');
+              });
+            return;
+          }
+
+          applyTheme(next);
+          if (motionOK) {
+            root.classList.remove('theme-anim');
+            void root.offsetWidth;
+            root.classList.add('theme-anim');
+            window.clearTimeout(themeAnimTimer);
+            themeAnimTimer = window.setTimeout(() => root.classList.remove('theme-anim'), 380);
+          }
+        }, { signal });
+
+        window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', () => {
+          if (!getStoredTheme()) {
+            applyTheme(getSystemTheme(), false);
+          }
+        }, { signal });
+      })();
+
+      (() => {
+        const signal = window.__blogPageController.signal;
+        const writeClipboard = async (text) => {
+          if (globalThis.navigator?.clipboard?.writeText) {
+            await globalThis.navigator.clipboard.writeText(text);
+            return true;
+          }
+
+          const textarea = document.createElement('textarea');
+          textarea.value = text;
+          textarea.setAttribute('readonly', '');
+          textarea.style.position = 'fixed';
+          textarea.style.opacity = '0';
+          document.body.append(textarea);
+          textarea.select();
+          const copied = document.execCommand('copy');
+          textarea.remove();
+          return copied;
+        };
+
+        document.querySelectorAll('.post-content pre').forEach((pre) => {
+          if (pre.querySelector('[data-copy-code]')) {
+            return;
+          }
+
+          const code = pre.querySelector('code');
+          const button = document.createElement('button');
+          button.type = 'button';
+          button.className = 'copy-code-button';
+          button.dataset.copyCode = '';
+          button.textContent = '复制';
+          button.setAttribute('aria-label', '复制代码');
+          pre.append(button);
+
+          button.addEventListener('click', async () => {
+            const text = code?.innerText ?? pre.innerText.replace(button.innerText, '');
+
+            try {
+              const copied = await writeClipboard(text.trimEnd());
+
+              if (!copied) {
+                throw new Error('Copy command failed');
+              }
+
+              button.textContent = '已复制';
+              button.classList.add('is-copied');
+              window.setTimeout(() => {
+                button.textContent = '复制';
+                button.classList.remove('is-copied');
+              }, 1800);
+            } catch {
+              button.textContent = '复制失败';
+              window.setTimeout(() => {
+                button.textContent = '复制';
+              }, 1800);
+            }
+          }, { signal });
+        });
+      })();
+
+      (() => {
+        const signal = window.__blogPageController.signal;
+        const images = document.querySelectorAll(
+          '.post-content img:not(.legacy-inline-image)',
+        );
+
+        if (!images.length) {
+          return;
+        }
+
+        let overlay = null;
+
+        const onKey = (event) => {
+          if (event.key === 'Escape') {
+            close();
+          }
+        };
+
+        function close() {
+          if (!overlay) {
+            return;
+          }
+
+          const node = overlay;
+          overlay = null;
+          node.classList.remove('is-open');
+          document.removeEventListener('keydown', onKey);
+          window.setTimeout(() => node.remove(), 200);
+        }
+
+        const open = (source, alt) => {
+          overlay = document.createElement('div');
+          overlay.className = 'lightbox';
+          overlay.setAttribute('role', 'dialog');
+          overlay.setAttribute('aria-modal', 'true');
+          overlay.setAttribute('aria-label', alt || '图片预览');
+
+          const full = document.createElement('img');
+          full.src = source;
+          full.alt = alt || '';
+          overlay.append(full);
+          overlay.addEventListener('click', close, { signal });
+          document.body.append(overlay);
+          requestAnimationFrame(() => overlay?.classList.add('is-open'));
+          document.addEventListener('keydown', onKey, { signal });
+        };
+
+        images.forEach((image) => {
+          image.addEventListener('click', () => {
+            open(image.currentSrc || image.src, image.alt);
+          }, { signal });
+        });
+      })();
+
+      (() => {
+        const signal = window.__blogPageController.signal;
+        const bar = document.querySelector('[data-reading-progress]');
+        const article = document.querySelector('.article');
+        const toTop = document.querySelector('[data-to-top]');
+        let ticking = false;
+
+        const update = () => {
+          ticking = false;
+          const scrollY = window.scrollY;
+
+          if (bar && article) {
+            const start = article.offsetTop;
+            const total = article.offsetHeight - window.innerHeight;
+            const progress = total > 0 ? (scrollY - start) / total : 0;
+            bar.style.transform = `scaleX(${Math.min(1, Math.max(0, progress))})`;
+          }
+
+          if (toTop) {
+            toTop.classList.toggle('is-visible', scrollY > 600);
+          }
+        };
+
+        const onScroll = () => {
+          if (!ticking) {
+            ticking = true;
+            window.requestAnimationFrame(update);
+          }
+        };
+
+        window.addEventListener('scroll', onScroll, { passive: true, signal });
+        window.addEventListener('resize', onScroll, { passive: true, signal });
+        update();
+
+        toTop?.addEventListener('click', () => {
+          window.scrollTo({ top: 0, behavior: 'smooth' });
+        }, { signal });
+      })();
+
+      (() => {
+        const signal = window.__blogPageController.signal;
+        const links = [...document.querySelectorAll('.toc a[href^="#"]')];
+
+        if (!links.length) {
+          return;
+        }
+
+        const items = links
+          .map((link) => {
+            const id = decodeURIComponent(link.getAttribute('href').slice(1));
+            return { link, heading: document.getElementById(id) };
+          })
+          .filter((item) => item.heading);
+
+        if (!items.length) {
+          return;
+        }
+
+        let current = null;
+        const setActive = (link) => {
+          if (current === link) {
+            return;
+          }
+          current?.classList.remove('is-active');
+          link.classList.add('is-active');
+          current = link;
+        };
+
+        let ticking = false;
+        const sync = () => {
+          ticking = false;
+          const offset = 130;
+          let active = items[0].link;
+          for (const { link, heading } of items) {
+            if (heading.getBoundingClientRect().top <= offset) {
+              active = link;
+            } else {
+              break;
+            }
+          }
+          // When scrolled to the bottom, the last headings may never pass the
+          // offset threshold (page runs out of scroll). Force the last item active.
+          if (window.scrollY + window.innerHeight >= document.documentElement.scrollHeight - 60) {
+            active = items[items.length - 1].link;
+          }
+          setActive(active);
+        };
+
+        window.addEventListener(
+          'scroll',
+          () => {
+            if (!ticking) {
+              ticking = true;
+              window.requestAnimationFrame(sync);
+            }
+          },
+          { passive: true, signal },
+        );
+        sync();
+      })();
+    </script><script>
+      // This site ships no service worker. Sweep out any registration left by
+      // a previous site generation (or another project on this localhost port)
+      // — a stale SW serves outdated CSS/JS and breaks page transitions.
+      (() => {
+        if (!('serviceWorker' in navigator)) return;
+        navigator.serviceWorker
+          .getRegistrations()
+          .then((regs) => {
+            if (!regs.length) return;
+            regs.forEach((reg) => reg.unregister());
+            if (window.caches) {
+              caches.keys().then((keys) => keys.forEach((key) => caches.delete(key)));
+            }
+          })
+          .catch(() => {});
+      })();
+    </script><script>
+      (() => {
+        const isTyping = (el) =>
+          el &&
+          (el.tagName === 'INPUT' ||
+            el.tagName === 'TEXTAREA' ||
+            el.tagName === 'SELECT' ||
+            el.isContentEditable);
+
+        document.addEventListener('keydown', (event) => {
+          const slash =
+            event.key === '/' && !event.metaKey && !event.ctrlKey && !event.altKey;
+          const cmdK =
+            (event.metaKey || event.ctrlKey) && (event.key === 'k' || event.key === 'K');
+
+          if (!slash && !cmdK) {
+            return;
+          }
+          if (slash && isTyping(document.activeElement)) {
+            return;
+          }
+
+          event.preventDefault();
+          const input = document.querySelector('#search-input');
+
+          if (input) {
+            input.focus();
+            input.select?.();
+          } else {
+            window.location.href = '/search/';
+          }
+        });
+      })();
+    </script></body></html>

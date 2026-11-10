@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630" role="img" aria-label="默认封面">
+  <defs>
+    <linearGradient id="clay-g" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#b0532b"/>
+      <stop offset="0.55" stop-color="#8a3f22"/>
+      <stop offset="1" stop-color="#5f2a15"/>
+    </linearGradient>
+    <radialGradient id="clay-glow" cx="0.5" cy="0.42" r="0.6">
+      <stop offset="0" stop-color="rgba(255,255,255,0.16)"/>
+      <stop offset="1" stop-color="rgba(255,255,255,0)"/>
+    </radialGradient>
+  </defs>
+  <rect width="1200" height="630" fill="url(#clay-g)"/>
+  <rect width="1200" height="630" fill="url(#clay-glow)"/>
+  <circle cx="600" cy="315" r="196" fill="none" stroke="rgba(255,255,255,0.16)" stroke-width="2"/>
+  <circle cx="600" cy="315" r="120" fill="none" stroke="rgba(255,255,255,0.28)" stroke-width="3"/>
+  <circle cx="600" cy="315" r="52" fill="rgba(255,255,255,0.88)"/>
+  <path d="M600 288 L640 315 L600 342 L560 315 Z" fill="#b0532b"/>
+</svg>

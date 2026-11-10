@@ -1,0 +1,1243 @@
+<!DOCTYPE html><html data-astro-transition-scope="astro-nfpogox7-1" lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="description" content="技术记录与实践笔记。"><meta name="author" content="k7tmiz"><meta id="theme-color" name="theme-color" content="#f8f7f4"><meta name="generator" content="Astro v7.2.0"><link rel="icon" type="image/png" href="/avatars/avatar.png"><link rel="apple-touch-icon" href="/avatars/avatar.png"><link rel="preconnect" href="https://cravatar.cn"><title>Archlinux安装指南 - k7tmiz</title><link rel="canonical" href="https://k7tmiz.com/posts/a907d758/"><link rel="alternate" type="application/rss+xml" title="k7tmiz RSS" href="https://k7tmiz.com/rss.xml"><meta property="og:title" content="Archlinux安装指南 - k7tmiz"><meta property="og:description" content="技术记录与实践笔记。"><meta property="og:type" content="article"><meta property="og:url" content="https://k7tmiz.com/posts/a907d758/"><meta property="og:site_name" content="k7tmiz"><meta property="og:locale" content="zh_CN"><meta property="og:image" content="https://k7tmiz.com/share/og-default.jpg"><meta name="twitter:card" content="summary_large_image"><meta name="twitter:title" content="Archlinux安装指南 - k7tmiz"><meta name="twitter:description" content="技术记录与实践笔记。"><meta name="twitter:image" content="https://k7tmiz.com/share/og-default.jpg"><script type="application/ld+json">{"@context":"https://schema.org","@type":"WebSite","name":"k7tmiz","url":"https://k7tmiz.com","description":"一些碎碎念","inLanguage":"zh-CN","author":{"@type":"Person","name":"k7tmiz","url":"https://k7tmiz.com"}}</script><script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"Archlinux安装指南","description":"技术记录与实践笔记。","inLanguage":"zh-CN","url":"https://k7tmiz.com/posts/a907d758/","mainEntityOfPage":"https://k7tmiz.com/posts/a907d758/","datePublished":"2025-04-19T22:28:32.000Z","dateModified":"2025-04-19T22:28:32.000Z","author":{"@type":"Person","name":"k7tmiz","url":"https://k7tmiz.com"},"publisher":{"@type":"Person","name":"k7tmiz","url":"https://k7tmiz.com"},"keywords":"linux"}</script><meta name="astro-view-transitions-enabled" content="true"><meta name="astro-view-transitions-fallback" content="animate"><script type="module" src="/_astro/ClientRouter.astro_astro_type_script_index_0_lang.DW-LBy1z.js"></script><script>
+      (() => {
+        const storageKey = 'blog-theme';
+        const lightColor = '#f8f7f4';
+        const darkColor = '#0e1116';
+        const getTheme = () => {
+          try {
+            const stored = localStorage.getItem(storageKey);
+            if (stored) return stored;
+          } catch {
+          }
+          return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+        };
+        const restoreTheme = () => {
+          const theme = getTheme();
+          document.documentElement.dataset.theme = theme;
+          document.documentElement.classList.add('js');
+          document.querySelector('#theme-color')?.setAttribute(
+            'content',
+            theme === 'dark' ? darkColor : lightColor,
+          );
+        };
+
+        restoreTheme();
+        // ClientRouter swaps the <html> attributes. Restore the chosen theme
+        // synchronously inside the swap callback, before the new frame paints.
+        document.addEventListener('astro:after-swap', restoreTheme);
+      })();
+    </script><link rel="stylesheet" href="/_astro/BaseLayout.BXjcRk6J.css"><style>[data-astro-transition-scope="astro-nfpogox7-1"] { view-transition-name: root; }@layer astro { ::view-transition-old(root) { animation: none; opacity: 0; mix-blend-mode: normal; }::view-transition-new(root) { animation: none; mix-blend-mode: normal; }::view-transition-group(root) { animation: none } }[data-astro-transition-fallback="old"] [data-astro-transition-scope="astro-nfpogox7-1"],
+			[data-astro-transition-fallback="old"][data-astro-transition-scope="astro-nfpogox7-1"] { animation: none; mix-blend-mode: normal; }[data-astro-transition-fallback="new"] [data-astro-transition-scope="astro-nfpogox7-1"],
+			[data-astro-transition-fallback="new"][data-astro-transition-scope="astro-nfpogox7-1"] { animation: none; mix-blend-mode: normal; }</style><style>[data-astro-transition-scope="astro-wugk46rw-2"] { view-transition-name: page-content; }@layer astro { ::view-transition-old(page-content) { 
+	animation-duration: 70ms;
+	animation-timing-function: cubic-bezier(0.4, 0, 1, 1);
+	animation-fill-mode: both;
+	animation-name: blogRouteOut; }::view-transition-new(page-content) { 
+	animation-duration: 130ms;
+	animation-timing-function: cubic-bezier(0.22, 1, 0.36, 1);
+	animation-delay: 70ms;
+	animation-fill-mode: both;
+	animation-name: blogRouteIn; }[data-astro-transition=back]::view-transition-old(page-content) { 
+	animation-duration: 70ms;
+	animation-timing-function: cubic-bezier(0.4, 0, 1, 1);
+	animation-fill-mode: both;
+	animation-name: blogRouteOut; }[data-astro-transition=back]::view-transition-new(page-content) { 
+	animation-duration: 130ms;
+	animation-timing-function: cubic-bezier(0.22, 1, 0.36, 1);
+	animation-delay: 70ms;
+	animation-fill-mode: both;
+	animation-name: blogRouteIn; } }[data-astro-transition-fallback="old"] [data-astro-transition-scope="astro-wugk46rw-2"],
+			[data-astro-transition-fallback="old"][data-astro-transition-scope="astro-wugk46rw-2"] { 
+	animation-duration: 70ms;
+	animation-timing-function: cubic-bezier(0.4, 0, 1, 1);
+	animation-fill-mode: both;
+	animation-name: blogRouteOut; }[data-astro-transition-fallback="new"] [data-astro-transition-scope="astro-wugk46rw-2"],
+			[data-astro-transition-fallback="new"][data-astro-transition-scope="astro-wugk46rw-2"] { 
+	animation-duration: 130ms;
+	animation-timing-function: cubic-bezier(0.22, 1, 0.36, 1);
+	animation-delay: 70ms;
+	animation-fill-mode: both;
+	animation-name: blogRouteIn; }[data-astro-transition=back][data-astro-transition-fallback="old"] [data-astro-transition-scope="astro-wugk46rw-2"],
+			[data-astro-transition=back][data-astro-transition-fallback="old"][data-astro-transition-scope="astro-wugk46rw-2"] { 
+	animation-duration: 70ms;
+	animation-timing-function: cubic-bezier(0.4, 0, 1, 1);
+	animation-fill-mode: both;
+	animation-name: blogRouteOut; }[data-astro-transition=back][data-astro-transition-fallback="new"] [data-astro-transition-scope="astro-wugk46rw-2"],
+			[data-astro-transition=back][data-astro-transition-fallback="new"][data-astro-transition-scope="astro-wugk46rw-2"] { 
+	animation-duration: 130ms;
+	animation-timing-function: cubic-bezier(0.22, 1, 0.36, 1);
+	animation-delay: 70ms;
+	animation-fill-mode: both;
+	animation-name: blogRouteIn; }</style><style>[data-astro-transition-scope="astro-l25zdozq-3"] { view-transition-name: astro-l25zdozq-3; }@layer astro { ::view-transition-old(astro-l25zdozq-3) { animation: none; opacity: 0; mix-blend-mode: normal; }::view-transition-new(astro-l25zdozq-3) { animation: none; mix-blend-mode: normal; }::view-transition-group(astro-l25zdozq-3) { animation: none } }[data-astro-transition-fallback="old"] [data-astro-transition-scope="astro-l25zdozq-3"],
+			[data-astro-transition-fallback="old"][data-astro-transition-scope="astro-l25zdozq-3"] { animation: none; mix-blend-mode: normal; }[data-astro-transition-fallback="new"] [data-astro-transition-scope="astro-l25zdozq-3"],
+			[data-astro-transition-fallback="new"][data-astro-transition-scope="astro-l25zdozq-3"] { animation: none; mix-blend-mode: normal; }</style><style>[data-astro-transition-scope="astro-urs5wucv-4"] { view-transition-name: music-player; }@layer astro { ::view-transition-old(music-player) { animation: none; opacity: 0; mix-blend-mode: normal; }::view-transition-new(music-player) { animation: none; mix-blend-mode: normal; }::view-transition-group(music-player) { animation: none } }[data-astro-transition-fallback="old"] [data-astro-transition-scope="astro-urs5wucv-4"],
+			[data-astro-transition-fallback="old"][data-astro-transition-scope="astro-urs5wucv-4"] { animation: none; mix-blend-mode: normal; }[data-astro-transition-fallback="new"] [data-astro-transition-scope="astro-urs5wucv-4"],
+			[data-astro-transition-fallback="new"][data-astro-transition-scope="astro-urs5wucv-4"] { animation: none; mix-blend-mode: normal; }</style></head><body class="article-page"><a class="skip-link" href="#main">跳到正文</a><div class="reading-progress" aria-hidden="true"><span data-reading-progress></span></div><header data-astro-transition-persist="site-nav" data-astro-transition-scope="astro-l25zdozq-3" class="site-nav"><nav class="site-nav__pill" aria-label="主导航"><span class="site-nav__indicator" aria-hidden="true"></span><a href="/" data-nav-route>首页</a><a href="/archive/" data-nav-route>归档</a><a href="/about/" data-nav-route>关于</a><span class="site-nav__sep" aria-hidden="true"></span><a href="https://github.com/k7tmiz" class="site-nav__icon" aria-label="GitHub 仓库" title="GitHub 仓库" target="_blank" rel="noopener noreferrer"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 19c-4.3 1.4-4.3-2.5-6-3m12 5v-3.5c0-1 .1-1.4-.5-2 2.8-.3 5.5-1.4 5.5-6a4.7 4.7 0 0 0-1.3-3.2 4.3 4.3 0 0 0-.1-3.2s-1.1-.3-3.5 1.3a12 12 0 0 0-6.2 0C6.5 2.8 5.4 3.1 5.4 3.1a4.3 4.3 0 0 0-.1 3.2A4.7 4.7 0 0 0 4 9.5c0 4.6 2.7 5.7 5.5 6-.6.6-.6 1.2-.5 2V21"/></svg></a><a href="/search/" class="site-nav__icon" aria-label="搜索" aria-keyshortcuts="/ Meta+K" title="搜索（/ 或 ⌘K）"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg></a><button type="button" class="theme-toggle site-nav__icon" data-theme-toggle aria-label="切换深色模式"><svg class="theme-toggle__moon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8Z"/></svg><svg class="theme-toggle__sun" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg></button></nav></header><script type="module">var e=window.__blogNavMotion??={pendingPath:``,indicator:null,animation:null,initialized:!1},t=e=>{let t=e.endsWith(`/`)?e:`${e}/`;return t===`//`?`/`:t},n=(e,t)=>{let n=e.getBoundingClientRect(),r=t.getBoundingClientRect();return{x:n.left-r.left,y:n.top-r.top,width:n.width,height:n.height}},r=({x:e})=>`translateX(${e}px) translateY(-50%)`,i=()=>{let t=e.animation;t&&(t.cancel(),e.animation=null)},a=(t=!0)=>{let a=document.querySelector(`.site-nav__pill`),o=a?.querySelector(`.site-nav__indicator`),s=a?.querySelector(`a[data-nav-route].is-current`);if(!a||!o||!s){a?.classList.remove(`has-indicator`);return}let c=a.getBoundingClientRect(),l=s.getBoundingClientRect(),u={x:l.left-c.left,y:0,width:l.width,height:l.height},d=e.indicator??u;if(e.animation&&(d=n(o,a),i()),!t||typeof o.animate!=`function`){a.classList.remove(`is-indicator-ready`),o.style.width=`${u.width}px`,o.style.height=`${u.height}px`,o.style.transform=r(u),e.indicator=u,a.classList.add(`has-indicator`),window.requestAnimationFrame(()=>a.classList.add(`is-indicator-ready`));return}o.style.width=`${u.width}px`,o.style.height=`${u.height}px`,o.style.transform=r(u),a.classList.add(`has-indicator`);let f=o.animate([{width:`${d.width}px`,height:`${d.height}px`,transform:r(d)},{width:`${u.width}px`,height:`${u.height}px`,transform:r(u)}],{duration:420,easing:`cubic-bezier(0.16, 1, 0.3, 1)`,fill:`both`});e.animation=f,e.indicator=u,f.onfinish=()=>{if(e.animation===f){try{f.commitStyles?.()}catch{}f.cancel(),e.animation=null}}},o=(n=!1)=>{let r=t(window.location.pathname);if(document.querySelectorAll(`.site-nav a[href]`).forEach(e=>{let n=t(new URL(e.href,window.location.href).pathname),i=n===`/`?r===`/`:r.startsWith(n);e.classList.remove(`is-pending`),e.classList.toggle(`is-current`,i),i?e.setAttribute(`aria-current`,`page`):e.removeAttribute(`aria-current`)}),e.pendingPath===r){e.pendingPath=``;return}a(n)},s=n=>{if(n.button!==0||n.metaKey||n.ctrlKey||n.shiftKey||n.altKey)return;let r=n.target;if(!(r instanceof Element))return;let i=r.closest(`.site-nav a[data-nav-route]`);if(!i)return;let o=t(new URL(i.href,window.location.href).pathname);o!==t(window.location.pathname)&&(e.pendingPath=o,document.querySelectorAll(`.site-nav a[data-nav-route]`).forEach(e=>{e.classList.toggle(`is-pending`,e===i),e.classList.toggle(`is-current`,e===i)}),a(!0))};e.initialized||=(o(),document.addEventListener(`pointerdown`,s),document.addEventListener(`click`,e=>{e.detail===0&&s(e)}),document.addEventListener(`astro:after-swap`,()=>o(!0)),window.addEventListener(`resize`,()=>a(!1),{passive:!0}),!0);</script><main data-astro-transition-scope="astro-wugk46rw-2" id="main"><article class="article article--toc"><a class="back-link" href="/"><svg class="back-link__arrow" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>返回首页</a><header class="article__header"><div class="post-meta"><span>Linux</span><time datetime="2025-04-19T22:28:32.000Z">2025年4月19日</time><span>2 分钟阅读</span></div><h1>Archlinux安装指南</h1><p>技术记录与实践笔记。</p><div class="tag-list" aria-label="标签"><span>linux</span></div></header><div class="article__body"><div class="article__main"><div class="post-content"><h2 id="初步配置">初步配置</h2>
+<h4 id="联网">联网</h4>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="plaintext"><code><span class="line"><span>dhcpcd/iwctl</span></span></code></pre>
+<blockquote>
+<p>iwctl:
+device list
+station ‘device’ scan
+station ‘device’ get-networks
+station ‘device’ connect ‘wlan’</p>
+</blockquote>
+<h4 id="更新ntp服务器">更新ntp服务器</h4>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="plaintext"><code><span class="line"><span>timdatectl set-ntp true</span></span></code></pre>
+<h2 id="分区及挂载">分区及挂载</h2>
+<blockquote>
+<p>此处演示p1:EFI p2:/mnt p3:swap</p>
+</blockquote>
+<h4 id="查看目前磁盘分区状况">查看目前磁盘，分区状况</h4>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="plaintext"><code><span class="line"><span>lsblk</span></span></code></pre>
+<h4 id="分区">分区</h4>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="plaintext"><code><span class="line"><span>fdisk /dev/sdX / fdisk /dev/nvme0n1</span></span></code></pre>
+<blockquote>
+<p>m 查看命令
+n 新建一个分区
+g 转换GPT
+t 更改分区类型：EFI:1  SWAP:19  Linux:20</p>
+</blockquote>
+<h4 id="格式化分区为fat32格式">格式化分区为FAT32格式</h4>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="plaintext"><code><span class="line"><span>mkfs.fat -F32 /dev/nvme0n1p1</span></span></code></pre>
+<h4 id="格式化分区为ext4格式">格式化分区为EXT4格式</h4>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="plaintext"><code><span class="line"><span>mkfs.ext4 /dev/nvme0n1p2</span></span></code></pre>
+<h4 id="格式化分区为swap格式">格式化分区为SWAP格式</h4>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="plaintext"><code><span class="line"><span>mkswap /dev/nvme0n1p3</span></span></code></pre>
+<h4 id="开启swap">开启SWAP</h4>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="plaintext"><code><span class="line"><span>swapon /dev/nvme0n1p3</span></span></code></pre>
+<h4 id="挂载根分区">挂载根分区</h4>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="plaintext"><code><span class="line"><span>mount /dev/nvme0n1p2 /mnt</span></span></code></pre>
+<h4 id="新建boot文件夹">新建Boot文件夹</h4>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="plaintext"><code><span class="line"><span>mkdir /mnt/boot</span></span></code></pre>
+<h4 id="新建home文件夹">新建Home文件夹</h4>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="plaintext"><code><span class="line"><span>mkdir /mnt/home</span></span></code></pre>
+<h4 id="挂载boot分区">挂载Boot分区</h4>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="plaintext"><code><span class="line"><span>mount /dev/nvme0n1p1 /mnt/boot</span></span></code></pre>
+<blockquote>
+<p>如果有的话一个分区为了Home分区 <code>mount /dev/nvme0n1px /mnt/home</code></p>
+</blockquote>
+<h2 id="开始安装">开始安装</h2>
+<h4 id="编辑镜像源">编辑镜像源</h4>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="plaintext"><code><span class="line"><span>nano /etc/pacman.d/mirrorlist</span></span></code></pre>
+<h4 id="拉取镜像">拉取镜像</h4>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="plaintext"><code><span class="line"><span>pacstrap /mnt base base-devel linux linux-firmware vi nano</span></span></code></pre>
+<h4 id="更新分区表">更新分区表</h4>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="plaintext"><code><span class="line"><span>genfstab -U /mnt >> /mnt/etc/fstab</span></span></code></pre>
+<h4 id="检查分区表">检查分区表</h4>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="plaintext"><code><span class="line"><span>cat /mnt/etc/fstab</span></span></code></pre>
+<h4 id="下载基本软件">下载基本软件</h4>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="plaintext"><code><span class="line"><span>pacman -S vim networkmanager dhcpcd</span></span></code></pre>
+<h2 id="切换到本地">切换到本地</h2>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="plaintext"><code><span class="line"><span>arch-chroot /mnt</span></span></code></pre>
+<h4 id="更新本地时间">更新本地时间</h4>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="plaintext"><code><span class="line"><span>ln -sf /usr/share/zoneinfo/Asia/Shanghai /etc/localtime</span></span></code></pre>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="plaintext"><code><span class="line"><span>hwclock --systohc</span></span></code></pre>
+<h4 id="编辑localegen">编辑locale.gen</h4>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="plaintext"><code><span class="line"><span>nano /etc/locale.gen</span></span></code></pre>
+<p><strong>找到 <code>en_US.UTF-8</code> 和 <code>zh_CN.UTF-8</code> 去掉前面的#</strong></p>
+<h4 id="更新">更新</h4>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="plaintext"><code><span class="line"><span>locale-gen</span></span></code></pre>
+<h4 id="编辑localeconf文件">编辑locale.conf文件</h4>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="plaintext"><code><span class="line"><span>nano /etc/locale.conf</span></span></code></pre>
+<blockquote>
+<p>写入 <code>LANG=en_US.UTF-8</code></p>
+</blockquote>
+<h4 id="设置root密码">设置root密码</h4>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="plaintext"><code><span class="line"><span>passwd</span></span></code></pre>
+<blockquote>
+<p>不显示密码是正常情况</p>
+</blockquote>
+<h4 id="下载基本软件-1">下载基本软件</h4>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="plaintext"><code><span class="line"><span>pacman -S dialog wpa_supplicant ntfs-3g</span></span></code></pre>
+<h4 id="安装cpu驱动">安装CPU驱动</h4>
+<h5 id="intel">intel</h5>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="plaintext"><code><span class="line"><span>pacman -S intel-ucode</span></span></code></pre>
+<h5 id="amd">amd</h5>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="plaintext"><code><span class="line"><span>pacman -S amd-ucode</span></span></code></pre>
+<h2 id="安装引导">安装引导</h2>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="plaintext"><code><span class="line"><span>pacman -S grub efibootmgr</span></span></code></pre>
+<h4 id="多系统引导">多系统引导</h4>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="plaintext"><code><span class="line"><span>pacman -S os-prober</span></span></code></pre>
+<h4 id="uefi引导">UEFI引导</h4>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="plaintext"><code><span class="line"><span>grub-install --target=x86_64-efi --efi-directory=/boot --bootloader=ArchLinux</span></span></code></pre>
+<h4 id="更新grub">更新grub</h4>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="plaintext"><code><span class="line"><span>grub-mkconfig -o /boot/grub/grub.cfg</span></span></code></pre>
+<h2 id="至此-安装结束"><strong>至此 安装结束</strong></h2>
+<h4 id="退出">退出</h4>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="plaintext"><code><span class="line"><span>exit</span></span></code></pre>
+<h4 id="重启">重启</h4>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="plaintext"><code><span class="line"><span>reboot</span></span></code></pre></div><footer class="article__footer"><nav class="post-nav" aria-label="相邻文章"><a class="post-nav__prev" href="/posts/5a88bde/"><span>上一篇</span><strong>MSI-PERKEYRGB</strong></a><a class="post-nav__next" href="/posts/f48c939a/"><span>下一篇</span><strong>ArchLinux安装后指南</strong></a></nav><section class="related-posts" aria-labelledby="related-heading"><h2 id="related-heading">相关文章</h2><div class="related-posts__grid"><a href="/posts/f48c939a/"><span>Linux</span><strong>ArchLinux安装后指南</strong><small>技术记录与实践笔记。</small></a><a href="/posts/5982c65e/"><span>Linux</span><strong>如何在Linux上优雅的使用小黄鸭</strong><small>技术记录与实践笔记。</small></a><a href="/posts/400b687c/"><span>Linux</span><strong>在Linux上优雅的使用Wemod</strong><small>技术记录与实践笔记。</small></a></div></section></footer></div><aside class="article__aside"><nav class="toc" aria-labelledby="toc-heading"><h2 id="toc-heading">目录</h2><ol><li class="toc__group toc__item--depth-2"><a href="#初步配置">初步配置</a></li><li class="toc__group toc__item--depth-2"><a href="#分区及挂载">分区及挂载</a></li><li class="toc__group toc__item--depth-2"><a href="#开始安装">开始安装</a></li><li class="toc__group toc__item--depth-2"><a href="#切换到本地">切换到本地</a></li><li class="toc__group toc__item--depth-2"><a href="#安装引导">安装引导</a></li><li class="toc__group toc__item--depth-2"><a href="#至此-安装结束">至此 安装结束</a></li></ol></nav></aside></div><div data-qc-root data-qc-selector=".post-content" hidden></div><script type="module">var e=null,t=()=>{let t=document.querySelector(`[data-qc-root]`);t!==e&&(e=t)};t(),document.addEventListener(`astro:page-load`,t);</script><section class="cbox" data-cbox><div class="cbox__head"><h2 class="cbox__title">评论</h2><span class="cbox__count" data-c-count></span></div><div data-c-mount></div></section><script type="module">var e=null,t=()=>{let t=document.querySelector(`[data-cbox]`);t!==e&&(e=t,t&&(t.hidden=!0))};t(),document.addEventListener(`astro:page-load`,t);</script></article></main><footer class="site-footer"><div class="site-footer__inner"><div class="site-footer__id"><img src="/avatars/avatar.png" alt="k7tmiz" class="site-footer__avatar" width="40" height="40"><div class="site-footer__id-text"><strong>k7tmiz</strong><span>Viva la vida</span></div></div><nav class="site-footer__links" aria-label="页脚链接"><a href="https://github.com/k7tmiz" target="_blank" rel="noopener noreferrer"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 19c-4.3 1.4-4.3-2.5-6-3m12 5v-3.5c0-1 .1-1.4-.5-2 2.8-.3 5.5-1.4 5.5-6a4.7 4.7 0 0 0-1.3-3.2 4.3 4.3 0 0 0-.1-3.2s-1.1-.3-3.5 1.3a12 12 0 0 0-6.2 0C6.5 2.8 5.4 3.1 5.4 3.1a4.3 4.3 0 0 0-.1 3.2A4.7 4.7 0 0 0 4 9.5c0 4.6 2.7 5.7 5.5 6-.6.6-.6 1.2-.5 2V21"/></svg>GitHub</a><a href="/rss.xml"><svg width="11" height="11" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><g transform="translate(1.3 -1.3) translate(12 12) scale(0.82) translate(-12 -12)"><path d="M19.199 24C19.199 13.467 10.533 4.8 0 4.8V0c13.165 0 24 10.835 24 24h-4.801zM3.291 17.415c1.814 0 3.293 1.479 3.293 3.295 0 1.813-1.485 3.29-3.301 3.29C1.47 24 0 22.526 0 20.71s1.475-3.294 3.291-3.295zM15.909 24h-4.665c0-6.169-5.075-11.245-11.244-11.245V8.09c8.727 0 15.909 7.184 15.909 15.91z"/></g></svg>RSS</a><span class="site-footer__sep" aria-hidden="true"></span></nav></div><div class="site-footer__bar"><span>© 2026 k7tmiz</span><span aria-hidden="true">·</span><a href="https://k7tmiz.com">k7tmiz.com</a><span aria-hidden="true">·</span><span>由 <a href="https://astro.build" target="_blank" rel="noopener noreferrer">Astro</a> 构建</span></div></footer><div data-astro-transition-persist="music-player" data-astro-transition-scope="astro-urs5wucv-4" class="music-player" data-music-player data-testid="music-player" data-playlist-id="13735371900" data-api-base="https://meting.mikus.ink/api"><section id="music-player-panel" class="music-player__panel" data-music-panel data-testid="music-panel" aria-label="音乐播放器" aria-hidden="true" inert><header class="music-player__header"><div class="music-player__playing-state"><span class="music-player__icon music-player__status-icon" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" fill="currentColor"><path d="M56,96v64a8,8,0,0,1-16,0V96a8,8,0,0,1,16,0ZM88,24a8,8,0,0,0-8,8V224a8,8,0,0,0,16,0V32A8,8,0,0,0,88,24Zm40,32a8,8,0,0,0-8,8V192a8,8,0,0,0,16,0V64A8,8,0,0,0,128,56Zm40,32a8,8,0,0,0-8,8v64a8,8,0,0,0,16,0V96A8,8,0,0,0,168,88Zm40-16a8,8,0,0,0-8,8v96a8,8,0,0,0,16,0V80A8,8,0,0,0,208,72Z"/></svg></span><span class="music-player__status" data-music-status aria-live="polite">正在连接歌单…</span></div><div class="music-player__header-actions"><button type="button" data-music-mute aria-label="静音" title="静音" disabled><span class="music-player__icon music-player__volume-icon" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" fill="currentColor"><path d="M155.51,24.81a8,8,0,0,0-8.42.88L77.25,80H32A16,16,0,0,0,16,96v64a16,16,0,0,0,16,16H77.25l69.84,54.31A8,8,0,0,0,160,224V32A8,8,0,0,0,155.51,24.81ZM32,96H72v64H32ZM144,207.64,88,164.09V91.91l56-43.55Zm54-106.08a40,40,0,0,1,0,52.88,8,8,0,0,1-12-10.58,24,24,0,0,0,0-31.72,8,8,0,0,1,12-10.58ZM248,128a79.9,79.9,0,0,1-20.37,53.34,8,8,0,0,1-11.92-10.67,64,64,0,0,0,0-85.33,8,8,0,1,1,11.92-10.67A79.83,79.83,0,0,1,248,128Z"/></svg></span><span class="music-player__icon music-player__muted-icon" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" fill="currentColor"><path d="M53.92,34.62A8,8,0,1,0,42.08,45.38L73.55,80H32A16,16,0,0,0,16,96v64a16,16,0,0,0,16,16H77.25l69.84,54.31A8,8,0,0,0,160,224V175.09l42.08,46.29a8,8,0,1,0,11.84-10.76ZM32,96H72v64H32ZM144,207.64,88,164.09V95.89l56,61.6Zm42-63.77a24,24,0,0,0,0-31.72,8,8,0,1,1,12-10.57,40,40,0,0,1,0,52.88,8,8,0,0,1-12-10.59Zm-80.16-76a8,8,0,0,1,1.4-11.23l39.85-31A8,8,0,0,1,160,32v74.83a8,8,0,0,1-16,0V48.36l-26.94,21A8,8,0,0,1,105.84,67.91ZM248,128a79.9,79.9,0,0,1-20.37,53.34,8,8,0,0,1-11.92-10.67,64,64,0,0,0,0-85.33,8,8,0,1,1,11.92-10.67A79.83,79.83,0,0,1,248,128Z"/></svg></span></button><a href="https://music.163.com/#/playlist?id=13735371900" target="_blank" rel="noopener noreferrer" aria-label="在网易云音乐中打开歌单" title="在网易云音乐中打开"><span class="music-player__icon" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" fill="currentColor"><path d="M224,104a8,8,0,0,1-16,0V59.32l-66.33,66.34a8,8,0,0,1-11.32-11.32L196.68,48H152a8,8,0,0,1,0-16h64a8,8,0,0,1,8,8Zm-40,24a8,8,0,0,0-8,8v72H48V80h72a8,8,0,0,0,0-16H48A16,16,0,0,0,32,80V208a16,16,0,0,0,16,16H176a16,16,0,0,0,16-16V136A8,8,0,0,0,184,128Z"/></svg></span></a><button type="button" data-music-close aria-label="收起音乐播放器" title="收起"><span class="music-player__icon" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" fill="currentColor"><path d="M205.66,194.34a8,8,0,0,1-11.32,11.32L128,139.31,61.66,205.66a8,8,0,0,1-11.32-11.32L116.69,128,50.34,61.66A8,8,0,0,1,61.66,50.34L128,116.69l66.34-66.35a8,8,0,0,1,11.32,11.32L139.31,128Z"/></svg></span></button></div></header><div class="music-player__now"><div class="music-player__cover" aria-hidden="true"><span class="music-player__cover-fallback music-player__icon"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" fill="currentColor"><path d="M212.92,17.69a8,8,0,0,0-6.86-1.45l-128,32A8,8,0,0,0,72,56V166.08A36,36,0,1,0,88,196V110.25l112-28v51.83A36,36,0,1,0,216,164V24A8,8,0,0,0,212.92,17.69ZM52,216a20,20,0,1,1,20-20A20,20,0,0,1,52,216ZM88,93.75V62.25l112-28v31.5ZM180,184a20,20,0,1,1,20-20A20,20,0,0,1,180,184Z"/></svg></span><img data-music-cover alt="" width="132" height="132" hidden></div><div class="music-player__meta"><strong data-music-title>歌单加载中</strong><span data-music-artist>网易云音乐</span></div><button type="button" class="music-player__favorite" data-music-favorite aria-label="收藏当前歌曲" aria-pressed="false" title="收藏" disabled><span class="music-player__icon music-player__heart-icon" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" fill="currentColor"><path d="M178,40c-20.65,0-38.73,8.88-50,23.89C116.73,48.88,98.65,40,78,40a62.07,62.07,0,0,0-62,62c0,70,103.79,126.66,108.21,129a8,8,0,0,0,7.58,0C136.21,228.66,240,172,240,102A62.07,62.07,0,0,0,178,40ZM128,214.8C109.74,204.16,32,155.69,32,102A46.06,46.06,0,0,1,78,56c19.45,0,35.78,10.36,42.6,27a8,8,0,0,0,14.8,0c6.82-16.67,23.15-27,42.6-27a46.06,46.06,0,0,1,46,46C224,155.61,146.24,204.15,128,214.8Z"/></svg></span><span class="music-player__icon music-player__heart-fill-icon" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" fill="currentColor"><path d="M240,102c0,70-103.79,126.66-108.21,129a8,8,0,0,1-7.58,0C119.79,228.66,16,172,16,102A62.07,62.07,0,0,1,78,40c20.65,0,38.73,8.88,50,23.89C139.27,48.88,157.35,40,178,40A62.07,62.07,0,0,1,240,102Z"/></svg></span></button></div><div class="music-player__timeline"><div class="music-player__seek"><span class="music-player__seek-track" aria-hidden="true"><span class="music-player__seek-fill"></span></span><input type="range" min="0" max="1000" value="0" step="1" data-music-progress aria-label="播放进度" aria-valuetext="0:00 / 0:00" disabled></div><div class="music-player__time" aria-hidden="true"><span data-music-current-time>0:00</span><span data-music-duration>0:00</span></div></div><div class="music-player__controls" aria-label="播放控制"><button type="button" data-music-shuffle aria-label="随机播放" aria-pressed="false" title="随机播放" disabled><span class="music-player__icon" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" fill="currentColor"><path d="M237.66,178.34a8,8,0,0,1,0,11.32l-24,24a8,8,0,0,1-11.32-11.32L212.69,192H200.94a72.12,72.12,0,0,1-58.59-30.15l-41.72-58.4A56.1,56.1,0,0,0,55.06,80H32a8,8,0,0,1,0-16H55.06a72.12,72.12,0,0,1,58.59,30.15l41.72,58.4A56.1,56.1,0,0,0,200.94,176h11.75l-10.35-10.34a8,8,0,0,1,11.32-11.32ZM143,107a8,8,0,0,0,11.16-1.86l1.2-1.67A56.1,56.1,0,0,1,200.94,80h11.75L202.34,90.34a8,8,0,0,0,11.32,11.32l24-24a8,8,0,0,0,0-11.32l-24-24a8,8,0,0,0-11.32,11.32L212.69,64H200.94a72.12,72.12,0,0,0-58.59,30.15l-1.2,1.67A8,8,0,0,0,143,107Zm-30,42a8,8,0,0,0-11.16,1.86l-1.2,1.67A56.1,56.1,0,0,1,55.06,176H32a8,8,0,0,0,0,16H55.06a72.12,72.12,0,0,0,58.59-30.15l1.2-1.67A8,8,0,0,0,113,149Z"/></svg></span></button><button type="button" data-music-prev aria-label="上一首" title="上一首" disabled><span class="music-player__icon" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" fill="currentColor"><path d="M208,47.88V208.12a16,16,0,0,1-24.43,13.43L64,146.77V216a8,8,0,0,1-16,0V40a8,8,0,0,1,16,0v69.23L183.57,34.45A15.95,15.95,0,0,1,208,47.88Z"/></svg></span></button><button type="button" class="music-player__play" data-music-play data-testid="music-play" aria-label="播放" title="播放" disabled><span class="music-player__icon music-player__play-icon" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" fill="currentColor"><path d="M240,128a15.74,15.74,0,0,1-7.6,13.51L88.32,229.65a16,16,0,0,1-16.2.3A15.86,15.86,0,0,1,64,216.13V39.87a15.86,15.86,0,0,1,8.12-13.82,16,16,0,0,1,16.2.3L232.4,114.49A15.74,15.74,0,0,1,240,128Z"/></svg></span><span class="music-player__icon music-player__pause-icon" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" fill="currentColor"><path d="M216,48V208a16,16,0,0,1-16,16H160a16,16,0,0,1-16-16V48a16,16,0,0,1,16-16h40A16,16,0,0,1,216,48ZM96,32H56A16,16,0,0,0,40,48V208a16,16,0,0,0,16,16H96a16,16,0,0,0,16-16V48A16,16,0,0,0,96,32Z"/></svg></span></button><button type="button" data-music-next aria-label="下一首" title="下一首" disabled><span class="music-player__icon" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" fill="currentColor"><path d="M208,40V216a8,8,0,0,1-16,0V146.77L72.43,221.55A15.95,15.95,0,0,1,48,208.12V47.88A15.95,15.95,0,0,1,72.43,34.45L192,109.23V40a8,8,0,0,1,16,0Z"/></svg></span></button><button type="button" data-music-repeat aria-label="单曲循环" aria-pressed="false" title="单曲循环" disabled><span class="music-player__icon" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" fill="currentColor"><path d="M24,128A72.08,72.08,0,0,1,96,56H204.69L194.34,45.66a8,8,0,0,1,11.32-11.32l24,24a8,8,0,0,1,0,11.32l-24,24a8,8,0,0,1-11.32-11.32L204.69,72H96a56.06,56.06,0,0,0-56,56,8,8,0,0,1-16,0Zm200-8a8,8,0,0,0-8,8,56.06,56.06,0,0,1-56,56H51.31l10.35-10.34a8,8,0,0,0-11.32-11.32l-24,24a8,8,0,0,0,0,11.32l24,24a8,8,0,0,0,11.32-11.32L51.31,200H160a72.08,72.08,0,0,0,72-72A8,8,0,0,0,224,120Z"/></svg></span></button></div><div class="music-player__queue-head"><span>播放列表</span><button type="button" data-music-retry hidden>重新加载</button><small data-music-count>加载中</small></div><ol class="music-player__queue" data-music-list aria-label="歌单曲目"><li class="music-player__empty" data-music-empty>正在从网易云读取歌单…</li></ol></section><button type="button" class="music-player__toggle" data-music-toggle data-testid="music-toggle" aria-controls="music-player-panel" aria-expanded="false" aria-label="打开音乐播放器" title="音乐"><span class="music-player__disc" aria-hidden="true"><span class="music-player__disc-fallback music-player__icon"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" fill="currentColor"><path d="M212.92,17.69a8,8,0,0,0-6.86-1.45l-128,32A8,8,0,0,0,72,56V166.08A36,36,0,1,0,88,196V110.25l112-28v51.83A36,36,0,1,0,216,164V24A8,8,0,0,0,212.92,17.69ZM52,216a20,20,0,1,1,20-20A20,20,0,0,1,52,216ZM88,93.75V62.25l112-28v31.5ZM180,184a20,20,0,1,1,20-20A20,20,0,0,1,180,184Z"/></svg></span><img data-music-dock-cover alt="" width="34" height="34" hidden></span><span class="music-player__pulse music-player__icon" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" fill="currentColor"><path d="M56,96v64a8,8,0,0,1-16,0V96a8,8,0,0,1,16,0ZM88,24a8,8,0,0,0-8,8V224a8,8,0,0,0,16,0V32A8,8,0,0,0,88,24Zm40,32a8,8,0,0,0-8,8V192a8,8,0,0,0,16,0V64A8,8,0,0,0,128,56Zm40,32a8,8,0,0,0-8,8v64a8,8,0,0,0,16,0V96A8,8,0,0,0,168,88Zm40-16a8,8,0,0,0-8,8v96a8,8,0,0,0,16,0V80A8,8,0,0,0,208,72Z"/></svg></span></button><audio data-music-audio preload="none"></audio></div><script>
+  (() => {
+    const formatTime = (seconds) => {
+      if (!Number.isFinite(seconds) || seconds < 0) return '0:00';
+      const minutes = Math.floor(seconds / 60);
+      return `${minutes}:${String(Math.floor(seconds % 60)).padStart(2, '0')}`;
+    };
+
+    const initPlayer = (root) => {
+      if (root.dataset.ready === 'true') return;
+      root.dataset.ready = 'true';
+
+      const panel = root.querySelector('[data-music-panel]');
+      const toggle = root.querySelector('[data-music-toggle]');
+      const closeButton = root.querySelector('[data-music-close]');
+      const audio = root.querySelector('[data-music-audio]');
+      const playButton = root.querySelector('[data-music-play]');
+      const prevButton = root.querySelector('[data-music-prev]');
+      const nextButton = root.querySelector('[data-music-next]');
+      const muteButton = root.querySelector('[data-music-mute]');
+      const shuffleButton = root.querySelector('[data-music-shuffle]');
+      const repeatButton = root.querySelector('[data-music-repeat]');
+      const favoriteButton = root.querySelector('[data-music-favorite]');
+      const retryButton = root.querySelector('[data-music-retry]');
+      const progress = root.querySelector('[data-music-progress]');
+      const currentTime = root.querySelector('[data-music-current-time]');
+      const duration = root.querySelector('[data-music-duration]');
+      const title = root.querySelector('[data-music-title]');
+      const artist = root.querySelector('[data-music-artist]');
+      const status = root.querySelector('[data-music-status]');
+      const count = root.querySelector('[data-music-count]');
+      const list = root.querySelector('[data-music-list]');
+      const cover = root.querySelector('[data-music-cover]');
+      const dockCover = root.querySelector('[data-music-dock-cover]');
+      const playlistId = root.dataset.playlistId || '8792942606';
+      const apiBase = root.dataset.apiBase || 'https://meting.mikus.ink/api';
+      const storageKey = `blog-music-player:${playlistId}`;
+
+      if (
+        !panel || !toggle || !audio || !playButton || !prevButton || !nextButton ||
+        !muteButton || !progress || !list || !title || !artist || !status
+      ) return;
+
+      let tracks = [];
+      let currentIndex = 0;
+      let loadedIndex = -1;
+      let wantsPlayback = false;
+      let playGeneration = 0;
+      let skipScheduled = false;
+      let skipTimer = 0;
+      let failedTracks = new Set();
+      let fetchController = null;
+
+      const saved = (() => {
+        try {
+          return JSON.parse(localStorage.getItem(storageKey) || '{}');
+        } catch {
+          return {};
+        }
+      })();
+
+      let shuffleEnabled = Boolean(saved.shuffle);
+      let repeatOne = Boolean(saved.repeatOne);
+      const favorites = new Set(
+        Array.isArray(saved.favorites)
+          ? saved.favorites.filter((value) => typeof value === 'string').slice(0, 250)
+          : [],
+      );
+
+      audio.volume = Number.isFinite(saved.volume)
+        ? Math.min(1, Math.max(0, saved.volume))
+        : 0.72;
+      audio.muted = Boolean(saved.muted);
+      audio.loop = repeatOne;
+      root.classList.toggle('is-muted', audio.muted);
+      shuffleButton?.setAttribute('aria-pressed', String(shuffleEnabled));
+      repeatButton?.setAttribute('aria-pressed', String(repeatOne));
+
+      const persist = () => {
+        try {
+          localStorage.setItem(
+            storageKey,
+            JSON.stringify({
+              index: currentIndex,
+              volume: audio.volume,
+              muted: audio.muted,
+              shuffle: shuffleEnabled,
+              repeatOne,
+              favorites: [...favorites],
+            }),
+          );
+        } catch {
+        }
+      };
+
+      const safeUrl = (value) => {
+        if (!value) return '';
+        try {
+          const parsed = new URL(String(value), window.location.href);
+          if (parsed.protocol !== 'http:' && parsed.protocol !== 'https:') return '';
+          if (window.location.protocol === 'https:' && parsed.protocol === 'http:') {
+            parsed.protocol = 'https:';
+          }
+          return parsed.toString();
+        } catch {
+          return '';
+        }
+      };
+
+      const cleanText = (value, fallback) => {
+        const text = String(value || '').trim().replace(/\s+/g, ' ');
+        return (text || fallback).slice(0, 180);
+      };
+
+      const setStatus = (message) => {
+        status.textContent = message;
+      };
+
+      const setControlsDisabled = (disabled) => {
+        [
+          playButton,
+          prevButton,
+          nextButton,
+          muteButton,
+          shuffleButton,
+          repeatButton,
+          favoriteButton,
+        ].forEach((button) => {
+          if (!button) return;
+          button.disabled = disabled;
+        });
+      };
+
+      const setOpen = (open) => {
+        root.classList.toggle('is-open', open);
+        panel.setAttribute('aria-hidden', String(!open));
+        if (open) panel.removeAttribute('inert');
+        else panel.setAttribute('inert', '');
+        toggle.setAttribute('aria-expanded', String(open));
+        toggle.setAttribute('aria-label', open ? '收起音乐播放器' : '打开音乐播放器');
+        toggle.title = open ? '收起音乐' : '音乐';
+        if (open) {
+          window.requestAnimationFrame(() => {
+            scrollActiveTrack();
+            closeButton?.focus({ preventScroll: true });
+          });
+        }
+      };
+
+      const updateCover = (image, source) => {
+        if (!image) return;
+        if (!source) {
+          image.hidden = true;
+          image.removeAttribute('src');
+          return;
+        }
+        image.hidden = false;
+        image.src = source;
+      };
+
+      cover?.addEventListener('error', () => { cover.hidden = true; });
+      dockCover?.addEventListener('error', () => { dockCover.hidden = true; });
+
+      const updateMediaSession = (track) => {
+        if (!('mediaSession' in navigator) || !('MediaMetadata' in window)) return;
+        try {
+          navigator.mediaSession.metadata = new MediaMetadata({
+            title: track.title,
+            artist: track.artist,
+            album: 'k7tmiz · 网易云歌单',
+            artwork: track.cover
+              ? [{ src: track.cover, sizes: '300x300', type: 'image/jpeg' }]
+              : [],
+          });
+        } catch {
+        }
+      };
+
+      const getTrackKey = (track) => `${track.title}\u0000${track.artist}\u0000${track.url}`;
+
+      const updateFavoriteState = () => {
+        if (!favoriteButton || !tracks.length) return;
+        const active = favorites.has(getTrackKey(tracks[currentIndex]));
+        favoriteButton.classList.toggle('is-favorite', active);
+        favoriteButton.setAttribute('aria-pressed', String(active));
+        favoriteButton.setAttribute('aria-label', active ? '取消收藏当前歌曲' : '收藏当前歌曲');
+        favoriteButton.title = active ? '取消收藏' : '收藏';
+      };
+
+      const scrollActiveTrack = () => {
+        const activeButton = list.querySelector(`[data-track-index="${currentIndex}"]`);
+        activeButton?.scrollIntoView({ block: 'nearest' });
+      };
+
+      const updateActiveTrack = () => {
+        list.querySelectorAll('[data-track-index]').forEach((button) => {
+          const active = Number(button.dataset.trackIndex) === currentIndex;
+          button.setAttribute('aria-current', String(active));
+        });
+      };
+
+      const showTrack = (index) => {
+        if (!tracks.length) return;
+        currentIndex = ((index % tracks.length) + tracks.length) % tracks.length;
+        const track = tracks[currentIndex];
+        title.textContent = track.title;
+        artist.textContent = track.artist;
+        updateCover(cover, track.cover);
+        updateCover(dockCover, track.cover);
+        updateActiveTrack();
+        updateFavoriteState();
+        if (count) count.textContent = `${currentIndex + 1}/${tracks.length}`;
+        if (root.classList.contains('is-open')) window.requestAnimationFrame(scrollActiveTrack);
+        updateMediaSession(track);
+        persist();
+      };
+
+      const resetTimeline = () => {
+        progress.value = '0';
+        progress.style.setProperty('--music-progress', '0%');
+        progress.parentElement?.style.setProperty('--music-progress', '0%');
+        progress.disabled = true;
+        progress.setAttribute('aria-valuetext', '0:00 / 0:00');
+        if (currentTime) currentTime.textContent = '0:00';
+        if (duration) duration.textContent = '0:00';
+      };
+
+      const loadCurrentAudio = () => {
+        if (!tracks.length) return false;
+        if (loadedIndex === currentIndex && audio.src) return true;
+        loadedIndex = currentIndex;
+        resetTimeline();
+        audio.src = tracks[currentIndex].url;
+        audio.load();
+        return true;
+      };
+
+      const scheduleSkip = () => {
+        if (skipScheduled || !wantsPlayback || !tracks.length) return;
+        skipScheduled = true;
+        failedTracks.add(currentIndex);
+        root.classList.remove('is-playing', 'is-loading');
+
+        if (failedTracks.size >= tracks.length) {
+          wantsPlayback = false;
+          setStatus('歌单中的曲目暂时都无法播放');
+          skipScheduled = false;
+          return;
+        }
+
+        let next = currentIndex;
+        do {
+          next = (next + 1) % tracks.length;
+        } while (failedTracks.has(next) && next !== currentIndex);
+
+        setStatus('这首暂不可播，已为你切换下一首');
+        skipTimer = window.setTimeout(() => {
+          skipTimer = 0;
+          skipScheduled = false;
+          selectTrack(next, true, false);
+        }, 420);
+      };
+
+      const playCurrent = async () => {
+        if (!loadCurrentAudio()) return;
+        const generation = ++playGeneration;
+        wantsPlayback = true;
+        root.classList.add('is-loading');
+        setStatus('正在缓冲…');
+        try {
+          await audio.play();
+        } catch (error) {
+          if (generation !== playGeneration || error?.name === 'AbortError') return;
+          root.classList.remove('is-loading');
+          if (error?.name === 'NotAllowedError') {
+            wantsPlayback = false;
+            setStatus('浏览器阻止了播放，请再点一次');
+            return;
+          }
+          scheduleSkip();
+        }
+      };
+
+      function selectTrack(index, shouldPlay, userInitiated = true) {
+        if (!tracks.length) return;
+        if (userInitiated && skipTimer) {
+          window.clearTimeout(skipTimer);
+          skipTimer = 0;
+          skipScheduled = false;
+        }
+        if (userInitiated) failedTracks.delete(((index % tracks.length) + tracks.length) % tracks.length);
+        const changed = currentIndex !== ((index % tracks.length) + tracks.length) % tracks.length;
+        if (changed) {
+          playGeneration += 1;
+          if (!audio.paused) audio.pause();
+        }
+        showTrack(index);
+        if (changed) {
+          loadedIndex = -1;
+          audio.removeAttribute('src');
+          audio.load();
+          resetTimeline();
+        }
+        if (shouldPlay) playCurrent();
+        else setStatus('准备就绪');
+      }
+
+      const getAdjacentIndex = (direction) => {
+        if (!shuffleEnabled || tracks.length < 2) return currentIndex + direction;
+        let candidate = currentIndex;
+        for (let attempts = 0; attempts < tracks.length * 2 && candidate === currentIndex; attempts += 1) {
+          candidate = Math.floor(Math.random() * tracks.length);
+        }
+        return candidate === currentIndex ? currentIndex + direction : candidate;
+      };
+
+      const renderTracks = () => {
+        list.replaceChildren();
+        const fragment = document.createDocumentFragment();
+        tracks.forEach((track, index) => {
+          const item = document.createElement('li');
+          const button = document.createElement('button');
+          const artwork = track.cover
+            ? document.createElement('img')
+            : document.createElement('span');
+          const copy = document.createElement('span');
+          const trackTitle = document.createElement('strong');
+          const trackArtist = document.createElement('small');
+          const trackPosition = document.createElement('span');
+
+          button.type = 'button';
+          button.className = 'music-player__track-button';
+          button.dataset.trackIndex = String(index);
+          button.setAttribute('aria-label', `播放 ${track.title} - ${track.artist}`);
+          button.setAttribute('aria-current', String(index === currentIndex));
+          if (artwork instanceof HTMLImageElement) {
+            artwork.className = 'music-player__track-art';
+            artwork.src = track.cover;
+            artwork.alt = '';
+            artwork.loading = 'lazy';
+            artwork.referrerPolicy = 'no-referrer';
+          } else {
+            artwork.className = 'music-player__track-number';
+            artwork.textContent = String(index + 1).padStart(2, '0');
+          }
+          copy.className = 'music-player__track-copy';
+          trackTitle.textContent = track.title;
+          trackArtist.textContent = track.artist;
+          trackPosition.className = 'music-player__track-position';
+          trackPosition.textContent = String(index + 1).padStart(2, '0');
+          copy.append(trackTitle, trackArtist);
+          button.append(artwork, copy, trackPosition);
+          item.append(button);
+          fragment.append(item);
+        });
+        list.append(fragment);
+      };
+
+      const loadPlaylist = async () => {
+        fetchController?.abort();
+        fetchController = new AbortController();
+        const timeout = window.setTimeout(() => fetchController.abort(), 10000);
+        setControlsDisabled(true);
+        retryButton?.setAttribute('hidden', '');
+        count.textContent = '加载中';
+        setStatus('正在连接歌单…');
+        list.innerHTML = '<li class="music-player__empty">正在从网易云读取歌单…</li>';
+
+        try {
+          const endpoint = new URL(apiBase, window.location.href);
+          endpoint.searchParams.set('server', 'netease');
+          endpoint.searchParams.set('type', 'playlist');
+          endpoint.searchParams.set('id', playlistId);
+          const response = await fetch(endpoint, {
+            signal: fetchController.signal,
+            mode: 'cors',
+            credentials: 'omit',
+            headers: { Accept: 'application/json' },
+          });
+          if (!response.ok) throw new Error(`Playlist request failed: ${response.status}`);
+          const data = await response.json();
+          if (!Array.isArray(data)) throw new Error('Invalid playlist response');
+
+          tracks = data
+            .slice(0, 250)
+            .map((item) => ({
+              title: cleanText(item.title ?? item.name, '未知歌曲'),
+              artist: cleanText(item.author ?? item.artist, '未知歌手'),
+              cover: safeUrl(item.pic ?? item.cover ?? item.image),
+              url: safeUrl(item.url ?? item.src),
+            }))
+            .filter((track) => track.url);
+
+          if (!tracks.length) throw new Error('Playlist is empty');
+          const requestedIndex = Number(saved.index);
+          currentIndex = Number.isInteger(requestedIndex)
+            ? Math.min(tracks.length - 1, Math.max(0, requestedIndex))
+            : 0;
+          loadedIndex = -1;
+          failedTracks = new Set();
+          renderTracks();
+          showTrack(currentIndex);
+          setControlsDisabled(false);
+          setStatus('准备就绪');
+        } catch (error) {
+          if (error?.name === 'AbortError') setStatus('歌单连接超时');
+          else setStatus('歌单暂时无法加载');
+          title.textContent = '稍后再试';
+          artist.textContent = '也可以前往网易云查看歌单';
+          count.textContent = '0/0';
+          list.innerHTML = '<li class="music-player__empty">公共音乐接口暂时不可用，请稍后重试。</li>';
+          retryButton?.removeAttribute('hidden');
+        } finally {
+          window.clearTimeout(timeout);
+        }
+      };
+
+      toggle.addEventListener('click', () => {
+        setOpen(!root.classList.contains('is-open'));
+      });
+
+      closeButton?.addEventListener('click', () => {
+        setOpen(false);
+        toggle.focus();
+      });
+
+      document.addEventListener('pointerdown', (event) => {
+        if (root.classList.contains('is-open') && !root.contains(event.target)) setOpen(false);
+      });
+
+      document.addEventListener('keydown', (event) => {
+        if (event.key === 'Escape' && root.classList.contains('is-open')) {
+          setOpen(false);
+          toggle.focus();
+        }
+      });
+
+      playButton.addEventListener('click', () => {
+        if (audio.paused) playCurrent();
+        else {
+          playGeneration += 1;
+          wantsPlayback = false;
+          audio.pause();
+        }
+      });
+
+      prevButton.addEventListener('click', () => {
+        const keepPlaying = wantsPlayback && !audio.paused;
+        selectTrack(getAdjacentIndex(-1), keepPlaying);
+      });
+
+      nextButton.addEventListener('click', () => {
+        const keepPlaying = wantsPlayback && !audio.paused;
+        selectTrack(getAdjacentIndex(1), keepPlaying);
+      });
+
+      muteButton.addEventListener('click', () => {
+        audio.muted = !audio.muted;
+      });
+
+      shuffleButton?.addEventListener('click', () => {
+        shuffleEnabled = !shuffleEnabled;
+        shuffleButton.setAttribute('aria-pressed', String(shuffleEnabled));
+        shuffleButton.title = shuffleEnabled ? '关闭随机播放' : '随机播放';
+        persist();
+      });
+
+      repeatButton?.addEventListener('click', () => {
+        repeatOne = !repeatOne;
+        audio.loop = repeatOne;
+        repeatButton.setAttribute('aria-pressed', String(repeatOne));
+        repeatButton.title = repeatOne ? '关闭单曲循环' : '单曲循环';
+        persist();
+      });
+
+      favoriteButton?.addEventListener('click', () => {
+        if (!tracks.length) return;
+        const key = getTrackKey(tracks[currentIndex]);
+        if (favorites.has(key)) favorites.delete(key);
+        else favorites.add(key);
+        updateFavoriteState();
+        persist();
+      });
+
+      retryButton?.addEventListener('click', loadPlaylist);
+
+      list.addEventListener('click', (event) => {
+        const button = event.target.closest('[data-track-index]');
+        if (!button || !list.contains(button)) return;
+        selectTrack(Number(button.dataset.trackIndex), true);
+      });
+
+      progress.addEventListener('input', () => {
+        if (!Number.isFinite(audio.duration) || audio.duration <= 0) return;
+        const ratio = Number(progress.value) / 1000;
+        progress.style.setProperty('--music-progress', `${ratio * 100}%`);
+        progress.parentElement?.style.setProperty('--music-progress', `${ratio * 100}%`);
+        audio.currentTime = ratio * audio.duration;
+        progress.setAttribute(
+          'aria-valuetext',
+          `${formatTime(audio.currentTime)} / ${formatTime(audio.duration)}`,
+        );
+      });
+
+      audio.addEventListener('loadstart', () => {
+        if (wantsPlayback) {
+          root.classList.add('is-loading');
+          setStatus('正在缓冲…');
+        }
+      });
+
+      audio.addEventListener('playing', () => {
+        wantsPlayback = true;
+        root.classList.remove('is-loading');
+        root.classList.add('is-playing');
+        playButton.setAttribute('aria-label', '暂停');
+        playButton.title = '暂停';
+        setStatus('正在播放');
+      });
+
+      audio.addEventListener('pause', () => {
+        root.classList.remove('is-playing', 'is-loading');
+        playButton.setAttribute('aria-label', '播放');
+        playButton.title = '播放';
+        if (!wantsPlayback && audio.currentTime > 0 && !audio.ended) setStatus('已暂停');
+      });
+
+      audio.addEventListener('waiting', () => {
+        if (wantsPlayback) {
+          root.classList.add('is-loading');
+          setStatus('网络缓冲中…');
+        }
+      });
+
+      audio.addEventListener('loadedmetadata', () => {
+        progress.disabled = !Number.isFinite(audio.duration);
+        if (duration) duration.textContent = formatTime(audio.duration);
+        progress.setAttribute(
+          'aria-valuetext',
+          `${formatTime(audio.currentTime)} / ${formatTime(audio.duration)}`,
+        );
+      });
+
+      audio.addEventListener('timeupdate', () => {
+        if (Number.isFinite(audio.duration) && audio.duration > 0) {
+          const ratio = audio.currentTime / audio.duration;
+          progress.value = String(Math.round(ratio * 1000));
+          progress.style.setProperty('--music-progress', `${ratio * 100}%`);
+          progress.parentElement?.style.setProperty('--music-progress', `${ratio * 100}%`);
+          if (currentTime) currentTime.textContent = formatTime(audio.currentTime);
+          if (duration) duration.textContent = formatTime(audio.duration);
+          progress.setAttribute(
+            'aria-valuetext',
+            `${formatTime(audio.currentTime)} / ${formatTime(audio.duration)}`,
+          );
+        }
+      });
+
+      audio.addEventListener('ended', () => {
+        selectTrack(repeatOne ? currentIndex : getAdjacentIndex(1), true, false);
+      });
+      audio.addEventListener('error', scheduleSkip);
+      audio.addEventListener('volumechange', () => {
+        root.classList.toggle('is-muted', audio.muted || audio.volume === 0);
+        muteButton.setAttribute('aria-label', audio.muted ? '恢复声音' : '静音');
+        muteButton.title = audio.muted ? '恢复声音' : '静音';
+        persist();
+      });
+
+      if ('mediaSession' in navigator) {
+        try {
+          navigator.mediaSession.setActionHandler('play', playCurrent);
+          navigator.mediaSession.setActionHandler('pause', () => {
+            playGeneration += 1;
+            wantsPlayback = false;
+            audio.pause();
+          });
+          navigator.mediaSession.setActionHandler('previoustrack', () => selectTrack(getAdjacentIndex(-1), true));
+          navigator.mediaSession.setActionHandler('nexttrack', () => selectTrack(getAdjacentIndex(1), true));
+        } catch {
+        }
+      }
+
+      loadPlaylist();
+    };
+
+    document.querySelectorAll('[data-music-player]').forEach(initPlayer);
+  })();
+</script><button type="button" class="to-top" data-to-top aria-label="回到顶部"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 19V5M6 11l6-6 6 6"></path></svg></button><script data-astro-rerun>
+      (() => {
+        window.__blogRevealController?.abort();
+        const controller = new AbortController();
+        window.__blogRevealController = controller;
+        const signal = controller.signal;
+        const sel =
+          '.hero__intro > *, .hero__picks, .section__header, .section__more, .post-row, .related-posts, .post-nav, .article__header > *, .article__main > .article__cover, .proj-section__head, .proj, .page-header, .archive-summary, .archive-year__head, .about__intro > *, .note';
+
+        // This fires inside ClientRouter's DOM-swap callback, before the browser
+        // captures the incoming frame. It prevents the page-level fade from
+        // snapshotting above-the-fold content in its hidden reveal state.
+        const revealIncomingFrame = () => {
+          // Route content already has one page-level entrance. Reveal every
+          // incoming child before capture so the swap callback performs no
+          // geometry reads and cannot extend the transition's blank interval.
+          const visible = [...document.querySelectorAll(sel)];
+
+          visible.forEach((el) => {
+            el.style.transition = 'none';
+            el.classList.add('is-revealed');
+            el.dataset.revealed = '1';
+          });
+
+          window.requestAnimationFrame(() => {
+            visible.forEach((el) => {
+              el.style.transition = '';
+            });
+          });
+        };
+        document.addEventListener('astro:after-swap', revealIncomingFrame, { signal });
+
+        const targets = [...document.querySelectorAll(sel)];
+
+        if (!targets.length) {
+          return;
+        }
+
+        // Position-based reveal: robust to fast scroll jumps, anchor links and
+        // restored scroll (anything at/above the viewport reveals; off-screen
+        // content that was jumped past simply appears without re-animating).
+        let ticking = false;
+        const routeSwap = document.documentElement.hasAttribute('data-astro-transition');
+        const reveal = () => {
+          ticking = false;
+          const line = window.innerHeight * 0.94;
+          const batch = [];
+          for (const el of targets) {
+            if (el.dataset.revealed) {
+              continue;
+            }
+            if (el.getBoundingClientRect().top < line) {
+              batch.push(el);
+            }
+          }
+          // Stagger only the items that cross in together (e.g. the on-load batch).
+          batch.forEach((el, index) => {
+            if (routeSwap) {
+              el.style.transition = 'none';
+              window.requestAnimationFrame(() => {
+                el.style.transition = '';
+              });
+            } else {
+              el.style.setProperty('--reveal-delay', Math.min(index, 6) * 0.06 + 's');
+            }
+            el.classList.add('is-revealed');
+            el.dataset.revealed = '1';
+          });
+        };
+        const onScroll = () => {
+          if (!ticking) {
+            ticking = true;
+            window.requestAnimationFrame(reveal);
+          }
+        };
+
+        window.addEventListener('scroll', onScroll, { passive: true, signal });
+        window.addEventListener('resize', onScroll, { passive: true, signal });
+        window.addEventListener('load', reveal, { signal });
+        window.requestAnimationFrame(reveal);
+      })();
+    </script><script data-astro-rerun>
+      (() => {
+        // Mark article images once their bytes arrive so CSS can fade them in.
+        document.querySelectorAll('.post-content img').forEach((img) => {
+          const mark = () => img.classList.add('is-loaded');
+          if (img.complete) {
+            mark();
+            return;
+          }
+          img.addEventListener('load', mark, { once: true });
+          img.addEventListener('error', mark, { once: true });
+        });
+      })();
+    </script><script data-astro-rerun>
+      window.__blogPageController?.abort();
+      window.__blogPageController = new AbortController();
+
+      (() => {
+        const signal = window.__blogPageController.signal;
+        const storageKey = 'blog-theme';
+        const lightColor = '#f8f7f4';
+        const darkColor = '#0e1116';
+        const button = document.querySelector('[data-theme-toggle]');
+        const themeColor = document.querySelector('#theme-color');
+        const getStoredTheme = () => {
+          try {
+            return localStorage.getItem(storageKey);
+          } catch {
+            return null;
+          }
+        };
+        const setStoredTheme = (theme) => {
+          try {
+            localStorage.setItem(storageKey, theme);
+          } catch {
+          }
+        };
+
+        const getSystemTheme = () =>
+          window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+
+        const applyTheme = (theme, persist = true) => {
+          document.documentElement.dataset.theme = theme;
+          themeColor?.setAttribute('content', theme === 'dark' ? darkColor : lightColor);
+
+          if (button) {
+            button.dataset.themeIcon = theme;
+            button.setAttribute(
+              'aria-label',
+              theme === 'dark' ? '切换到浅色模式' : '切换到深色模式',
+            );
+            button.setAttribute('aria-pressed', String(theme === 'dark'));
+          }
+
+          if (persist) {
+            setStoredTheme(theme);
+          }
+        };
+
+        const currentTheme = () =>
+          document.documentElement.dataset.theme || getStoredTheme() || getSystemTheme();
+
+        // Inject literal percentages instead of px values or dynamic vars.
+        // Chrome rasterizes view-transition snapshots at device-pixel density;
+        // px clip coordinates can therefore render at half-size on a 2x screen,
+        // leaving part of the viewport uncovered until the snapshot disappears.
+        // Exact percentages stay in the snapshot's own coordinate space.
+        const themeRevealStyle =
+          document.getElementById('theme-reveal-style') ??
+          (() => {
+            const styleEl = document.createElement('style');
+            styleEl.id = 'theme-reveal-style';
+            document.head.append(styleEl);
+            return styleEl;
+          })();
+
+        applyTheme(currentTheme(), false);
+
+        const motionOK = window.matchMedia('(prefers-reduced-motion: no-preference)').matches;
+        let themeAnimTimer;
+        let themeSwitching = false;
+        button?.addEventListener('click', () => {
+          if (themeSwitching) return;
+          const next = currentTheme() === 'dark' ? 'light' : 'dark';
+          const root = document.documentElement;
+
+          // New theme sweeps out of the toggle as an expanding circle.
+          if (
+            motionOK &&
+            document.startViewTransition &&
+            !root.hasAttribute('data-astro-transition')
+          ) {
+            const rect = button.getBoundingClientRect();
+            const x = rect.left + rect.width / 2;
+            const y = rect.top + rect.height / 2;
+            const radius =
+              Math.hypot(
+                Math.max(x, window.innerWidth - x),
+                Math.max(y, window.innerHeight - y),
+              ) + 20;
+            const xPercent = (x / window.innerWidth) * 100;
+            const yPercent = (y / window.innerHeight) * 100;
+            // CSS resolves a circle's percentage radius against the normalized
+            // diagonal: hypot(width, height) / sqrt(2).
+            const radiusReference =
+              Math.hypot(window.innerWidth, window.innerHeight) / Math.SQRT2;
+            const radiusPercent = (radius / radiusReference) * 100;
+
+            themeSwitching = true;
+            button.classList.add('is-switching');
+            themeRevealStyle.textContent = `@keyframes theme-reveal { from { clip-path: circle(0 at ${xPercent.toFixed(4)}% ${yPercent.toFixed(4)}%); } to { clip-path: circle(${radiusPercent.toFixed(4)}% at ${xPercent.toFixed(4)}% ${yPercent.toFixed(4)}%); } }`;
+            root.classList.add('theme-vt');
+            const vt = document.startViewTransition(() => applyTheme(next));
+            vt.finished
+              .catch(() => {})
+              .finally(() => {
+                themeSwitching = false;
+                button.classList.remove('is-switching');
+                root.classList.remove('theme-vt');
+              });
+            return;
+          }
+
+          applyTheme(next);
+          if (motionOK) {
+            root.classList.remove('theme-anim');
+            void root.offsetWidth;
+            root.classList.add('theme-anim');
+            window.clearTimeout(themeAnimTimer);
+            themeAnimTimer = window.setTimeout(() => root.classList.remove('theme-anim'), 380);
+          }
+        }, { signal });
+
+        window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', () => {
+          if (!getStoredTheme()) {
+            applyTheme(getSystemTheme(), false);
+          }
+        }, { signal });
+      })();
+
+      (() => {
+        const signal = window.__blogPageController.signal;
+        const writeClipboard = async (text) => {
+          if (globalThis.navigator?.clipboard?.writeText) {
+            await globalThis.navigator.clipboard.writeText(text);
+            return true;
+          }
+
+          const textarea = document.createElement('textarea');
+          textarea.value = text;
+          textarea.setAttribute('readonly', '');
+          textarea.style.position = 'fixed';
+          textarea.style.opacity = '0';
+          document.body.append(textarea);
+          textarea.select();
+          const copied = document.execCommand('copy');
+          textarea.remove();
+          return copied;
+        };
+
+        document.querySelectorAll('.post-content pre').forEach((pre) => {
+          if (pre.querySelector('[data-copy-code]')) {
+            return;
+          }
+
+          const code = pre.querySelector('code');
+          const button = document.createElement('button');
+          button.type = 'button';
+          button.className = 'copy-code-button';
+          button.dataset.copyCode = '';
+          button.textContent = '复制';
+          button.setAttribute('aria-label', '复制代码');
+          pre.append(button);
+
+          button.addEventListener('click', async () => {
+            const text = code?.innerText ?? pre.innerText.replace(button.innerText, '');
+
+            try {
+              const copied = await writeClipboard(text.trimEnd());
+
+              if (!copied) {
+                throw new Error('Copy command failed');
+              }
+
+              button.textContent = '已复制';
+              button.classList.add('is-copied');
+              window.setTimeout(() => {
+                button.textContent = '复制';
+                button.classList.remove('is-copied');
+              }, 1800);
+            } catch {
+              button.textContent = '复制失败';
+              window.setTimeout(() => {
+                button.textContent = '复制';
+              }, 1800);
+            }
+          }, { signal });
+        });
+      })();
+
+      (() => {
+        const signal = window.__blogPageController.signal;
+        const images = document.querySelectorAll(
+          '.post-content img:not(.legacy-inline-image)',
+        );
+
+        if (!images.length) {
+          return;
+        }
+
+        let overlay = null;
+
+        const onKey = (event) => {
+          if (event.key === 'Escape') {
+            close();
+          }
+        };
+
+        function close() {
+          if (!overlay) {
+            return;
+          }
+
+          const node = overlay;
+          overlay = null;
+          node.classList.remove('is-open');
+          document.removeEventListener('keydown', onKey);
+          window.setTimeout(() => node.remove(), 200);
+        }
+
+        const open = (source, alt) => {
+          overlay = document.createElement('div');
+          overlay.className = 'lightbox';
+          overlay.setAttribute('role', 'dialog');
+          overlay.setAttribute('aria-modal', 'true');
+          overlay.setAttribute('aria-label', alt || '图片预览');
+
+          const full = document.createElement('img');
+          full.src = source;
+          full.alt = alt || '';
+          overlay.append(full);
+          overlay.addEventListener('click', close, { signal });
+          document.body.append(overlay);
+          requestAnimationFrame(() => overlay?.classList.add('is-open'));
+          document.addEventListener('keydown', onKey, { signal });
+        };
+
+        images.forEach((image) => {
+          image.addEventListener('click', () => {
+            open(image.currentSrc || image.src, image.alt);
+          }, { signal });
+        });
+      })();
+
+      (() => {
+        const signal = window.__blogPageController.signal;
+        const bar = document.querySelector('[data-reading-progress]');
+        const article = document.querySelector('.article');
+        const toTop = document.querySelector('[data-to-top]');
+        let ticking = false;
+
+        const update = () => {
+          ticking = false;
+          const scrollY = window.scrollY;
+
+          if (bar && article) {
+            const start = article.offsetTop;
+            const total = article.offsetHeight - window.innerHeight;
+            const progress = total > 0 ? (scrollY - start) / total : 0;
+            bar.style.transform = `scaleX(${Math.min(1, Math.max(0, progress))})`;
+          }
+
+          if (toTop) {
+            toTop.classList.toggle('is-visible', scrollY > 600);
+          }
+        };
+
+        const onScroll = () => {
+          if (!ticking) {
+            ticking = true;
+            window.requestAnimationFrame(update);
+          }
+        };
+
+        window.addEventListener('scroll', onScroll, { passive: true, signal });
+        window.addEventListener('resize', onScroll, { passive: true, signal });
+        update();
+
+        toTop?.addEventListener('click', () => {
+          window.scrollTo({ top: 0, behavior: 'smooth' });
+        }, { signal });
+      })();
+
+      (() => {
+        const signal = window.__blogPageController.signal;
+        const links = [...document.querySelectorAll('.toc a[href^="#"]')];
+
+        if (!links.length) {
+          return;
+        }
+
+        const items = links
+          .map((link) => {
+            const id = decodeURIComponent(link.getAttribute('href').slice(1));
+            return { link, heading: document.getElementById(id) };
+          })
+          .filter((item) => item.heading);
+
+        if (!items.length) {
+          return;
+        }
+
+        let current = null;
+        const setActive = (link) => {
+          if (current === link) {
+            return;
+          }
+          current?.classList.remove('is-active');
+          link.classList.add('is-active');
+          current = link;
+        };
+
+        let ticking = false;
+        const sync = () => {
+          ticking = false;
+          const offset = 130;
+          let active = items[0].link;
+          for (const { link, heading } of items) {
+            if (heading.getBoundingClientRect().top <= offset) {
+              active = link;
+            } else {
+              break;
+            }
+          }
+          // When scrolled to the bottom, the last headings may never pass the
+          // offset threshold (page runs out of scroll). Force the last item active.
+          if (window.scrollY + window.innerHeight >= document.documentElement.scrollHeight - 60) {
+            active = items[items.length - 1].link;
+          }
+          setActive(active);
+        };
+
+        window.addEventListener(
+          'scroll',
+          () => {
+            if (!ticking) {
+              ticking = true;
+              window.requestAnimationFrame(sync);
+            }
+          },
+          { passive: true, signal },
+        );
+        sync();
+      })();
+    </script><script>
+      // This site ships no service worker. Sweep out any registration left by
+      // a previous site generation (or another project on this localhost port)
+      // — a stale SW serves outdated CSS/JS and breaks page transitions.
+      (() => {
+        if (!('serviceWorker' in navigator)) return;
+        navigator.serviceWorker
+          .getRegistrations()
+          .then((regs) => {
+            if (!regs.length) return;
+            regs.forEach((reg) => reg.unregister());
+            if (window.caches) {
+              caches.keys().then((keys) => keys.forEach((key) => caches.delete(key)));
+            }
+          })
+          .catch(() => {});
+      })();
+    </script><script>
+      (() => {
+        const isTyping = (el) =>
+          el &&
+          (el.tagName === 'INPUT' ||
+            el.tagName === 'TEXTAREA' ||
+            el.tagName === 'SELECT' ||
+            el.isContentEditable);
+
+        document.addEventListener('keydown', (event) => {
+          const slash =
+            event.key === '/' && !event.metaKey && !event.ctrlKey && !event.altKey;
+          const cmdK =
+            (event.metaKey || event.ctrlKey) && (event.key === 'k' || event.key === 'K');
+
+          if (!slash && !cmdK) {
+            return;
+          }
+          if (slash && isTyping(document.activeElement)) {
+            return;
+          }
+
+          event.preventDefault();
+          const input = document.querySelector('#search-input');
+
+          if (input) {
+            input.focus();
+            input.select?.();
+          } else {
+            window.location.href = '/search/';
+          }
+        });
+      })();
+    </script></body></html>

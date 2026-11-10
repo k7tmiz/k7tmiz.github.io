@@ -1,0 +1,28 @@
+{
+  "name": "A4 Memory",
+  "short_name": "A4 Memory",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "background_color": "#ebe6dc",
+  "theme_color": "#ebe6dc",
+  "icons": [
+    {
+      "src": "./assets/icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    },
+    {
+      "src": "./assets/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "./assets/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}
